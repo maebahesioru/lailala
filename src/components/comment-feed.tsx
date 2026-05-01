@@ -231,17 +231,17 @@ export function CommentFeed({ videoId }: { videoId: string }) {
   return (
     <div>
       <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
-        <div className="flex overflow-x-auto scrollbar-hide">
+        <div className="flex">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={tab.onClick}
-              className={`flex-shrink-0 px-6 py-4 text-center text-sm font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap ${
+              className={`flex-1 py-4 text-center text-sm font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap ${
                 activeTabId === tab.id ? "text-foreground" : "text-muted"
               }`}
             >
               {tab.id !== "top" && tab.id !== "new" && <List size={14} className="inline mr-1" />}
-              {tab.label}
+              <span className="truncate inline-block max-w-full px-1">{tab.label}</span>
               {activeTabId === tab.id && (
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
               )}

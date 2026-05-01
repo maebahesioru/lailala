@@ -205,10 +205,10 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
               )}
             </div>
 
-            <div className="flex items-center justify-between mt-3 gap-1 flex-wrap max-w-[400px]">
+            <div className="flex items-center justify-between mt-3">
               <button
                 onClick={(e) => { e.stopPropagation(); handleLike(); }}
-                className={`flex items-center gap-1.5 text-[13px] transition-colors ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}
                 title="高評価"
               >
                 <ThumbsUp size={18} fill={liked ? "currentColor" : "none"} />
@@ -217,7 +217,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
 
               <button
                 onClick={(e) => { e.stopPropagation(); handleDislike(); }}
-                className={`flex items-center gap-1.5 text-[13px] transition-colors ${disliked ? "text-primary" : "text-muted hover:text-primary"}`}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${disliked ? "text-primary" : "text-muted hover:text-primary"}`}
                 title="低評価"
               >
                 <ThumbsDown size={18} fill={disliked ? "currentColor" : "none"} />
@@ -225,22 +225,23 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
 
               <Link
                 href={threadLink}
-                className="flex items-center gap-1.5 text-[13px] text-muted hover:text-primary transition-colors"
+                className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
               >
                 <MessageCircle size={18} />
                 {reply.replyCount !== "0" && <span>{reply.replyCount}</span>}
               </Link>
 
-              <div onClick={(e) => e.stopPropagation()}>
+              <div onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center">
                 <ShareMenu
                   url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${reply.commentId}`}
                   text={`${reply.author.name}: ${reply.content}`}
+                  buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full"
                 />
               </div>
 
               <button
                 onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
-                className={`flex items-center gap-1.5 text-[13px] transition-colors ${bookmarked ? "text-primary" : "text-muted hover:text-primary"}`}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${bookmarked ? "text-primary" : "text-muted hover:text-primary"}`}
                 title={bookmarked ? "ブックマーク済み" : "ブックマーク"}
               >
                 <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
