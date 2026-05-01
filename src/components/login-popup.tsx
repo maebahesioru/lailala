@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X, LogIn, Loader2, Check } from "lucide-react";
+import { X, LogIn, Loader2, Check, Copy } from "lucide-react";
 
 interface LoginPopupProps {
   open: boolean;
@@ -16,6 +16,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
   const [sessionId, setSessionId] = useState("");
   const [error, setError] = useState("");
   const [polling, setPolling] = useState(false);
+  const [copied, setCopied] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startOAuth = async () => {
@@ -137,9 +138,22 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
             >
               {verificationUrl}
             </a>
-            <div className="bg-border rounded-xl p-4 text-center mb-4">
+            <div className="bg-border rounded-xl p-4 text-center mb-4 relative">
               <p className="text-xs text-muted mb-1">コード</p>
               <p className="text-2xl font-bold tracking-widest">{userCode}</p>
+              <button
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(userCode);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch {}
+                }}
+                className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-white/10 text-muted transition-colors"
+                title="コードをコピー"
+              >
+                {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+              </button>
             </div>
             {polling && (
               <div className="flex flex-col items-center gap-2 py-4">
