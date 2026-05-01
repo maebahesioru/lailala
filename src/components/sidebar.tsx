@@ -144,6 +144,7 @@ export function Sidebar() {
             onClick={toggleBgm}
             className={`flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors w-full text-left ${bgmMounted && bgmEnabled ? "text-primary" : "text-foreground"}`}
             aria-label="BGM"
+            suppressHydrationWarning
           >
             <Music size={26} aria-hidden="true" />
             <span className="font-medium">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>

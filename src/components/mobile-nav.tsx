@@ -55,7 +55,7 @@ export function MobileNav() {
                 }`}
                 aria-current={isActive ? "page" : undefined}
               >
-                <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                <item.icon size={22} strokeWidth={2} />
                 <span className="text-[10px] font-medium">{item.label}</span>
               </Link>
             );
@@ -66,8 +66,9 @@ export function MobileNav() {
               bgmMounted && bgmEnabled ? "text-primary" : "text-muted"
             }`}
             aria-label="BGM"
+            suppressHydrationWarning
           >
-            <Music size={22} strokeWidth={bgmMounted && bgmEnabled ? 2.5 : 2} />
+            <Music size={22} strokeWidth={2} />
             <span className="text-[10px] font-medium">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>
           </button>
         </div>
