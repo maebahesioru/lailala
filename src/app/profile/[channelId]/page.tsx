@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { CommentCard } from "@/components/comment-card";
 import { ArrowLeft, Loader2, User } from "lucide-react";
 import Link from "next/link";
@@ -16,8 +16,8 @@ interface ProfileComment {
   publishedAt: string;
 }
 
-export default function ProfilePage({ params }: { params: { channelId: string } }) {
-  const { channelId } = params;
+export default function ProfilePage({ params }: { params: Promise<{ channelId: string }> }) {
+  const { channelId } = use(params);
   const [comments, setComments] = useState<ProfileComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
