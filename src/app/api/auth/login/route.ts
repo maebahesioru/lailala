@@ -48,13 +48,41 @@ export async function POST(_req: NextRequest) {
         clearTimeout(timer);
         try {
           const encryptedCred = encrypt(JSON.stringify(credentials));
-          const email = `yt:${sessionId}`;
+
+          // Extract YouTube channel info from account
+          let channelId = sessionId;
+          let name = "YouTube User";
+          let thumbnail: string | null = null;
+
+          try {
+            const info = await innertube.account.getInfo();
+            const page = (info as any).page;
+            const sections = page?.contents?.array?.();
+            if (sections) {
+              for (const section of sections) {
+                const footers = section?.footers;
+                if (!footers) continue;
+                for (const footer of footers) {
+                  if (footer?.title?.text) name = footer.title.text;
+                  const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
+                  if (cid && cid.startsWith("UC")) {
+                    channelId = cid;
+                    thumbnail = `https://yt3.googleusercontent.com/ytc/${cid}=s88-c-k-c0x00ffffff-no-rj`;
+                  }
+                }
+              }
+            }
+          } catch {
+            // Non-fatal, use fallback
+          }
+
+          const email = `yt:${channelId}`;
 
           let user = await prisma.user.findFirst({ where: { email } });
           if (user) {
-            user = await prisma.user.update({ where: { id: user.id }, data: { name: "YouTube User", image: null } });
+            user = await prisma.user.update({ where: { id: user.id }, data: { name, image: thumbnail } });
           } else {
-            user = await prisma.user.create({ data: { name: "YouTube User", email, image: null } });
+            user = await prisma.user.create({ data: { name, email, image: thumbnail } });
           }
 
           await prisma.ytCredential.upsert({
