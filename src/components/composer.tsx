@@ -1,22 +1,88 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "./auth-provider";
-import { Image, Smile, Calendar, User } from "lucide-react";
+import { Smile, Calendar, User, Clock, X } from "lucide-react";
+
+const EMOJIS = [
+  "😀","😂","🥰","😍","🤔","😭","😡","👍","👎","🙏",
+  "🔥","💯","❤️","💖","✨","🎉","👀","🤣","😅","😊",
+  "🥺","😤","😎","🤮","💀","👏","🙌","💪","🤝","🎁",
+  "🌟","💫","⭐","🌈","☀️","🌙","💧","🔔","📢","💬",
+  "🇯🇵","🇺🇸","🍎","🍊","🍋","🍌","🍉","🍇","🍓","🫐",
+  "🍈","🍒","🍑","🍍","🥝","🥑","🍆","🥕","🌽","🌮",
+];
+
+interface ScheduledPost {
+  id: string;
+  videoId: string;
+  text: string;
+  scheduledAt: number;
+}
+
+function loadScheduled(): ScheduledPost[] {
+  try {
+    const raw = localStorage.getItem("lailala-scheduled");
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveScheduled(list: ScheduledPost[]) {
+  localStorage.setItem("lailala-scheduled", JSON.stringify(list));
+}
 
 export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: () => void }) {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [showSchedule, setShowSchedule] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("");
+  const [scheduledList, setScheduledList] = useState<ScheduledPost[]>([]);
+  const emojiRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = async () => {
-    if (!text.trim() || !user) return;
+  useEffect(() => {
+    setScheduledList(loadScheduled().filter((s) => s.videoId === videoId));
+  }, [videoId]);
+
+  // Poll for scheduled posts
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const all = loadScheduled();
+      const due = all.filter((s) => s.scheduledAt <= now && s.videoId === videoId);
+      if (due.length > 0) {
+        const remaining = all.filter((s) => s.scheduledAt > now || s.videoId !== videoId);
+        saveScheduled(remaining);
+        setScheduledList(remaining.filter((s) => s.videoId === videoId));
+        due.forEach((s) => doPost(s.text));
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoId]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) {
+        setShowEmoji(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const doPost = async (content: string) => {
+    if (!content.trim() || !user) return;
     setPosting(true);
     try {
       await fetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId, text: text.trim() }),
+        body: JSON.stringify({ videoId, text: content.trim() }),
       });
       setText("");
       onPosted?.();
@@ -25,6 +91,37 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     } finally {
       setPosting(false);
     }
+  };
+
+  const handleSubmit = () => doPost(text);
+
+  const handleSchedule = () => {
+    if (!text.trim() || !scheduleDate || !scheduleTime) return;
+    const scheduledAt = new Date(`${scheduleDate}T${scheduleTime}`).getTime();
+    if (isNaN(scheduledAt) || scheduledAt <= Date.now()) {
+      alert("未来の日時を選択してください");
+      return;
+    }
+    const id = crypto.randomUUID();
+    const newItem: ScheduledPost = { id, videoId, text: text.trim(), scheduledAt };
+    const updated = [...loadScheduled(), newItem];
+    saveScheduled(updated);
+    setScheduledList(updated.filter((s) => s.videoId === videoId));
+    setText("");
+    setShowSchedule(false);
+    setScheduleDate("");
+    setScheduleTime("");
+  };
+
+  const cancelSchedule = (id: string) => {
+    const updated = loadScheduled().filter((s) => s.id !== id);
+    saveScheduled(updated);
+    setScheduledList(updated.filter((s) => s.videoId === videoId));
+  };
+
+  const insertEmoji = (emoji: string) => {
+    setText((prev) => prev + emoji);
+    setShowEmoji(false);
   };
 
   if (!user) {
@@ -57,17 +154,94 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
             rows={2}
             className="w-full bg-transparent text-xl placeholder-[#71767b] outline-none resize-none"
           />
+
+          {/* Scheduled posts preview */}
+          {scheduledList.length > 0 && (
+            <div className="mb-2 space-y-1">
+              {scheduledList.map((s) => (
+                <div key={s.id} className="flex items-center justify-between bg-card border border-border rounded-lg px-3 py-2 text-[13px]">
+                  <div className="flex items-center gap-2 text-muted min-w-0">
+                    <Clock size={14} />
+                    <span className="truncate">{new Date(s.scheduledAt).toLocaleString("ja-JP")}</span>
+                    <span className="truncate text-foreground">{s.text}</span>
+                  </div>
+                  <button
+                    onClick={() => cancelSchedule(s.id)}
+                    className="p-1 rounded-full hover:bg-white/10 text-muted shrink-0"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center justify-between mt-2">
             <div className="flex gap-2 text-[#1d9bf0]">
-              <button className="p-2 rounded-full hover:bg-[#1d9bf0]/10">
-                <Image size={18} />
-              </button>
-              <button className="p-2 rounded-full hover:bg-[#1d9bf0]/10">
-                <Smile size={18} />
-              </button>
-              <button className="p-2 rounded-full hover:bg-[#1d9bf0]/10">
-                <Calendar size={18} />
-              </button>
+              {/* Emoji picker */}
+              <div className="relative" ref={emojiRef}>
+                <button
+                  onClick={() => setShowEmoji(!showEmoji)}
+                  className="p-2 rounded-full hover:bg-[#1d9bf0]/10"
+                >
+                  <Smile size={18} />
+                </button>
+                {showEmoji && (
+                  <div className="absolute bottom-full left-0 mb-2 bg-card border border-border rounded-xl shadow-lg p-3 grid grid-cols-10 gap-2 w-[320px] z-20">
+                    {EMOJIS.map((emoji) => (
+                      <button
+                        key={emoji}
+                        onClick={() => insertEmoji(emoji)}
+                        className="text-xl hover:bg-white/10 rounded p-1 transition-colors"
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Schedule picker */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowSchedule(!showSchedule)}
+                  className="p-2 rounded-full hover:bg-[#1d9bf0]/10"
+                >
+                  <Calendar size={18} />
+                </button>
+                {showSchedule && (
+                  <div className="absolute bottom-full left-0 mb-2 bg-card border border-border rounded-xl shadow-lg p-4 w-64 z-20 space-y-3">
+                    <p className="text-sm font-bold">予約投稿</p>
+                    <input
+                      type="date"
+                      value={scheduleDate}
+                      onChange={(e) => setScheduleDate(e.target.value)}
+                      className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    <input
+                      type="time"
+                      value={scheduleTime}
+                      onChange={(e) => setScheduleTime(e.target.value)}
+                      className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleSchedule}
+                        disabled={!text.trim() || !scheduleDate || !scheduleTime}
+                        className="flex-1 py-2 bg-primary text-white rounded-full font-bold hover:bg-primary-hover disabled:opacity-50 transition-colors text-sm"
+                      >
+                        予約
+                      </button>
+                      <button
+                        onClick={() => setShowSchedule(false)}
+                        className="flex-1 py-2 border border-border rounded-full font-bold hover:bg-white/5 transition-colors text-sm"
+                      >
+                        キャンセル
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <button
               onClick={handleSubmit}
