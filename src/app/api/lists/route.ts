@@ -4,23 +4,48 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   const { searchParams } = new URL(req.url);
   const listId = searchParams.get("listId");
+  const search = searchParams.get("search");
 
   try {
     if (listId) {
       const list = await prisma.list.findUnique({
-        where: { id: listId, userId },
-        include: { items: { orderBy: { createdAt: "desc" } } },
+        where: { id: listId },
+        include: {
+          items: {
+            orderBy: { createdAt: "desc" },
+            where: search
+              ? {
+                  OR: [
+                    { content: { contains: search, mode: "insensitive" } },
+                    { authorName: { contains: search, mode: "insensitive" } },
+                  ],
+                }
+              : undefined,
+          },
+          user: { select: { name: true, image: true } },
+          _count: { select: { followers: true } },
+        },
       });
       if (!list) {
         return NextResponse.json({ error: "Not found" }, { status: 404 });
       }
-      return NextResponse.json({ list });
+      // Only owner or public lists are viewable
+      const isOwner = list.userId === userId;
+      const isFollowing = userId
+        ? !!(await prisma.listFollow.findUnique({
+            where: { userId_listId: { userId, listId } },
+          }))
+        : false;
+      if (!isOwner && !list.isPublic) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      return NextResponse.json({ list: { ...list, isOwner, isFollowing } });
+    }
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const lists = await prisma.list.findMany({
@@ -42,19 +67,18 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     if (body.name) {
-      // Create list
       const list = await prisma.list.create({
         data: {
           userId,
           name: body.name,
           description: body.description || null,
+          isPublic: body.isPublic === true,
         },
       });
       return NextResponse.json({ list });
     }
 
     if (body.listId && body.commentId) {
-      // Add item to list
       const item = await prisma.listItem.upsert({
         where: {
           listId_commentId: {
@@ -76,6 +100,41 @@ export async function POST(req: NextRequest) {
         },
       });
       return NextResponse.json({ item, action: "added" });
+    }
+
+    if (body.listId && body.userId) {
+      // Add user/channel to list via profile
+      const list = await prisma.list.findFirst({
+        where: { id: body.listId, userId },
+      });
+      if (!list) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+      // Find comments by this user and add them
+      const comments = await prisma.commentCache.findMany({
+        where: { authorChannelId: body.userId },
+        take: 100,
+      });
+
+      let added = 0;
+      for (const c of comments) {
+        await prisma.listItem.upsert({
+          where: { listId_commentId: { listId: body.listId, commentId: c.commentId } },
+          update: {},
+          create: {
+            listId: body.listId,
+            commentId: c.commentId,
+            videoId: c.videoId,
+            authorName: c.authorName,
+            authorThumb: c.authorThumb,
+            content: c.content,
+            likeCount: String(c.likeCount),
+            replyCount: String(c.replyCount),
+            publishedTime: c.publishedAt.toISOString(),
+          },
+        });
+        added++;
+      }
+      return NextResponse.json({ added });
     }
 
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });

@@ -2,9 +2,9 @@ import { prisma } from "./prisma";
 
 let started = false;
 
-const VIDEO_IDS = process.env.TREND_VIDEO_IDS?.split(",").map((s) => s.trim()).filter(Boolean) || [];
+const VIDEO_ID = "niKAylKNIEI";
 const INTERVAL_MS = 10 * 60 * 1000; // 10分ごと
-const MAX_PER_VIDEO = 500;
+const MAX_PER_RUN = 500;
 
 function parsePublishedTime(text: string): Date | null {
   if (!text) return null;
@@ -34,7 +34,7 @@ async function cacheVideoComments(videoId: string) {
     let count = 0;
 
     const saveComment = async (c: any, isReply = false, parentCommentId?: string) => {
-      if (count >= MAX_PER_VIDEO) return;
+      if (count >= MAX_PER_RUN) return;
       if (!c || !c.comment_id) return;
 
       const publishedText = c.published_time?.text || String(c.published_time || "");
@@ -73,7 +73,7 @@ async function cacheVideoComments(videoId: string) {
 
     const saveBatch = async (batch: any[]) => {
       for (const thread of batch) {
-        if (count >= MAX_PER_VIDEO) return;
+        if (count >= MAX_PER_RUN) return;
         const c = thread.comment;
         if (!c) continue;
         await saveComment(c, false);
@@ -86,7 +86,7 @@ async function cacheVideoComments(videoId: string) {
     };
 
     await saveBatch(comments.contents);
-    while (comments.has_continuation && count < MAX_PER_VIDEO) {
+    while (comments.has_continuation && count < MAX_PER_RUN) {
       comments = await comments.getContinuation();
       await saveBatch(comments.contents);
     }
@@ -98,14 +98,7 @@ async function cacheVideoComments(videoId: string) {
 }
 
 async function run() {
-  if (VIDEO_IDS.length === 0) {
-    console.log("[CommentCacheWorker] No TREND_VIDEO_IDS configured, skipping");
-    return;
-  }
-  for (const videoId of VIDEO_IDS) {
-    await cacheVideoComments(videoId);
-    await new Promise((r) => setTimeout(r, 2000));
-  }
+  await cacheVideoComments(VIDEO_ID);
 }
 
 export function startCommentCacheWorker() {
@@ -114,5 +107,5 @@ export function startCommentCacheWorker() {
 
   run();
   setInterval(run, INTERVAL_MS);
-  console.log(`[CommentCacheWorker] Started with ${VIDEO_IDS.length} videos, interval ${INTERVAL_MS / 1000}s`);
+  console.log(`[CommentCacheWorker] Started for ${VIDEO_ID}, interval ${INTERVAL_MS / 1000}s`);
 }

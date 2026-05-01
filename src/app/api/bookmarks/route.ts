@@ -8,9 +8,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const folderId = searchParams.get("folderId");
+
   try {
     const bookmarks = await prisma.bookmark.findMany({
-      where: { userId },
+      where: { userId, ...(folderId ? { folderId } : { folderId: null }) },
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json({ bookmarks });
@@ -34,9 +37,12 @@ export async function POST(req: NextRequest) {
           commentId: body.commentId,
         },
       },
-      update: {},
+      update: {
+        folderId: body.folderId || null,
+      },
       create: {
         userId,
+        folderId: body.folderId || null,
         commentId: body.commentId,
         videoId: body.videoId,
         authorName: body.authorName,

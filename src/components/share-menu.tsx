@@ -6,9 +6,10 @@ import { Share, Link2, MoreHorizontal } from "lucide-react";
 interface ShareMenuProps {
   url: string;
   text: string;
+  buttonClass?: string;
 }
 
-export function ShareMenu({ url, text }: ShareMenuProps) {
+export function ShareMenu({ url, text, buttonClass }: ShareMenuProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -47,7 +48,7 @@ export function ShareMenu({ url, text }: ShareMenuProps) {
     <div className="relative" ref={ref}>
       <button
         onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
-        className="flex items-center gap-1.5 text-[13px] text-muted hover:text-primary transition-colors"
+        className={buttonClass || "flex items-center gap-1.5 text-[13px] text-muted hover:text-primary transition-colors"}
         title="シェア"
       >
         <Share size={18} />

@@ -174,6 +174,7 @@ exports.Prisma.CommentCacheScalarFieldEnum = {
 exports.Prisma.BookmarkScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  folderId: 'folderId',
   commentId: 'commentId',
   videoId: 'videoId',
   authorName: 'authorName',
@@ -190,6 +191,7 @@ exports.Prisma.ListScalarFieldEnum = {
   userId: 'userId',
   name: 'name',
   description: 'description',
+  isPublic: 'isPublic',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -205,6 +207,20 @@ exports.Prisma.ListItemScalarFieldEnum = {
   likeCount: 'likeCount',
   replyCount: 'replyCount',
   publishedTime: 'publishedTime',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ListFollowScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  listId: 'listId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BookmarkFolderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
   createdAt: 'createdAt'
 };
 
@@ -243,6 +259,8 @@ exports.Prisma.ModelName = {
   Bookmark: 'Bookmark',
   List: 'List',
   ListItem: 'ListItem',
+  ListFollow: 'ListFollow',
+  BookmarkFolder: 'BookmarkFolder',
   ScheduledPost: 'ScheduledPost'
 };
 

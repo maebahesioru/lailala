@@ -54,6 +54,16 @@ export type List = $Result.DefaultSelection<Prisma.$ListPayload>
  */
 export type ListItem = $Result.DefaultSelection<Prisma.$ListItemPayload>
 /**
+ * Model ListFollow
+ * 
+ */
+export type ListFollow = $Result.DefaultSelection<Prisma.$ListFollowPayload>
+/**
+ * Model BookmarkFolder
+ * 
+ */
+export type BookmarkFolder = $Result.DefaultSelection<Prisma.$BookmarkFolderPayload>
+/**
  * Model ScheduledPost
  * 
  */
@@ -256,6 +266,26 @@ export class PrismaClient<
     * ```
     */
   get listItem(): Prisma.ListItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.listFollow`: Exposes CRUD operations for the **ListFollow** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ListFollows
+    * const listFollows = await prisma.listFollow.findMany()
+    * ```
+    */
+  get listFollow(): Prisma.ListFollowDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bookmarkFolder`: Exposes CRUD operations for the **BookmarkFolder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BookmarkFolders
+    * const bookmarkFolders = await prisma.bookmarkFolder.findMany()
+    * ```
+    */
+  get bookmarkFolder(): Prisma.BookmarkFolderDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.scheduledPost`: Exposes CRUD operations for the **ScheduledPost** model.
@@ -715,6 +745,8 @@ export namespace Prisma {
     Bookmark: 'Bookmark',
     List: 'List',
     ListItem: 'ListItem',
+    ListFollow: 'ListFollow',
+    BookmarkFolder: 'BookmarkFolder',
     ScheduledPost: 'ScheduledPost'
   };
 
@@ -734,7 +766,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem" | "scheduledPost"
+      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "scheduledPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1330,6 +1362,154 @@ export namespace Prisma {
           }
         }
       }
+      ListFollow: {
+        payload: Prisma.$ListFollowPayload<ExtArgs>
+        fields: Prisma.ListFollowFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ListFollowFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ListFollowFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>
+          }
+          findFirst: {
+            args: Prisma.ListFollowFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ListFollowFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>
+          }
+          findMany: {
+            args: Prisma.ListFollowFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>[]
+          }
+          create: {
+            args: Prisma.ListFollowCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>
+          }
+          createMany: {
+            args: Prisma.ListFollowCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ListFollowCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>[]
+          }
+          delete: {
+            args: Prisma.ListFollowDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>
+          }
+          update: {
+            args: Prisma.ListFollowUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>
+          }
+          deleteMany: {
+            args: Prisma.ListFollowDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ListFollowUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ListFollowUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>[]
+          }
+          upsert: {
+            args: Prisma.ListFollowUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListFollowPayload>
+          }
+          aggregate: {
+            args: Prisma.ListFollowAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateListFollow>
+          }
+          groupBy: {
+            args: Prisma.ListFollowGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ListFollowGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ListFollowCountArgs<ExtArgs>
+            result: $Utils.Optional<ListFollowCountAggregateOutputType> | number
+          }
+        }
+      }
+      BookmarkFolder: {
+        payload: Prisma.$BookmarkFolderPayload<ExtArgs>
+        fields: Prisma.BookmarkFolderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BookmarkFolderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BookmarkFolderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>
+          }
+          findFirst: {
+            args: Prisma.BookmarkFolderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BookmarkFolderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>
+          }
+          findMany: {
+            args: Prisma.BookmarkFolderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>[]
+          }
+          create: {
+            args: Prisma.BookmarkFolderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>
+          }
+          createMany: {
+            args: Prisma.BookmarkFolderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BookmarkFolderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>[]
+          }
+          delete: {
+            args: Prisma.BookmarkFolderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>
+          }
+          update: {
+            args: Prisma.BookmarkFolderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>
+          }
+          deleteMany: {
+            args: Prisma.BookmarkFolderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BookmarkFolderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BookmarkFolderUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>[]
+          }
+          upsert: {
+            args: Prisma.BookmarkFolderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookmarkFolderPayload>
+          }
+          aggregate: {
+            args: Prisma.BookmarkFolderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBookmarkFolder>
+          }
+          groupBy: {
+            args: Prisma.BookmarkFolderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BookmarkFolderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BookmarkFolderCountArgs<ExtArgs>
+            result: $Utils.Optional<BookmarkFolderCountAggregateOutputType> | number
+          }
+        }
+      }
       ScheduledPost: {
         payload: Prisma.$ScheduledPostPayload<ExtArgs>
         fields: Prisma.ScheduledPostFieldRefs
@@ -1508,6 +1688,8 @@ export namespace Prisma {
     bookmark?: BookmarkOmit
     list?: ListOmit
     listItem?: ListItemOmit
+    listFollow?: ListFollowOmit
+    bookmarkFolder?: BookmarkFolderOmit
     scheduledPost?: ScheduledPostOmit
   }
 
@@ -1592,12 +1774,16 @@ export namespace Prisma {
     commentLikes: number
     actions: number
     lists: number
+    listFollows: number
+    bookmarkFolders: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     commentLikes?: boolean | UserCountOutputTypeCountCommentLikesArgs
     actions?: boolean | UserCountOutputTypeCountActionsArgs
     lists?: boolean | UserCountOutputTypeCountListsArgs
+    listFollows?: boolean | UserCountOutputTypeCountListFollowsArgs
+    bookmarkFolders?: boolean | UserCountOutputTypeCountBookmarkFoldersArgs
   }
 
   // Custom InputTypes
@@ -1632,6 +1818,20 @@ export namespace Prisma {
     where?: ListWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountListFollowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ListFollowWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBookmarkFoldersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookmarkFolderWhereInput
+  }
+
 
   /**
    * Count Type ListCountOutputType
@@ -1639,10 +1839,12 @@ export namespace Prisma {
 
   export type ListCountOutputType = {
     items: number
+    followers: number
   }
 
   export type ListCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     items?: boolean | ListCountOutputTypeCountItemsArgs
+    followers?: boolean | ListCountOutputTypeCountFollowersArgs
   }
 
   // Custom InputTypes
@@ -1661,6 +1863,44 @@ export namespace Prisma {
    */
   export type ListCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ListItemWhereInput
+  }
+
+  /**
+   * ListCountOutputType without action
+   */
+  export type ListCountOutputTypeCountFollowersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ListFollowWhereInput
+  }
+
+
+  /**
+   * Count Type BookmarkFolderCountOutputType
+   */
+
+  export type BookmarkFolderCountOutputType = {
+    bookmarks: number
+  }
+
+  export type BookmarkFolderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bookmarks?: boolean | BookmarkFolderCountOutputTypeCountBookmarksArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BookmarkFolderCountOutputType without action
+   */
+  export type BookmarkFolderCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolderCountOutputType
+     */
+    select?: BookmarkFolderCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BookmarkFolderCountOutputType without action
+   */
+  export type BookmarkFolderCountOutputTypeCountBookmarksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookmarkWhereInput
   }
 
 
@@ -1836,6 +2076,8 @@ export namespace Prisma {
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
     actions?: boolean | User$actionsArgs<ExtArgs>
     lists?: boolean | User$listsArgs<ExtArgs>
+    listFollows?: boolean | User$listFollowsArgs<ExtArgs>
+    bookmarkFolders?: boolean | User$bookmarkFoldersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1869,6 +2111,8 @@ export namespace Prisma {
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
     actions?: boolean | User$actionsArgs<ExtArgs>
     lists?: boolean | User$listsArgs<ExtArgs>
+    listFollows?: boolean | User$listFollowsArgs<ExtArgs>
+    bookmarkFolders?: boolean | User$bookmarkFoldersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1881,6 +2125,8 @@ export namespace Prisma {
       commentLikes: Prisma.$CommentLikePayload<ExtArgs>[]
       actions: Prisma.$UserActionPayload<ExtArgs>[]
       lists: Prisma.$ListPayload<ExtArgs>[]
+      listFollows: Prisma.$ListFollowPayload<ExtArgs>[]
+      bookmarkFolders: Prisma.$BookmarkFolderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2286,6 +2532,8 @@ export namespace Prisma {
     commentLikes<T extends User$commentLikesArgs<ExtArgs> = {}>(args?: Subset<T, User$commentLikesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     actions<T extends User$actionsArgs<ExtArgs> = {}>(args?: Subset<T, User$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     lists<T extends User$listsArgs<ExtArgs> = {}>(args?: Subset<T, User$listsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    listFollows<T extends User$listFollowsArgs<ExtArgs> = {}>(args?: Subset<T, User$listFollowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bookmarkFolders<T extends User$bookmarkFoldersArgs<ExtArgs> = {}>(args?: Subset<T, User$bookmarkFoldersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2796,6 +3044,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ListScalarFieldEnum | ListScalarFieldEnum[]
+  }
+
+  /**
+   * User.listFollows
+   */
+  export type User$listFollowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    where?: ListFollowWhereInput
+    orderBy?: ListFollowOrderByWithRelationInput | ListFollowOrderByWithRelationInput[]
+    cursor?: ListFollowWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ListFollowScalarFieldEnum | ListFollowScalarFieldEnum[]
+  }
+
+  /**
+   * User.bookmarkFolders
+   */
+  export type User$bookmarkFoldersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    where?: BookmarkFolderWhereInput
+    orderBy?: BookmarkFolderOrderByWithRelationInput | BookmarkFolderOrderByWithRelationInput[]
+    cursor?: BookmarkFolderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookmarkFolderScalarFieldEnum | BookmarkFolderScalarFieldEnum[]
   }
 
   /**
@@ -7167,6 +7463,7 @@ export namespace Prisma {
   export type BookmarkMinAggregateOutputType = {
     id: string | null
     userId: string | null
+    folderId: string | null
     commentId: string | null
     videoId: string | null
     authorName: string | null
@@ -7181,6 +7478,7 @@ export namespace Prisma {
   export type BookmarkMaxAggregateOutputType = {
     id: string | null
     userId: string | null
+    folderId: string | null
     commentId: string | null
     videoId: string | null
     authorName: string | null
@@ -7195,6 +7493,7 @@ export namespace Prisma {
   export type BookmarkCountAggregateOutputType = {
     id: number
     userId: number
+    folderId: number
     commentId: number
     videoId: number
     authorName: number
@@ -7211,6 +7510,7 @@ export namespace Prisma {
   export type BookmarkMinAggregateInputType = {
     id?: true
     userId?: true
+    folderId?: true
     commentId?: true
     videoId?: true
     authorName?: true
@@ -7225,6 +7525,7 @@ export namespace Prisma {
   export type BookmarkMaxAggregateInputType = {
     id?: true
     userId?: true
+    folderId?: true
     commentId?: true
     videoId?: true
     authorName?: true
@@ -7239,6 +7540,7 @@ export namespace Prisma {
   export type BookmarkCountAggregateInputType = {
     id?: true
     userId?: true
+    folderId?: true
     commentId?: true
     videoId?: true
     authorName?: true
@@ -7326,6 +7628,7 @@ export namespace Prisma {
   export type BookmarkGroupByOutputType = {
     id: string
     userId: string
+    folderId: string | null
     commentId: string
     videoId: string
     authorName: string
@@ -7357,6 +7660,7 @@ export namespace Prisma {
   export type BookmarkSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    folderId?: boolean
     commentId?: boolean
     videoId?: boolean
     authorName?: boolean
@@ -7366,11 +7670,13 @@ export namespace Prisma {
     replyCount?: boolean
     publishedTime?: boolean
     createdAt?: boolean
+    folder?: boolean | Bookmark$folderArgs<ExtArgs>
   }, ExtArgs["result"]["bookmark"]>
 
   export type BookmarkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    folderId?: boolean
     commentId?: boolean
     videoId?: boolean
     authorName?: boolean
@@ -7380,11 +7686,13 @@ export namespace Prisma {
     replyCount?: boolean
     publishedTime?: boolean
     createdAt?: boolean
+    folder?: boolean | Bookmark$folderArgs<ExtArgs>
   }, ExtArgs["result"]["bookmark"]>
 
   export type BookmarkSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    folderId?: boolean
     commentId?: boolean
     videoId?: boolean
     authorName?: boolean
@@ -7394,11 +7702,13 @@ export namespace Prisma {
     replyCount?: boolean
     publishedTime?: boolean
     createdAt?: boolean
+    folder?: boolean | Bookmark$folderArgs<ExtArgs>
   }, ExtArgs["result"]["bookmark"]>
 
   export type BookmarkSelectScalar = {
     id?: boolean
     userId?: boolean
+    folderId?: boolean
     commentId?: boolean
     videoId?: boolean
     authorName?: boolean
@@ -7410,14 +7720,26 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type BookmarkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "commentId" | "videoId" | "authorName" | "authorThumb" | "content" | "likeCount" | "replyCount" | "publishedTime" | "createdAt", ExtArgs["result"]["bookmark"]>
+  export type BookmarkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "folderId" | "commentId" | "videoId" | "authorName" | "authorThumb" | "content" | "likeCount" | "replyCount" | "publishedTime" | "createdAt", ExtArgs["result"]["bookmark"]>
+  export type BookmarkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    folder?: boolean | Bookmark$folderArgs<ExtArgs>
+  }
+  export type BookmarkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    folder?: boolean | Bookmark$folderArgs<ExtArgs>
+  }
+  export type BookmarkIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    folder?: boolean | Bookmark$folderArgs<ExtArgs>
+  }
 
   export type $BookmarkPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Bookmark"
-    objects: {}
+    objects: {
+      folder: Prisma.$BookmarkFolderPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
+      folderId: string | null
       commentId: string
       videoId: string
       authorName: string
@@ -7821,6 +8143,7 @@ export namespace Prisma {
    */
   export interface Prisma__BookmarkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    folder<T extends Bookmark$folderArgs<ExtArgs> = {}>(args?: Subset<T, Bookmark$folderArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7852,6 +8175,7 @@ export namespace Prisma {
   interface BookmarkFieldRefs {
     readonly id: FieldRef<"Bookmark", 'String'>
     readonly userId: FieldRef<"Bookmark", 'String'>
+    readonly folderId: FieldRef<"Bookmark", 'String'>
     readonly commentId: FieldRef<"Bookmark", 'String'>
     readonly videoId: FieldRef<"Bookmark", 'String'>
     readonly authorName: FieldRef<"Bookmark", 'String'>
@@ -7878,6 +8202,10 @@ export namespace Prisma {
      */
     omit?: BookmarkOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
      * Filter, which Bookmark to fetch.
      */
     where: BookmarkWhereUniqueInput
@@ -7896,6 +8224,10 @@ export namespace Prisma {
      */
     omit?: BookmarkOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
      * Filter, which Bookmark to fetch.
      */
     where: BookmarkWhereUniqueInput
@@ -7913,6 +8245,10 @@ export namespace Prisma {
      * Omit specific fields from the Bookmark
      */
     omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
     /**
      * Filter, which Bookmark to fetch.
      */
@@ -7962,6 +8298,10 @@ export namespace Prisma {
      */
     omit?: BookmarkOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
      * Filter, which Bookmark to fetch.
      */
     where?: BookmarkWhereInput
@@ -8010,6 +8350,10 @@ export namespace Prisma {
      */
     omit?: BookmarkOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
      * Filter, which Bookmarks to fetch.
      */
     where?: BookmarkWhereInput
@@ -8053,6 +8397,10 @@ export namespace Prisma {
      */
     omit?: BookmarkOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
      * The data needed to create a Bookmark.
      */
     data: XOR<BookmarkCreateInput, BookmarkUncheckedCreateInput>
@@ -8086,6 +8434,10 @@ export namespace Prisma {
      */
     data: BookmarkCreateManyInput | BookmarkCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -8100,6 +8452,10 @@ export namespace Prisma {
      * Omit specific fields from the Bookmark
      */
     omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
     /**
      * The data needed to update a Bookmark.
      */
@@ -8152,6 +8508,10 @@ export namespace Prisma {
      * Limit how many Bookmarks to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -8166,6 +8526,10 @@ export namespace Prisma {
      * Omit specific fields from the Bookmark
      */
     omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
     /**
      * The filter to search for the Bookmark to update in case it exists.
      */
@@ -8193,6 +8557,10 @@ export namespace Prisma {
      */
     omit?: BookmarkOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    /**
      * Filter which Bookmark to delete.
      */
     where: BookmarkWhereUniqueInput
@@ -8213,6 +8581,25 @@ export namespace Prisma {
   }
 
   /**
+   * Bookmark.folder
+   */
+  export type Bookmark$folderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    where?: BookmarkFolderWhereInput
+  }
+
+  /**
    * Bookmark without action
    */
   export type BookmarkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8224,6 +8611,10 @@ export namespace Prisma {
      * Omit specific fields from the Bookmark
      */
     omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
   }
 
 
@@ -8242,6 +8633,7 @@ export namespace Prisma {
     userId: string | null
     name: string | null
     description: string | null
+    isPublic: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8251,6 +8643,7 @@ export namespace Prisma {
     userId: string | null
     name: string | null
     description: string | null
+    isPublic: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8260,6 +8653,7 @@ export namespace Prisma {
     userId: number
     name: number
     description: number
+    isPublic: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8271,6 +8665,7 @@ export namespace Prisma {
     userId?: true
     name?: true
     description?: true
+    isPublic?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8280,6 +8675,7 @@ export namespace Prisma {
     userId?: true
     name?: true
     description?: true
+    isPublic?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8289,6 +8685,7 @@ export namespace Prisma {
     userId?: true
     name?: true
     description?: true
+    isPublic?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8371,6 +8768,7 @@ export namespace Prisma {
     userId: string
     name: string
     description: string | null
+    isPublic: boolean
     createdAt: Date
     updatedAt: Date
     _count: ListCountAggregateOutputType | null
@@ -8397,10 +8795,12 @@ export namespace Prisma {
     userId?: boolean
     name?: boolean
     description?: boolean
+    isPublic?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | List$itemsArgs<ExtArgs>
+    followers?: boolean | List$followersArgs<ExtArgs>
     _count?: boolean | ListCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["list"]>
 
@@ -8409,6 +8809,7 @@ export namespace Prisma {
     userId?: boolean
     name?: boolean
     description?: boolean
+    isPublic?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -8419,6 +8820,7 @@ export namespace Prisma {
     userId?: boolean
     name?: boolean
     description?: boolean
+    isPublic?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -8429,14 +8831,16 @@ export namespace Prisma {
     userId?: boolean
     name?: boolean
     description?: boolean
+    isPublic?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ListOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["list"]>
+  export type ListOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "description" | "isPublic" | "createdAt" | "updatedAt", ExtArgs["result"]["list"]>
   export type ListInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | List$itemsArgs<ExtArgs>
+    followers?: boolean | List$followersArgs<ExtArgs>
     _count?: boolean | ListCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ListIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8451,12 +8855,14 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       items: Prisma.$ListItemPayload<ExtArgs>[]
+      followers: Prisma.$ListFollowPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       name: string
       description: string | null
+      isPublic: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["list"]>
@@ -8855,6 +9261,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     items<T extends List$itemsArgs<ExtArgs> = {}>(args?: Subset<T, List$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    followers<T extends List$followersArgs<ExtArgs> = {}>(args?: Subset<T, List$followersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8888,6 +9295,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"List", 'String'>
     readonly name: FieldRef<"List", 'String'>
     readonly description: FieldRef<"List", 'String'>
+    readonly isPublic: FieldRef<"List", 'Boolean'>
     readonly createdAt: FieldRef<"List", 'DateTime'>
     readonly updatedAt: FieldRef<"List", 'DateTime'>
   }
@@ -9307,6 +9715,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ListItemScalarFieldEnum | ListItemScalarFieldEnum[]
+  }
+
+  /**
+   * List.followers
+   */
+  export type List$followersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    where?: ListFollowWhereInput
+    orderBy?: ListFollowOrderByWithRelationInput | ListFollowOrderByWithRelationInput[]
+    cursor?: ListFollowWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ListFollowScalarFieldEnum | ListFollowScalarFieldEnum[]
   }
 
   /**
@@ -10465,6 +10897,2134 @@ export namespace Prisma {
 
 
   /**
+   * Model ListFollow
+   */
+
+  export type AggregateListFollow = {
+    _count: ListFollowCountAggregateOutputType | null
+    _min: ListFollowMinAggregateOutputType | null
+    _max: ListFollowMaxAggregateOutputType | null
+  }
+
+  export type ListFollowMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    listId: string | null
+    createdAt: Date | null
+  }
+
+  export type ListFollowMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    listId: string | null
+    createdAt: Date | null
+  }
+
+  export type ListFollowCountAggregateOutputType = {
+    id: number
+    userId: number
+    listId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ListFollowMinAggregateInputType = {
+    id?: true
+    userId?: true
+    listId?: true
+    createdAt?: true
+  }
+
+  export type ListFollowMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    listId?: true
+    createdAt?: true
+  }
+
+  export type ListFollowCountAggregateInputType = {
+    id?: true
+    userId?: true
+    listId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ListFollowAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ListFollow to aggregate.
+     */
+    where?: ListFollowWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ListFollows to fetch.
+     */
+    orderBy?: ListFollowOrderByWithRelationInput | ListFollowOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ListFollowWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ListFollows from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ListFollows.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ListFollows
+    **/
+    _count?: true | ListFollowCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ListFollowMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ListFollowMaxAggregateInputType
+  }
+
+  export type GetListFollowAggregateType<T extends ListFollowAggregateArgs> = {
+        [P in keyof T & keyof AggregateListFollow]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateListFollow[P]>
+      : GetScalarType<T[P], AggregateListFollow[P]>
+  }
+
+
+
+
+  export type ListFollowGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ListFollowWhereInput
+    orderBy?: ListFollowOrderByWithAggregationInput | ListFollowOrderByWithAggregationInput[]
+    by: ListFollowScalarFieldEnum[] | ListFollowScalarFieldEnum
+    having?: ListFollowScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ListFollowCountAggregateInputType | true
+    _min?: ListFollowMinAggregateInputType
+    _max?: ListFollowMaxAggregateInputType
+  }
+
+  export type ListFollowGroupByOutputType = {
+    id: string
+    userId: string
+    listId: string
+    createdAt: Date
+    _count: ListFollowCountAggregateOutputType | null
+    _min: ListFollowMinAggregateOutputType | null
+    _max: ListFollowMaxAggregateOutputType | null
+  }
+
+  type GetListFollowGroupByPayload<T extends ListFollowGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ListFollowGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ListFollowGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ListFollowGroupByOutputType[P]>
+            : GetScalarType<T[P], ListFollowGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ListFollowSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    listId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    list?: boolean | ListDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["listFollow"]>
+
+  export type ListFollowSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    listId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    list?: boolean | ListDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["listFollow"]>
+
+  export type ListFollowSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    listId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    list?: boolean | ListDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["listFollow"]>
+
+  export type ListFollowSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    listId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ListFollowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "listId" | "createdAt", ExtArgs["result"]["listFollow"]>
+  export type ListFollowInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    list?: boolean | ListDefaultArgs<ExtArgs>
+  }
+  export type ListFollowIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    list?: boolean | ListDefaultArgs<ExtArgs>
+  }
+  export type ListFollowIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    list?: boolean | ListDefaultArgs<ExtArgs>
+  }
+
+  export type $ListFollowPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ListFollow"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      list: Prisma.$ListPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      listId: string
+      createdAt: Date
+    }, ExtArgs["result"]["listFollow"]>
+    composites: {}
+  }
+
+  type ListFollowGetPayload<S extends boolean | null | undefined | ListFollowDefaultArgs> = $Result.GetResult<Prisma.$ListFollowPayload, S>
+
+  type ListFollowCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ListFollowFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ListFollowCountAggregateInputType | true
+    }
+
+  export interface ListFollowDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListFollow'], meta: { name: 'ListFollow' } }
+    /**
+     * Find zero or one ListFollow that matches the filter.
+     * @param {ListFollowFindUniqueArgs} args - Arguments to find a ListFollow
+     * @example
+     * // Get one ListFollow
+     * const listFollow = await prisma.listFollow.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ListFollowFindUniqueArgs>(args: SelectSubset<T, ListFollowFindUniqueArgs<ExtArgs>>): Prisma__ListFollowClient<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ListFollow that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ListFollowFindUniqueOrThrowArgs} args - Arguments to find a ListFollow
+     * @example
+     * // Get one ListFollow
+     * const listFollow = await prisma.listFollow.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ListFollowFindUniqueOrThrowArgs>(args: SelectSubset<T, ListFollowFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListFollowClient<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ListFollow that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ListFollowFindFirstArgs} args - Arguments to find a ListFollow
+     * @example
+     * // Get one ListFollow
+     * const listFollow = await prisma.listFollow.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ListFollowFindFirstArgs>(args?: SelectSubset<T, ListFollowFindFirstArgs<ExtArgs>>): Prisma__ListFollowClient<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ListFollow that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ListFollowFindFirstOrThrowArgs} args - Arguments to find a ListFollow
+     * @example
+     * // Get one ListFollow
+     * const listFollow = await prisma.listFollow.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ListFollowFindFirstOrThrowArgs>(args?: SelectSubset<T, ListFollowFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListFollowClient<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ListFollows that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ListFollowFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ListFollows
+     * const listFollows = await prisma.listFollow.findMany()
+     * 
+     * // Get first 10 ListFollows
+     * const listFollows = await prisma.listFollow.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const listFollowWithIdOnly = await prisma.listFollow.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ListFollowFindManyArgs>(args?: SelectSubset<T, ListFollowFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ListFollow.
+     * @param {ListFollowCreateArgs} args - Arguments to create a ListFollow.
+     * @example
+     * // Create one ListFollow
+     * const ListFollow = await prisma.listFollow.create({
+     *   data: {
+     *     // ... data to create a ListFollow
+     *   }
+     * })
+     * 
+     */
+    create<T extends ListFollowCreateArgs>(args: SelectSubset<T, ListFollowCreateArgs<ExtArgs>>): Prisma__ListFollowClient<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ListFollows.
+     * @param {ListFollowCreateManyArgs} args - Arguments to create many ListFollows.
+     * @example
+     * // Create many ListFollows
+     * const listFollow = await prisma.listFollow.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ListFollowCreateManyArgs>(args?: SelectSubset<T, ListFollowCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ListFollows and returns the data saved in the database.
+     * @param {ListFollowCreateManyAndReturnArgs} args - Arguments to create many ListFollows.
+     * @example
+     * // Create many ListFollows
+     * const listFollow = await prisma.listFollow.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ListFollows and only return the `id`
+     * const listFollowWithIdOnly = await prisma.listFollow.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ListFollowCreateManyAndReturnArgs>(args?: SelectSubset<T, ListFollowCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ListFollow.
+     * @param {ListFollowDeleteArgs} args - Arguments to delete one ListFollow.
+     * @example
+     * // Delete one ListFollow
+     * const ListFollow = await prisma.listFollow.delete({
+     *   where: {
+     *     // ... filter to delete one ListFollow
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ListFollowDeleteArgs>(args: SelectSubset<T, ListFollowDeleteArgs<ExtArgs>>): Prisma__ListFollowClient<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ListFollow.
+     * @param {ListFollowUpdateArgs} args - Arguments to update one ListFollow.
+     * @example
+     * // Update one ListFollow
+     * const listFollow = await prisma.listFollow.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ListFollowUpdateArgs>(args: SelectSubset<T, ListFollowUpdateArgs<ExtArgs>>): Prisma__ListFollowClient<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ListFollows.
+     * @param {ListFollowDeleteManyArgs} args - Arguments to filter ListFollows to delete.
+     * @example
+     * // Delete a few ListFollows
+     * const { count } = await prisma.listFollow.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ListFollowDeleteManyArgs>(args?: SelectSubset<T, ListFollowDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ListFollows.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ListFollowUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ListFollows
+     * const listFollow = await prisma.listFollow.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ListFollowUpdateManyArgs>(args: SelectSubset<T, ListFollowUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ListFollows and returns the data updated in the database.
+     * @param {ListFollowUpdateManyAndReturnArgs} args - Arguments to update many ListFollows.
+     * @example
+     * // Update many ListFollows
+     * const listFollow = await prisma.listFollow.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ListFollows and only return the `id`
+     * const listFollowWithIdOnly = await prisma.listFollow.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ListFollowUpdateManyAndReturnArgs>(args: SelectSubset<T, ListFollowUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ListFollow.
+     * @param {ListFollowUpsertArgs} args - Arguments to update or create a ListFollow.
+     * @example
+     * // Update or create a ListFollow
+     * const listFollow = await prisma.listFollow.upsert({
+     *   create: {
+     *     // ... data to create a ListFollow
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ListFollow we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ListFollowUpsertArgs>(args: SelectSubset<T, ListFollowUpsertArgs<ExtArgs>>): Prisma__ListFollowClient<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ListFollows.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ListFollowCountArgs} args - Arguments to filter ListFollows to count.
+     * @example
+     * // Count the number of ListFollows
+     * const count = await prisma.listFollow.count({
+     *   where: {
+     *     // ... the filter for the ListFollows we want to count
+     *   }
+     * })
+    **/
+    count<T extends ListFollowCountArgs>(
+      args?: Subset<T, ListFollowCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ListFollowCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ListFollow.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ListFollowAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ListFollowAggregateArgs>(args: Subset<T, ListFollowAggregateArgs>): Prisma.PrismaPromise<GetListFollowAggregateType<T>>
+
+    /**
+     * Group by ListFollow.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ListFollowGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ListFollowGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ListFollowGroupByArgs['orderBy'] }
+        : { orderBy?: ListFollowGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ListFollowGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListFollowGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ListFollow model
+   */
+  readonly fields: ListFollowFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ListFollow.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ListFollowClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    list<T extends ListDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ListDefaultArgs<ExtArgs>>): Prisma__ListClient<$Result.GetResult<Prisma.$ListPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ListFollow model
+   */
+  interface ListFollowFieldRefs {
+    readonly id: FieldRef<"ListFollow", 'String'>
+    readonly userId: FieldRef<"ListFollow", 'String'>
+    readonly listId: FieldRef<"ListFollow", 'String'>
+    readonly createdAt: FieldRef<"ListFollow", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ListFollow findUnique
+   */
+  export type ListFollowFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * Filter, which ListFollow to fetch.
+     */
+    where: ListFollowWhereUniqueInput
+  }
+
+  /**
+   * ListFollow findUniqueOrThrow
+   */
+  export type ListFollowFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * Filter, which ListFollow to fetch.
+     */
+    where: ListFollowWhereUniqueInput
+  }
+
+  /**
+   * ListFollow findFirst
+   */
+  export type ListFollowFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * Filter, which ListFollow to fetch.
+     */
+    where?: ListFollowWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ListFollows to fetch.
+     */
+    orderBy?: ListFollowOrderByWithRelationInput | ListFollowOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ListFollows.
+     */
+    cursor?: ListFollowWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ListFollows from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ListFollows.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ListFollows.
+     */
+    distinct?: ListFollowScalarFieldEnum | ListFollowScalarFieldEnum[]
+  }
+
+  /**
+   * ListFollow findFirstOrThrow
+   */
+  export type ListFollowFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * Filter, which ListFollow to fetch.
+     */
+    where?: ListFollowWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ListFollows to fetch.
+     */
+    orderBy?: ListFollowOrderByWithRelationInput | ListFollowOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ListFollows.
+     */
+    cursor?: ListFollowWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ListFollows from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ListFollows.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ListFollows.
+     */
+    distinct?: ListFollowScalarFieldEnum | ListFollowScalarFieldEnum[]
+  }
+
+  /**
+   * ListFollow findMany
+   */
+  export type ListFollowFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * Filter, which ListFollows to fetch.
+     */
+    where?: ListFollowWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ListFollows to fetch.
+     */
+    orderBy?: ListFollowOrderByWithRelationInput | ListFollowOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ListFollows.
+     */
+    cursor?: ListFollowWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ListFollows from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ListFollows.
+     */
+    skip?: number
+    distinct?: ListFollowScalarFieldEnum | ListFollowScalarFieldEnum[]
+  }
+
+  /**
+   * ListFollow create
+   */
+  export type ListFollowCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ListFollow.
+     */
+    data: XOR<ListFollowCreateInput, ListFollowUncheckedCreateInput>
+  }
+
+  /**
+   * ListFollow createMany
+   */
+  export type ListFollowCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ListFollows.
+     */
+    data: ListFollowCreateManyInput | ListFollowCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ListFollow createManyAndReturn
+   */
+  export type ListFollowCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * The data used to create many ListFollows.
+     */
+    data: ListFollowCreateManyInput | ListFollowCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ListFollow update
+   */
+  export type ListFollowUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ListFollow.
+     */
+    data: XOR<ListFollowUpdateInput, ListFollowUncheckedUpdateInput>
+    /**
+     * Choose, which ListFollow to update.
+     */
+    where: ListFollowWhereUniqueInput
+  }
+
+  /**
+   * ListFollow updateMany
+   */
+  export type ListFollowUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ListFollows.
+     */
+    data: XOR<ListFollowUpdateManyMutationInput, ListFollowUncheckedUpdateManyInput>
+    /**
+     * Filter which ListFollows to update
+     */
+    where?: ListFollowWhereInput
+    /**
+     * Limit how many ListFollows to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ListFollow updateManyAndReturn
+   */
+  export type ListFollowUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * The data used to update ListFollows.
+     */
+    data: XOR<ListFollowUpdateManyMutationInput, ListFollowUncheckedUpdateManyInput>
+    /**
+     * Filter which ListFollows to update
+     */
+    where?: ListFollowWhereInput
+    /**
+     * Limit how many ListFollows to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ListFollow upsert
+   */
+  export type ListFollowUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ListFollow to update in case it exists.
+     */
+    where: ListFollowWhereUniqueInput
+    /**
+     * In case the ListFollow found by the `where` argument doesn't exist, create a new ListFollow with this data.
+     */
+    create: XOR<ListFollowCreateInput, ListFollowUncheckedCreateInput>
+    /**
+     * In case the ListFollow was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ListFollowUpdateInput, ListFollowUncheckedUpdateInput>
+  }
+
+  /**
+   * ListFollow delete
+   */
+  export type ListFollowDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+    /**
+     * Filter which ListFollow to delete.
+     */
+    where: ListFollowWhereUniqueInput
+  }
+
+  /**
+   * ListFollow deleteMany
+   */
+  export type ListFollowDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ListFollows to delete
+     */
+    where?: ListFollowWhereInput
+    /**
+     * Limit how many ListFollows to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ListFollow without action
+   */
+  export type ListFollowDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ListFollow
+     */
+    select?: ListFollowSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ListFollow
+     */
+    omit?: ListFollowOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListFollowInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BookmarkFolder
+   */
+
+  export type AggregateBookmarkFolder = {
+    _count: BookmarkFolderCountAggregateOutputType | null
+    _min: BookmarkFolderMinAggregateOutputType | null
+    _max: BookmarkFolderMaxAggregateOutputType | null
+  }
+
+  export type BookmarkFolderMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    createdAt: Date | null
+  }
+
+  export type BookmarkFolderMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    createdAt: Date | null
+  }
+
+  export type BookmarkFolderCountAggregateOutputType = {
+    id: number
+    userId: number
+    name: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type BookmarkFolderMinAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    createdAt?: true
+  }
+
+  export type BookmarkFolderMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    createdAt?: true
+  }
+
+  export type BookmarkFolderCountAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type BookmarkFolderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookmarkFolder to aggregate.
+     */
+    where?: BookmarkFolderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookmarkFolders to fetch.
+     */
+    orderBy?: BookmarkFolderOrderByWithRelationInput | BookmarkFolderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BookmarkFolderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookmarkFolders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookmarkFolders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BookmarkFolders
+    **/
+    _count?: true | BookmarkFolderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BookmarkFolderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BookmarkFolderMaxAggregateInputType
+  }
+
+  export type GetBookmarkFolderAggregateType<T extends BookmarkFolderAggregateArgs> = {
+        [P in keyof T & keyof AggregateBookmarkFolder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBookmarkFolder[P]>
+      : GetScalarType<T[P], AggregateBookmarkFolder[P]>
+  }
+
+
+
+
+  export type BookmarkFolderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookmarkFolderWhereInput
+    orderBy?: BookmarkFolderOrderByWithAggregationInput | BookmarkFolderOrderByWithAggregationInput[]
+    by: BookmarkFolderScalarFieldEnum[] | BookmarkFolderScalarFieldEnum
+    having?: BookmarkFolderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BookmarkFolderCountAggregateInputType | true
+    _min?: BookmarkFolderMinAggregateInputType
+    _max?: BookmarkFolderMaxAggregateInputType
+  }
+
+  export type BookmarkFolderGroupByOutputType = {
+    id: string
+    userId: string
+    name: string
+    createdAt: Date
+    _count: BookmarkFolderCountAggregateOutputType | null
+    _min: BookmarkFolderMinAggregateOutputType | null
+    _max: BookmarkFolderMaxAggregateOutputType | null
+  }
+
+  type GetBookmarkFolderGroupByPayload<T extends BookmarkFolderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BookmarkFolderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BookmarkFolderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BookmarkFolderGroupByOutputType[P]>
+            : GetScalarType<T[P], BookmarkFolderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BookmarkFolderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    bookmarks?: boolean | BookmarkFolder$bookmarksArgs<ExtArgs>
+    _count?: boolean | BookmarkFolderCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookmarkFolder"]>
+
+  export type BookmarkFolderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookmarkFolder"]>
+
+  export type BookmarkFolderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookmarkFolder"]>
+
+  export type BookmarkFolderSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    createdAt?: boolean
+  }
+
+  export type BookmarkFolderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "createdAt", ExtArgs["result"]["bookmarkFolder"]>
+  export type BookmarkFolderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    bookmarks?: boolean | BookmarkFolder$bookmarksArgs<ExtArgs>
+    _count?: boolean | BookmarkFolderCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BookmarkFolderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BookmarkFolderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $BookmarkFolderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BookmarkFolder"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      bookmarks: Prisma.$BookmarkPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      name: string
+      createdAt: Date
+    }, ExtArgs["result"]["bookmarkFolder"]>
+    composites: {}
+  }
+
+  type BookmarkFolderGetPayload<S extends boolean | null | undefined | BookmarkFolderDefaultArgs> = $Result.GetResult<Prisma.$BookmarkFolderPayload, S>
+
+  type BookmarkFolderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BookmarkFolderFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BookmarkFolderCountAggregateInputType | true
+    }
+
+  export interface BookmarkFolderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BookmarkFolder'], meta: { name: 'BookmarkFolder' } }
+    /**
+     * Find zero or one BookmarkFolder that matches the filter.
+     * @param {BookmarkFolderFindUniqueArgs} args - Arguments to find a BookmarkFolder
+     * @example
+     * // Get one BookmarkFolder
+     * const bookmarkFolder = await prisma.bookmarkFolder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BookmarkFolderFindUniqueArgs>(args: SelectSubset<T, BookmarkFolderFindUniqueArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BookmarkFolder that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BookmarkFolderFindUniqueOrThrowArgs} args - Arguments to find a BookmarkFolder
+     * @example
+     * // Get one BookmarkFolder
+     * const bookmarkFolder = await prisma.bookmarkFolder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BookmarkFolderFindUniqueOrThrowArgs>(args: SelectSubset<T, BookmarkFolderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookmarkFolder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFolderFindFirstArgs} args - Arguments to find a BookmarkFolder
+     * @example
+     * // Get one BookmarkFolder
+     * const bookmarkFolder = await prisma.bookmarkFolder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BookmarkFolderFindFirstArgs>(args?: SelectSubset<T, BookmarkFolderFindFirstArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookmarkFolder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFolderFindFirstOrThrowArgs} args - Arguments to find a BookmarkFolder
+     * @example
+     * // Get one BookmarkFolder
+     * const bookmarkFolder = await prisma.bookmarkFolder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BookmarkFolderFindFirstOrThrowArgs>(args?: SelectSubset<T, BookmarkFolderFindFirstOrThrowArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BookmarkFolders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFolderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BookmarkFolders
+     * const bookmarkFolders = await prisma.bookmarkFolder.findMany()
+     * 
+     * // Get first 10 BookmarkFolders
+     * const bookmarkFolders = await prisma.bookmarkFolder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bookmarkFolderWithIdOnly = await prisma.bookmarkFolder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BookmarkFolderFindManyArgs>(args?: SelectSubset<T, BookmarkFolderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BookmarkFolder.
+     * @param {BookmarkFolderCreateArgs} args - Arguments to create a BookmarkFolder.
+     * @example
+     * // Create one BookmarkFolder
+     * const BookmarkFolder = await prisma.bookmarkFolder.create({
+     *   data: {
+     *     // ... data to create a BookmarkFolder
+     *   }
+     * })
+     * 
+     */
+    create<T extends BookmarkFolderCreateArgs>(args: SelectSubset<T, BookmarkFolderCreateArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BookmarkFolders.
+     * @param {BookmarkFolderCreateManyArgs} args - Arguments to create many BookmarkFolders.
+     * @example
+     * // Create many BookmarkFolders
+     * const bookmarkFolder = await prisma.bookmarkFolder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BookmarkFolderCreateManyArgs>(args?: SelectSubset<T, BookmarkFolderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BookmarkFolders and returns the data saved in the database.
+     * @param {BookmarkFolderCreateManyAndReturnArgs} args - Arguments to create many BookmarkFolders.
+     * @example
+     * // Create many BookmarkFolders
+     * const bookmarkFolder = await prisma.bookmarkFolder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BookmarkFolders and only return the `id`
+     * const bookmarkFolderWithIdOnly = await prisma.bookmarkFolder.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BookmarkFolderCreateManyAndReturnArgs>(args?: SelectSubset<T, BookmarkFolderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BookmarkFolder.
+     * @param {BookmarkFolderDeleteArgs} args - Arguments to delete one BookmarkFolder.
+     * @example
+     * // Delete one BookmarkFolder
+     * const BookmarkFolder = await prisma.bookmarkFolder.delete({
+     *   where: {
+     *     // ... filter to delete one BookmarkFolder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BookmarkFolderDeleteArgs>(args: SelectSubset<T, BookmarkFolderDeleteArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BookmarkFolder.
+     * @param {BookmarkFolderUpdateArgs} args - Arguments to update one BookmarkFolder.
+     * @example
+     * // Update one BookmarkFolder
+     * const bookmarkFolder = await prisma.bookmarkFolder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BookmarkFolderUpdateArgs>(args: SelectSubset<T, BookmarkFolderUpdateArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BookmarkFolders.
+     * @param {BookmarkFolderDeleteManyArgs} args - Arguments to filter BookmarkFolders to delete.
+     * @example
+     * // Delete a few BookmarkFolders
+     * const { count } = await prisma.bookmarkFolder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BookmarkFolderDeleteManyArgs>(args?: SelectSubset<T, BookmarkFolderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookmarkFolders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFolderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BookmarkFolders
+     * const bookmarkFolder = await prisma.bookmarkFolder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BookmarkFolderUpdateManyArgs>(args: SelectSubset<T, BookmarkFolderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookmarkFolders and returns the data updated in the database.
+     * @param {BookmarkFolderUpdateManyAndReturnArgs} args - Arguments to update many BookmarkFolders.
+     * @example
+     * // Update many BookmarkFolders
+     * const bookmarkFolder = await prisma.bookmarkFolder.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BookmarkFolders and only return the `id`
+     * const bookmarkFolderWithIdOnly = await prisma.bookmarkFolder.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BookmarkFolderUpdateManyAndReturnArgs>(args: SelectSubset<T, BookmarkFolderUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BookmarkFolder.
+     * @param {BookmarkFolderUpsertArgs} args - Arguments to update or create a BookmarkFolder.
+     * @example
+     * // Update or create a BookmarkFolder
+     * const bookmarkFolder = await prisma.bookmarkFolder.upsert({
+     *   create: {
+     *     // ... data to create a BookmarkFolder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BookmarkFolder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BookmarkFolderUpsertArgs>(args: SelectSubset<T, BookmarkFolderUpsertArgs<ExtArgs>>): Prisma__BookmarkFolderClient<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BookmarkFolders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFolderCountArgs} args - Arguments to filter BookmarkFolders to count.
+     * @example
+     * // Count the number of BookmarkFolders
+     * const count = await prisma.bookmarkFolder.count({
+     *   where: {
+     *     // ... the filter for the BookmarkFolders we want to count
+     *   }
+     * })
+    **/
+    count<T extends BookmarkFolderCountArgs>(
+      args?: Subset<T, BookmarkFolderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BookmarkFolderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BookmarkFolder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFolderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BookmarkFolderAggregateArgs>(args: Subset<T, BookmarkFolderAggregateArgs>): Prisma.PrismaPromise<GetBookmarkFolderAggregateType<T>>
+
+    /**
+     * Group by BookmarkFolder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookmarkFolderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BookmarkFolderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BookmarkFolderGroupByArgs['orderBy'] }
+        : { orderBy?: BookmarkFolderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BookmarkFolderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBookmarkFolderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BookmarkFolder model
+   */
+  readonly fields: BookmarkFolderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BookmarkFolder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BookmarkFolderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    bookmarks<T extends BookmarkFolder$bookmarksArgs<ExtArgs> = {}>(args?: Subset<T, BookmarkFolder$bookmarksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BookmarkFolder model
+   */
+  interface BookmarkFolderFieldRefs {
+    readonly id: FieldRef<"BookmarkFolder", 'String'>
+    readonly userId: FieldRef<"BookmarkFolder", 'String'>
+    readonly name: FieldRef<"BookmarkFolder", 'String'>
+    readonly createdAt: FieldRef<"BookmarkFolder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BookmarkFolder findUnique
+   */
+  export type BookmarkFolderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * Filter, which BookmarkFolder to fetch.
+     */
+    where: BookmarkFolderWhereUniqueInput
+  }
+
+  /**
+   * BookmarkFolder findUniqueOrThrow
+   */
+  export type BookmarkFolderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * Filter, which BookmarkFolder to fetch.
+     */
+    where: BookmarkFolderWhereUniqueInput
+  }
+
+  /**
+   * BookmarkFolder findFirst
+   */
+  export type BookmarkFolderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * Filter, which BookmarkFolder to fetch.
+     */
+    where?: BookmarkFolderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookmarkFolders to fetch.
+     */
+    orderBy?: BookmarkFolderOrderByWithRelationInput | BookmarkFolderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookmarkFolders.
+     */
+    cursor?: BookmarkFolderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookmarkFolders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookmarkFolders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookmarkFolders.
+     */
+    distinct?: BookmarkFolderScalarFieldEnum | BookmarkFolderScalarFieldEnum[]
+  }
+
+  /**
+   * BookmarkFolder findFirstOrThrow
+   */
+  export type BookmarkFolderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * Filter, which BookmarkFolder to fetch.
+     */
+    where?: BookmarkFolderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookmarkFolders to fetch.
+     */
+    orderBy?: BookmarkFolderOrderByWithRelationInput | BookmarkFolderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookmarkFolders.
+     */
+    cursor?: BookmarkFolderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookmarkFolders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookmarkFolders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookmarkFolders.
+     */
+    distinct?: BookmarkFolderScalarFieldEnum | BookmarkFolderScalarFieldEnum[]
+  }
+
+  /**
+   * BookmarkFolder findMany
+   */
+  export type BookmarkFolderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * Filter, which BookmarkFolders to fetch.
+     */
+    where?: BookmarkFolderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookmarkFolders to fetch.
+     */
+    orderBy?: BookmarkFolderOrderByWithRelationInput | BookmarkFolderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BookmarkFolders.
+     */
+    cursor?: BookmarkFolderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookmarkFolders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookmarkFolders.
+     */
+    skip?: number
+    distinct?: BookmarkFolderScalarFieldEnum | BookmarkFolderScalarFieldEnum[]
+  }
+
+  /**
+   * BookmarkFolder create
+   */
+  export type BookmarkFolderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BookmarkFolder.
+     */
+    data: XOR<BookmarkFolderCreateInput, BookmarkFolderUncheckedCreateInput>
+  }
+
+  /**
+   * BookmarkFolder createMany
+   */
+  export type BookmarkFolderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BookmarkFolders.
+     */
+    data: BookmarkFolderCreateManyInput | BookmarkFolderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BookmarkFolder createManyAndReturn
+   */
+  export type BookmarkFolderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * The data used to create many BookmarkFolders.
+     */
+    data: BookmarkFolderCreateManyInput | BookmarkFolderCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookmarkFolder update
+   */
+  export type BookmarkFolderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BookmarkFolder.
+     */
+    data: XOR<BookmarkFolderUpdateInput, BookmarkFolderUncheckedUpdateInput>
+    /**
+     * Choose, which BookmarkFolder to update.
+     */
+    where: BookmarkFolderWhereUniqueInput
+  }
+
+  /**
+   * BookmarkFolder updateMany
+   */
+  export type BookmarkFolderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BookmarkFolders.
+     */
+    data: XOR<BookmarkFolderUpdateManyMutationInput, BookmarkFolderUncheckedUpdateManyInput>
+    /**
+     * Filter which BookmarkFolders to update
+     */
+    where?: BookmarkFolderWhereInput
+    /**
+     * Limit how many BookmarkFolders to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookmarkFolder updateManyAndReturn
+   */
+  export type BookmarkFolderUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * The data used to update BookmarkFolders.
+     */
+    data: XOR<BookmarkFolderUpdateManyMutationInput, BookmarkFolderUncheckedUpdateManyInput>
+    /**
+     * Filter which BookmarkFolders to update
+     */
+    where?: BookmarkFolderWhereInput
+    /**
+     * Limit how many BookmarkFolders to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookmarkFolder upsert
+   */
+  export type BookmarkFolderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BookmarkFolder to update in case it exists.
+     */
+    where: BookmarkFolderWhereUniqueInput
+    /**
+     * In case the BookmarkFolder found by the `where` argument doesn't exist, create a new BookmarkFolder with this data.
+     */
+    create: XOR<BookmarkFolderCreateInput, BookmarkFolderUncheckedCreateInput>
+    /**
+     * In case the BookmarkFolder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BookmarkFolderUpdateInput, BookmarkFolderUncheckedUpdateInput>
+  }
+
+  /**
+   * BookmarkFolder delete
+   */
+  export type BookmarkFolderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+    /**
+     * Filter which BookmarkFolder to delete.
+     */
+    where: BookmarkFolderWhereUniqueInput
+  }
+
+  /**
+   * BookmarkFolder deleteMany
+   */
+  export type BookmarkFolderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookmarkFolders to delete
+     */
+    where?: BookmarkFolderWhereInput
+    /**
+     * Limit how many BookmarkFolders to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookmarkFolder.bookmarks
+   */
+  export type BookmarkFolder$bookmarksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bookmark
+     */
+    select?: BookmarkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bookmark
+     */
+    omit?: BookmarkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkInclude<ExtArgs> | null
+    where?: BookmarkWhereInput
+    orderBy?: BookmarkOrderByWithRelationInput | BookmarkOrderByWithRelationInput[]
+    cursor?: BookmarkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookmarkScalarFieldEnum | BookmarkScalarFieldEnum[]
+  }
+
+  /**
+   * BookmarkFolder without action
+   */
+  export type BookmarkFolderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookmarkFolder
+     */
+    select?: BookmarkFolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookmarkFolder
+     */
+    omit?: BookmarkFolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookmarkFolderInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model ScheduledPost
    */
 
@@ -11567,6 +14127,7 @@ export namespace Prisma {
   export const BookmarkScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
+    folderId: 'folderId',
     commentId: 'commentId',
     videoId: 'videoId',
     authorName: 'authorName',
@@ -11586,6 +14147,7 @@ export namespace Prisma {
     userId: 'userId',
     name: 'name',
     description: 'description',
+    isPublic: 'isPublic',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11608,6 +14170,26 @@ export namespace Prisma {
   };
 
   export type ListItemScalarFieldEnum = (typeof ListItemScalarFieldEnum)[keyof typeof ListItemScalarFieldEnum]
+
+
+  export const ListFollowScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    listId: 'listId',
+    createdAt: 'createdAt'
+  };
+
+  export type ListFollowScalarFieldEnum = (typeof ListFollowScalarFieldEnum)[keyof typeof ListFollowScalarFieldEnum]
+
+
+  export const BookmarkFolderScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    name: 'name',
+    createdAt: 'createdAt'
+  };
+
+  export type BookmarkFolderScalarFieldEnum = (typeof BookmarkFolderScalarFieldEnum)[keyof typeof BookmarkFolderScalarFieldEnum]
 
 
   export const ScheduledPostScalarFieldEnum: {
@@ -11731,6 +14313,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeListRelationFilter
     actions?: UserActionListRelationFilter
     lists?: ListListRelationFilter
+    listFollows?: ListFollowListRelationFilter
+    bookmarkFolders?: BookmarkFolderListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11743,6 +14327,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeOrderByRelationAggregateInput
     actions?: UserActionOrderByRelationAggregateInput
     lists?: ListOrderByRelationAggregateInput
+    listFollows?: ListFollowOrderByRelationAggregateInput
+    bookmarkFolders?: BookmarkFolderOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -11758,6 +14344,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeListRelationFilter
     actions?: UserActionListRelationFilter
     lists?: ListListRelationFilter
+    listFollows?: ListFollowListRelationFilter
+    bookmarkFolders?: BookmarkFolderListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -12058,6 +14646,7 @@ export namespace Prisma {
     NOT?: BookmarkWhereInput | BookmarkWhereInput[]
     id?: StringFilter<"Bookmark"> | string
     userId?: StringFilter<"Bookmark"> | string
+    folderId?: StringNullableFilter<"Bookmark"> | string | null
     commentId?: StringFilter<"Bookmark"> | string
     videoId?: StringFilter<"Bookmark"> | string
     authorName?: StringFilter<"Bookmark"> | string
@@ -12067,11 +14656,13 @@ export namespace Prisma {
     replyCount?: StringFilter<"Bookmark"> | string
     publishedTime?: StringFilter<"Bookmark"> | string
     createdAt?: DateTimeFilter<"Bookmark"> | Date | string
+    folder?: XOR<BookmarkFolderNullableScalarRelationFilter, BookmarkFolderWhereInput> | null
   }
 
   export type BookmarkOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
+    folderId?: SortOrderInput | SortOrder
     commentId?: SortOrder
     videoId?: SortOrder
     authorName?: SortOrder
@@ -12081,6 +14672,7 @@ export namespace Prisma {
     replyCount?: SortOrder
     publishedTime?: SortOrder
     createdAt?: SortOrder
+    folder?: BookmarkFolderOrderByWithRelationInput
   }
 
   export type BookmarkWhereUniqueInput = Prisma.AtLeast<{
@@ -12090,6 +14682,7 @@ export namespace Prisma {
     OR?: BookmarkWhereInput[]
     NOT?: BookmarkWhereInput | BookmarkWhereInput[]
     userId?: StringFilter<"Bookmark"> | string
+    folderId?: StringNullableFilter<"Bookmark"> | string | null
     commentId?: StringFilter<"Bookmark"> | string
     videoId?: StringFilter<"Bookmark"> | string
     authorName?: StringFilter<"Bookmark"> | string
@@ -12099,11 +14692,13 @@ export namespace Prisma {
     replyCount?: StringFilter<"Bookmark"> | string
     publishedTime?: StringFilter<"Bookmark"> | string
     createdAt?: DateTimeFilter<"Bookmark"> | Date | string
+    folder?: XOR<BookmarkFolderNullableScalarRelationFilter, BookmarkFolderWhereInput> | null
   }, "id" | "userId_commentId">
 
   export type BookmarkOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
+    folderId?: SortOrderInput | SortOrder
     commentId?: SortOrder
     videoId?: SortOrder
     authorName?: SortOrder
@@ -12124,6 +14719,7 @@ export namespace Prisma {
     NOT?: BookmarkScalarWhereWithAggregatesInput | BookmarkScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Bookmark"> | string
     userId?: StringWithAggregatesFilter<"Bookmark"> | string
+    folderId?: StringNullableWithAggregatesFilter<"Bookmark"> | string | null
     commentId?: StringWithAggregatesFilter<"Bookmark"> | string
     videoId?: StringWithAggregatesFilter<"Bookmark"> | string
     authorName?: StringWithAggregatesFilter<"Bookmark"> | string
@@ -12143,10 +14739,12 @@ export namespace Prisma {
     userId?: StringFilter<"List"> | string
     name?: StringFilter<"List"> | string
     description?: StringNullableFilter<"List"> | string | null
+    isPublic?: BoolFilter<"List"> | boolean
     createdAt?: DateTimeFilter<"List"> | Date | string
     updatedAt?: DateTimeFilter<"List"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: ListItemListRelationFilter
+    followers?: ListFollowListRelationFilter
   }
 
   export type ListOrderByWithRelationInput = {
@@ -12154,10 +14752,12 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
     items?: ListItemOrderByRelationAggregateInput
+    followers?: ListFollowOrderByRelationAggregateInput
   }
 
   export type ListWhereUniqueInput = Prisma.AtLeast<{
@@ -12168,10 +14768,12 @@ export namespace Prisma {
     userId?: StringFilter<"List"> | string
     name?: StringFilter<"List"> | string
     description?: StringNullableFilter<"List"> | string | null
+    isPublic?: BoolFilter<"List"> | boolean
     createdAt?: DateTimeFilter<"List"> | Date | string
     updatedAt?: DateTimeFilter<"List"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: ListItemListRelationFilter
+    followers?: ListFollowListRelationFilter
   }, "id">
 
   export type ListOrderByWithAggregationInput = {
@@ -12179,6 +14781,7 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ListCountOrderByAggregateInput
@@ -12194,6 +14797,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"List"> | string
     name?: StringWithAggregatesFilter<"List"> | string
     description?: StringNullableWithAggregatesFilter<"List"> | string | null
+    isPublic?: BoolWithAggregatesFilter<"List"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"List"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"List"> | Date | string
   }
@@ -12284,6 +14888,113 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ListItem"> | Date | string
   }
 
+  export type ListFollowWhereInput = {
+    AND?: ListFollowWhereInput | ListFollowWhereInput[]
+    OR?: ListFollowWhereInput[]
+    NOT?: ListFollowWhereInput | ListFollowWhereInput[]
+    id?: StringFilter<"ListFollow"> | string
+    userId?: StringFilter<"ListFollow"> | string
+    listId?: StringFilter<"ListFollow"> | string
+    createdAt?: DateTimeFilter<"ListFollow"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    list?: XOR<ListScalarRelationFilter, ListWhereInput>
+  }
+
+  export type ListFollowOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    listId?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    list?: ListOrderByWithRelationInput
+  }
+
+  export type ListFollowWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_listId?: ListFollowUserIdListIdCompoundUniqueInput
+    AND?: ListFollowWhereInput | ListFollowWhereInput[]
+    OR?: ListFollowWhereInput[]
+    NOT?: ListFollowWhereInput | ListFollowWhereInput[]
+    userId?: StringFilter<"ListFollow"> | string
+    listId?: StringFilter<"ListFollow"> | string
+    createdAt?: DateTimeFilter<"ListFollow"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    list?: XOR<ListScalarRelationFilter, ListWhereInput>
+  }, "id" | "userId_listId">
+
+  export type ListFollowOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    listId?: SortOrder
+    createdAt?: SortOrder
+    _count?: ListFollowCountOrderByAggregateInput
+    _max?: ListFollowMaxOrderByAggregateInput
+    _min?: ListFollowMinOrderByAggregateInput
+  }
+
+  export type ListFollowScalarWhereWithAggregatesInput = {
+    AND?: ListFollowScalarWhereWithAggregatesInput | ListFollowScalarWhereWithAggregatesInput[]
+    OR?: ListFollowScalarWhereWithAggregatesInput[]
+    NOT?: ListFollowScalarWhereWithAggregatesInput | ListFollowScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ListFollow"> | string
+    userId?: StringWithAggregatesFilter<"ListFollow"> | string
+    listId?: StringWithAggregatesFilter<"ListFollow"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ListFollow"> | Date | string
+  }
+
+  export type BookmarkFolderWhereInput = {
+    AND?: BookmarkFolderWhereInput | BookmarkFolderWhereInput[]
+    OR?: BookmarkFolderWhereInput[]
+    NOT?: BookmarkFolderWhereInput | BookmarkFolderWhereInput[]
+    id?: StringFilter<"BookmarkFolder"> | string
+    userId?: StringFilter<"BookmarkFolder"> | string
+    name?: StringFilter<"BookmarkFolder"> | string
+    createdAt?: DateTimeFilter<"BookmarkFolder"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    bookmarks?: BookmarkListRelationFilter
+  }
+
+  export type BookmarkFolderOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    bookmarks?: BookmarkOrderByRelationAggregateInput
+  }
+
+  export type BookmarkFolderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BookmarkFolderWhereInput | BookmarkFolderWhereInput[]
+    OR?: BookmarkFolderWhereInput[]
+    NOT?: BookmarkFolderWhereInput | BookmarkFolderWhereInput[]
+    userId?: StringFilter<"BookmarkFolder"> | string
+    name?: StringFilter<"BookmarkFolder"> | string
+    createdAt?: DateTimeFilter<"BookmarkFolder"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    bookmarks?: BookmarkListRelationFilter
+  }, "id">
+
+  export type BookmarkFolderOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    _count?: BookmarkFolderCountOrderByAggregateInput
+    _max?: BookmarkFolderMaxOrderByAggregateInput
+    _min?: BookmarkFolderMinOrderByAggregateInput
+  }
+
+  export type BookmarkFolderScalarWhereWithAggregatesInput = {
+    AND?: BookmarkFolderScalarWhereWithAggregatesInput | BookmarkFolderScalarWhereWithAggregatesInput[]
+    OR?: BookmarkFolderScalarWhereWithAggregatesInput[]
+    NOT?: BookmarkFolderScalarWhereWithAggregatesInput | BookmarkFolderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BookmarkFolder"> | string
+    userId?: StringWithAggregatesFilter<"BookmarkFolder"> | string
+    name?: StringWithAggregatesFilter<"BookmarkFolder"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"BookmarkFolder"> | Date | string
+  }
+
   export type ScheduledPostWhereInput = {
     AND?: ScheduledPostWhereInput | ScheduledPostWhereInput[]
     OR?: ScheduledPostWhereInput[]
@@ -12356,6 +15067,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12368,6 +15081,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -12380,6 +15095,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12392,6 +15109,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12721,11 +15440,13 @@ export namespace Prisma {
     replyCount: string
     publishedTime: string
     createdAt?: Date | string
+    folder?: BookmarkFolderCreateNestedOneWithoutBookmarksInput
   }
 
   export type BookmarkUncheckedCreateInput = {
     id?: string
     userId: string
+    folderId?: string | null
     commentId: string
     videoId: string
     authorName: string
@@ -12749,11 +15470,13 @@ export namespace Prisma {
     replyCount?: StringFieldUpdateOperationsInput | string
     publishedTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folder?: BookmarkFolderUpdateOneWithoutBookmarksNestedInput
   }
 
   export type BookmarkUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    folderId?: NullableStringFieldUpdateOperationsInput | string | null
     commentId?: StringFieldUpdateOperationsInput | string
     videoId?: StringFieldUpdateOperationsInput | string
     authorName?: StringFieldUpdateOperationsInput | string
@@ -12768,6 +15491,7 @@ export namespace Prisma {
   export type BookmarkCreateManyInput = {
     id?: string
     userId: string
+    folderId?: string | null
     commentId: string
     videoId: string
     authorName: string
@@ -12796,6 +15520,7 @@ export namespace Prisma {
   export type BookmarkUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    folderId?: NullableStringFieldUpdateOperationsInput | string | null
     commentId?: StringFieldUpdateOperationsInput | string
     videoId?: StringFieldUpdateOperationsInput | string
     authorName?: StringFieldUpdateOperationsInput | string
@@ -12811,10 +15536,12 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutListsInput
     items?: ListItemCreateNestedManyWithoutListInput
+    followers?: ListFollowCreateNestedManyWithoutListInput
   }
 
   export type ListUncheckedCreateInput = {
@@ -12822,19 +15549,23 @@ export namespace Prisma {
     userId: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ListItemUncheckedCreateNestedManyWithoutListInput
+    followers?: ListFollowUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ListUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutListsNestedInput
     items?: ListItemUpdateManyWithoutListNestedInput
+    followers?: ListFollowUpdateManyWithoutListNestedInput
   }
 
   export type ListUncheckedUpdateInput = {
@@ -12842,9 +15573,11 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ListItemUncheckedUpdateManyWithoutListNestedInput
+    followers?: ListFollowUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type ListCreateManyInput = {
@@ -12852,6 +15585,7 @@ export namespace Prisma {
     userId: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12860,6 +15594,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12869,6 +15604,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12967,6 +15703,105 @@ export namespace Prisma {
     likeCount?: StringFieldUpdateOperationsInput | string
     replyCount?: StringFieldUpdateOperationsInput | string
     publishedTime?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ListFollowCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutListFollowsInput
+    list: ListCreateNestedOneWithoutFollowersInput
+  }
+
+  export type ListFollowUncheckedCreateInput = {
+    id?: string
+    userId: string
+    listId: string
+    createdAt?: Date | string
+  }
+
+  export type ListFollowUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutListFollowsNestedInput
+    list?: ListUpdateOneRequiredWithoutFollowersNestedInput
+  }
+
+  export type ListFollowUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    listId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ListFollowCreateManyInput = {
+    id?: string
+    userId: string
+    listId: string
+    createdAt?: Date | string
+  }
+
+  export type ListFollowUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ListFollowUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    listId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkFolderCreateInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutBookmarkFoldersInput
+    bookmarks?: BookmarkCreateNestedManyWithoutFolderInput
+  }
+
+  export type BookmarkFolderUncheckedCreateInput = {
+    id?: string
+    userId: string
+    name: string
+    createdAt?: Date | string
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutFolderInput
+  }
+
+  export type BookmarkFolderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBookmarkFoldersNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutFolderNestedInput
+  }
+
+  export type BookmarkFolderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutFolderNestedInput
+  }
+
+  export type BookmarkFolderCreateManyInput = {
+    id?: string
+    userId: string
+    name: string
+    createdAt?: Date | string
+  }
+
+  export type BookmarkFolderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkFolderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -13093,6 +15928,18 @@ export namespace Prisma {
     none?: ListWhereInput
   }
 
+  export type ListFollowListRelationFilter = {
+    every?: ListFollowWhereInput
+    some?: ListFollowWhereInput
+    none?: ListFollowWhereInput
+  }
+
+  export type BookmarkFolderListRelationFilter = {
+    every?: BookmarkFolderWhereInput
+    some?: BookmarkFolderWhereInput
+    none?: BookmarkFolderWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -13107,6 +15954,14 @@ export namespace Prisma {
   }
 
   export type ListOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ListFollowOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BookmarkFolderOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13368,6 +16223,11 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type BookmarkFolderNullableScalarRelationFilter = {
+    is?: BookmarkFolderWhereInput | null
+    isNot?: BookmarkFolderWhereInput | null
+  }
+
   export type BookmarkUserIdCommentIdCompoundUniqueInput = {
     userId: string
     commentId: string
@@ -13376,6 +16236,7 @@ export namespace Prisma {
   export type BookmarkCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    folderId?: SortOrder
     commentId?: SortOrder
     videoId?: SortOrder
     authorName?: SortOrder
@@ -13390,6 +16251,7 @@ export namespace Prisma {
   export type BookmarkMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    folderId?: SortOrder
     commentId?: SortOrder
     videoId?: SortOrder
     authorName?: SortOrder
@@ -13404,6 +16266,7 @@ export namespace Prisma {
   export type BookmarkMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    folderId?: SortOrder
     commentId?: SortOrder
     videoId?: SortOrder
     authorName?: SortOrder
@@ -13413,6 +16276,11 @@ export namespace Prisma {
     replyCount?: SortOrder
     publishedTime?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type ListItemListRelationFilter = {
@@ -13430,6 +16298,7 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13439,6 +16308,7 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13448,8 +16318,17 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ListScalarRelationFilter = {
@@ -13504,9 +16383,61 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type ListFollowUserIdListIdCompoundUniqueInput = {
+    userId: string
+    listId: string
+  }
+
+  export type ListFollowCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    listId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ListFollowMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    listId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ListFollowMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    listId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BookmarkListRelationFilter = {
+    every?: BookmarkWhereInput
+    some?: BookmarkWhereInput
+    none?: BookmarkWhereInput
+  }
+
+  export type BookmarkOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BookmarkFolderCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BookmarkFolderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BookmarkFolderMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ScheduledPostCountOrderByAggregateInput = {
@@ -13539,14 +16470,6 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type YtCredentialCreateNestedOneWithoutUserInput = {
     create?: XOR<YtCredentialCreateWithoutUserInput, YtCredentialUncheckedCreateWithoutUserInput>
     connectOrCreate?: YtCredentialCreateOrConnectWithoutUserInput
@@ -13574,6 +16497,20 @@ export namespace Prisma {
     connect?: ListWhereUniqueInput | ListWhereUniqueInput[]
   }
 
+  export type ListFollowCreateNestedManyWithoutUserInput = {
+    create?: XOR<ListFollowCreateWithoutUserInput, ListFollowUncheckedCreateWithoutUserInput> | ListFollowCreateWithoutUserInput[] | ListFollowUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ListFollowCreateOrConnectWithoutUserInput | ListFollowCreateOrConnectWithoutUserInput[]
+    createMany?: ListFollowCreateManyUserInputEnvelope
+    connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+  }
+
+  export type BookmarkFolderCreateNestedManyWithoutUserInput = {
+    create?: XOR<BookmarkFolderCreateWithoutUserInput, BookmarkFolderUncheckedCreateWithoutUserInput> | BookmarkFolderCreateWithoutUserInput[] | BookmarkFolderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookmarkFolderCreateOrConnectWithoutUserInput | BookmarkFolderCreateOrConnectWithoutUserInput[]
+    createMany?: BookmarkFolderCreateManyUserInputEnvelope
+    connect?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+  }
+
   export type YtCredentialUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<YtCredentialCreateWithoutUserInput, YtCredentialUncheckedCreateWithoutUserInput>
     connectOrCreate?: YtCredentialCreateOrConnectWithoutUserInput
@@ -13599,6 +16536,20 @@ export namespace Prisma {
     connectOrCreate?: ListCreateOrConnectWithoutUserInput | ListCreateOrConnectWithoutUserInput[]
     createMany?: ListCreateManyUserInputEnvelope
     connect?: ListWhereUniqueInput | ListWhereUniqueInput[]
+  }
+
+  export type ListFollowUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ListFollowCreateWithoutUserInput, ListFollowUncheckedCreateWithoutUserInput> | ListFollowCreateWithoutUserInput[] | ListFollowUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ListFollowCreateOrConnectWithoutUserInput | ListFollowCreateOrConnectWithoutUserInput[]
+    createMany?: ListFollowCreateManyUserInputEnvelope
+    connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+  }
+
+  export type BookmarkFolderUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BookmarkFolderCreateWithoutUserInput, BookmarkFolderUncheckedCreateWithoutUserInput> | BookmarkFolderCreateWithoutUserInput[] | BookmarkFolderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookmarkFolderCreateOrConnectWithoutUserInput | BookmarkFolderCreateOrConnectWithoutUserInput[]
+    createMany?: BookmarkFolderCreateManyUserInputEnvelope
+    connect?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13661,6 +16612,34 @@ export namespace Prisma {
     deleteMany?: ListScalarWhereInput | ListScalarWhereInput[]
   }
 
+  export type ListFollowUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ListFollowCreateWithoutUserInput, ListFollowUncheckedCreateWithoutUserInput> | ListFollowCreateWithoutUserInput[] | ListFollowUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ListFollowCreateOrConnectWithoutUserInput | ListFollowCreateOrConnectWithoutUserInput[]
+    upsert?: ListFollowUpsertWithWhereUniqueWithoutUserInput | ListFollowUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ListFollowCreateManyUserInputEnvelope
+    set?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    disconnect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    delete?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    update?: ListFollowUpdateWithWhereUniqueWithoutUserInput | ListFollowUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ListFollowUpdateManyWithWhereWithoutUserInput | ListFollowUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ListFollowScalarWhereInput | ListFollowScalarWhereInput[]
+  }
+
+  export type BookmarkFolderUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BookmarkFolderCreateWithoutUserInput, BookmarkFolderUncheckedCreateWithoutUserInput> | BookmarkFolderCreateWithoutUserInput[] | BookmarkFolderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookmarkFolderCreateOrConnectWithoutUserInput | BookmarkFolderCreateOrConnectWithoutUserInput[]
+    upsert?: BookmarkFolderUpsertWithWhereUniqueWithoutUserInput | BookmarkFolderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BookmarkFolderCreateManyUserInputEnvelope
+    set?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+    disconnect?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+    delete?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+    connect?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+    update?: BookmarkFolderUpdateWithWhereUniqueWithoutUserInput | BookmarkFolderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BookmarkFolderUpdateManyWithWhereWithoutUserInput | BookmarkFolderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BookmarkFolderScalarWhereInput | BookmarkFolderScalarWhereInput[]
+  }
+
   export type YtCredentialUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<YtCredentialCreateWithoutUserInput, YtCredentialUncheckedCreateWithoutUserInput>
     connectOrCreate?: YtCredentialCreateOrConnectWithoutUserInput
@@ -13711,6 +16690,34 @@ export namespace Prisma {
     update?: ListUpdateWithWhereUniqueWithoutUserInput | ListUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ListUpdateManyWithWhereWithoutUserInput | ListUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ListScalarWhereInput | ListScalarWhereInput[]
+  }
+
+  export type ListFollowUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ListFollowCreateWithoutUserInput, ListFollowUncheckedCreateWithoutUserInput> | ListFollowCreateWithoutUserInput[] | ListFollowUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ListFollowCreateOrConnectWithoutUserInput | ListFollowCreateOrConnectWithoutUserInput[]
+    upsert?: ListFollowUpsertWithWhereUniqueWithoutUserInput | ListFollowUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ListFollowCreateManyUserInputEnvelope
+    set?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    disconnect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    delete?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    update?: ListFollowUpdateWithWhereUniqueWithoutUserInput | ListFollowUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ListFollowUpdateManyWithWhereWithoutUserInput | ListFollowUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ListFollowScalarWhereInput | ListFollowScalarWhereInput[]
+  }
+
+  export type BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BookmarkFolderCreateWithoutUserInput, BookmarkFolderUncheckedCreateWithoutUserInput> | BookmarkFolderCreateWithoutUserInput[] | BookmarkFolderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookmarkFolderCreateOrConnectWithoutUserInput | BookmarkFolderCreateOrConnectWithoutUserInput[]
+    upsert?: BookmarkFolderUpsertWithWhereUniqueWithoutUserInput | BookmarkFolderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BookmarkFolderCreateManyUserInputEnvelope
+    set?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+    disconnect?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+    delete?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+    connect?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+    update?: BookmarkFolderUpdateWithWhereUniqueWithoutUserInput | BookmarkFolderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BookmarkFolderUpdateManyWithWhereWithoutUserInput | BookmarkFolderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BookmarkFolderScalarWhereInput | BookmarkFolderScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutYtCredentialInput = {
@@ -13767,6 +16774,22 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type BookmarkFolderCreateNestedOneWithoutBookmarksInput = {
+    create?: XOR<BookmarkFolderCreateWithoutBookmarksInput, BookmarkFolderUncheckedCreateWithoutBookmarksInput>
+    connectOrCreate?: BookmarkFolderCreateOrConnectWithoutBookmarksInput
+    connect?: BookmarkFolderWhereUniqueInput
+  }
+
+  export type BookmarkFolderUpdateOneWithoutBookmarksNestedInput = {
+    create?: XOR<BookmarkFolderCreateWithoutBookmarksInput, BookmarkFolderUncheckedCreateWithoutBookmarksInput>
+    connectOrCreate?: BookmarkFolderCreateOrConnectWithoutBookmarksInput
+    upsert?: BookmarkFolderUpsertWithoutBookmarksInput
+    disconnect?: BookmarkFolderWhereInput | boolean
+    delete?: BookmarkFolderWhereInput | boolean
+    connect?: BookmarkFolderWhereUniqueInput
+    update?: XOR<XOR<BookmarkFolderUpdateToOneWithWhereWithoutBookmarksInput, BookmarkFolderUpdateWithoutBookmarksInput>, BookmarkFolderUncheckedUpdateWithoutBookmarksInput>
+  }
+
   export type UserCreateNestedOneWithoutListsInput = {
     create?: XOR<UserCreateWithoutListsInput, UserUncheckedCreateWithoutListsInput>
     connectOrCreate?: UserCreateOrConnectWithoutListsInput
@@ -13780,11 +16803,29 @@ export namespace Prisma {
     connect?: ListItemWhereUniqueInput | ListItemWhereUniqueInput[]
   }
 
+  export type ListFollowCreateNestedManyWithoutListInput = {
+    create?: XOR<ListFollowCreateWithoutListInput, ListFollowUncheckedCreateWithoutListInput> | ListFollowCreateWithoutListInput[] | ListFollowUncheckedCreateWithoutListInput[]
+    connectOrCreate?: ListFollowCreateOrConnectWithoutListInput | ListFollowCreateOrConnectWithoutListInput[]
+    createMany?: ListFollowCreateManyListInputEnvelope
+    connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+  }
+
   export type ListItemUncheckedCreateNestedManyWithoutListInput = {
     create?: XOR<ListItemCreateWithoutListInput, ListItemUncheckedCreateWithoutListInput> | ListItemCreateWithoutListInput[] | ListItemUncheckedCreateWithoutListInput[]
     connectOrCreate?: ListItemCreateOrConnectWithoutListInput | ListItemCreateOrConnectWithoutListInput[]
     createMany?: ListItemCreateManyListInputEnvelope
     connect?: ListItemWhereUniqueInput | ListItemWhereUniqueInput[]
+  }
+
+  export type ListFollowUncheckedCreateNestedManyWithoutListInput = {
+    create?: XOR<ListFollowCreateWithoutListInput, ListFollowUncheckedCreateWithoutListInput> | ListFollowCreateWithoutListInput[] | ListFollowUncheckedCreateWithoutListInput[]
+    connectOrCreate?: ListFollowCreateOrConnectWithoutListInput | ListFollowCreateOrConnectWithoutListInput[]
+    createMany?: ListFollowCreateManyListInputEnvelope
+    connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutListsNestedInput = {
@@ -13809,6 +16850,20 @@ export namespace Prisma {
     deleteMany?: ListItemScalarWhereInput | ListItemScalarWhereInput[]
   }
 
+  export type ListFollowUpdateManyWithoutListNestedInput = {
+    create?: XOR<ListFollowCreateWithoutListInput, ListFollowUncheckedCreateWithoutListInput> | ListFollowCreateWithoutListInput[] | ListFollowUncheckedCreateWithoutListInput[]
+    connectOrCreate?: ListFollowCreateOrConnectWithoutListInput | ListFollowCreateOrConnectWithoutListInput[]
+    upsert?: ListFollowUpsertWithWhereUniqueWithoutListInput | ListFollowUpsertWithWhereUniqueWithoutListInput[]
+    createMany?: ListFollowCreateManyListInputEnvelope
+    set?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    disconnect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    delete?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    update?: ListFollowUpdateWithWhereUniqueWithoutListInput | ListFollowUpdateWithWhereUniqueWithoutListInput[]
+    updateMany?: ListFollowUpdateManyWithWhereWithoutListInput | ListFollowUpdateManyWithWhereWithoutListInput[]
+    deleteMany?: ListFollowScalarWhereInput | ListFollowScalarWhereInput[]
+  }
+
   export type ListItemUncheckedUpdateManyWithoutListNestedInput = {
     create?: XOR<ListItemCreateWithoutListInput, ListItemUncheckedCreateWithoutListInput> | ListItemCreateWithoutListInput[] | ListItemUncheckedCreateWithoutListInput[]
     connectOrCreate?: ListItemCreateOrConnectWithoutListInput | ListItemCreateOrConnectWithoutListInput[]
@@ -13821,6 +16876,20 @@ export namespace Prisma {
     update?: ListItemUpdateWithWhereUniqueWithoutListInput | ListItemUpdateWithWhereUniqueWithoutListInput[]
     updateMany?: ListItemUpdateManyWithWhereWithoutListInput | ListItemUpdateManyWithWhereWithoutListInput[]
     deleteMany?: ListItemScalarWhereInput | ListItemScalarWhereInput[]
+  }
+
+  export type ListFollowUncheckedUpdateManyWithoutListNestedInput = {
+    create?: XOR<ListFollowCreateWithoutListInput, ListFollowUncheckedCreateWithoutListInput> | ListFollowCreateWithoutListInput[] | ListFollowUncheckedCreateWithoutListInput[]
+    connectOrCreate?: ListFollowCreateOrConnectWithoutListInput | ListFollowCreateOrConnectWithoutListInput[]
+    upsert?: ListFollowUpsertWithWhereUniqueWithoutListInput | ListFollowUpsertWithWhereUniqueWithoutListInput[]
+    createMany?: ListFollowCreateManyListInputEnvelope
+    set?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    disconnect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    delete?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
+    update?: ListFollowUpdateWithWhereUniqueWithoutListInput | ListFollowUpdateWithWhereUniqueWithoutListInput[]
+    updateMany?: ListFollowUpdateManyWithWhereWithoutListInput | ListFollowUpdateManyWithWhereWithoutListInput[]
+    deleteMany?: ListFollowScalarWhereInput | ListFollowScalarWhereInput[]
   }
 
   export type ListCreateNestedOneWithoutItemsInput = {
@@ -13837,8 +16906,88 @@ export namespace Prisma {
     update?: XOR<XOR<ListUpdateToOneWithWhereWithoutItemsInput, ListUpdateWithoutItemsInput>, ListUncheckedUpdateWithoutItemsInput>
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type UserCreateNestedOneWithoutListFollowsInput = {
+    create?: XOR<UserCreateWithoutListFollowsInput, UserUncheckedCreateWithoutListFollowsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutListFollowsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ListCreateNestedOneWithoutFollowersInput = {
+    create?: XOR<ListCreateWithoutFollowersInput, ListUncheckedCreateWithoutFollowersInput>
+    connectOrCreate?: ListCreateOrConnectWithoutFollowersInput
+    connect?: ListWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutListFollowsNestedInput = {
+    create?: XOR<UserCreateWithoutListFollowsInput, UserUncheckedCreateWithoutListFollowsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutListFollowsInput
+    upsert?: UserUpsertWithoutListFollowsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutListFollowsInput, UserUpdateWithoutListFollowsInput>, UserUncheckedUpdateWithoutListFollowsInput>
+  }
+
+  export type ListUpdateOneRequiredWithoutFollowersNestedInput = {
+    create?: XOR<ListCreateWithoutFollowersInput, ListUncheckedCreateWithoutFollowersInput>
+    connectOrCreate?: ListCreateOrConnectWithoutFollowersInput
+    upsert?: ListUpsertWithoutFollowersInput
+    connect?: ListWhereUniqueInput
+    update?: XOR<XOR<ListUpdateToOneWithWhereWithoutFollowersInput, ListUpdateWithoutFollowersInput>, ListUncheckedUpdateWithoutFollowersInput>
+  }
+
+  export type UserCreateNestedOneWithoutBookmarkFoldersInput = {
+    create?: XOR<UserCreateWithoutBookmarkFoldersInput, UserUncheckedCreateWithoutBookmarkFoldersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBookmarkFoldersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BookmarkCreateNestedManyWithoutFolderInput = {
+    create?: XOR<BookmarkCreateWithoutFolderInput, BookmarkUncheckedCreateWithoutFolderInput> | BookmarkCreateWithoutFolderInput[] | BookmarkUncheckedCreateWithoutFolderInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutFolderInput | BookmarkCreateOrConnectWithoutFolderInput[]
+    createMany?: BookmarkCreateManyFolderInputEnvelope
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+  }
+
+  export type BookmarkUncheckedCreateNestedManyWithoutFolderInput = {
+    create?: XOR<BookmarkCreateWithoutFolderInput, BookmarkUncheckedCreateWithoutFolderInput> | BookmarkCreateWithoutFolderInput[] | BookmarkUncheckedCreateWithoutFolderInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutFolderInput | BookmarkCreateOrConnectWithoutFolderInput[]
+    createMany?: BookmarkCreateManyFolderInputEnvelope
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutBookmarkFoldersNestedInput = {
+    create?: XOR<UserCreateWithoutBookmarkFoldersInput, UserUncheckedCreateWithoutBookmarkFoldersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBookmarkFoldersInput
+    upsert?: UserUpsertWithoutBookmarkFoldersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBookmarkFoldersInput, UserUpdateWithoutBookmarkFoldersInput>, UserUncheckedUpdateWithoutBookmarkFoldersInput>
+  }
+
+  export type BookmarkUpdateManyWithoutFolderNestedInput = {
+    create?: XOR<BookmarkCreateWithoutFolderInput, BookmarkUncheckedCreateWithoutFolderInput> | BookmarkCreateWithoutFolderInput[] | BookmarkUncheckedCreateWithoutFolderInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutFolderInput | BookmarkCreateOrConnectWithoutFolderInput[]
+    upsert?: BookmarkUpsertWithWhereUniqueWithoutFolderInput | BookmarkUpsertWithWhereUniqueWithoutFolderInput[]
+    createMany?: BookmarkCreateManyFolderInputEnvelope
+    set?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    disconnect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    delete?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    update?: BookmarkUpdateWithWhereUniqueWithoutFolderInput | BookmarkUpdateWithWhereUniqueWithoutFolderInput[]
+    updateMany?: BookmarkUpdateManyWithWhereWithoutFolderInput | BookmarkUpdateManyWithWhereWithoutFolderInput[]
+    deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+  }
+
+  export type BookmarkUncheckedUpdateManyWithoutFolderNestedInput = {
+    create?: XOR<BookmarkCreateWithoutFolderInput, BookmarkUncheckedCreateWithoutFolderInput> | BookmarkCreateWithoutFolderInput[] | BookmarkUncheckedCreateWithoutFolderInput[]
+    connectOrCreate?: BookmarkCreateOrConnectWithoutFolderInput | BookmarkCreateOrConnectWithoutFolderInput[]
+    upsert?: BookmarkUpsertWithWhereUniqueWithoutFolderInput | BookmarkUpsertWithWhereUniqueWithoutFolderInput[]
+    createMany?: BookmarkCreateManyFolderInputEnvelope
+    set?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    disconnect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    delete?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+    update?: BookmarkUpdateWithWhereUniqueWithoutFolderInput | BookmarkUpdateWithWhereUniqueWithoutFolderInput[]
+    updateMany?: BookmarkUpdateManyWithWhereWithoutFolderInput | BookmarkUpdateManyWithWhereWithoutFolderInput[]
+    deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -14067,18 +17216,22 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ListItemCreateNestedManyWithoutListInput
+    followers?: ListFollowCreateNestedManyWithoutListInput
   }
 
   export type ListUncheckedCreateWithoutUserInput = {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: ListItemUncheckedCreateNestedManyWithoutListInput
+    followers?: ListFollowUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ListCreateOrConnectWithoutUserInput = {
@@ -14088,6 +17241,52 @@ export namespace Prisma {
 
   export type ListCreateManyUserInputEnvelope = {
     data: ListCreateManyUserInput | ListCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ListFollowCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    list: ListCreateNestedOneWithoutFollowersInput
+  }
+
+  export type ListFollowUncheckedCreateWithoutUserInput = {
+    id?: string
+    listId: string
+    createdAt?: Date | string
+  }
+
+  export type ListFollowCreateOrConnectWithoutUserInput = {
+    where: ListFollowWhereUniqueInput
+    create: XOR<ListFollowCreateWithoutUserInput, ListFollowUncheckedCreateWithoutUserInput>
+  }
+
+  export type ListFollowCreateManyUserInputEnvelope = {
+    data: ListFollowCreateManyUserInput | ListFollowCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BookmarkFolderCreateWithoutUserInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    bookmarks?: BookmarkCreateNestedManyWithoutFolderInput
+  }
+
+  export type BookmarkFolderUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutFolderInput
+  }
+
+  export type BookmarkFolderCreateOrConnectWithoutUserInput = {
+    where: BookmarkFolderWhereUniqueInput
+    create: XOR<BookmarkFolderCreateWithoutUserInput, BookmarkFolderUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookmarkFolderCreateManyUserInputEnvelope = {
+    data: BookmarkFolderCreateManyUserInput | BookmarkFolderCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -14197,8 +17396,61 @@ export namespace Prisma {
     userId?: StringFilter<"List"> | string
     name?: StringFilter<"List"> | string
     description?: StringNullableFilter<"List"> | string | null
+    isPublic?: BoolFilter<"List"> | boolean
     createdAt?: DateTimeFilter<"List"> | Date | string
     updatedAt?: DateTimeFilter<"List"> | Date | string
+  }
+
+  export type ListFollowUpsertWithWhereUniqueWithoutUserInput = {
+    where: ListFollowWhereUniqueInput
+    update: XOR<ListFollowUpdateWithoutUserInput, ListFollowUncheckedUpdateWithoutUserInput>
+    create: XOR<ListFollowCreateWithoutUserInput, ListFollowUncheckedCreateWithoutUserInput>
+  }
+
+  export type ListFollowUpdateWithWhereUniqueWithoutUserInput = {
+    where: ListFollowWhereUniqueInput
+    data: XOR<ListFollowUpdateWithoutUserInput, ListFollowUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ListFollowUpdateManyWithWhereWithoutUserInput = {
+    where: ListFollowScalarWhereInput
+    data: XOR<ListFollowUpdateManyMutationInput, ListFollowUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ListFollowScalarWhereInput = {
+    AND?: ListFollowScalarWhereInput | ListFollowScalarWhereInput[]
+    OR?: ListFollowScalarWhereInput[]
+    NOT?: ListFollowScalarWhereInput | ListFollowScalarWhereInput[]
+    id?: StringFilter<"ListFollow"> | string
+    userId?: StringFilter<"ListFollow"> | string
+    listId?: StringFilter<"ListFollow"> | string
+    createdAt?: DateTimeFilter<"ListFollow"> | Date | string
+  }
+
+  export type BookmarkFolderUpsertWithWhereUniqueWithoutUserInput = {
+    where: BookmarkFolderWhereUniqueInput
+    update: XOR<BookmarkFolderUpdateWithoutUserInput, BookmarkFolderUncheckedUpdateWithoutUserInput>
+    create: XOR<BookmarkFolderCreateWithoutUserInput, BookmarkFolderUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookmarkFolderUpdateWithWhereUniqueWithoutUserInput = {
+    where: BookmarkFolderWhereUniqueInput
+    data: XOR<BookmarkFolderUpdateWithoutUserInput, BookmarkFolderUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BookmarkFolderUpdateManyWithWhereWithoutUserInput = {
+    where: BookmarkFolderScalarWhereInput
+    data: XOR<BookmarkFolderUpdateManyMutationInput, BookmarkFolderUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BookmarkFolderScalarWhereInput = {
+    AND?: BookmarkFolderScalarWhereInput | BookmarkFolderScalarWhereInput[]
+    OR?: BookmarkFolderScalarWhereInput[]
+    NOT?: BookmarkFolderScalarWhereInput | BookmarkFolderScalarWhereInput[]
+    id?: StringFilter<"BookmarkFolder"> | string
+    userId?: StringFilter<"BookmarkFolder"> | string
+    name?: StringFilter<"BookmarkFolder"> | string
+    createdAt?: DateTimeFilter<"BookmarkFolder"> | Date | string
   }
 
   export type UserCreateWithoutYtCredentialInput = {
@@ -14210,6 +17462,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutYtCredentialInput = {
@@ -14221,6 +17475,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutYtCredentialInput = {
@@ -14248,6 +17504,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutYtCredentialInput = {
@@ -14259,6 +17517,8 @@ export namespace Prisma {
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCommentLikesInput = {
@@ -14270,6 +17530,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommentLikesInput = {
@@ -14281,6 +17543,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommentLikesInput = {
@@ -14308,6 +17572,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentLikesInput = {
@@ -14319,6 +17585,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutActionsInput = {
@@ -14330,6 +17598,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActionsInput = {
@@ -14341,6 +17611,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActionsInput = {
@@ -14368,6 +17640,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActionsInput = {
@@ -14379,6 +17653,52 @@ export namespace Prisma {
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BookmarkFolderCreateWithoutBookmarksInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutBookmarkFoldersInput
+  }
+
+  export type BookmarkFolderUncheckedCreateWithoutBookmarksInput = {
+    id?: string
+    userId: string
+    name: string
+    createdAt?: Date | string
+  }
+
+  export type BookmarkFolderCreateOrConnectWithoutBookmarksInput = {
+    where: BookmarkFolderWhereUniqueInput
+    create: XOR<BookmarkFolderCreateWithoutBookmarksInput, BookmarkFolderUncheckedCreateWithoutBookmarksInput>
+  }
+
+  export type BookmarkFolderUpsertWithoutBookmarksInput = {
+    update: XOR<BookmarkFolderUpdateWithoutBookmarksInput, BookmarkFolderUncheckedUpdateWithoutBookmarksInput>
+    create: XOR<BookmarkFolderCreateWithoutBookmarksInput, BookmarkFolderUncheckedCreateWithoutBookmarksInput>
+    where?: BookmarkFolderWhereInput
+  }
+
+  export type BookmarkFolderUpdateToOneWithWhereWithoutBookmarksInput = {
+    where?: BookmarkFolderWhereInput
+    data: XOR<BookmarkFolderUpdateWithoutBookmarksInput, BookmarkFolderUncheckedUpdateWithoutBookmarksInput>
+  }
+
+  export type BookmarkFolderUpdateWithoutBookmarksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBookmarkFoldersNestedInput
+  }
+
+  export type BookmarkFolderUncheckedUpdateWithoutBookmarksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateWithoutListsInput = {
@@ -14390,6 +17710,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutListsInput = {
@@ -14401,6 +17723,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutListsInput = {
@@ -14444,6 +17768,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ListFollowCreateWithoutListInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutListFollowsInput
+  }
+
+  export type ListFollowUncheckedCreateWithoutListInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type ListFollowCreateOrConnectWithoutListInput = {
+    where: ListFollowWhereUniqueInput
+    create: XOR<ListFollowCreateWithoutListInput, ListFollowUncheckedCreateWithoutListInput>
+  }
+
+  export type ListFollowCreateManyListInputEnvelope = {
+    data: ListFollowCreateManyListInput | ListFollowCreateManyListInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutListsInput = {
     update: XOR<UserUpdateWithoutListsInput, UserUncheckedUpdateWithoutListsInput>
     create: XOR<UserCreateWithoutListsInput, UserUncheckedCreateWithoutListsInput>
@@ -14464,6 +17810,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutListsInput = {
@@ -14475,6 +17823,8 @@ export namespace Prisma {
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ListItemUpsertWithWhereUniqueWithoutListInput = {
@@ -14510,13 +17860,31 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ListItem"> | Date | string
   }
 
+  export type ListFollowUpsertWithWhereUniqueWithoutListInput = {
+    where: ListFollowWhereUniqueInput
+    update: XOR<ListFollowUpdateWithoutListInput, ListFollowUncheckedUpdateWithoutListInput>
+    create: XOR<ListFollowCreateWithoutListInput, ListFollowUncheckedCreateWithoutListInput>
+  }
+
+  export type ListFollowUpdateWithWhereUniqueWithoutListInput = {
+    where: ListFollowWhereUniqueInput
+    data: XOR<ListFollowUpdateWithoutListInput, ListFollowUncheckedUpdateWithoutListInput>
+  }
+
+  export type ListFollowUpdateManyWithWhereWithoutListInput = {
+    where: ListFollowScalarWhereInput
+    data: XOR<ListFollowUpdateManyMutationInput, ListFollowUncheckedUpdateManyWithoutListInput>
+  }
+
   export type ListCreateWithoutItemsInput = {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutListsInput
+    followers?: ListFollowCreateNestedManyWithoutListInput
   }
 
   export type ListUncheckedCreateWithoutItemsInput = {
@@ -14524,8 +17892,10 @@ export namespace Prisma {
     userId: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    followers?: ListFollowUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ListCreateOrConnectWithoutItemsInput = {
@@ -14548,9 +17918,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutListsNestedInput
+    followers?: ListFollowUpdateManyWithoutListNestedInput
   }
 
   export type ListUncheckedUpdateWithoutItemsInput = {
@@ -14558,8 +17930,278 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    followers?: ListFollowUncheckedUpdateManyWithoutListNestedInput
+  }
+
+  export type UserCreateWithoutListFollowsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    actions?: UserActionCreateNestedManyWithoutUserInput
+    lists?: ListCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutListFollowsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
+    lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutListFollowsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutListFollowsInput, UserUncheckedCreateWithoutListFollowsInput>
+  }
+
+  export type ListCreateWithoutFollowersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutListsInput
+    items?: ListItemCreateNestedManyWithoutListInput
+  }
+
+  export type ListUncheckedCreateWithoutFollowersInput = {
+    id?: string
+    userId: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: ListItemUncheckedCreateNestedManyWithoutListInput
+  }
+
+  export type ListCreateOrConnectWithoutFollowersInput = {
+    where: ListWhereUniqueInput
+    create: XOR<ListCreateWithoutFollowersInput, ListUncheckedCreateWithoutFollowersInput>
+  }
+
+  export type UserUpsertWithoutListFollowsInput = {
+    update: XOR<UserUpdateWithoutListFollowsInput, UserUncheckedUpdateWithoutListFollowsInput>
+    create: XOR<UserCreateWithoutListFollowsInput, UserUncheckedCreateWithoutListFollowsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutListFollowsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutListFollowsInput, UserUncheckedUpdateWithoutListFollowsInput>
+  }
+
+  export type UserUpdateWithoutListFollowsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    actions?: UserActionUpdateManyWithoutUserNestedInput
+    lists?: ListUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutListFollowsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
+    lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ListUpsertWithoutFollowersInput = {
+    update: XOR<ListUpdateWithoutFollowersInput, ListUncheckedUpdateWithoutFollowersInput>
+    create: XOR<ListCreateWithoutFollowersInput, ListUncheckedCreateWithoutFollowersInput>
+    where?: ListWhereInput
+  }
+
+  export type ListUpdateToOneWithWhereWithoutFollowersInput = {
+    where?: ListWhereInput
+    data: XOR<ListUpdateWithoutFollowersInput, ListUncheckedUpdateWithoutFollowersInput>
+  }
+
+  export type ListUpdateWithoutFollowersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutListsNestedInput
+    items?: ListItemUpdateManyWithoutListNestedInput
+  }
+
+  export type ListUncheckedUpdateWithoutFollowersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ListItemUncheckedUpdateManyWithoutListNestedInput
+  }
+
+  export type UserCreateWithoutBookmarkFoldersInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    actions?: UserActionCreateNestedManyWithoutUserInput
+    lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBookmarkFoldersInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
+    lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBookmarkFoldersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBookmarkFoldersInput, UserUncheckedCreateWithoutBookmarkFoldersInput>
+  }
+
+  export type BookmarkCreateWithoutFolderInput = {
+    id?: string
+    userId: string
+    commentId: string
+    videoId: string
+    authorName: string
+    authorThumb?: string | null
+    content: string
+    likeCount: string
+    replyCount: string
+    publishedTime: string
+    createdAt?: Date | string
+  }
+
+  export type BookmarkUncheckedCreateWithoutFolderInput = {
+    id?: string
+    userId: string
+    commentId: string
+    videoId: string
+    authorName: string
+    authorThumb?: string | null
+    content: string
+    likeCount: string
+    replyCount: string
+    publishedTime: string
+    createdAt?: Date | string
+  }
+
+  export type BookmarkCreateOrConnectWithoutFolderInput = {
+    where: BookmarkWhereUniqueInput
+    create: XOR<BookmarkCreateWithoutFolderInput, BookmarkUncheckedCreateWithoutFolderInput>
+  }
+
+  export type BookmarkCreateManyFolderInputEnvelope = {
+    data: BookmarkCreateManyFolderInput | BookmarkCreateManyFolderInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutBookmarkFoldersInput = {
+    update: XOR<UserUpdateWithoutBookmarkFoldersInput, UserUncheckedUpdateWithoutBookmarkFoldersInput>
+    create: XOR<UserCreateWithoutBookmarkFoldersInput, UserUncheckedCreateWithoutBookmarkFoldersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBookmarkFoldersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBookmarkFoldersInput, UserUncheckedUpdateWithoutBookmarkFoldersInput>
+  }
+
+  export type UserUpdateWithoutBookmarkFoldersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    actions?: UserActionUpdateManyWithoutUserNestedInput
+    lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBookmarkFoldersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
+    lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BookmarkUpsertWithWhereUniqueWithoutFolderInput = {
+    where: BookmarkWhereUniqueInput
+    update: XOR<BookmarkUpdateWithoutFolderInput, BookmarkUncheckedUpdateWithoutFolderInput>
+    create: XOR<BookmarkCreateWithoutFolderInput, BookmarkUncheckedCreateWithoutFolderInput>
+  }
+
+  export type BookmarkUpdateWithWhereUniqueWithoutFolderInput = {
+    where: BookmarkWhereUniqueInput
+    data: XOR<BookmarkUpdateWithoutFolderInput, BookmarkUncheckedUpdateWithoutFolderInput>
+  }
+
+  export type BookmarkUpdateManyWithWhereWithoutFolderInput = {
+    where: BookmarkScalarWhereInput
+    data: XOR<BookmarkUpdateManyMutationInput, BookmarkUncheckedUpdateManyWithoutFolderInput>
+  }
+
+  export type BookmarkScalarWhereInput = {
+    AND?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+    OR?: BookmarkScalarWhereInput[]
+    NOT?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+    id?: StringFilter<"Bookmark"> | string
+    userId?: StringFilter<"Bookmark"> | string
+    folderId?: StringNullableFilter<"Bookmark"> | string | null
+    commentId?: StringFilter<"Bookmark"> | string
+    videoId?: StringFilter<"Bookmark"> | string
+    authorName?: StringFilter<"Bookmark"> | string
+    authorThumb?: StringNullableFilter<"Bookmark"> | string | null
+    content?: StringFilter<"Bookmark"> | string
+    likeCount?: StringFilter<"Bookmark"> | string
+    replyCount?: StringFilter<"Bookmark"> | string
+    publishedTime?: StringFilter<"Bookmark"> | string
+    createdAt?: DateTimeFilter<"Bookmark"> | Date | string
   }
 
   export type CommentLikeCreateManyUserInput = {
@@ -14583,8 +18225,21 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type ListFollowCreateManyUserInput = {
+    id?: string
+    listId: string
+    createdAt?: Date | string
+  }
+
+  export type BookmarkFolderCreateManyUserInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
   }
 
   export type CommentLikeUpdateWithoutUserInput = {
@@ -14642,26 +18297,69 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ListItemUpdateManyWithoutListNestedInput
+    followers?: ListFollowUpdateManyWithoutListNestedInput
   }
 
   export type ListUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ListItemUncheckedUpdateManyWithoutListNestedInput
+    followers?: ListFollowUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type ListUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ListFollowUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    list?: ListUpdateOneRequiredWithoutFollowersNestedInput
+  }
+
+  export type ListFollowUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    listId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ListFollowUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    listId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkFolderUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookmarks?: BookmarkUpdateManyWithoutFolderNestedInput
+  }
+
+  export type BookmarkFolderUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutFolderNestedInput
+  }
+
+  export type BookmarkFolderUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ListItemCreateManyListInput = {
@@ -14674,6 +18372,12 @@ export namespace Prisma {
     likeCount: string
     replyCount: string
     publishedTime: string
+    createdAt?: Date | string
+  }
+
+  export type ListFollowCreateManyListInput = {
+    id?: string
+    userId: string
     createdAt?: Date | string
   }
 
@@ -14705,6 +18409,80 @@ export namespace Prisma {
 
   export type ListItemUncheckedUpdateManyWithoutListInput = {
     id?: StringFieldUpdateOperationsInput | string
+    commentId?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    authorName?: StringFieldUpdateOperationsInput | string
+    authorThumb?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    likeCount?: StringFieldUpdateOperationsInput | string
+    replyCount?: StringFieldUpdateOperationsInput | string
+    publishedTime?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ListFollowUpdateWithoutListInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutListFollowsNestedInput
+  }
+
+  export type ListFollowUncheckedUpdateWithoutListInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ListFollowUncheckedUpdateManyWithoutListInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkCreateManyFolderInput = {
+    id?: string
+    userId: string
+    commentId: string
+    videoId: string
+    authorName: string
+    authorThumb?: string | null
+    content: string
+    likeCount: string
+    replyCount: string
+    publishedTime: string
+    createdAt?: Date | string
+  }
+
+  export type BookmarkUpdateWithoutFolderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    commentId?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    authorName?: StringFieldUpdateOperationsInput | string
+    authorThumb?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    likeCount?: StringFieldUpdateOperationsInput | string
+    replyCount?: StringFieldUpdateOperationsInput | string
+    publishedTime?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkUncheckedUpdateWithoutFolderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    commentId?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    authorName?: StringFieldUpdateOperationsInput | string
+    authorThumb?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    likeCount?: StringFieldUpdateOperationsInput | string
+    replyCount?: StringFieldUpdateOperationsInput | string
+    publishedTime?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookmarkUncheckedUpdateManyWithoutFolderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     commentId?: StringFieldUpdateOperationsInput | string
     videoId?: StringFieldUpdateOperationsInput | string
     authorName?: StringFieldUpdateOperationsInput | string

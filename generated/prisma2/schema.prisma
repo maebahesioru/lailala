@@ -9,15 +9,17 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  name         String?
-  email        String?       @unique
-  image        String?
-  channelId    String?       @map("channel_id")
-  ytCredential YtCredential?
-  commentLikes CommentLike[]
-  actions      UserAction[]
-  lists        List[]
+  id              String           @id @default(cuid())
+  name            String?
+  email           String?          @unique
+  image           String?
+  channelId       String?          @map("channel_id")
+  ytCredential    YtCredential?
+  commentLikes    CommentLike[]
+  actions         UserAction[]
+  lists           List[]
+  listFollows     ListFollow[]
+  bookmarkFolders BookmarkFolder[]
 
   @@map("users")
 }
@@ -89,34 +91,40 @@ model CommentCache {
 }
 
 model Bookmark {
-  id            String   @id @default(cuid())
-  userId        String   @map("user_id")
-  commentId     String   @map("comment_id")
-  videoId       String   @map("video_id")
-  authorName    String   @map("author_name")
-  authorThumb   String?  @map("author_thumb")
-  content       String   @db.Text
-  likeCount     String   @map("like_count")
-  replyCount    String   @map("reply_count")
-  publishedTime String   @map("published_time")
-  createdAt     DateTime @default(now()) @map("created_at")
+  id            String          @id @default(cuid())
+  userId        String          @map("user_id")
+  folderId      String?         @map("folder_id")
+  commentId     String          @map("comment_id")
+  videoId       String          @map("video_id")
+  authorName    String          @map("author_name")
+  authorThumb   String?         @map("author_thumb")
+  content       String          @db.Text
+  likeCount     String          @map("like_count")
+  replyCount    String          @map("reply_count")
+  publishedTime String          @map("published_time")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  folder        BookmarkFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
 
   @@unique([userId, commentId])
   @@index([userId, createdAt])
+  @@index([folderId])
   @@map("bookmarks")
 }
 
 model List {
-  id          String     @id @default(cuid())
-  userId      String     @map("user_id")
+  id          String       @id @default(cuid())
+  userId      String       @map("user_id")
   name        String
   description String?
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @updatedAt @map("updated_at")
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isPublic    Boolean      @default(false) @map("is_public")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       ListItem[]
+  followers   ListFollow[]
 
   @@index([userId])
+  @@index([isPublic])
   @@map("lists")
 }
 
@@ -137,6 +145,32 @@ model ListItem {
   @@unique([listId, commentId])
   @@index([listId, createdAt])
   @@map("list_items")
+}
+
+model ListFollow {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  listId    String   @map("list_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, listId])
+  @@index([userId])
+  @@index([listId])
+  @@map("list_follows")
+}
+
+model BookmarkFolder {
+  id        String     @id @default(cuid())
+  userId    String     @map("user_id")
+  name      String
+  createdAt DateTime   @default(now()) @map("created_at")
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookmarks Bookmark[]
+
+  @@index([userId])
+  @@map("bookmark_folders")
 }
 
 model ScheduledPost {

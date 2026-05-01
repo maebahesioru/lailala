@@ -5,12 +5,17 @@ import { CommentCard } from "./comment-card";
 import { Composer } from "./composer";
 import { fetchComments } from "@/lib/youtube-client";
 import { CommentThread } from "@/types/youtube";
-import { RefreshCw, Loader2 } from "lucide-react";
+import { RefreshCw, Loader2, List } from "lucide-react";
 import { SkeletonCard } from "./skeleton-card";
 
 interface VoteCounts {
   likes: number;
   dislikes: number;
+}
+
+interface FollowedList {
+  id: string;
+  name: string;
 }
 
 export function CommentFeed({ videoId }: { videoId: string }) {
@@ -25,26 +30,68 @@ export function CommentFeed({ videoId }: { videoId: string }) {
   const [nextToken, setNextToken] = useState<string | null>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
 
+  const [followedLists, setFollowedLists] = useState<FollowedList[]>([]);
+  const [activeListId, setActiveListId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/lists/follow")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.follows) {
+          setFollowedLists(data.follows.map((f: any) => ({ id: f.id, name: f.name })));
+        }
+      })
+      .catch(() => null);
+  }, []);
+
   const loadInitial = useCallback(async () => {
     setLoading(true);
     setError(null);
     setHasMore(false);
     setNextToken(null);
     try {
-      const data = await fetchComments(videoId, sortBy);
-      setThreads(data.threads);
-      setHasMore(data.hasContinuation);
-      setNextToken(data.continuationToken);
-      fetchVoteData(data.threads);
+      if (activeListId) {
+        const res = await fetch(`/api/lists?listId=${activeListId}`);
+        const data = await res.json();
+        const mapped = (data.list?.items || []).map((item: any) => ({
+          comment: {
+            commentId: item.commentId,
+            author: {
+              name: item.authorName,
+              thumbnail: item.authorThumb || undefined,
+              isChannelOwner: false,
+              isMember: false,
+            },
+            content: item.content,
+            publishedTime: item.publishedTime,
+            likeCount: item.likeCount,
+            replyCount: item.replyCount,
+            isLiked: false,
+            isDisliked: false,
+            isPinned: false,
+            isHearted: false,
+          },
+          replies: [],
+          hasRepliesContinuation: false,
+        }));
+        setThreads(mapped);
+        fetchVoteData(mapped);
+      } else {
+        const data = await fetchComments(videoId, sortBy);
+        setThreads(data.threads);
+        setHasMore(data.hasContinuation);
+        setNextToken(data.continuationToken);
+        fetchVoteData(data.threads);
+      }
     } catch (e: any) {
       setError(e.message || "コメントの取得に失敗しました");
     } finally {
       setLoading(false);
     }
-  }, [videoId, sortBy]);
+  }, [videoId, sortBy, activeListId]);
 
   const loadMore = useCallback(async () => {
-    if (!nextToken || loadingMore) return;
+    if (activeListId || !nextToken || loadingMore) return;
     setLoadingMore(true);
     try {
       const data = await fetchComments(videoId, sortBy, nextToken);
@@ -61,10 +108,11 @@ export function CommentFeed({ videoId }: { videoId: string }) {
     } finally {
       setLoadingMore(false);
     }
-  }, [videoId, sortBy, nextToken, loadingMore]);
+  }, [videoId, sortBy, nextToken, loadingMore, activeListId]);
 
   const fetchVoteData = async (threadList: CommentThread[]) => {
     const commentIds = threadList.map((t) => t.comment.commentId);
+    if (commentIds.length === 0) return;
     try {
       const [countsRes, userRes] = await Promise.all([
         fetch(`/api/comments/vote-counts?${commentIds.map((id) => `commentId=${id}`).join("&")}`),
@@ -90,13 +138,13 @@ export function CommentFeed({ videoId }: { videoId: string }) {
   useEffect(() => {
     setThreads([]);
     loadInitial();
-  }, [videoId, sortBy, loadInitial]);
+  }, [videoId, sortBy, activeListId, loadInitial]);
 
   // Listen for scroll-to-top event from sidebar home button
   useEffect(() => {
     const handleScrollToTop = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      if (sortBy !== "TOP_COMMENTS") {
+      if (!activeListId && sortBy !== "TOP_COMMENTS") {
         setSortBy("TOP_COMMENTS");
       } else {
         loadInitial();
@@ -104,7 +152,7 @@ export function CommentFeed({ videoId }: { videoId: string }) {
     };
     window.addEventListener("lailala:scrollToTop", handleScrollToTop);
     return () => window.removeEventListener("lailala:scrollToTop", handleScrollToTop);
-  }, [sortBy, loadInitial]);
+  }, [sortBy, loadInitial, activeListId]);
 
   // Fix back button bug
   useEffect(() => {
@@ -163,36 +211,41 @@ export function CommentFeed({ videoId }: { videoId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoId, sortBy]);
 
+  const tabs = [
+    { id: "top", label: "人気", onClick: () => { setActiveListId(null); setSortBy("TOP_COMMENTS"); } },
+    { id: "new", label: "新着", onClick: () => { setActiveListId(null); setSortBy("NEWEST_FIRST"); } },
+    ...followedLists.map((list) => ({
+      id: list.id,
+      label: list.name,
+      onClick: () => setActiveListId(list.id),
+    })),
+  ];
+
+  const activeTabId = activeListId || (sortBy === "TOP_COMMENTS" ? "top" : "new");
+
   return (
     <div>
       <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
-        <div className="flex">
-          <button
-            onClick={() => setSortBy("TOP_COMMENTS")}
-            className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${
-              sortBy === "TOP_COMMENTS" ? "text-foreground" : "text-muted"
-            }`}
-          >
-            人気
-            {sortBy === "TOP_COMMENTS" && (
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
-            )}
-          </button>
-          <button
-            onClick={() => setSortBy("NEWEST_FIRST")}
-            className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${
-              sortBy === "NEWEST_FIRST" ? "text-foreground" : "text-muted"
-            }`}
-          >
-            新着
-            {sortBy === "NEWEST_FIRST" && (
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
-            )}
-          </button>
+        <div className="flex overflow-x-auto scrollbar-hide">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={tab.onClick}
+              className={`flex-shrink-0 px-6 py-4 text-center text-sm font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap ${
+                activeTabId === tab.id ? "text-foreground" : "text-muted"
+              }`}
+            >
+              {tab.id !== "top" && tab.id !== "new" && <List size={14} className="inline mr-1" />}
+              {tab.label}
+              {activeTabId === tab.id && (
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
+              )}
+            </button>
+          ))}
         </div>
       </div>
 
-      <Composer videoId={videoId} onPosted={() => loadInitial()} />
+      {!activeListId && <Composer videoId={videoId} onPosted={() => loadInitial()} />}
 
       <div className="divide-y divide-border">
         {threads.length === 0 && loading

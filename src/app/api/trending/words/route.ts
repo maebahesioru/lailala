@@ -47,23 +47,17 @@ function extractTrendWords(contents: string[]): TrendWord[] {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const videoId = searchParams.get("videoId");
   const hours = parseInt(searchParams.get("hours") || "24", 10);
 
   try {
     const since = new Date(Date.now() - hours * 60 * 60 * 1000);
-    const where: any = {
-      publishedAt: { gte: since },
-    };
-    if (videoId) {
-      where.videoId = videoId;
-    }
 
     const comments = await prisma.commentCache.findMany({
-      where,
+      where: {
+        publishedAt: { gte: since },
+      },
       select: { content: true },
       orderBy: { publishedAt: "desc" },
-      take: 10000,
     });
 
     const contents = comments.map((c) => c.content);
