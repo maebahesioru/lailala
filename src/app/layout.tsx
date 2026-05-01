@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { startScheduledPostWorker } from "@/lib/scheduled-posts";
@@ -99,19 +100,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <head>
-        <script
+      <body className={`${inter.className} min-h-screen antialiased`}>
+        <Script
+          id="theme-script"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){var t=localStorage.getItem('lailala-theme');if(t&&['light','dark-blue','black'].includes(t))document.documentElement.setAttribute('data-theme',t)})();`,
           }}
         />
-        <script
+        <Script
+          id="sw-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'))}`,
           }}
         />
-      </head>
-      <body className={`${inter.className} min-h-screen antialiased`}>
         <Providers>
           <div className="min-h-screen flex flex-col">
             {children}
