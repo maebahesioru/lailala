@@ -3,6 +3,7 @@ import { getSessionUserId } from "@/lib/session";
 import { getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
+import { createNotification } from "@/lib/notifications";
 import { z } from "zod";
 
 const schema = z.object({
@@ -52,6 +53,22 @@ export async function POST(req: NextRequest) {
         update: { type: action },
         create: { commentId, videoId, userId, type: action },
       });
+
+      // Send notification to comment author
+      const authorChannelId = targetComment.author?.id;
+      const me = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, channelId: true, image: true } });
+      if (authorChannelId && me?.channelId && authorChannelId !== me.channelId) {
+        await createNotification({
+          recipientChannelId: authorChannelId,
+          type: action,
+          actorName: me.name || "Unknown",
+          actorChannelId: me.channelId,
+          actorThumb: me.image || undefined,
+          commentId,
+          videoId,
+          content: targetComment.content?.text || "",
+        });
+      }
     } else {
       await prisma.commentLike.deleteMany({ where: { commentId, userId } });
     }

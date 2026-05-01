@@ -1,0 +1,188 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { MainLayout } from "@/components/main-layout";
+import { Heart, MessageCircle, Bookmark, ThumbsDown, AtSign, Play, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { useNotifications } from "@/components/use-notifications";
+
+interface NotificationItem {
+  id: string;
+  type: string;
+  actorName: string;
+  actorThumb: string | null;
+  commentId: string | null;
+  videoId: string;
+  content: string | null;
+  isRead: boolean;
+  createdAt: string;
+}
+
+const TYPE_ICONS: Record<string, React.ReactNode> = {
+  like: <Heart size={18} className="text-pink-500" fill="currentColor" />,
+  dislike: <ThumbsDown size={18} className="text-blue-500" />,
+  reply: <MessageCircle size={18} className="text-blue-500" />,
+  bookmark: <Bookmark size={18} className="text-blue-500" fill="currentColor" />,
+  mention: <AtSign size={18} className="text-blue-500" />,
+  youtube: <Play size={18} className="text-red-500" />,
+};
+
+const TYPE_LABELS: Record<string, string> = {
+  like: "あなたのコメントをいいねしました",
+  dislike: "あなたのコメントを低評価しました",
+  reply: "あなたのコメントに返信しました",
+  bookmark: "あなたのコメントをブックマークしました",
+  mention: "あなたにメンションしました",
+  youtube: "YouTube通知",
+};
+
+export default function NotificationsPage() {
+  const [tab, setTab] = useState<"all" | "mentions">("all");
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const { refresh } = useNotifications();
+  const router = useRouter();
+
+  const fetchNotifications = useCallback(async (reset = false) => {
+    const newOffset = reset ? 0 : offset;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/notifications?type=${tab}&limit=50&offset=${newOffset}`, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+      const items = data.notifications || [];
+      setNotifications((prev) => (reset ? items : [...prev, ...items]));
+      setHasMore(items.length === 50);
+      if (reset) setOffset(50);
+      else setOffset((o) => o + 50);
+    } catch {
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [tab, offset]);
+
+  useEffect(() => {
+    fetchNotifications(true);
+  }, [tab]);
+
+  // Mark all as read on mount
+  useEffect(() => {
+    fetch("/api/notifications", { method: "PATCH", body: JSON.stringify({ all: true }) })
+      .then(() => refresh());
+  }, [refresh]);
+
+  const handleDelete = async (id: string) => {
+    await fetch("/api/notifications", {
+      method: "DELETE",
+      body: JSON.stringify({ notificationIds: [id] }),
+    });
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
+
+  const handleDeleteAll = async () => {
+    if (!confirm("すべての通知を削除しますか？")) return;
+    await fetch("/api/notifications", { method: "DELETE", body: JSON.stringify({ all: true }) });
+    setNotifications([]);
+  };
+
+  return (
+    <MainLayout>
+      <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <h1 className="text-xl font-bold">通知</h1>
+          {notifications.length > 0 && (
+            <button onClick={handleDeleteAll} className="text-sm text-muted hover:text-foreground transition-colors">
+              すべて削除
+            </button>
+          )}
+        </div>
+        <div className="flex">
+          <button
+            onClick={() => setTab("all")}
+            className={`flex-1 py-3 text-[15px] font-bold text-center hover:bg-white/5 transition-colors relative ${
+              tab === "all" ? "text-foreground" : "text-muted"
+            }`}
+          >
+            すべて
+            {tab === "all" && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary rounded-full" />}
+          </button>
+          <button
+            onClick={() => setTab("mentions")}
+            className={`flex-1 py-3 text-[15px] font-bold text-center hover:bg-white/5 transition-colors relative ${
+              tab === "mentions" ? "text-foreground" : "text-muted"
+            }`}
+          >
+            @返信
+            {tab === "mentions" && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary rounded-full" />}
+          </button>
+        </div>
+      </div>
+
+      <div className="divide-y divide-border">
+        {notifications.map((n) => (
+          <div
+            key={n.id}
+            className={`px-4 py-3 hover:bg-white/[0.03] transition-colors flex gap-3 ${
+              !n.isRead ? "bg-primary/5" : ""
+            }`}
+          >
+            <div className="shrink-0 pt-1">{TYPE_ICONS[n.type] || <Heart size={18} />}</div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                {n.actorThumb ? (
+                  <img src={n.actorThumb} alt="" className="w-8 h-8 rounded-full object-cover" />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-border flex items-center justify-center">
+                    <span className="text-xs text-muted">{n.actorName[0]}</span>
+                  </div>
+                )}
+                <span className="font-bold text-[15px]">{n.actorName}</span>
+                <span className="text-muted text-[15px]">{TYPE_LABELS[n.type] || "通知"}</span>
+                <span className="text-muted text-sm ml-auto shrink-0">{new Date(n.createdAt).toLocaleDateString("ja-JP")}</span>
+              </div>
+              {n.content && (
+                <Link
+                  href={n.commentId ? `/thread/${n.commentId}` : `/`}
+                  className="block text-[15px] text-muted mt-1 line-clamp-2 hover:underline"
+                >
+                  {n.content}
+                </Link>
+              )}
+            </div>
+            <button
+              onClick={() => handleDelete(n.id)}
+              className="shrink-0 self-center p-2 text-muted hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+              title="削除"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        ))}
+        {loading && (
+          <div className="p-8 text-center text-muted">
+            <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2" />
+            読み込み中...
+          </div>
+        )}
+        {!loading && notifications.length === 0 && (
+          <div className="p-12 text-center text-muted">
+            <p className="text-lg font-bold mb-2">通知はありません</p>
+            <p className="text-sm">いいね・返信・ブックマークなどの通知がここに表示されます</p>
+          </div>
+        )}
+        {hasMore && !loading && (
+          <button
+            onClick={() => fetchNotifications()}
+            className="w-full py-3 text-center text-primary text-sm font-bold hover:bg-white/5 transition-colors"
+          >
+            もっと見る
+          </button>
+        )}
+      </div>
+    </MainLayout>
+  );
+}

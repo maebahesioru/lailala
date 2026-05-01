@@ -3,6 +3,7 @@ import { getSessionUserId } from "@/lib/session";
 import { getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
+import { createNotification } from "@/lib/notifications";
 import { z } from "zod";
 
 const schema = z.object({
@@ -46,6 +47,22 @@ export async function POST(req: NextRequest) {
     await prisma.userAction.create({
       data: { userId, videoId, commentId, actionType: "reply", content: text },
     });
+
+    // Send notification to comment author
+    const authorChannelId = targetComment.author?.id;
+    const me = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, channelId: true, image: true } });
+    if (authorChannelId && me?.channelId && authorChannelId !== me.channelId) {
+      await createNotification({
+        recipientChannelId: authorChannelId,
+        type: "reply",
+        actorName: me.name || "Unknown",
+        actorChannelId: me.channelId,
+        actorThumb: me.image || undefined,
+        commentId,
+        videoId,
+        content: text,
+      });
+    }
 
     return NextResponse.json({ success: true, data: response });
   } catch (e: any) {

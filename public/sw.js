@@ -1,59 +1,28 @@
-const CACHE_NAME = "lailala-v3";
+const CACHE_NAME = "lailala-v1";
 
-self.addEventListener("install", (event) => {
-  self.skipWaiting();
+self.addEventListener("push", (event: any) => {
+  const data = event.data?.json() || {};
+  const title = data.title || "Lailala";
+  const options = {
+    body: data.body || "",
+    icon: data.icon || "/favicon.svg",
+    badge: "/favicon.svg",
+    data: {
+      url: data.url || "/",
+    },
+    requireInteraction: true,
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
-self.addEventListener("activate", (event) => {
+self.addEventListener("notificationclick", (event: any) => {
+  event.notification.close();
+  const url = event.notification.data?.url || "/";
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => {
-        if (k !== CACHE_NAME) return caches.delete(k);
-      }))
-    )
+    (self as any).clients.openWindow(url)
   );
-  self.clients.claim();
 });
 
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-  if (request.method !== "GET") return;
-
-  const url = new URL(request.url);
-
-  // Never cache HTML, API, or data requests - always fetch fresh
-  if (
-    url.pathname.startsWith("/api/") ||
-    request.destination === "document" ||
-    request.mode === "navigate"
-  ) {
-    // For HTML/navigate, go network-only to avoid stale shell
-    event.respondWith(fetch(request));
-    return;
-  }
-
-  // For static assets: Network First, fallback to cache
-  if (
-    request.destination === "script" ||
-    request.destination === "style" ||
-    request.destination === "font" ||
-    request.destination === "image"
-  ) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-          }
-          return response;
-        })
-        .catch(() => {
-          return caches.match(request).then((cached) => {
-            if (cached) return cached;
-            throw new Error("Network and cache both failed");
-          });
-        })
-    );
-  }
+self.addEventListener("activate", (event: any) => {
+  event.waitUntil(self.clients.claim());
 });

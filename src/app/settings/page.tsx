@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import { useTheme } from "@/components/theme-provider";
-import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight, Monitor, Hash, AtSign } from "lucide-react";
+import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight, Monitor, Hash, Bell, BellOff } from "lucide-react";
+import { usePush } from "@/components/push-provider";
 import Link from "next/link";
 
 const MENTION_COLORS = [
@@ -19,6 +20,7 @@ const MENTION_COLORS = [
 export default function SettingsPage() {
   const { user } = useAuth();
   const { theme, setTheme, useSystem, setUseSystem } = useTheme();
+  const { supported, subscribed, subscribe, unsubscribe } = usePush();
   const [message, setMessage] = useState("");
   const [mentionColor, setMentionColor] = useState("#1d9bf0");
 
@@ -157,6 +159,39 @@ export default function SettingsPage() {
             </div>
           ) : (
             <p className="text-muted text-sm">ログインしていません</p>
+          )}
+        </div>
+
+        {/* Push Notification */}
+        <div className="bg-card rounded-2xl border border-border p-4">
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <Bell size={20} className="text-muted" />
+            プッシュ通知
+          </h2>
+          {!supported ? (
+            <p className="text-sm text-muted">このブラウザはプッシュ通知に対応していません</p>
+          ) : (
+            <div className="space-y-3">
+              <button
+                onClick={() => (subscribed ? unsubscribe() : subscribe())}
+                className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-colors ${
+                  subscribed
+                    ? "border-primary bg-primary/10"
+                    : "border-border hover:border-primary/50"
+                }`}
+              >
+                {subscribed ? <Bell size={20} className="text-primary" /> : <BellOff size={20} className="text-muted" />}
+                <span className="flex-1 text-left text-sm font-medium">
+                  {subscribed ? "プッシュ通知ON" : "プッシュ通知OFF"}
+                </span>
+                {subscribed && <Check size={16} className="text-primary" />}
+              </button>
+              <p className="text-xs text-muted">
+                {subscribed
+                  ? "いいね・返信・ブックマークなどの通知を受け取っています"
+                  : "通知をオンにすると、リアルタイムで通知を受け取れます"}
+              </p>
+            </div>
           )}
         </div>
 

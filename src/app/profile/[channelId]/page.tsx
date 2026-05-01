@@ -3,9 +3,10 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
-import { ArrowLeft, Loader2, User, ThumbsUp, MessageCircle } from "lucide-react";
+import { ArrowLeft, Loader2, User, ThumbsUp, MessageCircle, Bell, BellOff } from "lucide-react";
 import Link from "next/link";
 import { ProfileMoreMenu } from "@/components/profile-more-menu";
+import { useAuth } from "@/components/auth-provider";
 
 interface ProfileComment {
   commentId: string;
@@ -42,6 +43,7 @@ function safeName(name: string | null | undefined, channelId?: string | null): s
 export default function ProfilePage({ params }: { params: Promise<{ channelId: string }> }) {
   const { channelId } = use(params);
   const router = useRouter();
+  const { user: currentUser } = useAuth();
   const [comments, setComments] = useState<ProfileComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +52,8 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
   const [authorName, setAuthorName] = useState<string>("");
   const [authorThumb, setAuthorThumb] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"comments" | "replies">("comments");
+  const [notifPref, setNotifPref] = useState<string>("all");
+  const [notifLoading, setNotifLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -74,6 +78,34 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
       .catch(() => setError("読み込みに失敗しました"))
       .finally(() => setLoading(false));
   }, [channelId, page, activeTab]);
+
+  // Load notification preference
+  useEffect(() => {
+    if (!currentUser || currentUser.channelId === channelId) return;
+    fetch(`/api/notifications/settings?channelId=${encodeURIComponent(channelId)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.preference) setNotifPref(data.preference);
+      })
+      .catch(() => {});
+  }, [currentUser, channelId]);
+
+  const toggleNotification = async () => {
+    if (!currentUser || currentUser.channelId === channelId) return;
+    setNotifLoading(true);
+    const next = notifPref === "none" ? "all" : "none";
+    try {
+      const res = await fetch("/api/notifications/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ channelId, preference: next }),
+      });
+      if (res.ok) {
+        setNotifPref(next);
+      }
+    } catch {}
+    setNotifLoading(false);
+  };
 
   const handleTabChange = (tab: "comments" | "replies") => {
     setActiveTab(tab);
@@ -107,9 +139,24 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
               <User size={32} className="text-muted" />
             </div>
           )}
-          <div>
+          <div className="flex-1">
             <h2 className="text-xl font-bold">{displayName}</h2>
           </div>
+          {currentUser && currentUser.channelId !== channelId && (
+            <button
+              onClick={toggleNotification}
+              disabled={notifLoading}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-colors border ${
+                notifPref === "none"
+                  ? "border-border hover:bg-white/5 text-foreground"
+                  : "bg-primary text-white border-primary hover:bg-primary-hover"
+              }`}
+              title={notifPref === "none" ? "通知をオンにする" : "通知をオフにする"}
+            >
+              {notifPref === "none" ? <BellOff size={16} /> : <Bell size={16} />}
+              <span>{notifPref === "none" ? "通知OFF" : "通知ON"}</span>
+            </button>
+          )}
         </div>
       </div>
 

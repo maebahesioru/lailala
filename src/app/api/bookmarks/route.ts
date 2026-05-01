@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { createNotification } from "@/lib/notifications";
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
@@ -63,6 +64,24 @@ export async function POST(req: NextRequest) {
         publishedTime: body.publishedTime,
       },
     });
+
+    // Send notification to comment author if it's a new bookmark and not self
+    if (bookmark && body.authorChannelId) {
+      const me = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, channelId: true, image: true } });
+      if (me?.channelId && body.authorChannelId !== me.channelId) {
+        await createNotification({
+          recipientChannelId: body.authorChannelId,
+          type: "bookmark",
+          actorName: me.name || "Unknown",
+          actorChannelId: me.channelId,
+          actorThumb: me.image || undefined,
+          commentId: body.commentId,
+          videoId: body.videoId,
+          content: body.content?.slice(0, 500),
+        });
+      }
+    }
+
     return NextResponse.json({ bookmark, action: "added" });
   } catch (e: any) {
     console.error("[Bookmarks POST]", e);

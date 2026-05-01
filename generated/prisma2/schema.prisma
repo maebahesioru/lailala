@@ -9,19 +9,22 @@ datasource db {
 }
 
 model User {
-  id              String           @id @default(cuid())
-  name            String?
-  email           String?          @unique
-  image           String?
-  channelId       String?          @map("channel_id")
-  ytCredential    YtCredential?
-  commentLikes    CommentLike[]
-  actions         UserAction[]
-  lists           List[]
-  listFollows     ListFollow[]
-  bookmarkFolders BookmarkFolder[]
-  blockedUsers    BlockedUser[]
-  mutedUsers      MutedUser[]
+  id                   String                @id @default(cuid())
+  name                 String?
+  email                String?               @unique
+  image                String?
+  channelId            String?               @map("channel_id")
+  ytCredential         YtCredential?
+  commentLikes         CommentLike[]
+  actions              UserAction[]
+  lists                List[]
+  listFollows          ListFollow[]
+  bookmarkFolders      BookmarkFolder[]
+  blockedUsers         BlockedUser[]
+  mutedUsers           MutedUser[]
+  notifications        Notification[]
+  notificationSettings NotificationSetting[]
+  pushSubscriptions    PushSubscription[]
 
   @@map("users")
 }
@@ -213,4 +216,57 @@ model ScheduledPost {
   @@index([posted, scheduledAt])
   @@index([userId])
   @@map("scheduled_posts")
+}
+
+// 通知
+model Notification {
+  id             String   @id @default(cuid())
+  userId         String   @map("user_id")
+  // 'like' | 'dislike' | 'reply' | 'bookmark' | 'mention' | 'youtube'
+  type           String
+  actorName      String   @map("actor_name")
+  actorChannelId String?  @map("actor_channel_id")
+  actorThumb     String?  @map("actor_thumb")
+  commentId      String?  @map("comment_id")
+  videoId        String   @map("video_id")
+  content        String?  @db.Text
+  isRead         Boolean  @default(false) @map("is_read")
+  createdAt      DateTime @default(now()) @map("created_at")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@index([userId, type])
+  @@map("notifications")
+}
+
+// 通知設定（各チャンネルごと）
+model NotificationSetting {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  channelId  String   @map("channel_id")
+  // 'all' | 'mentions' | 'none'
+  preference String   @default("all")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, channelId])
+  @@index([userId])
+  @@map("notification_settings")
+}
+
+// Web Push サブスクリプション
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  endpoint  String   @db.Text
+  p256dh    String   @db.Text
+  auth      String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, endpoint])
+  @@index([userId])
+  @@map("push_subscriptions")
 }

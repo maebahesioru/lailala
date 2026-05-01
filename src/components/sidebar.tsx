@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare, Music } from "lucide-react";
+import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare, Music, Bell } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,6 +8,7 @@ import { LoginPopup } from "./login-popup";
 import { ComposePopup } from "./compose-popup";
 import { useAuth } from "./auth-provider";
 import { useBgm } from "./bgm-provider";
+import { useNotifications } from "./use-notifications";
 
 function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onClose: () => void; onConfirm: () => void }) {
   if (!open) return null;
@@ -40,6 +41,7 @@ function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onCl
 export function Sidebar() {
   const { user } = useAuth();
   const { enabled: bgmEnabled, mounted: bgmMounted, toggle: toggleBgm } = useBgm();
+  const { unreadCount } = useNotifications();
   const [showLogin, setShowLogin] = useState(false);
   const [showCompose, setShowCompose] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
@@ -110,6 +112,22 @@ export function Sidebar() {
               <span className="font-medium">{item.label}</span>
             </Link>
           ))}
+          <Link
+            href="/notifications"
+            onClick={(e) => handleProtectedClick(e)}
+            className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground relative"
+            aria-label="通知"
+          >
+            <div className="relative">
+              <Bell size={26} aria-hidden="true" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1.5 -right-2 bg-primary text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </div>
+            <span className="font-medium">通知</span>
+          </Link>
           <Link
             href="/bookmarks"
             onClick={(e) => handleProtectedClick(e)}

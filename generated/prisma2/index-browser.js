@@ -250,6 +250,38 @@ exports.Prisma.ScheduledPostScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  actorName: 'actorName',
+  actorChannelId: 'actorChannelId',
+  actorThumb: 'actorThumb',
+  commentId: 'commentId',
+  videoId: 'videoId',
+  content: 'content',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.NotificationSettingScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  channelId: 'channelId',
+  preference: 'preference',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PushSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  endpoint: 'endpoint',
+  p256dh: 'p256dh',
+  auth: 'auth',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -279,7 +311,10 @@ exports.Prisma.ModelName = {
   BookmarkFolder: 'BookmarkFolder',
   BlockedUser: 'BlockedUser',
   MutedUser: 'MutedUser',
-  ScheduledPost: 'ScheduledPost'
+  ScheduledPost: 'ScheduledPost',
+  Notification: 'Notification',
+  NotificationSetting: 'NotificationSetting',
+  PushSubscription: 'PushSubscription'
 };
 
 /**
