@@ -36,7 +36,7 @@ function NestedReply({
 
   return (
     <div className={indentClass}>
-      <ReplyCard reply={node} parentCommentId={commentId} showDetailTime />
+      <ReplyCard reply={node} parentCommentId={commentId} />
       {hasChildren && (
         <div className="relative">
           {depth < 3 && (

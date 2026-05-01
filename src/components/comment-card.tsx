@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Share, Bookmark } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import { localizeTime, stripHandlePrefix, stripEditedTag, formatDetailedTime } f
 import Link from "next/link";
 import { MentionText } from "./mention-text";
 import { LoginPopup } from "./login-popup";
+import { ShareMenu } from "./share-menu";
 
 interface CommentCardProps {
   thread: CommentThread;
@@ -27,7 +28,6 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   const [localLikes, setLocalLikes] = useState(parseLikeCount(thread.comment.likeCount) + (voteCounts.likes || 0));
   const [showLogin, setShowLogin] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const [shareMessage, setShareMessage] = useState("");
 
   const handleLike = async () => {
     if (!user) { setShowLogin(true); return; }
@@ -65,24 +65,6 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
       await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${thread.comment.commentId}`, { method: "DELETE" });
       onDelete?.(thread.comment.commentId);
     } catch {}
-  };
-
-  const handleShare = async () => {
-    const url = `${window.location.origin}/thread/${thread.comment.commentId}`;
-    const text = `${thread.comment.author.name}: ${thread.comment.content}`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: "ライララ", text, url });
-      } else {
-        await navigator.clipboard.writeText(url);
-        setShareMessage("リンクをコピーしました");
-        setTimeout(() => setShareMessage(""), 2000);
-      }
-    } catch {
-      await navigator.clipboard.writeText(url);
-      setShareMessage("リンクをコピーしました");
-      setTimeout(() => setShareMessage(""), 2000);
-    }
   };
 
   const handleBookmark = async () => {
@@ -178,13 +160,12 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                 <span>{thread.comment.replyCount || 0}</span>
               </Link>
 
-              <button
-                onClick={(e) => { e.stopPropagation(); handleShare(); }}
-                className="flex items-center gap-1.5 text-[13px] text-muted hover:text-primary transition-colors"
-                title="シェア"
-              >
-                <Share size={18} />
-              </button>
+              <div onClick={(e) => e.stopPropagation()}>
+                <ShareMenu
+                  url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${thread.comment.commentId}`}
+                  text={`${thread.comment.author.name}: ${thread.comment.content}`}
+                />
+              </div>
 
               <button
                 onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
@@ -204,9 +185,6 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                 </button>
               )}
             </div>
-            {shareMessage && (
-              <p className="text-[13px] text-primary mt-1">{shareMessage}</p>
-            )}
           </div>
         </div>
       </article>

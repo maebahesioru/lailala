@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Share, Bookmark } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark } from "lucide-react";
 import { YtComment } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import { localizeTime, stripHandlePrefix, stripEditedTag, formatDetailedTime } f
 import Link from "next/link";
 import { MentionText } from "./mention-text";
 import { LoginPopup } from "./login-popup";
+import { ShareMenu } from "./share-menu";
 import { formatCount } from "./comment-card";
 
 interface ReplyCardProps {
@@ -38,7 +39,6 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   const [localLikes, setLocalLikes] = useState(parseLikeCount(reply.likeCount));
   const [showLogin, setShowLogin] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const [shareMessage, setShareMessage] = useState("");
 
   const { replyTo, displayContent } = parseReplyTo(reply.content);
   const detailTime = formatDetailedTime(reply.publishedTime);
@@ -79,24 +79,6 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
       await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${reply.commentId}`, { method: "DELETE" });
       onDelete?.(reply.commentId);
     } catch {}
-  };
-
-  const handleShare = async () => {
-    const url = `${window.location.origin}/thread/${reply.commentId}`;
-    const text = `${reply.author.name}: ${reply.content}`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: "ライララ", text, url });
-      } else {
-        await navigator.clipboard.writeText(url);
-        setShareMessage("リンクをコピーしました");
-        setTimeout(() => setShareMessage(""), 2000);
-      }
-    } catch {
-      await navigator.clipboard.writeText(url);
-      setShareMessage("リンクをコピーしました");
-      setTimeout(() => setShareMessage(""), 2000);
-    }
   };
 
   const handleBookmark = async () => {
@@ -197,13 +179,12 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                 {reply.replyCount !== "0" && <span>{reply.replyCount}</span>}
               </Link>
 
-              <button
-                onClick={(e) => { e.stopPropagation(); handleShare(); }}
-                className="flex items-center gap-1.5 text-[13px] text-muted hover:text-primary transition-colors"
-                title="シェア"
-              >
-                <Share size={18} />
-              </button>
+              <div onClick={(e) => e.stopPropagation()}>
+                <ShareMenu
+                  url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${reply.commentId}`}
+                  text={`${reply.author.name}: ${reply.content}`}
+                />
+              </div>
 
               <button
                 onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
@@ -223,9 +204,6 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                 </button>
               )}
             </div>
-            {shareMessage && (
-              <p className="text-[13px] text-primary mt-1">{shareMessage}</p>
-            )}
           </div>
         </div>
       </article>
