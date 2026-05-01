@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getInnertube } from "@/lib/youtube";
 import redis from "@/lib/redis";
 
-const CACHE_TTL = 300; // 5 minutes
-const VIDEO_ID = "niKAylKNIEI"; // default video for trends
+const CACHE_TTL = 1800; // 30 minutes
+const VIDEO_ID = "niKAylKNIEI";
 
 interface TrendWord {
   word: string;
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
 
     const contents: string[] = [];
     let batchCount = 0;
-    const maxBatches = 20; // Fetch up to 20 batches for better accuracy
+    const maxBatches = 30; // 30 batches (~600 threads) for decent accuracy without too much delay
 
     while (batchCount < maxBatches) {
       for (const thread of comments.contents) {
