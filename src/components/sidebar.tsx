@@ -1,10 +1,11 @@
 "use client";
 
-import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal } from "lucide-react";
+import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LoginPopup } from "./login-popup";
+import { ComposePopup } from "./compose-popup";
 import { useAuth } from "./auth-provider";
 
 function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onClose: () => void; onConfirm: () => void }) {
@@ -38,6 +39,7 @@ function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onCl
 export function Sidebar() {
   const { user } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
+  const [showCompose, setShowCompose] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const pathname = usePathname();
@@ -136,6 +138,13 @@ export function Sidebar() {
             <Settings size={26} aria-hidden="true" />
             <span className="font-medium">設定</span>
           </Link>
+          <button
+            onClick={() => user ? setShowCompose(true) : setShowLogin(true)}
+            className="mt-4 compose-btn flex items-center justify-center gap-2 px-4 py-3 text-xl rounded-full font-bold transition-colors w-full"
+          >
+            <PenSquare size={22} />
+            <span>コメントする</span>
+          </button>
         </nav>
         <div className="mt-auto px-3 pb-4 relative">
           {user ? (
@@ -181,6 +190,7 @@ export function Sidebar() {
         </div>
       </aside>
       <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
+      <ComposePopup open={showCompose} onClose={() => setShowCompose(false)} videoId="niKAylKNIEI" />
       <LogoutConfirmDialog
         open={showLogoutConfirm}
         onClose={() => setShowLogoutConfirm(false)}
