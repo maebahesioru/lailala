@@ -19,45 +19,38 @@ export function BgmProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio("/bgm.mp3");
-      audioRef.current.loop = true;
-    }
-    if (enabled) {
-      audioRef.current.play().catch(() => {});
-    } else {
-      audioRef.current.pause();
-    }
     localStorage.setItem("ytx-bgm-enabled", String(enabled));
-  }, [enabled]);
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  // Retry play on first user interaction after reload (browsers block autoplay)
-  useEffect(() => {
-    if (!enabled || !audioRef.current) return;
-    if (!audioRef.current.paused) return;
-
-    const tryPlay = () => {
-      audioRef.current
-        ?.play()
-        .then(() => {
-          document.removeEventListener("click", tryPlay);
-          document.removeEventListener("touchstart", tryPlay);
-        })
-        .catch(() => {});
-    };
-
-    document.addEventListener("click", tryPlay);
-    document.addEventListener("touchstart", tryPlay);
-    return () => {
-      document.removeEventListener("click", tryPlay);
-      document.removeEventListener("touchstart", tryPlay);
-    };
+    if (enabled) {
+      // Browsers allow autoplay when muted. Start muted, then unmute.
+      audio.muted = true;
+      audio.play().catch(() => {});
+      // Small delay then unmute so browser treats it as a continuous playback
+      const t = setTimeout(() => {
+        audio.muted = false;
+      }, 100);
+      return () => clearTimeout(t);
+    } else {
+      audio.muted = true;
+    }
   }, [enabled]);
 
   const toggle = () => setEnabled((prev) => !prev);
 
   return (
     <BgmContext.Provider value={{ enabled, toggle }}>
+      <audio
+        ref={audioRef}
+        src="/bgm.mp3"
+        loop
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        style={{ display: "none" }}
+      />
       {children}
     </BgmContext.Provider>
   );
