@@ -8,32 +8,66 @@ const BgmContext = createContext<{
 }>({ enabled: false, toggle: () => {} });
 
 export function BgmProvider({ children }: { children: React.ReactNode }) {
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("ytx-bgm-enabled") === "true";
+    }
+    return false;
+  });
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem("ytx-bgm-enabled");
-    if (stored === "true") {
-      setEnabled(true);
-    }
-  }, []);
+    localStorage.setItem("ytx-bgm-enabled", String(enabled));
+  }, [enabled]);
 
   useEffect(() => {
-    localStorage.setItem("ytx-bgm-enabled", String(enabled));
     const audio = audioRef.current;
     if (!audio) return;
 
+    const tryUnmute = () => {
+      if (!audio || !audio.muted) return;
+      audio.muted = false;
+      audio.play().catch(() => {
+        audio.muted = true;
+      });
+    };
+
     if (enabled) {
-      // Browsers allow autoplay when muted. Start muted, then unmute.
       audio.muted = true;
-      audio.play().catch(() => {});
-      // Small delay then unmute so browser treats it as a continuous playback
-      const t = setTimeout(() => {
-        audio.muted = false;
-      }, 100);
-      return () => clearTimeout(t);
+      const promise = audio.play();
+      if (promise !== undefined) {
+        promise
+          .then(() => {
+            tryUnmute();
+          })
+          .catch(() => {});
+      }
+
+      const handler = () => {
+        tryUnmute();
+        if (!audio.muted) {
+          document.removeEventListener("click", handler);
+          document.removeEventListener("touchstart", handler);
+          document.removeEventListener("scroll", handler);
+          document.removeEventListener("keydown", handler);
+        }
+      };
+
+      document.addEventListener("click", handler);
+      document.addEventListener("touchstart", handler);
+      document.addEventListener("scroll", handler, { passive: true });
+      document.addEventListener("keydown", handler);
+
+      return () => {
+        document.removeEventListener("click", handler);
+        document.removeEventListener("touchstart", handler);
+        document.removeEventListener("scroll", handler);
+        document.removeEventListener("keydown", handler);
+      };
     } else {
       audio.muted = true;
+      audio.pause();
     }
   }, [enabled]);
 
@@ -45,7 +79,6 @@ export function BgmProvider({ children }: { children: React.ReactNode }) {
         ref={audioRef}
         src="/bgm.mp3"
         loop
-        autoPlay
         muted
         playsInline
         preload="auto"
