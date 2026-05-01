@@ -62,11 +62,20 @@ export async function POST(_req: NextRequest) {
       });
     });
 
-    // Start sign-in after all listeners are set
-    await innertube.session.signIn();
+    // Start sign-in (don't await - it resolves only when auth completes)
+    innertube.session.signIn().catch((e: any) => {
+      // If signIn rejects before auth-pending fires, clean up
+      if (!oauthStates.has(sessionId)) return;
+      oauthStates.delete(sessionId);
+    });
 
-    // If we don't have verification data yet, signIn might fire synchronously
-    // The auth-pending handler above should have captured it
+    // Wait briefly for auth-pending to fire
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    if (!userCode) {
+      oauthStates.delete(sessionId);
+      return NextResponse.json({ error: "Failed to start OAuth flow. Please try again." }, { status: 500 });
+    }
 
     oauthStates.set(sessionId, authPromise);
     setTimeout(() => oauthStates.delete(sessionId), timeout + 5000);
