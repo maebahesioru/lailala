@@ -67,12 +67,6 @@ export function Sidebar() {
     window.location.reload();
   };
 
-  const handleSwitchAccount = async () => {
-    setShowAccountMenu(false);
-    await fetch("/api/auth/me", { method: "POST" });
-    setShowLogin(true);
-  };
-
   const handleHomeClick = (e: React.MouseEvent) => {
     if (pathname === "/") {
       e.preventDefault();
@@ -166,26 +160,11 @@ export function Sidebar() {
               {showAccountMenu && (
                 <div className="absolute bottom-full left-3 right-3 mb-2 bg-card border border-border rounded-xl shadow-lg overflow-hidden z-50">
                   <button
-                    onClick={() => { setShowAccountMenu(false); setShowLogin(true); }}
-                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[15px]"
-                  >
-                    <User size={18} className="text-muted" />
-                    <span>アカウントを追加</span>
-                  </button>
-                  <button
-                    onClick={handleSwitchAccount}
-                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[15px]"
-                  >
-                    <LogOut size={18} className="text-muted" />
-                    <span>アカウントを変更</span>
-                  </button>
-                  <div className="border-t border-border" />
-                  <button
                     onClick={() => { setShowAccountMenu(false); setShowLogoutConfirm(true); }}
                     className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[15px]"
                   >
                     <LogOut size={18} className="text-muted" />
-                    <span>ログアウト</span>
+                    <span>ログアウト @{user.name || "user"}</span>
                   </button>
                 </div>
               )}
