@@ -7,9 +7,9 @@ import { MainLayout } from "@/components/main-layout";
 import { ThreadView } from "@/components/thread-view";
 import { buildReplyTree } from "@/lib/reply-tree";
 
-export async function generateMetadata({ params }: { params: Promise<{ commentId: string[] }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ commentId: string }> }): Promise<Metadata> {
   const segments = await params;
-  const commentId = segments.commentId.join("/");
+  const commentId = segments.commentId;
   const videoId = "niKAylKNIEI";
 
   try {
@@ -54,12 +54,12 @@ const parseReply = (r: any) => ({
 });
 
 interface PageProps {
-  params: Promise<{ commentId: string[] }>;
+  params: Promise<{ commentId: string }>;
 }
 
 export default async function ThreadPage({ params }: PageProps) {
   const segments = await params;
-  const commentId = segments.commentId.join("/");
+  const commentId = segments.commentId;
   const videoId = "niKAylKNIEI";
 
   const userId = await getSessionUserId();
