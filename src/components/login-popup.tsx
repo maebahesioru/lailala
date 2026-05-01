@@ -101,7 +101,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
           )}
         </div>
 
-        {error && step !== "done" && (
+        {error && (
           <p className="text-red-400 text-sm mb-4 p-3 bg-red-500/10 rounded-xl">{error}</p>
         )}
 
