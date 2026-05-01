@@ -9,11 +9,9 @@ import {
   Bookmark,
   Loader2,
   User,
-  Trash2,
   ThumbsUp,
   ThumbsDown,
   MessageCircle,
-  Heart,
 } from "lucide-react";
 import Link from "next/link";
 import { ShareMenu } from "@/components/share-menu";
@@ -179,16 +177,6 @@ export default function BookmarksPage() {
                     >
                       <Bookmark size={18} fill="currentColor" />
                     </button>
-
-                    {user && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); removeBookmark(b.commentId); }}
-                        className="flex items-center gap-1.5 text-[13px] text-muted hover:text-red-500 transition-colors"
-                        title="削除"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
