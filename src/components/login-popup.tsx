@@ -49,11 +49,8 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
         const data = await res.json();
         if (data.status === "complete") {
           setPolling(false);
+          setError("");
           setStep("done");
-          setTimeout(() => {
-            onClose();
-            window.location.reload();
-          }, 1000);
         } else if (data.status === "error" || data.status === "expired") {
           setPolling(false);
           setError(data.message || "認証に失敗しました");
@@ -154,11 +151,17 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
         )}
 
         {step === "done" && (
-          <div className="flex flex-col items-center py-6 gap-2">
+          <div className="flex flex-col items-center py-6 gap-3">
             <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
               <Check size={24} className="text-green-500" />
             </div>
-            <p className="text-muted text-sm">ログインしました。画面を更新します...</p>
+            <p className="text-muted text-sm">ログインしました</p>
+            <button
+              onClick={() => { onClose(); window.location.reload(); }}
+              className="px-6 py-2 bg-primary text-white rounded-full font-bold hover:bg-primary-hover transition-colors"
+            >
+              OK
+            </button>
           </div>
         )}
       </div>

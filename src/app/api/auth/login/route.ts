@@ -49,31 +49,21 @@ export async function POST(_req: NextRequest) {
         try {
           const encryptedCred = encrypt(JSON.stringify(credentials));
 
-          // Extract YouTube channel info from account
+          // Get YouTube account info
           let channelId = sessionId;
           let name = "YouTube User";
           let thumbnail: string | null = null;
 
           try {
-            const info = await innertube.account.getInfo();
-            const page = (info as any).page;
-            const sections = page?.contents?.array?.();
-            if (sections) {
-              for (const section of sections) {
-                const footers = section?.footers;
-                if (!footers) continue;
-                for (const footer of footers) {
-                  if (footer?.title?.text) name = footer.title.text;
-                  const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
-                  if (cid && cid.startsWith("UC")) {
-                    channelId = cid;
-                    thumbnail = `https://yt3.googleusercontent.com/ytc/${cid}=s88-c-k-c0x00ffffff-no-rj`;
-                  }
-                }
-              }
+            const items = await innertube.account.getInfo(true);
+            if (Array.isArray(items) && items.length > 0) {
+              const primary = items[0];
+              if (primary.account_name?.text) name = primary.account_name.text;
+              if (primary.account_photo?.[0]?.url) thumbnail = primary.account_photo[0].url;
+              if (primary.channel_handle?.text) channelId = primary.channel_handle.text;
             }
           } catch {
-            // Non-fatal, use fallback
+            // Non-fatal
           }
 
           const email = `yt:${channelId}`;
