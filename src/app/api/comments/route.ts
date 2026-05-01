@@ -13,11 +13,7 @@ const postSchema = z.object({
 
 function isOlderThanOneYear(publishedTime: string): boolean {
   if (!publishedTime) return false;
-  const match = publishedTime.match(/(\d+)\s*year/);
-  if (match) {
-    return parseInt(match[1], 10) >= 1;
-  }
-  return false;
+  return /(\d+)\s*(年|year)/.test(publishedTime);
 }
 
 function parseCommentThread(thread: any) {

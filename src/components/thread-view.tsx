@@ -76,12 +76,35 @@ export function ThreadView({
   commentId,
   userVote,
 }: ThreadViewProps) {
-  const [replies] = useState(initialReplies);
-  const [continuationToken] = useState(initialContinuationToken);
-  const [loadingMore] = useState(false);
+  const [replies, setReplies] = useState(initialReplies);
+  const [continuationToken, setContinuationToken] = useState(initialContinuationToken);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const handleReload = () => {
     window.location.reload();
+  };
+
+  const loadMore = async () => {
+    if (!continuationToken) return;
+    setLoadingMore(true);
+    try {
+      const url = `/api/comments/thread?videoId=${videoId}&commentId=${commentId}&continuationToken=${encodeURIComponent(continuationToken!)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.replies) {
+        const newReplies = data.replies.map((r: any) => ({
+          ...r,
+          children: [],
+          replyTo: null,
+        }));
+        setReplies((prev) => [...prev, ...newReplies]);
+        setContinuationToken(data.continuationToken || null);
+      }
+    } catch {
+      // ignore
+    } finally {
+      setLoadingMore(false);
+    }
   };
 
   useEffect(() => {
@@ -102,7 +125,7 @@ export function ThreadView({
 
   return (
     <>
-      <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-[#2f3336] px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 py-3 flex items-center gap-3">
         <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft size={20} />
         </Link>
@@ -149,6 +172,7 @@ export function ThreadView({
       {continuationToken && (
         <div className="p-6 text-center border-t border-[#2f3336]">
           <button
+            onClick={loadMore}
             disabled={loadingMore}
             className="inline-flex items-center gap-2 text-[13px] text-[#1d9bf0] hover:bg-[#1d9bf0]/10 px-4 py-2 rounded-full transition-colors disabled:opacity-50"
           >
