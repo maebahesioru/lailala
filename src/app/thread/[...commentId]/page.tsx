@@ -93,8 +93,6 @@ export default async function ThreadPage({ params }: PageProps) {
         );
         if (foundThread?.replies) {
           loadedReplies = foundThread.replies;
-        } else {
-          replyError = e.message || "Failed to load replies";
         }
       } catch (e2: any) {
         replyError = e2.message || e.message || "Failed to load replies";
