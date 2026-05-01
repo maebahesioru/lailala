@@ -186,7 +186,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
               )}
             </div>
 
-            <div className="flex items-center justify-between mt-3 gap-1 flex-wrap max-w-[400px]">
+            <div className="flex items-center justify-between mt-3 gap-1 flex-wrap">
               <button
                 onClick={(e) => { e.stopPropagation(); handleLike(); }}
                 className={`flex items-center gap-1.5 text-[13px] transition-colors ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}
