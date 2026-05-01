@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark, User } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
@@ -100,11 +100,17 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
       <article className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text">
         <div className="flex gap-3">
           <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0">
-            <img
-              src={thread.comment.author.thumbnail || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23333'/%3E%3C/svg%3E"}
-              alt={thread.comment.author.name}
-              className="w-10 h-10 rounded-full object-cover shrink-0"
-            />
+            {thread.comment.author.thumbnail ? (
+              <img
+                src={thread.comment.author.thumbnail}
+                alt={thread.comment.author.name}
+                className="w-10 h-10 rounded-full object-cover shrink-0"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                <User size={20} className="text-muted" />
+              </div>
+            )}
           </Link>
           <div className="flex-1 min-w-0">
             <div className="cursor-pointer" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>

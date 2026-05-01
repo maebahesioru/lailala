@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, use } from "react";
-import { CommentCard } from "@/components/comment-card";
+import { MainLayout } from "@/components/main-layout";
 import { ArrowLeft, Loader2, User } from "lucide-react";
 import Link from "next/link";
 
@@ -47,6 +47,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
   }, [channelId, page]);
 
   return (
+    <MainLayout>
     <div className="min-h-screen">
       {/* Header */}
       <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-[#2f3336] px-4 py-3 flex items-center gap-3">
@@ -158,5 +159,6 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
         </div>
       )}
     </div>
+    </MainLayout>
   );
 }

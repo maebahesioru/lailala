@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Search, User, Settings, LogOut, Bookmark } from "lucide-react";
+import { Home, Search, User, Settings, LogOut, Bookmark, List } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { LoginPopup } from "./login-popup";
@@ -53,6 +53,14 @@ export function Sidebar() {
           >
             <Bookmark size={26} />
             <span className="font-medium">ブックマーク</span>
+          </Link>
+          <Link
+            href={user ? "/lists" : "/"}
+            onClick={(e) => handleProtectedClick(e)}
+            className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
+          >
+            <List size={26} />
+            <span className="font-medium">リスト</span>
           </Link>
           <Link
             href={user ? "/profile" : "/"}

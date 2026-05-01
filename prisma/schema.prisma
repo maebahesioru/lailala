@@ -15,6 +15,7 @@ model User {
   ytCredential  YtCredential?
   commentLikes  CommentLike[]
   actions       UserAction[]
+  lists         List[]
 
   @@map("users")
 }
@@ -99,4 +100,37 @@ model Bookmark {
   @@unique([userId, commentId])
   @@index([userId, createdAt])
   @@map("bookmarks")
+}
+
+model List {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  name        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       ListItem[]
+
+  @@index([userId])
+  @@map("lists")
+}
+
+model ListItem {
+  id            String   @id @default(cuid())
+  listId        String   @map("list_id")
+  commentId     String   @map("comment_id")
+  videoId       String   @map("video_id")
+  authorName    String   @map("author_name")
+  authorThumb   String?  @map("author_thumb")
+  content       String   @db.Text
+  likeCount     String   @map("like_count")
+  replyCount    String   @map("reply_count")
+  publishedTime String   @map("published_time")
+  createdAt     DateTime @default(now()) @map("created_at")
+  list          List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, commentId])
+  @@index([listId, createdAt])
+  @@map("list_items")
 }
