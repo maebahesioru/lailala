@@ -95,25 +95,24 @@ export async function GET(req: NextRequest) {
       const info = await innertube.account.getInfo();
       const page = (info as any).page;
       const sections = page?.contents?.array?.();
-      let debugParts: string[] = [];
       if (sections) {
-        for (let si = 0; si < sections.length; si++) {
-          const section = sections[si];
-          const items = section?.contents;
-          debugParts.push(`s${si}:type=${section?.type},contentsLen=${items?.length || 0}`);
-          if (items) {
-            for (let ii = 0; ii < items.length; ii++) {
-              const item = items[ii];
-              debugParts.push(`  i${ii}:type=${item?.type},name=${!!item?.account_name?.text},photo=${!!item?.account_photo?.[0]},handle=${!!item?.channel_handle?.text}`);
-              if (item?.account_name?.text && name === "YouTube User") name = item.account_name.text;
-              if (item?.account_photo?.[0]?.url && !thumbnail) thumbnail = item.account_photo[0].url;
-              if (item?.channel_handle?.text && channelId === sessionId) channelId = item.channel_handle.text;
+        for (const section of sections) {
+          const itemSections = section?.contents;
+          if (!itemSections) continue;
+          for (const itemSection of itemSections) {
+            // AccountItemSection → contents → AccountItem[]
+            const items = itemSection?.contents;
+            if (!items) continue;
+            for (const item of items) {
+              if (item?.account_name?.text) name = item.account_name.text;
+              if (item?.account_photo?.[0]?.url) thumbnail = item.account_photo[0].url;
+              if (item?.channel_handle?.text) channelId = item.channel_handle.text;
             }
           }
         }
       }
       if (channelId === sessionId) {
-        accountError = `no channel found. debug: ${debugParts.join(" | ")}`;
+        accountError = "no channel found";
       }
     } catch (e: any) {
       accountError = e.message || "getInfo failed";
