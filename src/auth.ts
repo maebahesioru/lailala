@@ -3,6 +3,13 @@ import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./lib/prisma";
 
+function getBaseUrl() {
+  if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.RAILWAY_STATIC_URL) return `https://${process.env.RAILWAY_STATIC_URL}`;
+  return "http://localhost:3000";
+}
+
 const nextAuth = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -14,12 +21,21 @@ const nextAuth = NextAuth({
   session: {
     strategy: "jwt",
   },
+  trustHost: true,
   callbacks: {
     async session({ session, token }) {
       if (token.sub && session.user) {
         (session.user as any).id = token.sub;
       }
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      const appUrl = getBaseUrl();
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${appUrl}${url}`;
+      // Allows callback URLs on the same origin
+      if (new URL(url).origin === baseUrl) return url;
+      return appUrl;
     },
   },
 });
