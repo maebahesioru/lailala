@@ -31,6 +31,29 @@ export function BgmProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("ytx-bgm-enabled", String(enabled));
   }, [enabled]);
 
+  // Retry play on first user interaction after reload (browsers block autoplay)
+  useEffect(() => {
+    if (!enabled || !audioRef.current) return;
+    if (!audioRef.current.paused) return;
+
+    const tryPlay = () => {
+      audioRef.current
+        ?.play()
+        .then(() => {
+          document.removeEventListener("click", tryPlay);
+          document.removeEventListener("touchstart", tryPlay);
+        })
+        .catch(() => {});
+    };
+
+    document.addEventListener("click", tryPlay);
+    document.addEventListener("touchstart", tryPlay);
+    return () => {
+      document.removeEventListener("click", tryPlay);
+      document.removeEventListener("touchstart", tryPlay);
+    };
+  }, [enabled]);
+
   const toggle = () => setEnabled((prev) => !prev);
 
   return (

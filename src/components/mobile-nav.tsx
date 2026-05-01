@@ -1,15 +1,17 @@
 "use client";
 
-import { Home, Search, Flame, List, User } from "lucide-react";
+import { Home, Search, Flame, List, User, Music } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "./auth-provider";
 import { useState } from "react";
 import { LoginPopup } from "./login-popup";
+import { useBgm } from "./bgm-provider";
 
 export function MobileNav() {
   const pathname = usePathname();
   const { user } = useAuth();
+  const { enabled: bgmEnabled, toggle: toggleBgm } = useBgm();
   const [showLogin, setShowLogin] = useState(false);
 
   const handleProtectedClick = (e: React.MouseEvent) => {
@@ -48,7 +50,7 @@ export function MobileNav() {
                 key={item.label}
                 href={item.href}
                 onClick={item.onClick ? item.onClick : item.protected ? handleProtectedClick : undefined}
-                className={`flex flex-col items-center justify-center gap-0.5 w-16 h-full transition-colors ${
+                className={`flex flex-col items-center justify-center gap-0.5 w-14 h-full transition-colors ${
                   isActive ? "text-primary" : "text-muted"
                 }`}
                 aria-current={isActive ? "page" : undefined}
@@ -58,6 +60,16 @@ export function MobileNav() {
               </Link>
             );
           })}
+          <button
+            onClick={toggleBgm}
+            className={`flex flex-col items-center justify-center gap-0.5 w-14 h-full transition-colors ${
+              bgmEnabled ? "text-primary" : "text-muted"
+            }`}
+            aria-label="BGM"
+          >
+            <Music size={22} strokeWidth={bgmEnabled ? 2.5 : 2} />
+            <span className="text-[10px] font-medium">BGM {bgmEnabled ? "ON" : "OFF"}</span>
+          </button>
         </div>
       </nav>
       {/* Safe area padding for bottom nav */}
