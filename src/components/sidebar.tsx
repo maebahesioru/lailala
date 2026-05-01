@@ -32,7 +32,7 @@ export function Sidebar() {
       <aside className="w-[275px] hidden md:flex flex-col sticky top-0 h-screen px-4 py-4">
         <div className="mb-6 px-3">
           <Link href="/" className="text-2xl font-bold text-foreground tracking-tight">
-            ライララ
+            ライララ(仮)
           </Link>
         </div>
         <nav className="space-y-2 flex-1">
