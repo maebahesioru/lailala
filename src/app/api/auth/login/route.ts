@@ -81,7 +81,6 @@ export async function GET(req: NextRequest) {
       setTimeout(() => reject(new Error("TIMEOUT")), 5000)
     );
     const result = await Promise.race([promise, timeout]);
-    oauthStates.delete(sessionId);
 
     // Auth succeeded: extract credentials and account info
     const { credentials, innertube } = result;
@@ -120,6 +119,8 @@ export async function GET(req: NextRequest) {
       create: { userId: user.id, credential: encryptedCred, type: "oauth" },
     });
 
+    // Delete only after all DB work succeeds
+    oauthStates.delete(sessionId);
     await createSession(user.id);
     console.log("auth complete for user:", user.id, user.name);
     return NextResponse.json({ status: "complete" });
