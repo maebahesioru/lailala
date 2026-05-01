@@ -1,16 +1,57 @@
 "use client";
 
-import { Home, Search, User, Settings, LogOut, Bookmark, List } from "lucide-react";
-import { useState } from "react";
+import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LoginPopup } from "./login-popup";
 import { useAuth } from "./auth-provider";
 
+function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onClose: () => void; onConfirm: () => void }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-card border border-border rounded-2xl p-6 w-full max-w-sm mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <h3 className="text-lg font-bold mb-2">ログアウトしますか？</h3>
+        <p className="text-muted text-sm mb-6">
+          再度ログインするには、YouTubeアカウントでの認証が必要です。
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 py-2.5 border border-border rounded-full font-bold hover:bg-white/5 transition-colors"
+          >
+            キャンセル
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-2.5 bg-primary text-white rounded-full font-bold hover:bg-primary-hover transition-colors"
+          >
+            ログアウト
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Sidebar() {
   const { user } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const pathname = usePathname();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowAccountMenu(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleProtectedClick = (e: React.MouseEvent) => {
     if (!user) {
@@ -20,15 +61,22 @@ export function Sidebar() {
   };
 
   const handleLogout = async () => {
+    setShowLogoutConfirm(false);
+    setShowAccountMenu(false);
     await fetch("/api/auth/me", { method: "POST" });
     window.location.reload();
+  };
+
+  const handleSwitchAccount = async () => {
+    setShowAccountMenu(false);
+    await fetch("/api/auth/me", { method: "POST" });
+    setShowLogin(true);
   };
 
   const handleHomeClick = (e: React.MouseEvent) => {
     if (pathname === "/") {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
-      // Also reload feed by dispatching a custom event that CommentFeed can listen to
       window.dispatchEvent(new CustomEvent("lailala:scrollToTop"));
     }
   };
@@ -95,15 +143,53 @@ export function Sidebar() {
             <span className="font-medium">設定</span>
           </Link>
         </nav>
-        <div className="mt-auto px-3 pb-4">
+        <div className="mt-auto px-3 pb-4 relative">
           {user ? (
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-3 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors w-full text-left text-foreground"
-            >
-              <LogOut size={26} />
-              <span className="font-medium">ログアウト</span>
-            </button>
+            <div ref={menuRef}>
+              <button
+                onClick={() => setShowAccountMenu(!showAccountMenu)}
+                className="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-white/10 transition-colors w-full text-left"
+              >
+                {user.image ? (
+                  <img src={user.image} alt="" className="w-9 h-9 rounded-full object-cover shrink-0" />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-border flex items-center justify-center shrink-0">
+                    <User size={18} className="text-muted" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-[15px] truncate">{user.name || "ユーザー"}</p>
+                  <p className="text-[13px] text-muted truncate">{user.email || "@user"}</p>
+                </div>
+                <MoreHorizontal size={18} className="text-muted shrink-0" />
+              </button>
+              {showAccountMenu && (
+                <div className="absolute bottom-full left-3 right-3 mb-2 bg-card border border-border rounded-xl shadow-lg overflow-hidden z-50">
+                  <button
+                    onClick={() => { setShowAccountMenu(false); setShowLogin(true); }}
+                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[15px]"
+                  >
+                    <User size={18} className="text-muted" />
+                    <span>アカウントを追加</span>
+                  </button>
+                  <button
+                    onClick={handleSwitchAccount}
+                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[15px]"
+                  >
+                    <LogOut size={18} className="text-muted" />
+                    <span>アカウントを変更</span>
+                  </button>
+                  <div className="border-t border-border" />
+                  <button
+                    onClick={() => { setShowAccountMenu(false); setShowLogoutConfirm(true); }}
+                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[15px]"
+                  >
+                    <LogOut size={18} className="text-muted" />
+                    <span>ログアウト</span>
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <button
               onClick={() => setShowLogin(true)}
@@ -116,6 +202,11 @@ export function Sidebar() {
         </div>
       </aside>
       <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
+      <LogoutConfirmDialog
+        open={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={handleLogout}
+      />
     </>
   );
 }
