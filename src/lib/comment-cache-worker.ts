@@ -1,10 +1,12 @@
 import { prisma } from "./prisma";
 
 let started = false;
+let fullScanDone = false;
 
 const VIDEO_ID = "niKAylKNIEI";
 const INTERVAL_MS = 5 * 60 * 1000; // 5分ごと
 const MAX_PER_RUN = 10000;
+const FULL_SCAN_MAX = 500000; // 起動時の全件収集上限
 
 function parsePublishedTime(text: string): Date | null {
   if (!text || text.trim() === "") return null;
@@ -26,7 +28,7 @@ function parsePublishedTime(text: string): Date | null {
   return d;
 }
 
-async function cacheVideoComments(videoId: string) {
+async function cacheVideoComments(videoId: string, maxItems: number) {
   try {
     const { getInnertube } = await import("./youtube");
     const innertube = await getInnertube();
@@ -34,7 +36,7 @@ async function cacheVideoComments(videoId: string) {
     let count = 0;
 
     const saveComment = async (c: any, isReply = false, parentCommentId?: string) => {
-      if (count >= MAX_PER_RUN) return;
+      if (count >= maxItems) return;
       if (!c || !c.comment_id) return;
 
       const publishedText = c.published_time?.text || String(c.published_time || "");
@@ -76,7 +78,7 @@ async function cacheVideoComments(videoId: string) {
 
     const saveBatch = async (batch: any[]) => {
       for (const thread of batch) {
-        if (count >= MAX_PER_RUN) return;
+        if (count >= maxItems) return;
         const c = thread.comment;
         if (!c) continue;
         await saveComment(c, false);
@@ -89,26 +91,41 @@ async function cacheVideoComments(videoId: string) {
     };
 
     await saveBatch(comments.contents);
-    while (comments.has_continuation && count < MAX_PER_RUN) {
+    while (comments.has_continuation && count < maxItems) {
       comments = await comments.getContinuation();
       await saveBatch(comments.contents);
     }
 
-    console.log(`[CommentCacheWorker] Cached ${count} comments for ${videoId}`);
+    console.log(`[CommentCacheWorker] Cached ${count} comments for ${videoId} (limit=${maxItems})`);
+    return count;
   } catch (e: any) {
     console.error(`[CommentCacheWorker] Failed to cache ${videoId}:`, e.message);
+    return 0;
   }
 }
 
 async function run() {
-  await cacheVideoComments(VIDEO_ID);
+  await cacheVideoComments(VIDEO_ID, MAX_PER_RUN);
+}
+
+async function runFullScan() {
+  if (fullScanDone) return;
+  console.log(`[CommentCacheWorker] Starting full scan for ${VIDEO_ID}...`);
+  const count = await cacheVideoComments(VIDEO_ID, FULL_SCAN_MAX);
+  fullScanDone = true;
+  console.log(`[CommentCacheWorker] Full scan completed: ${count} comments`);
 }
 
 export function startCommentCacheWorker() {
   if (started) return;
   started = true;
 
-  run();
-  setInterval(run, INTERVAL_MS);
+  // Run full scan first, then start periodic updates
+  (async () => {
+    await runFullScan();
+    await run();
+    setInterval(run, INTERVAL_MS);
+  })();
+
   console.log(`[CommentCacheWorker] Started for ${VIDEO_ID}, interval ${INTERVAL_MS / 1000}s`);
 }

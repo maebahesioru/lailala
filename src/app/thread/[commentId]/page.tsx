@@ -128,7 +128,11 @@ export default async function ThreadPage({ params }: PageProps) {
     }
   }
 
-  const parsedReplies = loadedReplies.map(parseReply);
+  // Deduplicate: remove targetReply from replies list since it's shown as parent
+  const filteredReplies = isReplyThread && targetReply
+    ? loadedReplies.filter((r: any) => r.comment_id !== commentId)
+    : loadedReplies;
+  const parsedReplies = filteredReplies.map(parseReply);
   const replyTree = buildReplyTree(parsedReplies);
 
   let parent: any;
