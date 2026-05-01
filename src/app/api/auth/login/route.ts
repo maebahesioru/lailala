@@ -92,19 +92,26 @@ export async function GET(req: NextRequest) {
     let accountError: string | null = null;
 
     try {
-      const items = await innertube.account.getInfo(true);
-      if (Array.isArray(items) && items.length > 0) {
-        const primary = items[0];
-        name = primary.account_name?.text || name;
-        thumbnail = primary.account_photo?.[0]?.url || thumbnail;
-        channelId = primary.channel_handle?.text || channelId;
-        if (!primary.account_name?.text && !primary.channel_handle?.text) {
-          accountError = "item has no name/handle. keys: " + Object.keys(primary).join(", ");
+      const info = await innertube.account.getInfo();
+      // AccountInfo structure: info.page.contents.array() → AccountSectionList → footers → AccountChannel
+      const page = (info as any).page;
+      const sections = page?.contents?.array?.();
+      if (sections) {
+        for (const section of sections) {
+          const footers = section?.footers;
+          if (!footers) continue;
+          for (const footer of footers) {
+            if (footer?.title?.text) name = footer.title.text;
+            const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
+            if (cid && cid.startsWith("UC")) {
+              channelId = cid;
+              thumbnail = footer?.thumbnails?.[0]?.url || null;
+            }
+          }
         }
-      } else if (Array.isArray(items)) {
-        accountError = "empty account list";
-      } else {
-        accountError = "not an array: " + typeof items;
+      }
+      if (channelId === sessionId) {
+        accountError = "could not find channel in account data";
       }
     } catch (e: any) {
       accountError = e.message || "getInfo failed";
