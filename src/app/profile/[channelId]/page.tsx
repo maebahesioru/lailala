@@ -33,7 +33,7 @@ function safeName(name: string | null | undefined, channelId?: string | null): s
   if (name && name !== "Unknown" && name.trim() !== "") return name;
   if (channelId) {
     const id = channelId.startsWith("UC") ? channelId : `UC${channelId}`;
-    return `@${id.slice(0, 12)}…`;
+    return id;
   }
   return "名無し";
 }

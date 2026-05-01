@@ -1,12 +1,13 @@
 "use client";
 
-import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare } from "lucide-react";
+import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare, Music } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LoginPopup } from "./login-popup";
 import { ComposePopup } from "./compose-popup";
 import { useAuth } from "./auth-provider";
+import { useBgm } from "./bgm-provider";
 
 function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onClose: () => void; onConfirm: () => void }) {
   if (!open) return null;
@@ -38,6 +39,7 @@ function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onCl
 
 export function Sidebar() {
   const { user } = useAuth();
+  const { enabled: bgmEnabled, toggle: toggleBgm } = useBgm();
   const [showLogin, setShowLogin] = useState(false);
   const [showCompose, setShowCompose] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
@@ -138,6 +140,14 @@ export function Sidebar() {
             <Settings size={26} aria-hidden="true" />
             <span className="font-medium">設定</span>
           </Link>
+          <button
+            onClick={toggleBgm}
+            className={`flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors w-full text-left ${bgmEnabled ? "text-primary" : "text-foreground"}`}
+            aria-label="BGM"
+          >
+            <Music size={26} aria-hidden="true" />
+            <span className="font-medium">BGM {bgmEnabled ? "ON" : "OFF"}</span>
+          </button>
           <button
             onClick={() => user ? setShowCompose(true) : setShowLogin(true)}
             className="mt-4 compose-btn flex items-center justify-center gap-2 px-4 py-3 text-xl rounded-full font-bold transition-colors w-full"
