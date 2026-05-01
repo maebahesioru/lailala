@@ -47,28 +47,14 @@ export async function POST(_req: NextRequest) {
       innertube.session.on("auth", async ({ credentials }: any) => {
         clearTimeout(timer);
         try {
-          // Try to get YouTube account info, but don't fail if it errors
-          let channelId = sessionId;
-          let name = "YouTube User";
-          let thumbnail: string | null = null;
-
-          try {
-            const info = await innertube.account.getInfo();
-            channelId = (info as any).channel_id || (info as any).id || sessionId;
-            name = (info as any).name || (info as any).display_name || "YouTube User";
-            thumbnail = (info as any).thumbnails?.[0]?.url || null;
-          } catch {
-            // getInfo failed, use fallback values
-          }
-
           const encryptedCred = encrypt(JSON.stringify(credentials));
-          const email = `yt:${channelId}`;
+          const email = `yt:${sessionId}`;
 
           let user = await prisma.user.findFirst({ where: { email } });
           if (user) {
-            user = await prisma.user.update({ where: { id: user.id }, data: { name, image: thumbnail } });
+            user = await prisma.user.update({ where: { id: user.id }, data: { name: "YouTube User", image: null } });
           } else {
-            user = await prisma.user.create({ data: { name, email, image: thumbnail } });
+            user = await prisma.user.create({ data: { name: "YouTube User", email, image: null } });
           }
 
           await prisma.ytCredential.upsert({
