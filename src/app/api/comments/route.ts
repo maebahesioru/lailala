@@ -183,6 +183,39 @@ export async function GET(req: NextRequest) {
 
     threads = filterBlockedThreads(threads, blockedIds);
 
+    // Fire-and-forget: cache fetched comments to DB
+    Promise.resolve().then(async () => {
+      for (const t of threads) {
+        const c = t.comment;
+        if (!c?.commentId) continue;
+        try {
+          await prisma.commentCache.upsert({
+            where: { commentId: c.commentId },
+            update: {
+              content: c.content || "",
+              likeCount: parseInt(String(c.likeCount).replace(/[^0-9]/g, ""), 10) || 0,
+              replyCount: parseInt(String(c.replyCount).replace(/[^0-9]/g, ""), 10) || 0,
+              authorName: c.author?.name || "Unknown",
+              authorChannelId: c.author?.channelId || null,
+              authorThumb: c.author?.thumbnail || null,
+              publishedAt: new Date(),
+            },
+            create: {
+              commentId: c.commentId,
+              videoId,
+              content: c.content || "",
+              likeCount: parseInt(String(c.likeCount).replace(/[^0-9]/g, ""), 10) || 0,
+              replyCount: parseInt(String(c.replyCount).replace(/[^0-9]/g, ""), 10) || 0,
+              authorName: c.author?.name || "Unknown",
+              authorChannelId: c.author?.channelId || null,
+              authorThumb: c.author?.thumbnail || null,
+              publishedAt: new Date(),
+            },
+          });
+        } catch {}
+      }
+    }).catch(() => {});
+
     return NextResponse.json({
       threads,
       hasContinuation,
