@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import { useTheme } from "@/components/theme-provider";
-import { Sun, Moon, Palette, Check } from "lucide-react";
+import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 export default function SettingsPage() {
   const { user } = useAuth();
@@ -80,6 +81,21 @@ export default function SettingsPage() {
           ) : (
             <p className="text-muted text-sm">ログインしていません</p>
           )}
+        </div>
+
+        {/* Blocked / Muted */}
+        <div className="bg-card rounded-2xl border border-border overflow-hidden">
+          <h2 className="text-lg font-bold px-4 pt-4 pb-2">管理</h2>
+          <Link href="/settings/blocked" className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors border-t border-border">
+            <Ban size={18} className="text-muted" />
+            <span className="flex-1">ブロック一覧</span>
+            <ChevronRight size={16} className="text-muted" />
+          </Link>
+          <Link href="/settings/muted" className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors border-t border-border">
+            <VolumeX size={18} className="text-muted" />
+            <span className="flex-1">ミュート一覧</span>
+            <ChevronRight size={16} className="text-muted" />
+          </Link>
         </div>
       </div>
     </MainLayout>

@@ -143,6 +143,30 @@ export async function POST(req: NextRequest) {
   }
 }
 
+export async function PUT(req: NextRequest) {
+  const userId = await getSessionUserId();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { listId, name, description, isPublic } = await req.json();
+  if (!listId) return NextResponse.json({ error: "listId required" }, { status: 400 });
+
+  try {
+    const list = await prisma.list.updateMany({
+      where: { id: listId, userId },
+      data: {
+        ...(name !== undefined ? { name } : {}),
+        ...(description !== undefined ? { description } : {}),
+        ...(isPublic !== undefined ? { isPublic } : {}),
+      },
+    });
+    return NextResponse.json({ success: true, list });
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {

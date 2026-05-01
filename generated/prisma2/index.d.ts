@@ -64,6 +64,16 @@ export type ListFollow = $Result.DefaultSelection<Prisma.$ListFollowPayload>
  */
 export type BookmarkFolder = $Result.DefaultSelection<Prisma.$BookmarkFolderPayload>
 /**
+ * Model BlockedUser
+ * 
+ */
+export type BlockedUser = $Result.DefaultSelection<Prisma.$BlockedUserPayload>
+/**
+ * Model MutedUser
+ * 
+ */
+export type MutedUser = $Result.DefaultSelection<Prisma.$MutedUserPayload>
+/**
  * Model ScheduledPost
  * 
  */
@@ -286,6 +296,26 @@ export class PrismaClient<
     * ```
     */
   get bookmarkFolder(): Prisma.BookmarkFolderDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.blockedUser`: Exposes CRUD operations for the **BlockedUser** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BlockedUsers
+    * const blockedUsers = await prisma.blockedUser.findMany()
+    * ```
+    */
+  get blockedUser(): Prisma.BlockedUserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mutedUser`: Exposes CRUD operations for the **MutedUser** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MutedUsers
+    * const mutedUsers = await prisma.mutedUser.findMany()
+    * ```
+    */
+  get mutedUser(): Prisma.MutedUserDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.scheduledPost`: Exposes CRUD operations for the **ScheduledPost** model.
@@ -747,6 +777,8 @@ export namespace Prisma {
     ListItem: 'ListItem',
     ListFollow: 'ListFollow',
     BookmarkFolder: 'BookmarkFolder',
+    BlockedUser: 'BlockedUser',
+    MutedUser: 'MutedUser',
     ScheduledPost: 'ScheduledPost'
   };
 
@@ -766,7 +798,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "scheduledPost"
+      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "scheduledPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1510,6 +1542,154 @@ export namespace Prisma {
           }
         }
       }
+      BlockedUser: {
+        payload: Prisma.$BlockedUserPayload<ExtArgs>
+        fields: Prisma.BlockedUserFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BlockedUserFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BlockedUserFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+          }
+          findFirst: {
+            args: Prisma.BlockedUserFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BlockedUserFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+          }
+          findMany: {
+            args: Prisma.BlockedUserFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+          }
+          create: {
+            args: Prisma.BlockedUserCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+          }
+          createMany: {
+            args: Prisma.BlockedUserCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BlockedUserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+          }
+          delete: {
+            args: Prisma.BlockedUserDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+          }
+          update: {
+            args: Prisma.BlockedUserUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+          }
+          deleteMany: {
+            args: Prisma.BlockedUserDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BlockedUserUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BlockedUserUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+          }
+          upsert: {
+            args: Prisma.BlockedUserUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+          }
+          aggregate: {
+            args: Prisma.BlockedUserAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBlockedUser>
+          }
+          groupBy: {
+            args: Prisma.BlockedUserGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BlockedUserGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BlockedUserCountArgs<ExtArgs>
+            result: $Utils.Optional<BlockedUserCountAggregateOutputType> | number
+          }
+        }
+      }
+      MutedUser: {
+        payload: Prisma.$MutedUserPayload<ExtArgs>
+        fields: Prisma.MutedUserFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MutedUserFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MutedUserFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>
+          }
+          findFirst: {
+            args: Prisma.MutedUserFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MutedUserFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>
+          }
+          findMany: {
+            args: Prisma.MutedUserFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>[]
+          }
+          create: {
+            args: Prisma.MutedUserCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>
+          }
+          createMany: {
+            args: Prisma.MutedUserCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MutedUserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>[]
+          }
+          delete: {
+            args: Prisma.MutedUserDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>
+          }
+          update: {
+            args: Prisma.MutedUserUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>
+          }
+          deleteMany: {
+            args: Prisma.MutedUserDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MutedUserUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MutedUserUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>[]
+          }
+          upsert: {
+            args: Prisma.MutedUserUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedUserPayload>
+          }
+          aggregate: {
+            args: Prisma.MutedUserAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMutedUser>
+          }
+          groupBy: {
+            args: Prisma.MutedUserGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MutedUserGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MutedUserCountArgs<ExtArgs>
+            result: $Utils.Optional<MutedUserCountAggregateOutputType> | number
+          }
+        }
+      }
       ScheduledPost: {
         payload: Prisma.$ScheduledPostPayload<ExtArgs>
         fields: Prisma.ScheduledPostFieldRefs
@@ -1690,6 +1870,8 @@ export namespace Prisma {
     listItem?: ListItemOmit
     listFollow?: ListFollowOmit
     bookmarkFolder?: BookmarkFolderOmit
+    blockedUser?: BlockedUserOmit
+    mutedUser?: MutedUserOmit
     scheduledPost?: ScheduledPostOmit
   }
 
@@ -1776,6 +1958,8 @@ export namespace Prisma {
     lists: number
     listFollows: number
     bookmarkFolders: number
+    blockedUsers: number
+    mutedUsers: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1784,6 +1968,8 @@ export namespace Prisma {
     lists?: boolean | UserCountOutputTypeCountListsArgs
     listFollows?: boolean | UserCountOutputTypeCountListFollowsArgs
     bookmarkFolders?: boolean | UserCountOutputTypeCountBookmarkFoldersArgs
+    blockedUsers?: boolean | UserCountOutputTypeCountBlockedUsersArgs
+    mutedUsers?: boolean | UserCountOutputTypeCountMutedUsersArgs
   }
 
   // Custom InputTypes
@@ -1830,6 +2016,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountBookmarkFoldersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookmarkFolderWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBlockedUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BlockedUserWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMutedUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MutedUserWhereInput
   }
 
 
@@ -2078,6 +2278,8 @@ export namespace Prisma {
     lists?: boolean | User$listsArgs<ExtArgs>
     listFollows?: boolean | User$listFollowsArgs<ExtArgs>
     bookmarkFolders?: boolean | User$bookmarkFoldersArgs<ExtArgs>
+    blockedUsers?: boolean | User$blockedUsersArgs<ExtArgs>
+    mutedUsers?: boolean | User$mutedUsersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2113,6 +2315,8 @@ export namespace Prisma {
     lists?: boolean | User$listsArgs<ExtArgs>
     listFollows?: boolean | User$listFollowsArgs<ExtArgs>
     bookmarkFolders?: boolean | User$bookmarkFoldersArgs<ExtArgs>
+    blockedUsers?: boolean | User$blockedUsersArgs<ExtArgs>
+    mutedUsers?: boolean | User$mutedUsersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2127,6 +2331,8 @@ export namespace Prisma {
       lists: Prisma.$ListPayload<ExtArgs>[]
       listFollows: Prisma.$ListFollowPayload<ExtArgs>[]
       bookmarkFolders: Prisma.$BookmarkFolderPayload<ExtArgs>[]
+      blockedUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
+      mutedUsers: Prisma.$MutedUserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2534,6 +2740,8 @@ export namespace Prisma {
     lists<T extends User$listsArgs<ExtArgs> = {}>(args?: Subset<T, User$listsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     listFollows<T extends User$listFollowsArgs<ExtArgs> = {}>(args?: Subset<T, User$listFollowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookmarkFolders<T extends User$bookmarkFoldersArgs<ExtArgs> = {}>(args?: Subset<T, User$bookmarkFoldersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    blockedUsers<T extends User$blockedUsersArgs<ExtArgs> = {}>(args?: Subset<T, User$blockedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mutedUsers<T extends User$mutedUsersArgs<ExtArgs> = {}>(args?: Subset<T, User$mutedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3092,6 +3300,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BookmarkFolderScalarFieldEnum | BookmarkFolderScalarFieldEnum[]
+  }
+
+  /**
+   * User.blockedUsers
+   */
+  export type User$blockedUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    where?: BlockedUserWhereInput
+    orderBy?: BlockedUserOrderByWithRelationInput | BlockedUserOrderByWithRelationInput[]
+    cursor?: BlockedUserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BlockedUserScalarFieldEnum | BlockedUserScalarFieldEnum[]
+  }
+
+  /**
+   * User.mutedUsers
+   */
+  export type User$mutedUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    where?: MutedUserWhereInput
+    orderBy?: MutedUserOrderByWithRelationInput | MutedUserOrderByWithRelationInput[]
+    cursor?: MutedUserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MutedUserScalarFieldEnum | MutedUserScalarFieldEnum[]
   }
 
   /**
@@ -13025,6 +13281,2122 @@ export namespace Prisma {
 
 
   /**
+   * Model BlockedUser
+   */
+
+  export type AggregateBlockedUser = {
+    _count: BlockedUserCountAggregateOutputType | null
+    _min: BlockedUserMinAggregateOutputType | null
+    _max: BlockedUserMaxAggregateOutputType | null
+  }
+
+  export type BlockedUserMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    channelId: string | null
+    channelName: string | null
+    createdAt: Date | null
+  }
+
+  export type BlockedUserMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    channelId: string | null
+    channelName: string | null
+    createdAt: Date | null
+  }
+
+  export type BlockedUserCountAggregateOutputType = {
+    id: number
+    userId: number
+    channelId: number
+    channelName: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type BlockedUserMinAggregateInputType = {
+    id?: true
+    userId?: true
+    channelId?: true
+    channelName?: true
+    createdAt?: true
+  }
+
+  export type BlockedUserMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    channelId?: true
+    channelName?: true
+    createdAt?: true
+  }
+
+  export type BlockedUserCountAggregateInputType = {
+    id?: true
+    userId?: true
+    channelId?: true
+    channelName?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type BlockedUserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BlockedUser to aggregate.
+     */
+    where?: BlockedUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlockedUsers to fetch.
+     */
+    orderBy?: BlockedUserOrderByWithRelationInput | BlockedUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BlockedUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlockedUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlockedUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BlockedUsers
+    **/
+    _count?: true | BlockedUserCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BlockedUserMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BlockedUserMaxAggregateInputType
+  }
+
+  export type GetBlockedUserAggregateType<T extends BlockedUserAggregateArgs> = {
+        [P in keyof T & keyof AggregateBlockedUser]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBlockedUser[P]>
+      : GetScalarType<T[P], AggregateBlockedUser[P]>
+  }
+
+
+
+
+  export type BlockedUserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BlockedUserWhereInput
+    orderBy?: BlockedUserOrderByWithAggregationInput | BlockedUserOrderByWithAggregationInput[]
+    by: BlockedUserScalarFieldEnum[] | BlockedUserScalarFieldEnum
+    having?: BlockedUserScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BlockedUserCountAggregateInputType | true
+    _min?: BlockedUserMinAggregateInputType
+    _max?: BlockedUserMaxAggregateInputType
+  }
+
+  export type BlockedUserGroupByOutputType = {
+    id: string
+    userId: string
+    channelId: string
+    channelName: string | null
+    createdAt: Date
+    _count: BlockedUserCountAggregateOutputType | null
+    _min: BlockedUserMinAggregateOutputType | null
+    _max: BlockedUserMaxAggregateOutputType | null
+  }
+
+  type GetBlockedUserGroupByPayload<T extends BlockedUserGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BlockedUserGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BlockedUserGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BlockedUserGroupByOutputType[P]>
+            : GetScalarType<T[P], BlockedUserGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BlockedUserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    channelId?: boolean
+    channelName?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["blockedUser"]>
+
+  export type BlockedUserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    channelId?: boolean
+    channelName?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["blockedUser"]>
+
+  export type BlockedUserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    channelId?: boolean
+    channelName?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["blockedUser"]>
+
+  export type BlockedUserSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    channelId?: boolean
+    channelName?: boolean
+    createdAt?: boolean
+  }
+
+  export type BlockedUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "channelId" | "channelName" | "createdAt", ExtArgs["result"]["blockedUser"]>
+  export type BlockedUserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BlockedUserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BlockedUserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $BlockedUserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BlockedUser"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      channelId: string
+      channelName: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["blockedUser"]>
+    composites: {}
+  }
+
+  type BlockedUserGetPayload<S extends boolean | null | undefined | BlockedUserDefaultArgs> = $Result.GetResult<Prisma.$BlockedUserPayload, S>
+
+  type BlockedUserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BlockedUserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BlockedUserCountAggregateInputType | true
+    }
+
+  export interface BlockedUserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BlockedUser'], meta: { name: 'BlockedUser' } }
+    /**
+     * Find zero or one BlockedUser that matches the filter.
+     * @param {BlockedUserFindUniqueArgs} args - Arguments to find a BlockedUser
+     * @example
+     * // Get one BlockedUser
+     * const blockedUser = await prisma.blockedUser.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BlockedUserFindUniqueArgs>(args: SelectSubset<T, BlockedUserFindUniqueArgs<ExtArgs>>): Prisma__BlockedUserClient<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BlockedUser that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BlockedUserFindUniqueOrThrowArgs} args - Arguments to find a BlockedUser
+     * @example
+     * // Get one BlockedUser
+     * const blockedUser = await prisma.blockedUser.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BlockedUserFindUniqueOrThrowArgs>(args: SelectSubset<T, BlockedUserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BlockedUserClient<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BlockedUser that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlockedUserFindFirstArgs} args - Arguments to find a BlockedUser
+     * @example
+     * // Get one BlockedUser
+     * const blockedUser = await prisma.blockedUser.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BlockedUserFindFirstArgs>(args?: SelectSubset<T, BlockedUserFindFirstArgs<ExtArgs>>): Prisma__BlockedUserClient<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BlockedUser that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlockedUserFindFirstOrThrowArgs} args - Arguments to find a BlockedUser
+     * @example
+     * // Get one BlockedUser
+     * const blockedUser = await prisma.blockedUser.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BlockedUserFindFirstOrThrowArgs>(args?: SelectSubset<T, BlockedUserFindFirstOrThrowArgs<ExtArgs>>): Prisma__BlockedUserClient<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BlockedUsers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlockedUserFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BlockedUsers
+     * const blockedUsers = await prisma.blockedUser.findMany()
+     * 
+     * // Get first 10 BlockedUsers
+     * const blockedUsers = await prisma.blockedUser.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const blockedUserWithIdOnly = await prisma.blockedUser.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BlockedUserFindManyArgs>(args?: SelectSubset<T, BlockedUserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BlockedUser.
+     * @param {BlockedUserCreateArgs} args - Arguments to create a BlockedUser.
+     * @example
+     * // Create one BlockedUser
+     * const BlockedUser = await prisma.blockedUser.create({
+     *   data: {
+     *     // ... data to create a BlockedUser
+     *   }
+     * })
+     * 
+     */
+    create<T extends BlockedUserCreateArgs>(args: SelectSubset<T, BlockedUserCreateArgs<ExtArgs>>): Prisma__BlockedUserClient<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BlockedUsers.
+     * @param {BlockedUserCreateManyArgs} args - Arguments to create many BlockedUsers.
+     * @example
+     * // Create many BlockedUsers
+     * const blockedUser = await prisma.blockedUser.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BlockedUserCreateManyArgs>(args?: SelectSubset<T, BlockedUserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BlockedUsers and returns the data saved in the database.
+     * @param {BlockedUserCreateManyAndReturnArgs} args - Arguments to create many BlockedUsers.
+     * @example
+     * // Create many BlockedUsers
+     * const blockedUser = await prisma.blockedUser.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BlockedUsers and only return the `id`
+     * const blockedUserWithIdOnly = await prisma.blockedUser.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BlockedUserCreateManyAndReturnArgs>(args?: SelectSubset<T, BlockedUserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BlockedUser.
+     * @param {BlockedUserDeleteArgs} args - Arguments to delete one BlockedUser.
+     * @example
+     * // Delete one BlockedUser
+     * const BlockedUser = await prisma.blockedUser.delete({
+     *   where: {
+     *     // ... filter to delete one BlockedUser
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BlockedUserDeleteArgs>(args: SelectSubset<T, BlockedUserDeleteArgs<ExtArgs>>): Prisma__BlockedUserClient<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BlockedUser.
+     * @param {BlockedUserUpdateArgs} args - Arguments to update one BlockedUser.
+     * @example
+     * // Update one BlockedUser
+     * const blockedUser = await prisma.blockedUser.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BlockedUserUpdateArgs>(args: SelectSubset<T, BlockedUserUpdateArgs<ExtArgs>>): Prisma__BlockedUserClient<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BlockedUsers.
+     * @param {BlockedUserDeleteManyArgs} args - Arguments to filter BlockedUsers to delete.
+     * @example
+     * // Delete a few BlockedUsers
+     * const { count } = await prisma.blockedUser.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BlockedUserDeleteManyArgs>(args?: SelectSubset<T, BlockedUserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BlockedUsers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlockedUserUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BlockedUsers
+     * const blockedUser = await prisma.blockedUser.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BlockedUserUpdateManyArgs>(args: SelectSubset<T, BlockedUserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BlockedUsers and returns the data updated in the database.
+     * @param {BlockedUserUpdateManyAndReturnArgs} args - Arguments to update many BlockedUsers.
+     * @example
+     * // Update many BlockedUsers
+     * const blockedUser = await prisma.blockedUser.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BlockedUsers and only return the `id`
+     * const blockedUserWithIdOnly = await prisma.blockedUser.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BlockedUserUpdateManyAndReturnArgs>(args: SelectSubset<T, BlockedUserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BlockedUser.
+     * @param {BlockedUserUpsertArgs} args - Arguments to update or create a BlockedUser.
+     * @example
+     * // Update or create a BlockedUser
+     * const blockedUser = await prisma.blockedUser.upsert({
+     *   create: {
+     *     // ... data to create a BlockedUser
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BlockedUser we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BlockedUserUpsertArgs>(args: SelectSubset<T, BlockedUserUpsertArgs<ExtArgs>>): Prisma__BlockedUserClient<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BlockedUsers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlockedUserCountArgs} args - Arguments to filter BlockedUsers to count.
+     * @example
+     * // Count the number of BlockedUsers
+     * const count = await prisma.blockedUser.count({
+     *   where: {
+     *     // ... the filter for the BlockedUsers we want to count
+     *   }
+     * })
+    **/
+    count<T extends BlockedUserCountArgs>(
+      args?: Subset<T, BlockedUserCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BlockedUserCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BlockedUser.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlockedUserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BlockedUserAggregateArgs>(args: Subset<T, BlockedUserAggregateArgs>): Prisma.PrismaPromise<GetBlockedUserAggregateType<T>>
+
+    /**
+     * Group by BlockedUser.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlockedUserGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BlockedUserGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BlockedUserGroupByArgs['orderBy'] }
+        : { orderBy?: BlockedUserGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BlockedUserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBlockedUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BlockedUser model
+   */
+  readonly fields: BlockedUserFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BlockedUser.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BlockedUserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BlockedUser model
+   */
+  interface BlockedUserFieldRefs {
+    readonly id: FieldRef<"BlockedUser", 'String'>
+    readonly userId: FieldRef<"BlockedUser", 'String'>
+    readonly channelId: FieldRef<"BlockedUser", 'String'>
+    readonly channelName: FieldRef<"BlockedUser", 'String'>
+    readonly createdAt: FieldRef<"BlockedUser", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BlockedUser findUnique
+   */
+  export type BlockedUserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which BlockedUser to fetch.
+     */
+    where: BlockedUserWhereUniqueInput
+  }
+
+  /**
+   * BlockedUser findUniqueOrThrow
+   */
+  export type BlockedUserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which BlockedUser to fetch.
+     */
+    where: BlockedUserWhereUniqueInput
+  }
+
+  /**
+   * BlockedUser findFirst
+   */
+  export type BlockedUserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which BlockedUser to fetch.
+     */
+    where?: BlockedUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlockedUsers to fetch.
+     */
+    orderBy?: BlockedUserOrderByWithRelationInput | BlockedUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BlockedUsers.
+     */
+    cursor?: BlockedUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlockedUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlockedUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BlockedUsers.
+     */
+    distinct?: BlockedUserScalarFieldEnum | BlockedUserScalarFieldEnum[]
+  }
+
+  /**
+   * BlockedUser findFirstOrThrow
+   */
+  export type BlockedUserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which BlockedUser to fetch.
+     */
+    where?: BlockedUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlockedUsers to fetch.
+     */
+    orderBy?: BlockedUserOrderByWithRelationInput | BlockedUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BlockedUsers.
+     */
+    cursor?: BlockedUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlockedUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlockedUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BlockedUsers.
+     */
+    distinct?: BlockedUserScalarFieldEnum | BlockedUserScalarFieldEnum[]
+  }
+
+  /**
+   * BlockedUser findMany
+   */
+  export type BlockedUserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which BlockedUsers to fetch.
+     */
+    where?: BlockedUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlockedUsers to fetch.
+     */
+    orderBy?: BlockedUserOrderByWithRelationInput | BlockedUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BlockedUsers.
+     */
+    cursor?: BlockedUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlockedUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlockedUsers.
+     */
+    skip?: number
+    distinct?: BlockedUserScalarFieldEnum | BlockedUserScalarFieldEnum[]
+  }
+
+  /**
+   * BlockedUser create
+   */
+  export type BlockedUserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BlockedUser.
+     */
+    data: XOR<BlockedUserCreateInput, BlockedUserUncheckedCreateInput>
+  }
+
+  /**
+   * BlockedUser createMany
+   */
+  export type BlockedUserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BlockedUsers.
+     */
+    data: BlockedUserCreateManyInput | BlockedUserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BlockedUser createManyAndReturn
+   */
+  export type BlockedUserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * The data used to create many BlockedUsers.
+     */
+    data: BlockedUserCreateManyInput | BlockedUserCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BlockedUser update
+   */
+  export type BlockedUserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BlockedUser.
+     */
+    data: XOR<BlockedUserUpdateInput, BlockedUserUncheckedUpdateInput>
+    /**
+     * Choose, which BlockedUser to update.
+     */
+    where: BlockedUserWhereUniqueInput
+  }
+
+  /**
+   * BlockedUser updateMany
+   */
+  export type BlockedUserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BlockedUsers.
+     */
+    data: XOR<BlockedUserUpdateManyMutationInput, BlockedUserUncheckedUpdateManyInput>
+    /**
+     * Filter which BlockedUsers to update
+     */
+    where?: BlockedUserWhereInput
+    /**
+     * Limit how many BlockedUsers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BlockedUser updateManyAndReturn
+   */
+  export type BlockedUserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * The data used to update BlockedUsers.
+     */
+    data: XOR<BlockedUserUpdateManyMutationInput, BlockedUserUncheckedUpdateManyInput>
+    /**
+     * Filter which BlockedUsers to update
+     */
+    where?: BlockedUserWhereInput
+    /**
+     * Limit how many BlockedUsers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BlockedUser upsert
+   */
+  export type BlockedUserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BlockedUser to update in case it exists.
+     */
+    where: BlockedUserWhereUniqueInput
+    /**
+     * In case the BlockedUser found by the `where` argument doesn't exist, create a new BlockedUser with this data.
+     */
+    create: XOR<BlockedUserCreateInput, BlockedUserUncheckedCreateInput>
+    /**
+     * In case the BlockedUser was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BlockedUserUpdateInput, BlockedUserUncheckedUpdateInput>
+  }
+
+  /**
+   * BlockedUser delete
+   */
+  export type BlockedUserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+    /**
+     * Filter which BlockedUser to delete.
+     */
+    where: BlockedUserWhereUniqueInput
+  }
+
+  /**
+   * BlockedUser deleteMany
+   */
+  export type BlockedUserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BlockedUsers to delete
+     */
+    where?: BlockedUserWhereInput
+    /**
+     * Limit how many BlockedUsers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BlockedUser without action
+   */
+  export type BlockedUserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlockedUser
+     */
+    select?: BlockedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlockedUser
+     */
+    omit?: BlockedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlockedUserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MutedUser
+   */
+
+  export type AggregateMutedUser = {
+    _count: MutedUserCountAggregateOutputType | null
+    _min: MutedUserMinAggregateOutputType | null
+    _max: MutedUserMaxAggregateOutputType | null
+  }
+
+  export type MutedUserMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    channelId: string | null
+    channelName: string | null
+    createdAt: Date | null
+  }
+
+  export type MutedUserMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    channelId: string | null
+    channelName: string | null
+    createdAt: Date | null
+  }
+
+  export type MutedUserCountAggregateOutputType = {
+    id: number
+    userId: number
+    channelId: number
+    channelName: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type MutedUserMinAggregateInputType = {
+    id?: true
+    userId?: true
+    channelId?: true
+    channelName?: true
+    createdAt?: true
+  }
+
+  export type MutedUserMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    channelId?: true
+    channelName?: true
+    createdAt?: true
+  }
+
+  export type MutedUserCountAggregateInputType = {
+    id?: true
+    userId?: true
+    channelId?: true
+    channelName?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MutedUserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MutedUser to aggregate.
+     */
+    where?: MutedUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MutedUsers to fetch.
+     */
+    orderBy?: MutedUserOrderByWithRelationInput | MutedUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MutedUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MutedUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MutedUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MutedUsers
+    **/
+    _count?: true | MutedUserCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MutedUserMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MutedUserMaxAggregateInputType
+  }
+
+  export type GetMutedUserAggregateType<T extends MutedUserAggregateArgs> = {
+        [P in keyof T & keyof AggregateMutedUser]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMutedUser[P]>
+      : GetScalarType<T[P], AggregateMutedUser[P]>
+  }
+
+
+
+
+  export type MutedUserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MutedUserWhereInput
+    orderBy?: MutedUserOrderByWithAggregationInput | MutedUserOrderByWithAggregationInput[]
+    by: MutedUserScalarFieldEnum[] | MutedUserScalarFieldEnum
+    having?: MutedUserScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MutedUserCountAggregateInputType | true
+    _min?: MutedUserMinAggregateInputType
+    _max?: MutedUserMaxAggregateInputType
+  }
+
+  export type MutedUserGroupByOutputType = {
+    id: string
+    userId: string
+    channelId: string
+    channelName: string | null
+    createdAt: Date
+    _count: MutedUserCountAggregateOutputType | null
+    _min: MutedUserMinAggregateOutputType | null
+    _max: MutedUserMaxAggregateOutputType | null
+  }
+
+  type GetMutedUserGroupByPayload<T extends MutedUserGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MutedUserGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MutedUserGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MutedUserGroupByOutputType[P]>
+            : GetScalarType<T[P], MutedUserGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MutedUserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    channelId?: boolean
+    channelName?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mutedUser"]>
+
+  export type MutedUserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    channelId?: boolean
+    channelName?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mutedUser"]>
+
+  export type MutedUserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    channelId?: boolean
+    channelName?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mutedUser"]>
+
+  export type MutedUserSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    channelId?: boolean
+    channelName?: boolean
+    createdAt?: boolean
+  }
+
+  export type MutedUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "channelId" | "channelName" | "createdAt", ExtArgs["result"]["mutedUser"]>
+  export type MutedUserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MutedUserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MutedUserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MutedUserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MutedUser"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      channelId: string
+      channelName: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["mutedUser"]>
+    composites: {}
+  }
+
+  type MutedUserGetPayload<S extends boolean | null | undefined | MutedUserDefaultArgs> = $Result.GetResult<Prisma.$MutedUserPayload, S>
+
+  type MutedUserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MutedUserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MutedUserCountAggregateInputType | true
+    }
+
+  export interface MutedUserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MutedUser'], meta: { name: 'MutedUser' } }
+    /**
+     * Find zero or one MutedUser that matches the filter.
+     * @param {MutedUserFindUniqueArgs} args - Arguments to find a MutedUser
+     * @example
+     * // Get one MutedUser
+     * const mutedUser = await prisma.mutedUser.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MutedUserFindUniqueArgs>(args: SelectSubset<T, MutedUserFindUniqueArgs<ExtArgs>>): Prisma__MutedUserClient<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MutedUser that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MutedUserFindUniqueOrThrowArgs} args - Arguments to find a MutedUser
+     * @example
+     * // Get one MutedUser
+     * const mutedUser = await prisma.mutedUser.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MutedUserFindUniqueOrThrowArgs>(args: SelectSubset<T, MutedUserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MutedUserClient<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MutedUser that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedUserFindFirstArgs} args - Arguments to find a MutedUser
+     * @example
+     * // Get one MutedUser
+     * const mutedUser = await prisma.mutedUser.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MutedUserFindFirstArgs>(args?: SelectSubset<T, MutedUserFindFirstArgs<ExtArgs>>): Prisma__MutedUserClient<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MutedUser that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedUserFindFirstOrThrowArgs} args - Arguments to find a MutedUser
+     * @example
+     * // Get one MutedUser
+     * const mutedUser = await prisma.mutedUser.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MutedUserFindFirstOrThrowArgs>(args?: SelectSubset<T, MutedUserFindFirstOrThrowArgs<ExtArgs>>): Prisma__MutedUserClient<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MutedUsers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedUserFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MutedUsers
+     * const mutedUsers = await prisma.mutedUser.findMany()
+     * 
+     * // Get first 10 MutedUsers
+     * const mutedUsers = await prisma.mutedUser.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mutedUserWithIdOnly = await prisma.mutedUser.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MutedUserFindManyArgs>(args?: SelectSubset<T, MutedUserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MutedUser.
+     * @param {MutedUserCreateArgs} args - Arguments to create a MutedUser.
+     * @example
+     * // Create one MutedUser
+     * const MutedUser = await prisma.mutedUser.create({
+     *   data: {
+     *     // ... data to create a MutedUser
+     *   }
+     * })
+     * 
+     */
+    create<T extends MutedUserCreateArgs>(args: SelectSubset<T, MutedUserCreateArgs<ExtArgs>>): Prisma__MutedUserClient<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MutedUsers.
+     * @param {MutedUserCreateManyArgs} args - Arguments to create many MutedUsers.
+     * @example
+     * // Create many MutedUsers
+     * const mutedUser = await prisma.mutedUser.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MutedUserCreateManyArgs>(args?: SelectSubset<T, MutedUserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MutedUsers and returns the data saved in the database.
+     * @param {MutedUserCreateManyAndReturnArgs} args - Arguments to create many MutedUsers.
+     * @example
+     * // Create many MutedUsers
+     * const mutedUser = await prisma.mutedUser.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MutedUsers and only return the `id`
+     * const mutedUserWithIdOnly = await prisma.mutedUser.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MutedUserCreateManyAndReturnArgs>(args?: SelectSubset<T, MutedUserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MutedUser.
+     * @param {MutedUserDeleteArgs} args - Arguments to delete one MutedUser.
+     * @example
+     * // Delete one MutedUser
+     * const MutedUser = await prisma.mutedUser.delete({
+     *   where: {
+     *     // ... filter to delete one MutedUser
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MutedUserDeleteArgs>(args: SelectSubset<T, MutedUserDeleteArgs<ExtArgs>>): Prisma__MutedUserClient<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MutedUser.
+     * @param {MutedUserUpdateArgs} args - Arguments to update one MutedUser.
+     * @example
+     * // Update one MutedUser
+     * const mutedUser = await prisma.mutedUser.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MutedUserUpdateArgs>(args: SelectSubset<T, MutedUserUpdateArgs<ExtArgs>>): Prisma__MutedUserClient<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MutedUsers.
+     * @param {MutedUserDeleteManyArgs} args - Arguments to filter MutedUsers to delete.
+     * @example
+     * // Delete a few MutedUsers
+     * const { count } = await prisma.mutedUser.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MutedUserDeleteManyArgs>(args?: SelectSubset<T, MutedUserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MutedUsers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedUserUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MutedUsers
+     * const mutedUser = await prisma.mutedUser.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MutedUserUpdateManyArgs>(args: SelectSubset<T, MutedUserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MutedUsers and returns the data updated in the database.
+     * @param {MutedUserUpdateManyAndReturnArgs} args - Arguments to update many MutedUsers.
+     * @example
+     * // Update many MutedUsers
+     * const mutedUser = await prisma.mutedUser.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MutedUsers and only return the `id`
+     * const mutedUserWithIdOnly = await prisma.mutedUser.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MutedUserUpdateManyAndReturnArgs>(args: SelectSubset<T, MutedUserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MutedUser.
+     * @param {MutedUserUpsertArgs} args - Arguments to update or create a MutedUser.
+     * @example
+     * // Update or create a MutedUser
+     * const mutedUser = await prisma.mutedUser.upsert({
+     *   create: {
+     *     // ... data to create a MutedUser
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MutedUser we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MutedUserUpsertArgs>(args: SelectSubset<T, MutedUserUpsertArgs<ExtArgs>>): Prisma__MutedUserClient<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MutedUsers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedUserCountArgs} args - Arguments to filter MutedUsers to count.
+     * @example
+     * // Count the number of MutedUsers
+     * const count = await prisma.mutedUser.count({
+     *   where: {
+     *     // ... the filter for the MutedUsers we want to count
+     *   }
+     * })
+    **/
+    count<T extends MutedUserCountArgs>(
+      args?: Subset<T, MutedUserCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MutedUserCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MutedUser.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedUserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MutedUserAggregateArgs>(args: Subset<T, MutedUserAggregateArgs>): Prisma.PrismaPromise<GetMutedUserAggregateType<T>>
+
+    /**
+     * Group by MutedUser.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedUserGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MutedUserGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MutedUserGroupByArgs['orderBy'] }
+        : { orderBy?: MutedUserGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MutedUserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMutedUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MutedUser model
+   */
+  readonly fields: MutedUserFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MutedUser.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MutedUserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MutedUser model
+   */
+  interface MutedUserFieldRefs {
+    readonly id: FieldRef<"MutedUser", 'String'>
+    readonly userId: FieldRef<"MutedUser", 'String'>
+    readonly channelId: FieldRef<"MutedUser", 'String'>
+    readonly channelName: FieldRef<"MutedUser", 'String'>
+    readonly createdAt: FieldRef<"MutedUser", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MutedUser findUnique
+   */
+  export type MutedUserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedUser to fetch.
+     */
+    where: MutedUserWhereUniqueInput
+  }
+
+  /**
+   * MutedUser findUniqueOrThrow
+   */
+  export type MutedUserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedUser to fetch.
+     */
+    where: MutedUserWhereUniqueInput
+  }
+
+  /**
+   * MutedUser findFirst
+   */
+  export type MutedUserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedUser to fetch.
+     */
+    where?: MutedUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MutedUsers to fetch.
+     */
+    orderBy?: MutedUserOrderByWithRelationInput | MutedUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MutedUsers.
+     */
+    cursor?: MutedUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MutedUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MutedUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MutedUsers.
+     */
+    distinct?: MutedUserScalarFieldEnum | MutedUserScalarFieldEnum[]
+  }
+
+  /**
+   * MutedUser findFirstOrThrow
+   */
+  export type MutedUserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedUser to fetch.
+     */
+    where?: MutedUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MutedUsers to fetch.
+     */
+    orderBy?: MutedUserOrderByWithRelationInput | MutedUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MutedUsers.
+     */
+    cursor?: MutedUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MutedUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MutedUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MutedUsers.
+     */
+    distinct?: MutedUserScalarFieldEnum | MutedUserScalarFieldEnum[]
+  }
+
+  /**
+   * MutedUser findMany
+   */
+  export type MutedUserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedUsers to fetch.
+     */
+    where?: MutedUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MutedUsers to fetch.
+     */
+    orderBy?: MutedUserOrderByWithRelationInput | MutedUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MutedUsers.
+     */
+    cursor?: MutedUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MutedUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MutedUsers.
+     */
+    skip?: number
+    distinct?: MutedUserScalarFieldEnum | MutedUserScalarFieldEnum[]
+  }
+
+  /**
+   * MutedUser create
+   */
+  export type MutedUserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MutedUser.
+     */
+    data: XOR<MutedUserCreateInput, MutedUserUncheckedCreateInput>
+  }
+
+  /**
+   * MutedUser createMany
+   */
+  export type MutedUserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MutedUsers.
+     */
+    data: MutedUserCreateManyInput | MutedUserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MutedUser createManyAndReturn
+   */
+  export type MutedUserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * The data used to create many MutedUsers.
+     */
+    data: MutedUserCreateManyInput | MutedUserCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MutedUser update
+   */
+  export type MutedUserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MutedUser.
+     */
+    data: XOR<MutedUserUpdateInput, MutedUserUncheckedUpdateInput>
+    /**
+     * Choose, which MutedUser to update.
+     */
+    where: MutedUserWhereUniqueInput
+  }
+
+  /**
+   * MutedUser updateMany
+   */
+  export type MutedUserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MutedUsers.
+     */
+    data: XOR<MutedUserUpdateManyMutationInput, MutedUserUncheckedUpdateManyInput>
+    /**
+     * Filter which MutedUsers to update
+     */
+    where?: MutedUserWhereInput
+    /**
+     * Limit how many MutedUsers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MutedUser updateManyAndReturn
+   */
+  export type MutedUserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * The data used to update MutedUsers.
+     */
+    data: XOR<MutedUserUpdateManyMutationInput, MutedUserUncheckedUpdateManyInput>
+    /**
+     * Filter which MutedUsers to update
+     */
+    where?: MutedUserWhereInput
+    /**
+     * Limit how many MutedUsers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MutedUser upsert
+   */
+  export type MutedUserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MutedUser to update in case it exists.
+     */
+    where: MutedUserWhereUniqueInput
+    /**
+     * In case the MutedUser found by the `where` argument doesn't exist, create a new MutedUser with this data.
+     */
+    create: XOR<MutedUserCreateInput, MutedUserUncheckedCreateInput>
+    /**
+     * In case the MutedUser was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MutedUserUpdateInput, MutedUserUncheckedUpdateInput>
+  }
+
+  /**
+   * MutedUser delete
+   */
+  export type MutedUserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+    /**
+     * Filter which MutedUser to delete.
+     */
+    where: MutedUserWhereUniqueInput
+  }
+
+  /**
+   * MutedUser deleteMany
+   */
+  export type MutedUserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MutedUsers to delete
+     */
+    where?: MutedUserWhereInput
+    /**
+     * Limit how many MutedUsers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MutedUser without action
+   */
+  export type MutedUserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedUser
+     */
+    select?: MutedUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedUser
+     */
+    omit?: MutedUserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedUserInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model ScheduledPost
    */
 
@@ -14192,6 +16564,28 @@ export namespace Prisma {
   export type BookmarkFolderScalarFieldEnum = (typeof BookmarkFolderScalarFieldEnum)[keyof typeof BookmarkFolderScalarFieldEnum]
 
 
+  export const BlockedUserScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    channelId: 'channelId',
+    channelName: 'channelName',
+    createdAt: 'createdAt'
+  };
+
+  export type BlockedUserScalarFieldEnum = (typeof BlockedUserScalarFieldEnum)[keyof typeof BlockedUserScalarFieldEnum]
+
+
+  export const MutedUserScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    channelId: 'channelId',
+    channelName: 'channelName',
+    createdAt: 'createdAt'
+  };
+
+  export type MutedUserScalarFieldEnum = (typeof MutedUserScalarFieldEnum)[keyof typeof MutedUserScalarFieldEnum]
+
+
   export const ScheduledPostScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -14315,6 +16709,8 @@ export namespace Prisma {
     lists?: ListListRelationFilter
     listFollows?: ListFollowListRelationFilter
     bookmarkFolders?: BookmarkFolderListRelationFilter
+    blockedUsers?: BlockedUserListRelationFilter
+    mutedUsers?: MutedUserListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14329,6 +16725,8 @@ export namespace Prisma {
     lists?: ListOrderByRelationAggregateInput
     listFollows?: ListFollowOrderByRelationAggregateInput
     bookmarkFolders?: BookmarkFolderOrderByRelationAggregateInput
+    blockedUsers?: BlockedUserOrderByRelationAggregateInput
+    mutedUsers?: MutedUserOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14346,6 +16744,8 @@ export namespace Prisma {
     lists?: ListListRelationFilter
     listFollows?: ListFollowListRelationFilter
     bookmarkFolders?: BookmarkFolderListRelationFilter
+    blockedUsers?: BlockedUserListRelationFilter
+    mutedUsers?: MutedUserListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -14995,6 +17395,118 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"BookmarkFolder"> | Date | string
   }
 
+  export type BlockedUserWhereInput = {
+    AND?: BlockedUserWhereInput | BlockedUserWhereInput[]
+    OR?: BlockedUserWhereInput[]
+    NOT?: BlockedUserWhereInput | BlockedUserWhereInput[]
+    id?: StringFilter<"BlockedUser"> | string
+    userId?: StringFilter<"BlockedUser"> | string
+    channelId?: StringFilter<"BlockedUser"> | string
+    channelName?: StringNullableFilter<"BlockedUser"> | string | null
+    createdAt?: DateTimeFilter<"BlockedUser"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type BlockedUserOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type BlockedUserWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_channelId?: BlockedUserUserIdChannelIdCompoundUniqueInput
+    AND?: BlockedUserWhereInput | BlockedUserWhereInput[]
+    OR?: BlockedUserWhereInput[]
+    NOT?: BlockedUserWhereInput | BlockedUserWhereInput[]
+    userId?: StringFilter<"BlockedUser"> | string
+    channelId?: StringFilter<"BlockedUser"> | string
+    channelName?: StringNullableFilter<"BlockedUser"> | string | null
+    createdAt?: DateTimeFilter<"BlockedUser"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_channelId">
+
+  export type BlockedUserOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: BlockedUserCountOrderByAggregateInput
+    _max?: BlockedUserMaxOrderByAggregateInput
+    _min?: BlockedUserMinOrderByAggregateInput
+  }
+
+  export type BlockedUserScalarWhereWithAggregatesInput = {
+    AND?: BlockedUserScalarWhereWithAggregatesInput | BlockedUserScalarWhereWithAggregatesInput[]
+    OR?: BlockedUserScalarWhereWithAggregatesInput[]
+    NOT?: BlockedUserScalarWhereWithAggregatesInput | BlockedUserScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BlockedUser"> | string
+    userId?: StringWithAggregatesFilter<"BlockedUser"> | string
+    channelId?: StringWithAggregatesFilter<"BlockedUser"> | string
+    channelName?: StringNullableWithAggregatesFilter<"BlockedUser"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BlockedUser"> | Date | string
+  }
+
+  export type MutedUserWhereInput = {
+    AND?: MutedUserWhereInput | MutedUserWhereInput[]
+    OR?: MutedUserWhereInput[]
+    NOT?: MutedUserWhereInput | MutedUserWhereInput[]
+    id?: StringFilter<"MutedUser"> | string
+    userId?: StringFilter<"MutedUser"> | string
+    channelId?: StringFilter<"MutedUser"> | string
+    channelName?: StringNullableFilter<"MutedUser"> | string | null
+    createdAt?: DateTimeFilter<"MutedUser"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type MutedUserOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type MutedUserWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_channelId?: MutedUserUserIdChannelIdCompoundUniqueInput
+    AND?: MutedUserWhereInput | MutedUserWhereInput[]
+    OR?: MutedUserWhereInput[]
+    NOT?: MutedUserWhereInput | MutedUserWhereInput[]
+    userId?: StringFilter<"MutedUser"> | string
+    channelId?: StringFilter<"MutedUser"> | string
+    channelName?: StringNullableFilter<"MutedUser"> | string | null
+    createdAt?: DateTimeFilter<"MutedUser"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_channelId">
+
+  export type MutedUserOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: MutedUserCountOrderByAggregateInput
+    _max?: MutedUserMaxOrderByAggregateInput
+    _min?: MutedUserMinOrderByAggregateInput
+  }
+
+  export type MutedUserScalarWhereWithAggregatesInput = {
+    AND?: MutedUserScalarWhereWithAggregatesInput | MutedUserScalarWhereWithAggregatesInput[]
+    OR?: MutedUserScalarWhereWithAggregatesInput[]
+    NOT?: MutedUserScalarWhereWithAggregatesInput | MutedUserScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MutedUser"> | string
+    userId?: StringWithAggregatesFilter<"MutedUser"> | string
+    channelId?: StringWithAggregatesFilter<"MutedUser"> | string
+    channelName?: StringNullableWithAggregatesFilter<"MutedUser"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MutedUser"> | Date | string
+  }
+
   export type ScheduledPostWhereInput = {
     AND?: ScheduledPostWhereInput | ScheduledPostWhereInput[]
     OR?: ScheduledPostWhereInput[]
@@ -15069,6 +17581,8 @@ export namespace Prisma {
     lists?: ListCreateNestedManyWithoutUserInput
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15083,6 +17597,8 @@ export namespace Prisma {
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -15097,6 +17613,8 @@ export namespace Prisma {
     lists?: ListUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15111,6 +17629,8 @@ export namespace Prisma {
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -15805,6 +18325,116 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BlockedUserCreateInput = {
+    id?: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutBlockedUsersInput
+  }
+
+  export type BlockedUserUncheckedCreateInput = {
+    id?: string
+    userId: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type BlockedUserUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBlockedUsersNestedInput
+  }
+
+  export type BlockedUserUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlockedUserCreateManyInput = {
+    id?: string
+    userId: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type BlockedUserUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlockedUserUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedUserCreateInput = {
+    id?: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutMutedUsersInput
+  }
+
+  export type MutedUserUncheckedCreateInput = {
+    id?: string
+    userId: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MutedUserUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutMutedUsersNestedInput
+  }
+
+  export type MutedUserUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedUserCreateManyInput = {
+    id?: string
+    userId: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MutedUserUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedUserUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ScheduledPostCreateInput = {
     id?: string
     userId: string
@@ -15940,6 +18570,18 @@ export namespace Prisma {
     none?: BookmarkFolderWhereInput
   }
 
+  export type BlockedUserListRelationFilter = {
+    every?: BlockedUserWhereInput
+    some?: BlockedUserWhereInput
+    none?: BlockedUserWhereInput
+  }
+
+  export type MutedUserListRelationFilter = {
+    every?: MutedUserWhereInput
+    some?: MutedUserWhereInput
+    none?: MutedUserWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -15962,6 +18604,14 @@ export namespace Prisma {
   }
 
   export type BookmarkFolderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BlockedUserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MutedUserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16440,6 +19090,64 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type BlockedUserUserIdChannelIdCompoundUniqueInput = {
+    userId: string
+    channelId: string
+  }
+
+  export type BlockedUserCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BlockedUserMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BlockedUserMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MutedUserUserIdChannelIdCompoundUniqueInput = {
+    userId: string
+    channelId: string
+  }
+
+  export type MutedUserCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MutedUserMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MutedUserMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    channelId?: SortOrder
+    channelName?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type ScheduledPostCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -16511,6 +19219,20 @@ export namespace Prisma {
     connect?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
   }
 
+  export type BlockedUserCreateNestedManyWithoutUserInput = {
+    create?: XOR<BlockedUserCreateWithoutUserInput, BlockedUserUncheckedCreateWithoutUserInput> | BlockedUserCreateWithoutUserInput[] | BlockedUserUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BlockedUserCreateOrConnectWithoutUserInput | BlockedUserCreateOrConnectWithoutUserInput[]
+    createMany?: BlockedUserCreateManyUserInputEnvelope
+    connect?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+  }
+
+  export type MutedUserCreateNestedManyWithoutUserInput = {
+    create?: XOR<MutedUserCreateWithoutUserInput, MutedUserUncheckedCreateWithoutUserInput> | MutedUserCreateWithoutUserInput[] | MutedUserUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MutedUserCreateOrConnectWithoutUserInput | MutedUserCreateOrConnectWithoutUserInput[]
+    createMany?: MutedUserCreateManyUserInputEnvelope
+    connect?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+  }
+
   export type YtCredentialUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<YtCredentialCreateWithoutUserInput, YtCredentialUncheckedCreateWithoutUserInput>
     connectOrCreate?: YtCredentialCreateOrConnectWithoutUserInput
@@ -16550,6 +19272,20 @@ export namespace Prisma {
     connectOrCreate?: BookmarkFolderCreateOrConnectWithoutUserInput | BookmarkFolderCreateOrConnectWithoutUserInput[]
     createMany?: BookmarkFolderCreateManyUserInputEnvelope
     connect?: BookmarkFolderWhereUniqueInput | BookmarkFolderWhereUniqueInput[]
+  }
+
+  export type BlockedUserUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BlockedUserCreateWithoutUserInput, BlockedUserUncheckedCreateWithoutUserInput> | BlockedUserCreateWithoutUserInput[] | BlockedUserUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BlockedUserCreateOrConnectWithoutUserInput | BlockedUserCreateOrConnectWithoutUserInput[]
+    createMany?: BlockedUserCreateManyUserInputEnvelope
+    connect?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+  }
+
+  export type MutedUserUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<MutedUserCreateWithoutUserInput, MutedUserUncheckedCreateWithoutUserInput> | MutedUserCreateWithoutUserInput[] | MutedUserUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MutedUserCreateOrConnectWithoutUserInput | MutedUserCreateOrConnectWithoutUserInput[]
+    createMany?: MutedUserCreateManyUserInputEnvelope
+    connect?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -16640,6 +19376,34 @@ export namespace Prisma {
     deleteMany?: BookmarkFolderScalarWhereInput | BookmarkFolderScalarWhereInput[]
   }
 
+  export type BlockedUserUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BlockedUserCreateWithoutUserInput, BlockedUserUncheckedCreateWithoutUserInput> | BlockedUserCreateWithoutUserInput[] | BlockedUserUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BlockedUserCreateOrConnectWithoutUserInput | BlockedUserCreateOrConnectWithoutUserInput[]
+    upsert?: BlockedUserUpsertWithWhereUniqueWithoutUserInput | BlockedUserUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BlockedUserCreateManyUserInputEnvelope
+    set?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+    disconnect?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+    delete?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+    connect?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+    update?: BlockedUserUpdateWithWhereUniqueWithoutUserInput | BlockedUserUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BlockedUserUpdateManyWithWhereWithoutUserInput | BlockedUserUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BlockedUserScalarWhereInput | BlockedUserScalarWhereInput[]
+  }
+
+  export type MutedUserUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MutedUserCreateWithoutUserInput, MutedUserUncheckedCreateWithoutUserInput> | MutedUserCreateWithoutUserInput[] | MutedUserUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MutedUserCreateOrConnectWithoutUserInput | MutedUserCreateOrConnectWithoutUserInput[]
+    upsert?: MutedUserUpsertWithWhereUniqueWithoutUserInput | MutedUserUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MutedUserCreateManyUserInputEnvelope
+    set?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+    disconnect?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+    delete?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+    connect?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+    update?: MutedUserUpdateWithWhereUniqueWithoutUserInput | MutedUserUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MutedUserUpdateManyWithWhereWithoutUserInput | MutedUserUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MutedUserScalarWhereInput | MutedUserScalarWhereInput[]
+  }
+
   export type YtCredentialUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<YtCredentialCreateWithoutUserInput, YtCredentialUncheckedCreateWithoutUserInput>
     connectOrCreate?: YtCredentialCreateOrConnectWithoutUserInput
@@ -16718,6 +19482,34 @@ export namespace Prisma {
     update?: BookmarkFolderUpdateWithWhereUniqueWithoutUserInput | BookmarkFolderUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: BookmarkFolderUpdateManyWithWhereWithoutUserInput | BookmarkFolderUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: BookmarkFolderScalarWhereInput | BookmarkFolderScalarWhereInput[]
+  }
+
+  export type BlockedUserUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BlockedUserCreateWithoutUserInput, BlockedUserUncheckedCreateWithoutUserInput> | BlockedUserCreateWithoutUserInput[] | BlockedUserUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BlockedUserCreateOrConnectWithoutUserInput | BlockedUserCreateOrConnectWithoutUserInput[]
+    upsert?: BlockedUserUpsertWithWhereUniqueWithoutUserInput | BlockedUserUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BlockedUserCreateManyUserInputEnvelope
+    set?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+    disconnect?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+    delete?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+    connect?: BlockedUserWhereUniqueInput | BlockedUserWhereUniqueInput[]
+    update?: BlockedUserUpdateWithWhereUniqueWithoutUserInput | BlockedUserUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BlockedUserUpdateManyWithWhereWithoutUserInput | BlockedUserUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BlockedUserScalarWhereInput | BlockedUserScalarWhereInput[]
+  }
+
+  export type MutedUserUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MutedUserCreateWithoutUserInput, MutedUserUncheckedCreateWithoutUserInput> | MutedUserCreateWithoutUserInput[] | MutedUserUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MutedUserCreateOrConnectWithoutUserInput | MutedUserCreateOrConnectWithoutUserInput[]
+    upsert?: MutedUserUpsertWithWhereUniqueWithoutUserInput | MutedUserUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MutedUserCreateManyUserInputEnvelope
+    set?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+    disconnect?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+    delete?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+    connect?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+    update?: MutedUserUpdateWithWhereUniqueWithoutUserInput | MutedUserUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MutedUserUpdateManyWithWhereWithoutUserInput | MutedUserUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MutedUserScalarWhereInput | MutedUserScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutYtCredentialInput = {
@@ -16988,6 +19780,34 @@ export namespace Prisma {
     update?: BookmarkUpdateWithWhereUniqueWithoutFolderInput | BookmarkUpdateWithWhereUniqueWithoutFolderInput[]
     updateMany?: BookmarkUpdateManyWithWhereWithoutFolderInput | BookmarkUpdateManyWithWhereWithoutFolderInput[]
     deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutBlockedUsersInput = {
+    create?: XOR<UserCreateWithoutBlockedUsersInput, UserUncheckedCreateWithoutBlockedUsersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBlockedUsersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutBlockedUsersNestedInput = {
+    create?: XOR<UserCreateWithoutBlockedUsersInput, UserUncheckedCreateWithoutBlockedUsersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBlockedUsersInput
+    upsert?: UserUpsertWithoutBlockedUsersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBlockedUsersInput, UserUpdateWithoutBlockedUsersInput>, UserUncheckedUpdateWithoutBlockedUsersInput>
+  }
+
+  export type UserCreateNestedOneWithoutMutedUsersInput = {
+    create?: XOR<UserCreateWithoutMutedUsersInput, UserUncheckedCreateWithoutMutedUsersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMutedUsersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutMutedUsersNestedInput = {
+    create?: XOR<UserCreateWithoutMutedUsersInput, UserUncheckedCreateWithoutMutedUsersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMutedUsersInput
+    upsert?: UserUpsertWithoutMutedUsersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMutedUsersInput, UserUpdateWithoutMutedUsersInput>, UserUncheckedUpdateWithoutMutedUsersInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -17290,6 +20110,54 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BlockedUserCreateWithoutUserInput = {
+    id?: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type BlockedUserUncheckedCreateWithoutUserInput = {
+    id?: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type BlockedUserCreateOrConnectWithoutUserInput = {
+    where: BlockedUserWhereUniqueInput
+    create: XOR<BlockedUserCreateWithoutUserInput, BlockedUserUncheckedCreateWithoutUserInput>
+  }
+
+  export type BlockedUserCreateManyUserInputEnvelope = {
+    data: BlockedUserCreateManyUserInput | BlockedUserCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MutedUserCreateWithoutUserInput = {
+    id?: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MutedUserUncheckedCreateWithoutUserInput = {
+    id?: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MutedUserCreateOrConnectWithoutUserInput = {
+    where: MutedUserWhereUniqueInput
+    create: XOR<MutedUserCreateWithoutUserInput, MutedUserUncheckedCreateWithoutUserInput>
+  }
+
+  export type MutedUserCreateManyUserInputEnvelope = {
+    data: MutedUserCreateManyUserInput | MutedUserCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type YtCredentialUpsertWithoutUserInput = {
     update: XOR<YtCredentialUpdateWithoutUserInput, YtCredentialUncheckedUpdateWithoutUserInput>
     create: XOR<YtCredentialCreateWithoutUserInput, YtCredentialUncheckedCreateWithoutUserInput>
@@ -17453,6 +20321,60 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"BookmarkFolder"> | Date | string
   }
 
+  export type BlockedUserUpsertWithWhereUniqueWithoutUserInput = {
+    where: BlockedUserWhereUniqueInput
+    update: XOR<BlockedUserUpdateWithoutUserInput, BlockedUserUncheckedUpdateWithoutUserInput>
+    create: XOR<BlockedUserCreateWithoutUserInput, BlockedUserUncheckedCreateWithoutUserInput>
+  }
+
+  export type BlockedUserUpdateWithWhereUniqueWithoutUserInput = {
+    where: BlockedUserWhereUniqueInput
+    data: XOR<BlockedUserUpdateWithoutUserInput, BlockedUserUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BlockedUserUpdateManyWithWhereWithoutUserInput = {
+    where: BlockedUserScalarWhereInput
+    data: XOR<BlockedUserUpdateManyMutationInput, BlockedUserUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BlockedUserScalarWhereInput = {
+    AND?: BlockedUserScalarWhereInput | BlockedUserScalarWhereInput[]
+    OR?: BlockedUserScalarWhereInput[]
+    NOT?: BlockedUserScalarWhereInput | BlockedUserScalarWhereInput[]
+    id?: StringFilter<"BlockedUser"> | string
+    userId?: StringFilter<"BlockedUser"> | string
+    channelId?: StringFilter<"BlockedUser"> | string
+    channelName?: StringNullableFilter<"BlockedUser"> | string | null
+    createdAt?: DateTimeFilter<"BlockedUser"> | Date | string
+  }
+
+  export type MutedUserUpsertWithWhereUniqueWithoutUserInput = {
+    where: MutedUserWhereUniqueInput
+    update: XOR<MutedUserUpdateWithoutUserInput, MutedUserUncheckedUpdateWithoutUserInput>
+    create: XOR<MutedUserCreateWithoutUserInput, MutedUserUncheckedCreateWithoutUserInput>
+  }
+
+  export type MutedUserUpdateWithWhereUniqueWithoutUserInput = {
+    where: MutedUserWhereUniqueInput
+    data: XOR<MutedUserUpdateWithoutUserInput, MutedUserUncheckedUpdateWithoutUserInput>
+  }
+
+  export type MutedUserUpdateManyWithWhereWithoutUserInput = {
+    where: MutedUserScalarWhereInput
+    data: XOR<MutedUserUpdateManyMutationInput, MutedUserUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type MutedUserScalarWhereInput = {
+    AND?: MutedUserScalarWhereInput | MutedUserScalarWhereInput[]
+    OR?: MutedUserScalarWhereInput[]
+    NOT?: MutedUserScalarWhereInput | MutedUserScalarWhereInput[]
+    id?: StringFilter<"MutedUser"> | string
+    userId?: StringFilter<"MutedUser"> | string
+    channelId?: StringFilter<"MutedUser"> | string
+    channelName?: StringNullableFilter<"MutedUser"> | string | null
+    createdAt?: DateTimeFilter<"MutedUser"> | Date | string
+  }
+
   export type UserCreateWithoutYtCredentialInput = {
     id?: string
     name?: string | null
@@ -17464,6 +20386,8 @@ export namespace Prisma {
     lists?: ListCreateNestedManyWithoutUserInput
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutYtCredentialInput = {
@@ -17477,6 +20401,8 @@ export namespace Prisma {
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutYtCredentialInput = {
@@ -17506,6 +20432,8 @@ export namespace Prisma {
     lists?: ListUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutYtCredentialInput = {
@@ -17519,6 +20447,8 @@ export namespace Prisma {
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCommentLikesInput = {
@@ -17532,6 +20462,8 @@ export namespace Prisma {
     lists?: ListCreateNestedManyWithoutUserInput
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommentLikesInput = {
@@ -17545,6 +20477,8 @@ export namespace Prisma {
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommentLikesInput = {
@@ -17574,6 +20508,8 @@ export namespace Prisma {
     lists?: ListUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentLikesInput = {
@@ -17587,6 +20523,8 @@ export namespace Prisma {
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutActionsInput = {
@@ -17600,6 +20538,8 @@ export namespace Prisma {
     lists?: ListCreateNestedManyWithoutUserInput
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActionsInput = {
@@ -17613,6 +20553,8 @@ export namespace Prisma {
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActionsInput = {
@@ -17642,6 +20584,8 @@ export namespace Prisma {
     lists?: ListUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActionsInput = {
@@ -17655,6 +20599,8 @@ export namespace Prisma {
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BookmarkFolderCreateWithoutBookmarksInput = {
@@ -17712,6 +20658,8 @@ export namespace Prisma {
     actions?: UserActionCreateNestedManyWithoutUserInput
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutListsInput = {
@@ -17725,6 +20673,8 @@ export namespace Prisma {
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutListsInput = {
@@ -17812,6 +20762,8 @@ export namespace Prisma {
     actions?: UserActionUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutListsInput = {
@@ -17825,6 +20777,8 @@ export namespace Prisma {
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ListItemUpsertWithWhereUniqueWithoutListInput = {
@@ -17947,6 +20901,8 @@ export namespace Prisma {
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutListFollowsInput = {
@@ -17960,6 +20916,8 @@ export namespace Prisma {
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutListFollowsInput = {
@@ -18016,6 +20974,8 @@ export namespace Prisma {
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutListFollowsInput = {
@@ -18029,6 +20989,8 @@ export namespace Prisma {
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ListUpsertWithoutFollowersInput = {
@@ -18075,6 +21037,8 @@ export namespace Prisma {
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBookmarkFoldersInput = {
@@ -18088,6 +21052,8 @@ export namespace Prisma {
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBookmarkFoldersInput = {
@@ -18155,6 +21121,8 @@ export namespace Prisma {
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookmarkFoldersInput = {
@@ -18168,6 +21136,8 @@ export namespace Prisma {
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BookmarkUpsertWithWhereUniqueWithoutFolderInput = {
@@ -18202,6 +21172,158 @@ export namespace Prisma {
     replyCount?: StringFilter<"Bookmark"> | string
     publishedTime?: StringFilter<"Bookmark"> | string
     createdAt?: DateTimeFilter<"Bookmark"> | Date | string
+  }
+
+  export type UserCreateWithoutBlockedUsersInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    actions?: UserActionCreateNestedManyWithoutUserInput
+    lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBlockedUsersInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
+    lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBlockedUsersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBlockedUsersInput, UserUncheckedCreateWithoutBlockedUsersInput>
+  }
+
+  export type UserUpsertWithoutBlockedUsersInput = {
+    update: XOR<UserUpdateWithoutBlockedUsersInput, UserUncheckedUpdateWithoutBlockedUsersInput>
+    create: XOR<UserCreateWithoutBlockedUsersInput, UserUncheckedCreateWithoutBlockedUsersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBlockedUsersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBlockedUsersInput, UserUncheckedUpdateWithoutBlockedUsersInput>
+  }
+
+  export type UserUpdateWithoutBlockedUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    actions?: UserActionUpdateManyWithoutUserNestedInput
+    lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBlockedUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
+    lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutMutedUsersInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    actions?: UserActionCreateNestedManyWithoutUserInput
+    lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutMutedUsersInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
+    lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutMutedUsersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMutedUsersInput, UserUncheckedCreateWithoutMutedUsersInput>
+  }
+
+  export type UserUpsertWithoutMutedUsersInput = {
+    update: XOR<UserUpdateWithoutMutedUsersInput, UserUncheckedUpdateWithoutMutedUsersInput>
+    create: XOR<UserCreateWithoutMutedUsersInput, UserUncheckedCreateWithoutMutedUsersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMutedUsersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMutedUsersInput, UserUncheckedUpdateWithoutMutedUsersInput>
+  }
+
+  export type UserUpdateWithoutMutedUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    actions?: UserActionUpdateManyWithoutUserNestedInput
+    lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMutedUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
+    lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CommentLikeCreateManyUserInput = {
@@ -18239,6 +21361,20 @@ export namespace Prisma {
   export type BookmarkFolderCreateManyUserInput = {
     id?: string
     name: string
+    createdAt?: Date | string
+  }
+
+  export type BlockedUserCreateManyUserInput = {
+    id?: string
+    channelId: string
+    channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MutedUserCreateManyUserInput = {
+    id?: string
+    channelId: string
+    channelName?: string | null
     createdAt?: Date | string
   }
 
@@ -18359,6 +21495,48 @@ export namespace Prisma {
   export type BookmarkFolderUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlockedUserUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlockedUserUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlockedUserUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedUserUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedUserUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedUserUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channelId?: StringFieldUpdateOperationsInput | string
+    channelName?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

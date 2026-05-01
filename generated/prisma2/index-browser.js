@@ -224,6 +224,22 @@ exports.Prisma.BookmarkFolderScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.BlockedUserScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  channelId: 'channelId',
+  channelName: 'channelName',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MutedUserScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  channelId: 'channelId',
+  channelName: 'channelName',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.ScheduledPostScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -261,6 +277,8 @@ exports.Prisma.ModelName = {
   ListItem: 'ListItem',
   ListFollow: 'ListFollow',
   BookmarkFolder: 'BookmarkFolder',
+  BlockedUser: 'BlockedUser',
+  MutedUser: 'MutedUser',
   ScheduledPost: 'ScheduledPost'
 };
 

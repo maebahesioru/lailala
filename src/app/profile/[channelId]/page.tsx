@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
 import { ArrowLeft, Loader2, User, ThumbsUp, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { ProfileMoreMenu } from "@/components/profile-more-menu";
 
 interface ProfileComment {
   commentId: string;
@@ -89,10 +90,11 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
         <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft size={20} />
         </Link>
-        <div>
-          <h1 className="text-lg font-bold">{displayName}</h1>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-lg font-bold truncate">{displayName}</h1>
           <p className="text-[13px] text-[#71767b]">{comments.length} 件のコメント</p>
         </div>
+        <ProfileMoreMenu channelId={channelId} channelName={displayName} />
       </div>
 
       {/* Author info */}

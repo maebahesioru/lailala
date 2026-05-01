@@ -20,6 +20,8 @@ model User {
   lists         List[]
   listFollows   ListFollow[]
   bookmarkFolders BookmarkFolder[]
+  blockedUsers  BlockedUser[]
+  mutedUsers    MutedUser[]
 
   @@map("users")
 }
@@ -171,6 +173,32 @@ model BookmarkFolder {
 
   @@index([userId])
   @@map("bookmark_folders")
+}
+
+model BlockedUser {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  channelId     String   @map("channel_id")
+  channelName   String?  @map("channel_name")
+  createdAt     DateTime @default(now()) @map("created_at")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, channelId])
+  @@index([userId])
+  @@map("blocked_users")
+}
+
+model MutedUser {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  channelId     String   @map("channel_id")
+  channelName   String?  @map("channel_name")
+  createdAt     DateTime @default(now()) @map("created_at")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, channelId])
+  @@index([userId])
+  @@map("muted_users")
 }
 
 model ScheduledPost {

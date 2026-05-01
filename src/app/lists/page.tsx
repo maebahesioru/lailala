@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
-import { ArrowLeft, List, Plus, Trash2, User, Loader2, ThumbsUp, MessageCircle, Search, Globe, Lock, Heart, FolderOpen } from "lucide-react";
+import { ArrowLeft, List, Plus, Trash2, User, Loader2, ThumbsUp, MessageCircle, Search, Globe, Lock, Heart, FolderOpen, Pencil, CheckSquare, Square, X } from "lucide-react";
 import Link from "next/link";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 
 interface ListItem {
   id: string;
@@ -47,8 +48,21 @@ export default function ListsPage() {
   const [newListDesc, setNewListDesc] = useState("");
   const [newListPublic, setNewListPublic] = useState(false);
   const [selectedList, setSelectedList] = useState<UserList | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"mine" | "public" | "followed" | "containing">("mine");
+
+  // Edit mode
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editDesc, setEditDesc] = useState("");
+  const [editPublic, setEditPublic] = useState(false);
+
+  // Delete confirm
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Bulk select in list detail
+  const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
+  const [isBulkMode, setIsBulkMode] = useState(false);
 
   useEffect(() => {
     if (!user) { setLoading(false); return; }
@@ -82,7 +96,12 @@ export default function ListsPage() {
     try {
       const res = await fetch(`/api/lists?listId=${id}`);
       const data = await res.json();
-      if (data.list) setSelectedList(data.list);
+      if (data.list) {
+        setSelectedList(data.list);
+        setEditName(data.list.name);
+        setEditDesc(data.list.description || "");
+        setEditPublic(data.list.isPublic);
+      }
     } catch {}
   };
 
@@ -105,13 +124,33 @@ export default function ListsPage() {
     } catch {}
   };
 
-  const deleteList = async (id: string) => {
-    if (!confirm("このリストを削除しますか？")) return;
+  const saveEdit = async () => {
+    if (!selectedList || !editName.trim()) return;
     try {
-      await fetch(`/api/lists?listId=${id}`, { method: "DELETE" });
-      setLists((prev) => prev.filter((l) => l.id !== id));
-      if (selectedList?.id === id) setSelectedList(null);
+      await fetch("/api/lists", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ listId: selectedList.id, name: editName.trim(), description: editDesc.trim() || undefined, isPublic: editPublic }),
+      });
+      setSelectedList((prev) => prev ? { ...prev, name: editName.trim(), description: editDesc.trim() || undefined, isPublic: editPublic } : null);
+      setIsEditing(false);
     } catch {}
+  };
+
+  const promptDeleteList = (id: string) => {
+    setDeleteTargetId(id);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDeleteList = async () => {
+    if (!deleteTargetId) return;
+    try {
+      await fetch(`/api/lists?listId=${deleteTargetId}`, { method: "DELETE" });
+      setLists((prev) => prev.filter((l) => l.id !== deleteTargetId));
+      if (selectedList?.id === deleteTargetId) setSelectedList(null);
+    } catch {}
+    setShowDeleteConfirm(false);
+    setDeleteTargetId(null);
   };
 
   const openList = async (list: UserList) => {
@@ -127,6 +166,34 @@ export default function ListsPage() {
           : null
       );
     } catch {}
+  };
+
+  const bulkRemoveItems = async () => {
+    if (!selectedList || selectedItemIds.size === 0) return;
+    const ids = Array.from(selectedItemIds);
+    for (const commentId of ids) {
+      await removeItem(selectedList.id, commentId);
+    }
+    setSelectedItemIds(new Set());
+    setIsBulkMode(false);
+  };
+
+  const toggleItemSelect = (commentId: string) => {
+    setSelectedItemIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(commentId)) next.delete(commentId);
+      else next.add(commentId);
+      return next;
+    });
+  };
+
+  const selectAllItems = () => {
+    if (!selectedList?.items) return;
+    if (selectedItemIds.size === selectedList.items.length) {
+      setSelectedItemIds(new Set());
+    } else {
+      setSelectedItemIds(new Set(selectedList.items.map((i) => i.commentId)));
+    }
   };
 
   const toggleFollow = async (listId: string, currentlyFollowing: boolean) => {
@@ -155,21 +222,46 @@ export default function ListsPage() {
             <button onClick={() => setSelectedList(null)} className="p-2 rounded-full hover:bg-white/10 transition-colors">
               <ArrowLeft size={20} />
             </button>
-            <div className="flex-1 min-w-0">
-              <h1 className="text-lg font-bold truncate">{selectedList.name}</h1>
-              <p className="text-[13px] text-muted">{selectedList._count?.items || selectedList.items?.length || 0} 件 · {selectedList.isPublic ? <Globe size={12} className="inline" /> : <Lock size={12} className="inline" />}</p>
-            </div>
-            {selectedList.isOwner ? (
-              <button onClick={() => deleteList(selectedList.id)} className="p-2 rounded-full hover:bg-red-500/10 text-muted hover:text-red-500 transition-colors">
-                <Trash2 size={18} />
-              </button>
+            {isEditing ? (
+              <div className="flex-1 min-w-0 flex items-center gap-2">
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="flex-1 bg-background text-foreground rounded-lg px-3 py-1.5 border border-border outline-none focus:ring-2 focus:ring-primary text-sm"
+                />
+                <button onClick={saveEdit} className="p-2 rounded-full bg-primary text-white hover:bg-primary-hover">
+                  <CheckSquare size={16} />
+                </button>
+                <button onClick={() => setIsEditing(false)} className="p-2 rounded-full bg-border text-foreground hover:bg-white/10">
+                  <X size={16} />
+                </button>
+              </div>
             ) : (
-              <button
-                onClick={() => toggleFollow(selectedList.id, !!selectedList.isFollowing)}
-                className={`px-4 py-1.5 rounded-full text-sm font-bold transition-colors ${selectedList.isFollowing ? "border border-border hover:border-red-500 hover:text-red-500" : "bg-primary text-white hover:bg-primary-hover"}`}
-              >
-                {selectedList.isFollowing ? "フォロー中" : "フォロー"}
-              </button>
+              <>
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-lg font-bold truncate">{selectedList.name}</h1>
+                  <p className="text-[13px] text-muted">{selectedList._count?.items || selectedList.items?.length || 0} 件 · {selectedList.isPublic ? <Globe size={12} className="inline" /> : <Lock size={12} className="inline" />}</p>
+                </div>
+                {selectedList.isOwner && (
+                  <>
+                    <button onClick={() => setIsEditing(true)} className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted">
+                      <Pencil size={18} />
+                    </button>
+                    <button onClick={() => promptDeleteList(selectedList.id)} className="p-2 rounded-full hover:bg-red-500/10 text-muted hover:text-red-500 transition-colors">
+                      <Trash2 size={18} />
+                    </button>
+                  </>
+                )}
+                {!selectedList.isOwner && (
+                  <button
+                    onClick={() => toggleFollow(selectedList.id, !!selectedList.isFollowing)}
+                    className={`px-4 py-1.5 rounded-full text-sm font-bold transition-colors ${selectedList.isFollowing ? "border border-border hover:border-red-500 hover:text-red-500" : "bg-primary text-white hover:bg-primary-hover"}`}
+                  >
+                    {selectedList.isFollowing ? "フォロー中" : "フォロー"}
+                  </button>
+                )}
+              </>
             )}
           </>
         ) : (
@@ -183,61 +275,111 @@ export default function ListsPage() {
       </div>
 
       {selectedList ? (
-        <div className="divide-y divide-border">
-          {selectedList.items && selectedList.items.length > 0 ? (
-            selectedList.items.map((item) => (
-              <article
-                key={item.id}
-                className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer"
-                onClick={() => router.push(`/thread/${item.commentId}`)}
-              >
-                <div className="flex gap-3">
-                  <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
-                    {item.authorThumb ? (
-                      <img src={item.authorThumb} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
-                        <User size={20} className="text-muted" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-[15px] truncate">{item.authorName}</span>
-                      <span className="text-muted text-[15px]">·</span>
-                      <span className="text-muted text-[15px] shrink-0">{item.publishedTime}</span>
-                    </div>
-                    <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed break-words">{item.content}</p>
-                    <div className="flex items-center justify-between mt-3 text-[13px] text-muted">
-                      <span className="flex items-center gap-1.5">
-                        <ThumbsUp size={16} />
-                        <span>{item.likeCount}</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <MessageCircle size={16} />
-                        <span>{item.replyCount}</span>
-                      </span>
-                      {selectedList.isOwner && (
-                        <button
-                          onClick={(e) => { e.stopPropagation(); removeItem(selectedList.id, item.commentId); }}
-                          className="text-muted hover:text-red-500 transition-colors flex items-center gap-1"
-                        >
-                          <Trash2 size={14} />
-                          削除
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))
-          ) : (
-            <div className="p-12 text-center text-muted">
-              <List size={32} className="mx-auto mb-3 opacity-50" />
-              <p>リストが空です</p>
+        <>
+          {isEditing && (
+            <div className="px-4 py-3 border-b border-border space-y-2 bg-primary/5">
+              <input
+                type="text"
+                placeholder="説明"
+                value={editDesc}
+                onChange={(e) => setEditDesc(e.target.value)}
+                className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary text-sm"
+              />
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" checked={editPublic} onChange={(e) => setEditPublic(e.target.checked)} className="rounded" />
+                <Globe size={14} />
+                公開リストにする
+              </label>
             </div>
           )}
-        </div>
+
+          {/* Bulk select bar */}
+          {selectedList.isOwner && selectedList.items && selectedList.items.length > 0 && (
+            <div className="flex items-center gap-3 px-4 py-2 border-b border-border">
+              <button onClick={() => setIsBulkMode(!isBulkMode)} className={`text-sm font-medium transition-colors ${isBulkMode ? "text-primary" : "text-muted"}`}>
+                {isBulkMode ? "完了" : "編集"}
+              </button>
+              {isBulkMode && (
+                <>
+                  <button onClick={selectAllItems} className="text-sm text-muted hover:text-foreground transition-colors">
+                    全選択
+                  </button>
+                  {selectedItemIds.size > 0 && (
+                    <button onClick={bulkRemoveItems} className="ml-auto text-sm text-red-500 hover:text-red-400 transition-colors">
+                      {selectedItemIds.size}件削除
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          <div className="divide-y divide-border">
+            {selectedList.items && selectedList.items.length > 0 ? (
+              selectedList.items.map((item) => (
+                <article
+                  key={item.id}
+                  className={`px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer ${selectedItemIds.has(item.commentId) ? "bg-primary/5" : ""}`}
+                  onClick={() => {
+                    if (isBulkMode) toggleItemSelect(item.commentId);
+                    else router.push(`/thread/${item.commentId}`);
+                  }}
+                >
+                  <div className="flex gap-3">
+                    {isBulkMode && (
+                      <div className="shrink-0 flex items-start pt-2" onClick={(e) => e.stopPropagation()}>
+                        <button onClick={() => toggleItemSelect(item.commentId)} className="text-muted hover:text-primary transition-colors">
+                          {selectedItemIds.has(item.commentId) ? <CheckSquare size={20} /> : <Square size={20} />}
+                        </button>
+                      </div>
+                    )}
+                    <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                      {item.authorThumb ? (
+                        <img src={item.authorThumb} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                          <User size={20} className="text-muted" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-bold text-[15px] truncate">{item.authorName}</span>
+                        <span className="text-muted text-[15px]">·</span>
+                        <span className="text-muted text-[15px] shrink-0">{item.publishedTime}</span>
+                      </div>
+                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed break-words">{item.content}</p>
+                      <div className="flex items-center justify-between mt-3 text-[13px] text-muted">
+                        <span className="flex items-center gap-1.5">
+                          <ThumbsUp size={16} />
+                          <span>{item.likeCount}</span>
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <MessageCircle size={16} />
+                          <span>{item.replyCount}</span>
+                        </span>
+                        {!isBulkMode && selectedList.isOwner && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); removeItem(selectedList.id, item.commentId); }}
+                            className="text-muted hover:text-red-500 transition-colors flex items-center gap-1"
+                          >
+                            <Trash2 size={14} />
+                            削除
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div className="p-12 text-center text-muted">
+                <List size={32} className="mx-auto mb-3 opacity-50" />
+                <p>リストが空です</p>
+              </div>
+            )}
+          </div>
+        </>
       ) : (
         <div className="p-4">
           {!user ? (
@@ -329,7 +471,7 @@ export default function ListsPage() {
                           </p>
                         </div>
                         {list.isOwner ? (
-                          <button onClick={(e) => { e.stopPropagation(); deleteList(list.id); }} className="p-2 rounded-full hover:bg-red-500/10 text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button onClick={(e) => { e.stopPropagation(); promptDeleteList(list.id); }} className="p-2 rounded-full hover:bg-red-500/10 text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Trash2 size={18} />
                           </button>
                         ) : (
@@ -349,6 +491,16 @@ export default function ListsPage() {
           )}
         </div>
       )}
+
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        title="リストを削除しますか？"
+        message="この操作は取り消せません。リスト内のすべてのアイテムが削除されます。"
+        confirmLabel="削除"
+        confirmVariant="danger"
+        onConfirm={confirmDeleteList}
+        onCancel={() => { setShowDeleteConfirm(false); setDeleteTargetId(null); }}
+      />
     </MainLayout>
   );
 }

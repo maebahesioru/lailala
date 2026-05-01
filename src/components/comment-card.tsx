@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark, User, MoreHorizontal } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark, User } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,8 @@ import Link from "next/link";
 import { MentionText } from "./mention-text";
 import { LoginPopup } from "./login-popup";
 import { ShareMenu } from "./share-menu";
+import { TweetMoreMenu } from "./tweet-more-menu";
+import { ConfirmDialog } from "./confirm-dialog";
 
 interface CommentCardProps {
   thread: CommentThread;
@@ -30,6 +32,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   const [bookmarked, setBookmarked] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [isOwnComment, setIsOwnComment] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -81,7 +84,6 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
 
   const handleDelete = async () => {
     if (!user) return;
-    if (!confirm("このコメントを削除しますか？")) return;
     try {
       await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${thread.comment.commentId}`, { method: "DELETE" });
       onDelete?.(thread.comment.commentId);
@@ -162,28 +164,30 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                 )}
               </div>
 
-              {/* Top-right more menu - delete only */}
-              {isOwnComment && (
-                <div className="relative shrink-0" ref={moreRef}>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setShowMore(!showMore); }}
-                    className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
-                  >
-                    <MoreHorizontal size={18} />
-                  </button>
-                  {showMore && (
-                    <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden w-48 z-20">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleDelete(); setShowMore(false); }}
-                        className="flex items-center gap-3 w-full px-4 py-2 hover:bg-white/5 text-left text-[14px] text-red-500"
-                      >
-                        <Trash2 size={16} />
-                        <span>削除</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
+              {/* Top-right more menu */}
+              <div className="flex items-center gap-1 shrink-0">
+                <TweetMoreMenu
+                  commentId={thread.comment.commentId}
+                  videoId={videoId}
+                  authorName={thread.comment.author.name}
+                  authorThumb={thread.comment.author.thumbnail}
+                  content={thread.comment.content}
+                  likeCount={thread.comment.likeCount}
+                  replyCount={thread.comment.replyCount}
+                  publishedTime={thread.comment.publishedTime}
+                  authorChannelId={thread.comment.author.channelId}
+                />
+                {isOwnComment && (
+                  <div className="relative shrink-0" ref={moreRef}>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setShowDeleteConfirm(true); }}
+                      className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center justify-between mt-3">
@@ -232,6 +236,15 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
         </div>
       </article>
       <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        title="コメントを削除しますか？"
+        message="この操作は取り消せません。"
+        confirmLabel="削除"
+        confirmVariant="danger"
+        onConfirm={() => { handleDelete(); setShowDeleteConfirm(false); }}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </>
   );
 }
