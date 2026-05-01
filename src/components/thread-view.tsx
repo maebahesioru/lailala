@@ -144,7 +144,7 @@ export function ThreadView({
 
       <Composer videoId={videoId} onPosted={handleReload} />
 
-      <div className="divide-y divide-[#2f3336]">
+      <div className="divide-y divide-[#2f3336] border-b border-[#2f3336]">
         {replies.map((reply) => (
           <NestedReply
             key={reply.commentId}
