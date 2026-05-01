@@ -30,6 +30,16 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
+
+    // Folder move only: no videoId means updating existing bookmark
+    if (body.folderId !== undefined && body.videoId === undefined) {
+      await prisma.bookmark.updateMany({
+        where: { userId, commentId: body.commentId },
+        data: { folderId: body.folderId || null },
+      });
+      return NextResponse.json({ action: "moved" });
+    }
+
     const bookmark = await prisma.bookmark.upsert({
       where: {
         userId_commentId: {
@@ -55,6 +65,7 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ bookmark, action: "added" });
   } catch (e: any) {
+    console.error("[Bookmarks POST]", e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

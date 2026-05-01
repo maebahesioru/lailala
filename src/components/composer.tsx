@@ -24,8 +24,13 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("");
   const [scheduledList, setScheduledList] = useState<ScheduledPost[]>([]);
+  const [mounted, setMounted] = useState(false);
   const emojiRef = useRef<HTMLDivElement>(null);
   const scheduleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const loadScheduled = async () => {
     try {
@@ -110,7 +115,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     } catch {}
   };
 
-  if (!user) {
+  if (!mounted || !user) {
     return (
       <div className="px-4 py-6 border-b border-[#2f3336] text-center text-[#71767b]">
         コメントするにはログインしてください

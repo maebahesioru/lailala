@@ -37,7 +37,15 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ lists });
+    const follows = await prisma.listFollow.findMany({
+      where: { userId },
+      select: { listId: true },
+    });
+    const followSet = new Set(follows.map((f) => f.listId));
+
+    return NextResponse.json({
+      lists: lists.map((l) => ({ ...l, isFollowing: followSet.has(l.id) })),
+    });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

@@ -50,6 +50,9 @@ export async function GET(req: NextRequest) {
 
     const lists = await prisma.list.findMany({
       where: { userId },
+      include: {
+        _count: { select: { items: true, followers: true } },
+      },
       orderBy: { updatedAt: "desc" },
     });
     return NextResponse.json({ lists });

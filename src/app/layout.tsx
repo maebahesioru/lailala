@@ -95,11 +95,13 @@ export default function RootLayout({
       <head />
       <body className={`${inter.className} min-h-screen antialiased`}>
         <script
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `(function(){var t=localStorage.getItem('lailala-theme');if(t&&['light','dark-blue','black'].includes(t))document.documentElement.setAttribute('data-theme',t)})();`,
           }}
         />
         <script
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').then(function(reg){reg.addEventListener('updatefound',function(){var newWorker=reg.installing;newWorker.addEventListener('statechange',function(){if(newWorker.state==='activated'){window.location.reload()}})});setInterval(function(){reg.update()},3600000)})})}`,
           }}

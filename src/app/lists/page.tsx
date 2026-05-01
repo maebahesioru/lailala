@@ -155,6 +155,7 @@ function ListsPageInner() {
 
   const openList = async (list: UserList) => {
     await openListById(list.id);
+    router.push(`/lists?id=${list.id}`);
   };
 
   const removeItem = async (listId: string, commentId: string) => {
@@ -204,7 +205,13 @@ function ListsPageInner() {
         await fetch("/api/lists/follow", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ listId }) });
       }
       setFollowedLists((prev) =>
-        currentlyFollowing ? prev.filter((l) => l.id !== listId) : [...prev, publicLists.find((l) => l.id === listId)!].filter(Boolean)
+        currentlyFollowing ? prev.filter((l) => l.id !== listId) : [...prev, publicLists.find((l) => l.id === listId)! || containingMe.find((l) => l.id === listId)!].filter(Boolean)
+      );
+      setPublicLists((prev) =>
+        prev.map((l) => (l.id === listId ? { ...l, isFollowing: !currentlyFollowing } : l))
+      );
+      setContainingMe((prev) =>
+        prev.map((l) => (l.id === listId ? { ...l, isFollowing: !currentlyFollowing } : l))
       );
       if (selectedList?.id === listId) {
         setSelectedList((prev) => prev ? { ...prev, isFollowing: !currentlyFollowing } : null);
