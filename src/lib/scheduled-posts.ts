@@ -1,5 +1,4 @@
 import { prisma } from "./prisma";
-import { getInnertubeWithAuth } from "./youtube";
 
 let started = false;
 
@@ -22,6 +21,8 @@ export function startScheduledPostWorker() {
 
       for (const post of due) {
         try {
+          // Lazy import to avoid bundling youtubei.js at startup
+          const { getInnertubeWithAuth } = await import("./youtube");
           const innertube = await getInnertubeWithAuth(post.userId);
           await innertube.comment(post.videoId, post.text);
           await prisma.scheduledPost.update({
@@ -31,8 +32,6 @@ export function startScheduledPostWorker() {
           console.log(`[ScheduledPost] Posted ${post.id} for video ${post.videoId}`);
         } catch (e: any) {
           console.error(`[ScheduledPost] Failed to post ${post.id}:`, e.message);
-          // 失敗してもposted=trueにしない（リトライの可能性を残す）
-          // ただし無限ループを防ぐため、一定回数リトライ後に諦める機能が必要な場合がある
         }
       }
     } catch (e: any) {
