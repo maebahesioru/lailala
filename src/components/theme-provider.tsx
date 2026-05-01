@@ -19,7 +19,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("ytx-theme") as Theme | null;
+    const saved = localStorage.getItem("lailala-theme") as Theme | null;
     if (saved && ["light", "dark", "dark-blue"].includes(saved)) {
       setThemeState(saved);
       document.documentElement.setAttribute("data-theme", saved);
@@ -31,7 +31,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setTheme = (t: Theme) => {
     setThemeState(t);
-    localStorage.setItem("ytx-theme", t);
+    localStorage.setItem("lailala-theme", t);
     document.documentElement.setAttribute("data-theme", t);
   };
 
