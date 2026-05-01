@@ -66,6 +66,9 @@ function ListsPageInner() {
   const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
   const [isBulkMode, setIsBulkMode] = useState(false);
 
+  // Edit modal
+  const [showEditModal, setShowEditModal] = useState(false);
+
   useEffect(() => {
     if (!user) { setLoading(false); return; }
     loadAll();
@@ -287,22 +290,48 @@ function ListsPageInner() {
 
       {selectedList ? (
         <>
-          {isEditing && (
-            <div className="px-4 py-3 border-b border-border space-y-2 bg-primary/5">
-              <input
-                type="text"
-                placeholder="説明"
-                value={editDesc}
-                onChange={(e) => setEditDesc(e.target.value)}
-                className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary text-sm"
-              />
-              <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={editPublic} onChange={(e) => setEditPublic(e.target.checked)} className="rounded" />
-                <Globe size={14} />
-                公開リストにする
-              </label>
+          {/* Banner header */}
+          <div className="relative">
+            <div className="h-32 bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center">
+              <List size={48} className="text-primary/40" />
             </div>
-          )}
+            <div className="px-4 pb-4">
+              <div className="flex items-end justify-between -mt-6 mb-3">
+                <div className="w-16 h-16 rounded-full bg-background border-4 border-background flex items-center justify-center">
+                  <List size={28} className="text-primary" />
+                </div>
+                {selectedList.isOwner && (
+                  <button
+                    onClick={() => setShowEditModal(true)}
+                    className="px-4 py-1.5 rounded-full border border-border text-sm font-bold hover:bg-white/5 transition-colors mb-1"
+                  >
+                    リストを編集
+                  </button>
+                )}
+                {!selectedList.isOwner && (
+                  <button
+                    onClick={() => toggleFollow(selectedList.id, !!selectedList.isFollowing)}
+                    className={`px-4 py-1.5 rounded-full text-sm font-bold transition-colors mb-1 ${selectedList.isFollowing ? "border border-border hover:border-red-500 hover:text-red-500" : "bg-primary text-white hover:bg-primary-hover"}`}
+                  >
+                    {selectedList.isFollowing ? "フォロー中" : "フォロー"}
+                  </button>
+                )}
+              </div>
+              <h2 className="text-xl font-bold">{selectedList.name}</h2>
+              <div className="flex items-center gap-2 mt-1 text-[13px] text-muted">
+                <span className="flex items-center gap-1">
+                  <User size={14} />
+                  {selectedList.user?.name || "ユーザー"}
+                </span>
+                <span>·</span>
+                <span>{selectedList._count?.items || selectedList.items?.length || 0} 件</span>
+                <span>·</span>
+                <span>{selectedList._count?.followers || 0} フォロワー</span>
+                <span>·</span>
+                <span>{selectedList.isPublic ? <Globe size={12} className="inline" /> : <Lock size={12} className="inline" />}</span>
+              </div>
+            </div>
+          </div>
 
           {/* Bulk select bar */}
           {selectedList.isOwner && selectedList.items && selectedList.items.length > 0 && (
@@ -381,11 +410,70 @@ function ListsPageInner() {
               })
             ) : (
               <div className="p-12 text-center text-muted">
-                <List size={32} className="mx-auto mb-3 opacity-50" />
-                <p>リストが空です</p>
+                <h3 className="text-2xl font-bold mb-2">ポストはまだありません</h3>
+                <p className="text-[13px]">このリストのユーザーによるポストがここに表示されます。</p>
               </div>
             )}
           </div>
+
+          {/* Edit Modal */}
+          {showEditModal && selectedList.isOwner && (
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-20 md:pt-24" onClick={() => setShowEditModal(false)}>
+              <div className="bg-card border border-border rounded-2xl w-full max-w-lg mx-4 shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                  <button onClick={() => setShowEditModal(false)} className="p-2 rounded-full hover:bg-white/10 text-muted">
+                    <X size={20} />
+                  </button>
+                  <h3 className="font-bold">リストを編集</h3>
+                  <button onClick={() => { saveEdit(); setShowEditModal(false); }} className="px-4 py-1.5 bg-primary text-white rounded-full text-sm font-bold hover:bg-primary-hover">
+                    完了
+                  </button>
+                </div>
+                <div className="p-4 space-y-4">
+                  {/* Banner preview */}
+                  <div className="h-24 bg-gradient-to-br from-primary/30 to-primary/10 rounded-xl flex items-center justify-center relative">
+                    <List size={32} className="text-primary/40" />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] text-muted mb-1">名前</label>
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] text-muted mb-1">詳細</label>
+                    <textarea
+                      value={editDesc}
+                      onChange={(e) => setEditDesc(e.target.value)}
+                      rows={3}
+                      className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary text-sm resize-none"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between py-2 border-t border-border">
+                    <div>
+                      <p className="text-sm font-medium">非公開にする</p>
+                      <p className="text-[12px] text-muted">リストを非公開にすると、他のアカウントが表示できなくなります。</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={!editPublic}
+                      onChange={(e) => setEditPublic(!e.target.checked)}
+                      className="w-5 h-5 rounded"
+                    />
+                  </div>
+                  <button
+                    onClick={() => { setShowEditModal(false); promptDeleteList(selectedList.id); }}
+                    className="w-full py-3 text-red-500 text-sm font-medium hover:bg-red-500/5 rounded-lg transition-colors"
+                  >
+                    リストを削除
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <div className="p-4">

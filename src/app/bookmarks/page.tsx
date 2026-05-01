@@ -11,6 +11,7 @@ import Link from "next/link";
 import { ShareMenu } from "@/components/share-menu";
 import { LoginPopup } from "@/components/login-popup";
 import { MentionText } from "@/components/mention-text";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { stripHandlePrefix, stripEditedTag, localizeTime } from "@/lib/i18n";
 
 interface BookmarkItem {
@@ -43,6 +44,7 @@ export default function BookmarksPage() {
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
+  const [folderDeleteTarget, setFolderDeleteTarget] = useState<string | null>(null);
 
   // Multi-select
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<Set<string>>(new Set());
@@ -84,12 +86,17 @@ export default function BookmarksPage() {
   };
 
   const deleteFolder = async (id: string) => {
-    if (!confirm("このフォルダを削除しますか？（ブックマークは未分類に移動します）")) return;
+    setFolderDeleteTarget(id);
+  };
+
+  const confirmDeleteFolder = async () => {
+    if (!folderDeleteTarget) return;
     try {
-      await fetch(`/api/bookmarks/folders?folderId=${id}`, { method: "DELETE" });
-      setFolders((prev) => prev.filter((f) => f.id !== id));
-      if (selectedFolder === id) setSelectedFolder(null);
+      await fetch(`/api/bookmarks/folders?folderId=${folderDeleteTarget}`, { method: "DELETE" });
+      setFolders((prev) => prev.filter((f) => f.id !== folderDeleteTarget));
+      if (selectedFolder === folderDeleteTarget) setSelectedFolder(null);
     } catch {}
+    setFolderDeleteTarget(null);
   };
 
   const moveBookmark = async (commentId: string, folderId: string | null) => {
@@ -315,6 +322,15 @@ export default function BookmarksPage() {
         )}
       </div>
       <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
+      <ConfirmDialog
+        open={!!folderDeleteTarget}
+        title="フォルダを削除しますか？"
+        message="このフォルダを削除しても、ブックマーク自体は未分類に移動します。"
+        confirmLabel="削除"
+        confirmVariant="danger"
+        onConfirm={confirmDeleteFolder}
+        onCancel={() => setFolderDeleteTarget(null)}
+      />
     </MainLayout>
   );
 }
