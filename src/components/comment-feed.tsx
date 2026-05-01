@@ -32,8 +32,10 @@ export function CommentFeed({ videoId }: { videoId: string }) {
 
   const [followedLists, setFollowedLists] = useState<FollowedList[]>([]);
   const [activeListId, setActiveListId] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     fetch("/api/lists/follow")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
@@ -211,15 +213,18 @@ export function CommentFeed({ videoId }: { videoId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoId, sortBy]);
 
-  const tabs = [
+  const baseTabs = [
     { id: "top", label: "人気", onClick: () => { setActiveListId(null); setSortBy("TOP_COMMENTS"); } },
     { id: "new", label: "新着", onClick: () => { setActiveListId(null); setSortBy("NEWEST_FIRST"); } },
-    ...followedLists.map((list) => ({
-      id: list.id,
-      label: list.name,
-      onClick: () => setActiveListId(list.id),
-    })),
   ];
+  const listTabs = mounted
+    ? followedLists.map((list) => ({
+        id: list.id,
+        label: list.name,
+        onClick: () => setActiveListId(list.id),
+      }))
+    : [];
+  const tabs = [...baseTabs, ...listTabs];
 
   const activeTabId = activeListId || (sortBy === "TOP_COMMENTS" ? "top" : "new");
 
