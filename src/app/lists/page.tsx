@@ -91,7 +91,7 @@ function ListsPageInner() {
       ]);
       setLists(mine.lists || []);
       setPublicLists(pub.lists || []);
-      setFollowedLists(follows.follows || []);
+      setFollowedLists((follows.follows || []).map((l: any) => ({ ...l, isFollowing: true })));
       setContainingMe(me.lists || []);
     } catch {}
     setLoading(false);
@@ -212,7 +212,7 @@ function ListsPageInner() {
       setFollowedLists((prev) =>
         currentlyFollowing
           ? prev.filter((l) => l.id !== listId)
-          : [...prev, (publicLists.find((l) => l.id === listId) || containingMe.find((l) => l.id === listId) || selectedList) as UserList].filter((l): l is UserList => !!l && l.id === listId)
+          : [...prev, { ...(publicLists.find((l) => l.id === listId) || containingMe.find((l) => l.id === listId) || selectedList || {}), isFollowing: true } as UserList].filter((l): l is UserList => !!l && l.id === listId)
       );
       setPublicLists((prev) =>
         prev.map((l) => (l.id === listId ? { ...l, isFollowing: !currentlyFollowing } : l))
@@ -259,7 +259,13 @@ function ListsPageInner() {
                 </div>
                 {selectedList.isOwner && (
                   <>
-                    <button onClick={() => setIsEditing(true)} className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted">
+                    <button
+                      onClick={() => toggleFollow(selectedList.id, !!selectedList.isFollowing)}
+                      className={`px-4 py-1.5 rounded-full text-sm font-bold transition-colors ${selectedList.isFollowing ? "border border-border hover:border-red-500 hover:text-red-500" : "bg-primary text-white hover:bg-primary-hover"}`}
+                    >
+                      {selectedList.isFollowing ? "フォロー中" : "フォロー"}
+                    </button>
+                    <button onClick={() => setShowEditModal(true)} className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted">
                       <Pencil size={18} />
                     </button>
                     <button onClick={() => promptDeleteList(selectedList.id)} className="p-2 rounded-full hover:bg-red-500/10 text-muted hover:text-red-500 transition-colors">

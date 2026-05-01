@@ -33,11 +33,11 @@ export async function GET(req: NextRequest) {
       }
       // Only owner or public lists are viewable
       const isOwner = list.userId === userId;
-      const isFollowing = userId
+      const isFollowing = isOwner || (userId
         ? !!(await prisma.listFollow.findUnique({
             where: { userId_listId: { userId, listId } },
           }))
-        : false;
+        : false);
       if (!isOwner && !list.isPublic) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
       },
       orderBy: { updatedAt: "desc" },
     });
-    return NextResponse.json({ lists });
+    return NextResponse.json({ lists: lists.map((l) => ({ ...l, isFollowing: true })) });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
@@ -78,6 +78,10 @@ export async function POST(req: NextRequest) {
           isPublic: body.isPublic === true,
         },
       });
+      // Owner automatically follows their own list
+      await prisma.listFollow.create({
+        data: { userId, listId: list.id },
+      }).catch(() => {});
       return NextResponse.json({ list });
     }
 
