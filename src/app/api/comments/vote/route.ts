@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getInnertube } from "@/lib/youtube";
+import { getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
   const { videoId, commentId, action } = parsed.data;
 
   try {
-    const innertube = await getInnertube(session.user.id);
+    const innertube = await getInnertubeWithAuth(session.user.id);
     const comments = await innertube.getComments(videoId, "TOP_COMMENTS", commentId);
 
     let targetComment: any = null;

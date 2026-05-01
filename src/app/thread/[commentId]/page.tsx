@@ -34,7 +34,7 @@ export default async function ThreadPage({ params }: PageProps) {
   const videoId = "niKAylKNIEI";
 
   const session = await auth();
-  const innertube = await getInnertube(session?.user?.id);
+  const innertube = await getInnertube();
   const info = await innertube.getInfo(videoId);
   const channelId = info.basic_info.channel_id;
 

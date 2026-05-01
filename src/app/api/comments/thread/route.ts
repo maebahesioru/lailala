@@ -41,8 +41,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const session = await auth();
-    const innertube = await getInnertube(session?.user?.id);
+    const innertube = await getInnertube();
 
     // If continuationToken is provided, fetch next batch directly
     if (continuationToken) {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getInnertube } from "@/lib/youtube";
+import { getInnertube, getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
   const { videoId, text } = parsed.data;
 
   try {
-    const innertube = await getInnertube(session.user.id);
+    const innertube = await getInnertubeWithAuth(session.user.id);
     const response = await innertube.interact.comment(videoId, text);
 
     await prisma.userAction.create({

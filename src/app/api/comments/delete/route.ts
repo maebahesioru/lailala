@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getInnertube } from "@/lib/youtube";
+import { getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
@@ -33,7 +33,7 @@ export async function DELETE(req: NextRequest) {
   const { videoId, commentId } = parsed.data;
 
   try {
-    const innertube = await getInnertube(session.user.id);
+    const innertube = await getInnertubeWithAuth(session.user.id);
 
     // Delete via direct innerTube action payload
     // This is a best-effort implementation based on common InnerTube patterns.

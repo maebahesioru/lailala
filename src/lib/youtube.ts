@@ -2,7 +2,21 @@ import { Innertube, UniversalCache } from "youtubei.js";
 import { prisma } from "./prisma";
 import { decrypt } from "./crypto";
 
-export async function getInnertube(credentialId?: string) {
+/**
+ * 閲覧用: 認証不要。CookieなしでInnertubeインスタンスを作成。
+ */
+export async function getInnertube() {
+  const innertube = await Innertube.create({
+    cache: new UniversalCache(false),
+  });
+  return innertube;
+}
+
+/**
+ * 書き込み操作用: 認証が必要。
+ * ユーザーのCredential → 管理者Cookie（env）→ DB内のCookie の順で探す。
+ */
+export async function getInnertubeWithAuth(credentialId?: string) {
   let cookie: string | undefined;
 
   // 1. 指定されたユーザーの認証情報

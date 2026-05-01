@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
 
     const contents: string[] = [];
     let batchCount = 0;
-    const maxBatches = 10; // Fetch up to 10 batches for better accuracy
+    const maxBatches = 20; // Fetch up to 20 batches for better accuracy
 
     while (batchCount < maxBatches) {
       for (const thread of comments.contents) {
