@@ -88,6 +88,20 @@ export function CommentFeed({ videoId }: { videoId: string }) {
     loadInitial();
   }, [videoId, sortBy, loadInitial]);
 
+  // Listen for scroll-to-top event from sidebar home button
+  useEffect(() => {
+    const handleScrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (sortBy !== "TOP_COMMENTS") {
+        setSortBy("TOP_COMMENTS");
+      } else {
+        loadInitial();
+      }
+    };
+    window.addEventListener("lailala:scrollToTop", handleScrollToTop);
+    return () => window.removeEventListener("lailala:scrollToTop", handleScrollToTop);
+  }, [sortBy, loadInitial]);
+
   // Fix back button bug
   useEffect(() => {
     const handlePageShow = (e: PageTransitionEvent) => {
@@ -217,10 +231,11 @@ export function CommentFeed({ videoId }: { videoId: string }) {
       <button
         onClick={() => loadInitial()}
         disabled={loading}
-        className="fixed bottom-6 right-6 z-50 p-3 bg-primary text-white rounded-full shadow-lg hover:bg-primary-hover transition-colors disabled:opacity-50"
+        className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 p-3 bg-primary text-white rounded-full shadow-lg hover:bg-primary-hover transition-colors disabled:opacity-50"
         title="更新"
+        aria-label="コメントを更新"
       >
-        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+        <RefreshCw size={20} className={loading ? "animate-spin" : ""} aria-hidden="true" />
       </button>
     </div>
   );

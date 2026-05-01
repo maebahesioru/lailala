@@ -3,12 +3,14 @@
 import { Home, Search, User, Settings, LogOut, Bookmark, List } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LoginPopup } from "./login-popup";
 import { useAuth } from "./auth-provider";
 
 export function Sidebar() {
   const { user } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
+  const pathname = usePathname();
 
   const handleProtectedClick = (e: React.MouseEvent) => {
     if (!user) {
@@ -22,27 +24,38 @@ export function Sidebar() {
     window.location.reload();
   };
 
+  const handleHomeClick = (e: React.MouseEvent) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      // Also reload feed by dispatching a custom event that CommentFeed can listen to
+      window.dispatchEvent(new CustomEvent("lailala:scrollToTop"));
+    }
+  };
+
   const navItems = [
-    { icon: Home, label: "ホーム", href: "/" },
+    { icon: Home, label: "ホーム", href: "/", onClick: handleHomeClick },
     { icon: Search, label: "検索", href: "/search" },
   ];
 
   return (
     <>
-      <aside className="w-[275px] hidden md:flex flex-col sticky top-0 h-screen px-4 py-4">
+      <aside className="w-[275px] hidden md:flex flex-col sticky top-0 h-screen px-4 py-4" aria-label="メインナビゲーション">
         <div className="mb-6 px-3">
-          <Link href="/" className="text-2xl font-bold text-foreground tracking-tight">
+          <Link href="/" className="text-2xl font-bold text-foreground tracking-tight" aria-label="ライララ(仮) ホーム">
             ライララ(仮)
           </Link>
         </div>
-        <nav className="space-y-2 flex-1">
+        <nav className="space-y-2 flex-1" role="navigation" aria-label="サイドバーメニュー">
           {navItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
+              onClick={item.onClick}
               className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
+              aria-label={item.label}
             >
-              <item.icon size={26} />
+              <item.icon size={26} aria-hidden="true" />
               <span className="font-medium">{item.label}</span>
             </Link>
           ))}
@@ -50,31 +63,35 @@ export function Sidebar() {
             href={user ? "/bookmarks" : "/"}
             onClick={(e) => handleProtectedClick(e)}
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
+            aria-label="ブックマーク"
           >
-            <Bookmark size={26} />
+            <Bookmark size={26} aria-hidden="true" />
             <span className="font-medium">ブックマーク</span>
           </Link>
           <Link
             href={user ? "/lists" : "/"}
             onClick={(e) => handleProtectedClick(e)}
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
+            aria-label="リスト"
           >
-            <List size={26} />
+            <List size={26} aria-hidden="true" />
             <span className="font-medium">リスト</span>
           </Link>
           <Link
             href={user ? "/profile" : "/"}
             onClick={(e) => handleProtectedClick(e)}
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
+            aria-label="プロフィール"
           >
-            <User size={26} />
+            <User size={26} aria-hidden="true" />
             <span className="font-medium">プロフィール</span>
           </Link>
           <Link
             href="/settings"
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
+            aria-label="設定"
           >
-            <Settings size={26} />
+            <Settings size={26} aria-hidden="true" />
             <span className="font-medium">設定</span>
           </Link>
         </nav>

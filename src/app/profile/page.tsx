@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { MainLayout } from "@/components/main-layout";
 import { ArrowLeft, User, MessageSquare, Heart, ThumbsDown, Trash2 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "マイプロフィール",
+  description: "あなたのアクティビティと設定",
+};
 
 export default async function MyProfilePage() {
   const userId = await getSessionUserId();
@@ -41,6 +48,7 @@ export default async function MyProfilePage() {
   };
 
   return (
+    <MainLayout>
     <div className="min-h-screen">
       <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-[#2f3336] px-4 py-3 flex items-center gap-3">
         <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
@@ -100,5 +108,6 @@ export default async function MyProfilePage() {
         )}
       </div>
     </div>
+    </MainLayout>
   );
 }

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSessionUserId } from "@/lib/session";
 import { getInnertube } from "@/lib/youtube";
@@ -5,6 +6,33 @@ import { prisma } from "@/lib/prisma";
 import { MainLayout } from "@/components/main-layout";
 import { ThreadView } from "@/components/thread-view";
 import { buildReplyTree } from "@/lib/reply-tree";
+
+export async function generateMetadata({ params }: { params: Promise<{ commentId: string[] }> }): Promise<Metadata> {
+  const segments = await params;
+  const commentId = segments.commentId.join("/");
+  const videoId = "niKAylKNIEI";
+
+  try {
+    const innertube = await getInnertube();
+    const comments = await innertube.getComments(videoId, "TOP_COMMENTS", commentId);
+    const thread = comments.contents.find((t: any) => t.comment?.comment_id === commentId);
+    if (thread) {
+      const content = thread.comment?.content?.text || "";
+      const author = typeof thread.comment?.author?.name === "string"
+        ? thread.comment.author.name
+        : thread.comment?.author?.name?.text || "Unknown";
+      return {
+        title: `${author}さんのコメント`,
+        description: content.slice(0, 120),
+      };
+    }
+  } catch {}
+
+  return {
+    title: "スレッド",
+    description: "コメントスレッド",
+  };
+}
 
 const parseReply = (r: any) => ({
   commentId: r.comment_id,

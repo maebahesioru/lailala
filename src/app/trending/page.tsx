@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { MainLayout } from "@/components/main-layout";
 import { CommentCard } from "@/components/comment-card";
 import { RefreshTrends } from "@/components/refresh-trends";
 import { prisma } from "@/lib/prisma";
 import { Flame } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "トレンド",
+  description: "人気の高いYouTubeコメントをランキング形式でチェック。",
+};
 
 export const dynamic = "force-dynamic";
 

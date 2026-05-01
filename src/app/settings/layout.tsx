@@ -1,0 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "設定",
+  description: "テーマやアカウント設定",
+};
+
+export default function SettingsLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
+}

@@ -32,7 +32,7 @@ export default function SettingsPage() {
         {/* Theme Settings */}
         <div className="bg-card rounded-2xl border border-border p-4">
           <h2 className="text-lg font-bold mb-4">テーマ</h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {themes.map((t) => (
               <button
                 key={t.id}
