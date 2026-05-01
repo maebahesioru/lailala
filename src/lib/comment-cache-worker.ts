@@ -3,11 +3,11 @@ import { prisma } from "./prisma";
 let started = false;
 
 const VIDEO_ID = "niKAylKNIEI";
-const INTERVAL_MS = 10 * 60 * 1000; // 10分ごと
-const MAX_PER_RUN = 3000;
+const INTERVAL_MS = 5 * 60 * 1000; // 5分ごと
+const MAX_PER_RUN = 10000;
 
 function parsePublishedTime(text: string): Date | null {
-  if (!text) return null;
+  if (!text || text.trim() === "") return null;
   const now = new Date();
   const match = text.match(/(\d+)\s*(year|month|week|day|hour|minute|second)s?\s*ago/);
   if (!match) return now;
