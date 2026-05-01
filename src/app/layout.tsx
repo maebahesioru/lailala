@@ -100,7 +100,7 @@ export default function RootLayout({
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'))}`,
+            __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').then(function(reg){reg.addEventListener('updatefound',function(){var newWorker=reg.installing;newWorker.addEventListener('statechange',function(){if(newWorker.state==='activated'){window.location.reload()}})});setInterval(function(){reg.update()},3600000)})})}`,
           }}
         />
       </head>

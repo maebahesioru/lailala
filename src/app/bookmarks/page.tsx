@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import {
-  ArrowLeft, Bookmark, Loader2, User, ThumbsUp, ThumbsDown, MessageCircle, Plus, Trash2, FolderOpen
+  ArrowLeft, Bookmark, Loader2, User, ThumbsUp, ThumbsDown, MessageCircle, Plus, Trash2, FolderOpen, CheckSquare, Square
 } from "lucide-react";
 import Link from "next/link";
 import { ShareMenu } from "@/components/share-menu";
@@ -16,6 +16,7 @@ import { stripHandlePrefix, stripEditedTag, localizeTime } from "@/lib/i18n";
 interface BookmarkItem {
   id: string;
   commentId: string;
+  folderId: string | null;
   videoId: string;
   authorName: string;
   authorThumb: string | null;
@@ -42,6 +43,10 @@ export default function BookmarksPage() {
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
+
+  // Multi-select
+  const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<Set<string>>(new Set());
+  const [bulkFolderId, setBulkFolderId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) { setLoading(false); return; }
@@ -98,12 +103,46 @@ export default function BookmarksPage() {
     } catch {}
   };
 
+  const bulkMove = async () => {
+    if (selectedBookmarkIds.size === 0) return;
+    const ids = Array.from(selectedBookmarkIds);
+    for (const commentId of ids) {
+      await moveBookmark(commentId, bulkFolderId);
+    }
+    setSelectedBookmarkIds(new Set());
+    setBulkFolderId(null);
+  };
+
+  const toggleSelect = (commentId: string) => {
+    setSelectedBookmarkIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(commentId)) next.delete(commentId);
+      else next.add(commentId);
+      return next;
+    });
+  };
+
+  const selectAll = () => {
+    if (selectedBookmarkIds.size === bookmarks.length) {
+      setSelectedBookmarkIds(new Set());
+    } else {
+      setSelectedBookmarkIds(new Set(bookmarks.map((b) => b.commentId)));
+    }
+  };
+
   const removeBookmark = async (commentId: string) => {
     try {
       await fetch(`/api/bookmarks?commentId=${commentId}`, { method: "DELETE" });
       setBookmarks((prev) => prev.filter((b) => b.commentId !== commentId));
+      setSelectedBookmarkIds((prev) => {
+        const next = new Set(prev);
+        next.delete(commentId);
+        return next;
+      });
     } catch {}
   };
+
+  const isBulkMode = selectedBookmarkIds.size > 0;
 
   return (
     <MainLayout>
@@ -112,6 +151,15 @@ export default function BookmarksPage() {
           <ArrowLeft size={20} />
         </Link>
         <h1 className="text-lg font-bold">ブックマーク</h1>
+        {bookmarks.length > 0 && (
+          <button
+            onClick={selectAll}
+            className="ml-auto text-sm text-muted hover:text-foreground transition-colors flex items-center gap-1"
+          >
+            {selectedBookmarkIds.size === bookmarks.length ? <CheckSquare size={16} /> : <Square size={16} />}
+            全選択
+          </button>
+        )}
       </div>
 
       {/* Folder tabs */}
@@ -162,6 +210,37 @@ export default function BookmarksPage() {
         </div>
       )}
 
+      {/* Bulk move bar */}
+      {isBulkMode && (
+        <div className="px-4 py-3 border-b border-border flex items-center gap-3 bg-primary/5">
+          <span className="text-sm font-medium">{selectedBookmarkIds.size}件選択中</span>
+          <select
+            value={bulkFolderId || ""}
+            onChange={(e) => setBulkFolderId(e.target.value || null)}
+            className="flex-1 bg-background text-foreground text-sm border border-border rounded px-3 py-1.5 outline-none"
+          >
+            <option value="">移動先を選択</option>
+            <option value="">未分類</option>
+            {folders.map((f) => (
+              <option key={f.id} value={f.id}>{f.name}</option>
+            ))}
+          </select>
+          <button
+            onClick={bulkMove}
+            disabled={!bulkFolderId && bulkFolderId !== null}
+            className="px-4 py-1.5 bg-primary text-white rounded-full text-sm font-bold hover:bg-primary-hover disabled:opacity-50"
+          >
+            移動
+          </button>
+          <button
+            onClick={() => { setSelectedBookmarkIds(new Set()); setBulkFolderId(null); }}
+            className="px-3 py-1.5 bg-border text-foreground rounded-full text-sm font-bold hover:bg-white/10"
+          >
+            キャンセル
+          </button>
+        </div>
+      )}
+
       <div className="divide-y divide-border">
         {loading ? (
           <div className="p-8 flex justify-center">
@@ -176,11 +255,20 @@ export default function BookmarksPage() {
           bookmarks.map((b) => (
             <article
               key={b.id}
-              className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer"
-              onClick={() => router.push(`/thread/${b.commentId}`)}
+              className={`px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer ${selectedBookmarkIds.has(b.commentId) ? "bg-primary/5" : ""}`}
+              onClick={() => {
+                if (isBulkMode) toggleSelect(b.commentId);
+                else router.push(`/thread/${b.commentId}`);
+              }}
             >
               <div className="flex gap-3">
-                <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                <div className="shrink-0 flex flex-col items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    onClick={() => toggleSelect(b.commentId)}
+                    className="mt-2 text-muted hover:text-primary transition-colors"
+                  >
+                    {selectedBookmarkIds.has(b.commentId) ? <CheckSquare size={20} /> : <Square size={20} />}
+                  </button>
                   {b.authorThumb ? (
                     <img src={b.authorThumb} alt={b.authorName} className="w-10 h-10 rounded-full object-cover shrink-0" />
                   ) : (
@@ -219,12 +307,12 @@ export default function BookmarksPage() {
                     </button>
                   </div>
 
-                  {/* Move to folder */}
+                  {/* Move to folder - individual */}
                   {folders.length > 0 && (
                     <div className="flex items-center gap-2 mt-2">
                       <FolderOpen size={14} className="text-muted" />
                       <select
-                        value={selectedFolder || ""}
+                        value={b.folderId || ""}
                         onChange={(e) => moveBookmark(b.commentId, e.target.value || null)}
                         onClick={(e) => e.stopPropagation()}
                         className="bg-background text-foreground text-xs border border-border rounded px-2 py-1 outline-none"
