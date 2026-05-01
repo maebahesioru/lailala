@@ -40,49 +40,13 @@ export async function POST(_req: NextRequest) {
       return NextResponse.json({ error: "Failed to get verification code" }, { status: 500 });
     }
 
-    // Build auth promise (for polling)
-    const authPromise = new Promise<string>((resolve, reject) => {
+    // Build auth promise: just wait for credentials
+    const authPromise = new Promise<any>((resolve, reject) => {
       const timer = setTimeout(() => reject(new Error("OAuth timed out")), timeout);
 
-      innertube.session.on("auth", async ({ credentials }: any) => {
+      innertube.session.on("auth", ({ credentials }: any) => {
         clearTimeout(timer);
-        const encryptedCred = encrypt(JSON.stringify(credentials));
-
-        // Try to get account info, but never fail
-        let channelId = sessionId;
-        let name = "YouTube User";
-        let thumbnail: string | null = null;
-
-        try {
-          const items = await innertube.account.getInfo(true);
-          if (Array.isArray(items) && items.length > 0) {
-            const primary = items[0];
-            if (primary.account_name?.text) name = primary.account_name.text;
-            if (primary.account_photo?.[0]?.url) thumbnail = primary.account_photo[0].url;
-            if (primary.channel_handle?.text) channelId = primary.channel_handle.text;
-          }
-        } catch {}
-
-        const email = `yt:${channelId}`;
-
-        try {
-          let user = await prisma.user.findFirst({ where: { email } });
-          if (user) {
-            user = await prisma.user.update({ where: { id: user.id }, data: { name, image: thumbnail } });
-          } else {
-            user = await prisma.user.create({ data: { name, email, image: thumbnail } });
-          }
-
-          await prisma.ytCredential.upsert({
-            where: { userId: user.id },
-            update: { credential: encryptedCred, type: "oauth" },
-            create: { userId: user.id, credential: encryptedCred, type: "oauth" },
-          });
-
-          resolve(user.id);
-        } catch (e) {
-          reject(e);
-        }
+        resolve({ sessionId, credentials, innertube });
       });
 
       innertube.session.on("auth-error", (err: any) => {
@@ -116,13 +80,47 @@ export async function GET(req: NextRequest) {
     const timeout = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error("TIMEOUT")), 5000)
     );
-    const userId = await Promise.race([promise, timeout]);
+    const result = await Promise.race([promise, timeout]);
     oauthStates.delete(sessionId);
-    await createSession(userId);
+
+    // Auth succeeded: extract credentials and account info
+    const { credentials, innertube } = result;
+    const encryptedCred = encrypt(JSON.stringify(credentials));
+
+    let channelId = sessionId;
+    let name = "YouTube User";
+    let thumbnail: string | null = null;
+
+    try {
+      const items = await innertube.account.getInfo(true);
+      if (Array.isArray(items) && items.length > 0) {
+        const primary = items[0];
+        if (primary.account_name?.text) name = primary.account_name.text;
+        if (primary.account_photo?.[0]?.url) thumbnail = primary.account_photo[0].url;
+        if (primary.channel_handle?.text) channelId = primary.channel_handle.text;
+      }
+    } catch {}
+
+    const email = `yt:${channelId}`;
+
+    let user = await prisma.user.findFirst({ where: { email } });
+    if (user) {
+      user = await prisma.user.update({ where: { id: user.id }, data: { name, image: thumbnail } });
+    } else {
+      user = await prisma.user.create({ data: { name, email, image: thumbnail } });
+    }
+
+    await prisma.ytCredential.upsert({
+      where: { userId: user.id },
+      update: { credential: encryptedCred, type: "oauth" },
+      create: { userId: user.id, credential: encryptedCred, type: "oauth" },
+    });
+
+    await createSession(user.id);
     return NextResponse.json({ status: "complete" });
   } catch (e: any) {
     if (e.message === "TIMEOUT") return NextResponse.json({ status: "pending" });
     oauthStates.delete(sessionId);
-    return NextResponse.json({ status: "error", message: e.message }, { status: 500 });
+    return NextResponse.json({ status: "error", message: e.message || "認証に失敗しました" }, { status: 500 });
   }
 }
