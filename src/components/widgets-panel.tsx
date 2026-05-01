@@ -197,6 +197,14 @@ export function WidgetsPanel() {
           </div>
         )}
       </div>
+
+      {/* Footer links */}
+      <div className="flex flex-wrap gap-x-3 gap-y-1 px-4 text-[13px] text-muted">
+        <Link href="/terms" className="hover:underline">利用規約</Link>
+        <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
+        <Link href="/cookies" className="hover:underline">Cookieポリシー</Link>
+        <span>&copy; 2025 ライララ(仮)</span>
+      </div>
     </aside>
   );
 }
