@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, LogIn, Loader2, Check } from "lucide-react";
 
 interface LoginPopupProps {
@@ -10,11 +10,13 @@ interface LoginPopupProps {
 }
 
 export function LoginPopup({ open, onClose }: LoginPopupProps) {
-  const [step, setStep] = useState<"idle" | "starting" | "code" | "polling" | "done">("idle");
+  const [step, setStep] = useState<"idle" | "starting" | "code" | "done">("idle");
   const [verificationUrl, setVerificationUrl] = useState("");
   const [userCode, setUserCode] = useState("");
   const [sessionId, setSessionId] = useState("");
   const [error, setError] = useState("");
+  const [polling, setPolling] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startOAuth = async () => {
     setStep("starting");
@@ -31,6 +33,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
       setUserCode(data.userCode);
       setSessionId(data.sessionId);
       setStep("code");
+      setPolling(true);
     } catch {
       setError("接続に失敗しました");
       setStep("idle");
@@ -38,31 +41,35 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
   };
 
   useEffect(() => {
-    if (step !== "code" || !sessionId) return;
+    if (!polling || !sessionId) return;
 
-    setStep("polling");
-    const interval = setInterval(async () => {
+    const poll = async () => {
       try {
         const res = await fetch(`/api/auth/login?sessionId=${sessionId}`);
         const data = await res.json();
         if (data.status === "complete") {
+          setPolling(false);
           setStep("done");
-          clearInterval(interval);
           setTimeout(() => {
             onClose();
             window.location.reload();
           }, 1000);
         } else if (data.status === "error" || data.status === "expired") {
+          setPolling(false);
           setError(data.message || "認証に失敗しました");
-          setStep("code");
-          clearInterval(interval);
         }
       } catch {
         // keep polling
       }
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [step, sessionId, onClose]);
+    };
+
+    poll();
+    intervalRef.current = setInterval(poll, 3000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [polling, sessionId]);
 
   const reset = () => {
     setStep("idle");
@@ -70,6 +77,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
     setVerificationUrl("");
     setUserCode("");
     setSessionId("");
+    setPolling(false);
   };
 
   // Reset on close
@@ -119,7 +127,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
           </div>
         )}
 
-        {(step === "code" || step === "polling") && (
+        {(step === "code") && (
           <>
             <p className="text-sm mb-4">
               以下のURLにアクセスし、コードを入力してください：
@@ -136,7 +144,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
               <p className="text-xs text-muted mb-1">コード</p>
               <p className="text-2xl font-bold tracking-widest">{userCode}</p>
             </div>
-            {step === "polling" && (
+            {polling && (
               <div className="flex flex-col items-center gap-2 py-4">
                 <Loader2 size={24} className="animate-spin text-primary" />
                 <p className="text-muted text-sm">認証を待っています...</p>
