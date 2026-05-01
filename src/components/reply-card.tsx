@@ -181,30 +181,17 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                 )}
               </div>
 
-              {/* Top-right more menu */}
-              <div className="relative shrink-0" ref={moreRef}>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setShowMore(!showMore); }}
-                  className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
-                >
-                  <MoreHorizontal size={18} />
-                </button>
-                {showMore && (
-                  <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden w-48 z-20">
-                    <div onClick={(e) => e.stopPropagation()} className="px-4 py-2 hover:bg-white/5 cursor-pointer">
-                      <ShareMenu
-                        url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${reply.commentId}`}
-                        text={`${reply.author.name}: ${reply.content}`}
-                      />
-                    </div>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleBookmark(); setShowMore(false); }}
-                      className="flex items-center gap-3 w-full px-4 py-2 hover:bg-white/5 text-left text-[14px]"
-                    >
-                      <Bookmark size={16} className={bookmarked ? "text-primary" : "text-muted"} fill={bookmarked ? "currentColor" : "none"} />
-                      <span>{bookmarked ? "ブックマーク解除" : "ブックマーク"}</span>
-                    </button>
-                    {isOwnComment && (
+              {/* Top-right more menu - delete only */}
+              {isOwnComment && (
+                <div className="relative shrink-0" ref={moreRef}>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowMore(!showMore); }}
+                    className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
+                  >
+                    <MoreHorizontal size={18} />
+                  </button>
+                  {showMore && (
+                    <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden w-48 z-20">
                       <button
                         onClick={(e) => { e.stopPropagation(); handleDelete(); setShowMore(false); }}
                         className="flex items-center gap-3 w-full px-4 py-2 hover:bg-white/5 text-left text-[14px] text-red-500"
@@ -212,10 +199,10 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                         <Trash2 size={16} />
                         <span>削除</span>
                       </button>
-                    )}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center justify-between mt-3 gap-1 flex-wrap max-w-[400px]">
@@ -243,6 +230,21 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                 <MessageCircle size={18} />
                 {reply.replyCount !== "0" && <span>{reply.replyCount}</span>}
               </Link>
+
+              <div onClick={(e) => e.stopPropagation()}>
+                <ShareMenu
+                  url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${reply.commentId}`}
+                  text={`${reply.author.name}: ${reply.content}`}
+                />
+              </div>
+
+              <button
+                onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
+                className={`flex items-center gap-1.5 text-[13px] transition-colors ${bookmarked ? "text-primary" : "text-muted hover:text-primary"}`}
+                title={bookmarked ? "ブックマーク済み" : "ブックマーク"}
+              >
+                <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
+              </button>
             </div>
           </div>
         </div>
