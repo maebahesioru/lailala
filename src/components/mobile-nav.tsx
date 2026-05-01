@@ -68,7 +68,7 @@ export function MobileNav() {
             aria-label="BGM"
           >
             <Music size={22} strokeWidth={bgmEnabled ? 2.5 : 2} />
-            <span className="text-[10px] font-medium">BGM {bgmEnabled ? "ON" : "OFF"}</span>
+            <span className="text-[10px] font-medium" suppressHydrationWarning>BGM {bgmEnabled ? "ON" : "OFF"}</span>
           </button>
         </div>
       </nav>

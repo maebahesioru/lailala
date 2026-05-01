@@ -146,7 +146,7 @@ export function Sidebar() {
             aria-label="BGM"
           >
             <Music size={26} aria-hidden="true" />
-            <span className="font-medium">BGM {bgmEnabled ? "ON" : "OFF"}</span>
+            <span className="font-medium" suppressHydrationWarning>BGM {bgmEnabled ? "ON" : "OFF"}</span>
           </button>
           <button
             onClick={() => user ? setShowCompose(true) : setShowLogin(true)}
