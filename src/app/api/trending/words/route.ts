@@ -4,8 +4,8 @@ import redis from "@/lib/redis";
 
 const CACHE_TTL = 1800;
 const VIDEO_ID = "niKAylKNIEI";
-const INITIAL_BATCHES = 5;  // fast first response (~2.5s)
-const FULL_BATCHES = 30;    // background full scan
+const INITIAL_BATCHES = 5;
+const MAX_BATCHES = 100; // hard cap to prevent infinite loops
 
 interface TrendWord {
   word: string;
@@ -26,20 +26,39 @@ function isJapaneseWord(w: string): boolean {
     || w.startsWith("@");
 }
 
-async function collectBatches(innertube: any, videoId: string, maxBatches: number): Promise<string[]> {
+function isOlderThan24h(publishedText: string): boolean {
+  const text = publishedText.toLowerCase();
+  // "1 day ago" or older
+  if (/\d+\s*day/.test(text)) return true;
+  if (/\d+\s*week/.test(text)) return true;
+  if (/\d+\s*month/.test(text)) return true;
+  if (/\d+\s*year/.test(text)) return true;
+  return false;
+}
+
+async function collectBatches(innertube: any, videoId: string, maxBatches: number, stopAt24h: boolean): Promise<{ contents: string[]; reached24h: boolean }> {
   let comments = await innertube.getComments(videoId, "NEWEST_FIRST");
   const contents: string[] = [];
   let batchCount = 0;
+  let reached24h = false;
 
   while (batchCount < maxBatches) {
     for (const thread of comments.contents) {
-      if (thread.comment?.content?.text) contents.push(thread.comment.content.text);
+      if (thread.comment?.content?.text) {
+        // Check if this comment is older than 24h
+        if (stopAt24h && thread.comment.published_time && isOlderThan24h(thread.comment.published_time)) {
+          reached24h = true;
+        }
+        contents.push(thread.comment.content.text);
+      }
       if (thread.replies) {
         for (const reply of thread.replies) {
           if (reply.content?.text) contents.push(reply.content.text);
         }
       }
+      if (reached24h) break;
     }
+    if (reached24h) break;
     if (!comments.has_continuation) break;
     try {
       comments = await comments.getContinuation();
@@ -48,7 +67,7 @@ async function collectBatches(innertube: any, videoId: string, maxBatches: numbe
       break;
     }
   }
-  return contents;
+  return { contents, reached24h };
 }
 
 function extractTrendWords(contents: string[]): TrendWord[] {
@@ -79,7 +98,7 @@ export async function GET(req: NextRequest) {
   const videoId = searchParams.get("videoId") || VIDEO_ID;
   const cacheKey = `trending:words:${videoId}`;
 
-  // Return cached data if available (already full accuracy)
+  // Return cached data if available
   try {
     const cached = await redis.get(cacheKey);
     if (cached) {
@@ -87,27 +106,20 @@ export async function GET(req: NextRequest) {
     }
   } catch {}
 
-  // No cache: quick first response + trigger background full scan
+  // No cache: quick first response + background 24h scan
   try {
     const innertube = await getInnertube();
 
-    // 1. Fetch initial batches for fast response
-    const quickContents = await collectBatches(innertube, videoId, INITIAL_BATCHES);
+    // 1. Quick response (5 batches)
+    const { contents: quickContents } = await collectBatches(innertube, videoId, INITIAL_BATCHES, false);
     const quickWords = extractTrendWords(quickContents);
+    try { await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(quickWords)); } catch {}
 
-    // Save initial result to cache immediately
-    try {
-      await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(quickWords));
-    } catch {}
-
-    // 2. Fire background full scan (don't await - runs after response)
-    collectBatches(innertube, videoId, FULL_BATCHES - INITIAL_BATCHES)
-      .then(async (moreContents) => {
-        const allContents = [...quickContents, ...moreContents];
-        const fullWords = extractTrendWords(allContents);
-        try {
-          await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(fullWords));
-        } catch {}
+    // 2. Background: collect ALL comments from last 24 hours (up to 100 batches)
+    collectBatches(innertube, videoId, MAX_BATCHES, true)
+      .then(async ({ contents, reached24h }) => {
+        const words = extractTrendWords(contents);
+        try { await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(words)); } catch {}
       })
       .catch(() => {});
 
@@ -124,9 +136,8 @@ export async function GET(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const videoId = searchParams.get("videoId") || VIDEO_ID;
   try {
-    await redis.del(`trending:words:${videoId}`);
+    await redis.del(`trending:words:${searchParams.get("videoId") || VIDEO_ID}`);
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Redis unavailable" }, { status: 500 });
