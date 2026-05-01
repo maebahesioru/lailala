@@ -92,7 +92,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <head>
+      <head />
+      <body className={`${inter.className} min-h-screen antialiased`}>
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var t=localStorage.getItem('lailala-theme');if(t&&['light','dark-blue','black'].includes(t))document.documentElement.setAttribute('data-theme',t)})();`,
@@ -103,8 +104,6 @@ export default function RootLayout({
             __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').then(function(reg){reg.addEventListener('updatefound',function(){var newWorker=reg.installing;newWorker.addEventListener('statechange',function(){if(newWorker.state==='activated'){window.location.reload()}})});setInterval(function(){reg.update()},3600000)})})}`,
           }}
         />
-      </head>
-      <body className={`${inter.className} min-h-screen antialiased`}>
         <Providers>
           <div className="min-h-screen flex flex-col">
             {children}

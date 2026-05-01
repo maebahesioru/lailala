@@ -44,8 +44,13 @@ export function Sidebar() {
   const [showCompose, setShowCompose] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -106,7 +111,7 @@ export function Sidebar() {
             </Link>
           ))}
           <Link
-            href={user ? "/bookmarks" : "/"}
+            href="/bookmarks"
             onClick={(e) => handleProtectedClick(e)}
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
             aria-label="ブックマーク"
@@ -115,7 +120,7 @@ export function Sidebar() {
             <span className="font-medium">ブックマーク</span>
           </Link>
           <Link
-            href={user ? "/lists" : "/"}
+            href="/lists"
             onClick={(e) => handleProtectedClick(e)}
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
             aria-label="リスト"
@@ -124,7 +129,7 @@ export function Sidebar() {
             <span className="font-medium">リスト</span>
           </Link>
           <Link
-            href={user ? "/profile" : "/"}
+            href="/profile"
             onClick={(e) => handleProtectedClick(e)}
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
             aria-label="プロフィール"
@@ -158,7 +163,7 @@ export function Sidebar() {
           </button>
         </nav>
         <div className="mt-auto px-3 pb-4 relative">
-          {user ? (
+          {mounted && user ? (
             <div ref={menuRef}>
               <button
                 onClick={() => setShowAccountMenu(!showAccountMenu)}
