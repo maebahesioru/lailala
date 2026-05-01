@@ -45,7 +45,7 @@ export function TwemojiText({ content, className = "" }: { content: string; clas
         src={`${TWEMOJI_BASE}/${code}.svg`}
         alt={fullEmoji}
         className={`inline-block align-text-bottom ${className}`}
-        style={{ width: "1.1em", height: "1.1em" }}
+        style={{ width: "1.3em", height: "1.3em" }}
         draggable={false}
         onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
       />

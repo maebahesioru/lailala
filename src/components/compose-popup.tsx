@@ -3,9 +3,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "./auth-provider";
 import { Smile, Calendar, User, Clock, X, FileText, Trash2, Loader2 } from "lucide-react";
+import { ConfirmDialog } from "./confirm-dialog";
 import dynamic from "next/dynamic";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
+import { Theme as EmojiTheme, EmojiStyle } from "emoji-picker-react";
 
 interface ScheduledPost {
   id: string;
@@ -45,9 +47,19 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
   const [scheduledList, setScheduledList] = useState<ScheduledPost[]>([]);
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [activeDraftId, setActiveDraftId] = useState<string | null>(null);
+  const [showDraftConfirm, setShowDraftConfirm] = useState(false);
+  const [pendingClose, setPendingClose] = useState(false);
   const emojiRef = useRef<HTMLDivElement>(null);
   const scheduleRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  function generateId() {
+    try {
+      return crypto.randomUUID();
+    } catch {
+      return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
+  }
 
   useEffect(() => {
     if (open) {
@@ -66,7 +78,7 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
         saveDrafts(updated);
         setDrafts(updated);
       } else {
-        const newDraft: Draft = { id: crypto.randomUUID(), text, updatedAt: Date.now() };
+        const newDraft: Draft = { id: generateId(), text, updatedAt: Date.now() };
         const updated = [newDraft, ...all];
         saveDrafts(updated);
         setDrafts(updated);
@@ -182,6 +194,30 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
     textareaRef.current?.focus();
   };
 
+  const handleClose = () => {
+    if (text.trim() && !activeDraftId) {
+      setShowDraftConfirm(true);
+      setPendingClose(true);
+      return;
+    }
+    onClose();
+  };
+
+  const confirmSaveDraft = () => {
+    const all = loadDrafts();
+    const draft: Draft = { id: generateId(), text, updatedAt: Date.now() };
+    saveDrafts([draft, ...all]);
+    setShowDraftConfirm(false);
+    setPendingClose(false);
+    onClose();
+  };
+
+  const discardDraft = () => {
+    setShowDraftConfirm(false);
+    setPendingClose(false);
+    onClose();
+  };
+
   if (!open) return null;
   if (!user) {
     return (
@@ -194,11 +230,11 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm pt-20 md:pt-24" onClick={onClose}>
-      <div className="bg-card border border-border rounded-2xl w-full max-w-xl mx-4 shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm pt-20 md:pt-24" onClick={handleClose}>
+      <div className="bg-card border border-border rounded-2xl w-full max-w-xl mx-4 shadow-2xl overflow-visible" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 text-muted">
+          <button onClick={handleClose} className="p-2 rounded-full hover:bg-white/10 text-muted">
             <X size={20} />
           </button>
           <div className="flex items-center gap-2">
@@ -263,8 +299,8 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
                               width={320}
                               height={400}
                               previewConfig={{ showPreview: false }}
-                              theme="dark"
-                              emojiStyle="twitter"
+                              theme={EmojiTheme.DARK}
+                              emojiStyle={EmojiStyle.TWITTER}
                               searchPlaceholder="絵文字を検索"
                               skinTonesDisabled
                             />
@@ -369,6 +405,15 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        open={showDraftConfirm}
+        title="下書きを保存しますか？"
+        message="入力中のテキストがあります。下書きとして保存しますか？"
+        confirmLabel="保存する"
+        onConfirm={confirmSaveDraft}
+        onCancel={discardDraft}
+      />
     </div>
   );
 }

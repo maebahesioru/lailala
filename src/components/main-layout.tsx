@@ -7,7 +7,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex justify-center">
       <div className="flex w-full max-w-[1280px] items-start">
         <Sidebar />
-        <main className="flex-1 min-w-0 md:border-x border-[#2f3336] min-h-screen w-full">
+        <main className="flex-1 min-w-0 md:border-x border-[#2f3336] min-h-screen w-full flex flex-col">
           {children}
         </main>
         <WidgetsPanel />

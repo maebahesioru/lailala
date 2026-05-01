@@ -6,6 +6,7 @@ import { Smile, Calendar, User, Clock, X } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
+import { Theme as EmojiTheme, EmojiStyle } from "emoji-picker-react";
 
 interface ScheduledPost {
   id: string;
@@ -166,8 +167,8 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
                       width={320}
                       height={400}
                       previewConfig={{ showPreview: false }}
-                      theme="dark"
-                      emojiStyle="twitter"
+                      theme={EmojiTheme.DARK}
+                      emojiStyle={EmojiStyle.TWITTER}
                       searchPlaceholder="絵文字を検索"
                       skinTonesDisabled
                     />

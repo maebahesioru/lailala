@@ -236,12 +236,12 @@ export function CommentFeed({ videoId }: { videoId: string }) {
             <button
               key={tab.id}
               onClick={tab.onClick}
-              className={`flex-1 py-4 text-center text-sm font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap ${
+              className={`flex-1 py-4 text-center text-sm font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap inline-flex items-center justify-center ${
                 activeTabId === tab.id ? "text-foreground" : "text-muted"
               }`}
             >
-              {tab.id !== "top" && tab.id !== "new" && <List size={14} className="inline mr-1" />}
-              <span className="truncate inline-block max-w-full px-1 text-[15px]">{tab.label}</span>
+              {tab.id !== "top" && tab.id !== "new" && <List size={14} className="mr-1 shrink-0" />}
+              <span className="truncate max-w-full px-1 text-[15px]">{tab.label}</span>
               {activeTabId === tab.id && (
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
               )}
@@ -289,16 +289,7 @@ export function CommentFeed({ videoId }: { videoId: string }) {
         </div>
       )}
 
-      {/* Floating refresh button */}
-      <button
-        onClick={() => loadInitial()}
-        disabled={loading}
-        className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 p-3 bg-primary text-white rounded-full shadow-lg hover:bg-primary-hover transition-colors disabled:opacity-50"
-        title="更新"
-        aria-label="コメントを更新"
-      >
-        <RefreshCw size={20} className={loading ? "animate-spin" : ""} aria-hidden="true" />
-      </button>
+
     </div>
   );
 }

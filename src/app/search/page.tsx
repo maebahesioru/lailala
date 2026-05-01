@@ -158,10 +158,15 @@ function SearchContent() {
             ) : (
               <div className="divide-y divide-border">
                 {trendWords.map((t, i) => (
-                  <Link
+                  <button
                     key={t.word}
-                    href={`/search?q=${encodeURIComponent(t.word)}`}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors"
+                    onClick={() => {
+                      setInputValue(t.word);
+                      setQuery(t.word);
+                      performSearch(t.word);
+                      window.history.pushState(null, "", `/search?q=${encodeURIComponent(t.word)}`);
+                    }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors w-full text-left"
                   >
                     <span className={`text-[15px] font-bold w-5 text-center ${i < 3 ? "text-[#f91880]" : "text-muted"}`}>
                       {i + 1}
@@ -170,7 +175,7 @@ function SearchContent() {
                       <p className="text-[14px] font-medium truncate">{t.word}</p>
                       <p className="text-[13px] text-muted">{t.count} 件のコメント</p>
                     </div>
-                  </Link>
+                  </button>
                 ))}
               </div>
             )}

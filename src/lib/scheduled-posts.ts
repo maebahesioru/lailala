@@ -24,7 +24,7 @@ export function startScheduledPostWorker() {
           // Lazy import to avoid bundling youtubei.js at startup
           const { getInnertubeWithAuth } = await import("./youtube");
           const innertube = await getInnertubeWithAuth(post.userId);
-          await innertube.comment(post.videoId, post.text);
+          await innertube.interact.comment(post.videoId, post.text);
           await prisma.scheduledPost.update({
             where: { id: post.id },
             data: { posted: true },

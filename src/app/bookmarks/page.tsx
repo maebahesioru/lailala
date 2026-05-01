@@ -307,23 +307,7 @@ export default function BookmarksPage() {
                     </button>
                   </div>
 
-                  {/* Move to folder - individual */}
-                  {folders.length > 0 && (
-                    <div className="flex items-center gap-2 mt-2">
-                      <FolderOpen size={14} className="text-muted" />
-                      <select
-                        value={b.folderId || ""}
-                        onChange={(e) => moveBookmark(b.commentId, e.target.value || null)}
-                        onClick={(e) => e.stopPropagation()}
-                        className="bg-background text-foreground text-xs border border-border rounded px-2 py-1 outline-none"
-                      >
-                        <option value="">未分類</option>
-                        {folders.map((f) => (
-                          <option key={f.id} value={f.id}>{f.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
+
                 </div>
               </div>
             </article>

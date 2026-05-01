@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
@@ -32,7 +32,7 @@ interface UserList {
   _count?: { items: number; followers: number };
 }
 
-export default function ListsPage() {
+function ListsPageInner() {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -132,7 +132,7 @@ export default function ListsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ listId: selectedList.id, name: editName.trim(), description: editDesc.trim() || undefined, isPublic: editPublic }),
       });
-      setSelectedList((prev) => prev ? { ...prev, name: editName.trim(), description: editDesc.trim() || undefined, isPublic: editPublic } : null);
+      setSelectedList((prev) => prev ? { ...prev, name: editName.trim(), description: editDesc.trim() || null, isPublic: editPublic } : null);
       setIsEditing(false);
     } catch {}
   };
@@ -502,5 +502,13 @@ export default function ListsPage() {
         onCancel={() => { setShowDeleteConfirm(false); setDeleteTargetId(null); }}
       />
     </MainLayout>
+  );
+}
+
+export default function ListsPage() {
+  return (
+    <Suspense fallback={null}>
+      <ListsPageInner />
+    </Suspense>
   );
 }

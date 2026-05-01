@@ -18,8 +18,35 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({ user: null, loading: true, refresh: async () => {} });
 
+function getCachedUser(): User | null {
+  try {
+    const raw = localStorage.getItem("lailala-user-cache");
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    // Cache expires after 7 days
+    if (parsed._cachedAt && Date.now() - parsed._cachedAt > 7 * 24 * 60 * 60 * 1000) {
+      localStorage.removeItem("lailala-user-cache");
+      return null;
+    }
+    delete parsed._cachedAt;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedUser(user: User | null) {
+  try {
+    if (user) {
+      localStorage.setItem("lailala-user-cache", JSON.stringify({ ...user, _cachedAt: Date.now() }));
+    } else {
+      localStorage.removeItem("lailala-user-cache");
+    }
+  } catch {}
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => getCachedUser());
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
@@ -28,11 +55,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
+        setCachedUser(data.user);
       } else {
         setUser(null);
+        setCachedUser(null);
       }
     } catch {
       setUser(null);
+      setCachedUser(null);
     } finally {
       setLoading(false);
     }

@@ -21,7 +21,7 @@ export async function POST(_req: NextRequest) {
         resolve(data);
       });
 
-      innertube.session.on("error", (err: any) => {
+      (innertube.session as any).on("error", (err: any) => {
         clearTimeout(timer);
         reject(err instanceof Error ? err : new Error(String(err)));
       });
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
     const timeout = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error("TIMEOUT")), 5000)
     );
-    const result = await Promise.race([promise, timeout]);
+    const result = await Promise.race([promise, timeout]) as any;
 
     // Auth succeeded: extract credentials and account info
     const { credentials, innertube } = result;

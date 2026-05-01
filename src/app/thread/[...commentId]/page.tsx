@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ commentId
       const content = thread.comment?.content?.text || "";
       const author = typeof thread.comment?.author?.name === "string"
         ? thread.comment.author.name
-        : thread.comment?.author?.name?.text || "Unknown";
+        : (thread.comment?.author?.name as any)?.text || "Unknown";
       return {
         title: `${author}さんのコメント`,
         description: content.slice(0, 120),

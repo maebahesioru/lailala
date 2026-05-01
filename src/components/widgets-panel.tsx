@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, ThumbsUp, ThumbsDown, Eye, Clock, MessageSquare, TrendingUp, Mic, MicOff } from "lucide-react";
+import { Search, ThumbsUp, ThumbsDown, Eye, Clock, MessageSquare, TrendingUp, Mic, MicOff, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -29,6 +29,7 @@ export function WidgetsPanel() {
   const [listening, setListening] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     Promise.all([
@@ -73,7 +74,15 @@ export function WidgetsPanel() {
       router.push(`/search?q=${encodeURIComponent(transcript)}`);
     };
     recognition.onerror = () => setListening(false);
+    recognitionRef.current = recognition;
     recognition.start();
+  };
+
+  const stopVoiceInput = () => {
+    try {
+      recognitionRef.current?.stop();
+    } catch {}
+    setListening(false);
   };
 
   const formatCount = (n: number | null | undefined) => {
@@ -205,6 +214,25 @@ export function WidgetsPanel() {
         <Link href="/cookies" className="hover:underline">Cookieポリシー</Link>
         <span>&copy; 2025 ライララ(仮)</span>
       </div>
+
+      {/* Voice input overlay */}
+      {listening && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-card border border-border rounded-2xl p-8 flex flex-col items-center gap-4 shadow-2xl mx-4">
+            <div className="p-4 rounded-full bg-primary/10 animate-pulse">
+              <Mic size={48} className="text-primary" />
+            </div>
+            <p className="text-lg font-bold">音声を聞いています...</p>
+            <button
+              onClick={stopVoiceInput}
+              className="flex items-center gap-1 text-sm text-muted hover:text-foreground transition-colors"
+            >
+              <X size={14} />
+              キャンセル
+            </button>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }
