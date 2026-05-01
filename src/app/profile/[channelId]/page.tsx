@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
-import { ArrowLeft, Loader2, User } from "lucide-react";
+import { ArrowLeft, Loader2, User, ThumbsUp, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
 interface ProfileComment {
@@ -16,8 +17,25 @@ interface ProfileComment {
   publishedAt: string;
 }
 
+function formatRelativeTime(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+  if (diff < 60) return "数秒前";
+  if (diff < 3600) return `${Math.floor(diff / 60)}分前`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}時間前`;
+  if (diff < 604800) return `${Math.floor(diff / 86400)}日前`;
+  return date.toLocaleDateString("ja-JP", { year: "numeric", month: "short", day: "numeric" });
+}
+
+function safeName(name: string | null | undefined): string {
+  if (!name || name === "Unknown" || name.trim() === "") return "ユーザー";
+  return name;
+}
+
 export default function ProfilePage({ params }: { params: Promise<{ channelId: string }> }) {
   const { channelId } = use(params);
+  const router = useRouter();
   const [comments, setComments] = useState<ProfileComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +55,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
           setComments(data.comments);
           setTotalPages(data.totalPages);
           if (data.comments.length > 0) {
-            setAuthorName(data.comments[0].authorName);
+            setAuthorName(safeName(data.comments[0].authorName));
             setAuthorThumb(data.comments[0].authorThumb);
           }
         }
@@ -66,13 +84,12 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
           {authorThumb ? (
             <img src={authorThumb} alt={authorName} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-[#2f3336] flex items-center justify-center">
-              <User size={32} className="text-[#71767b]" />
+            <div className="w-20 h-20 rounded-full bg-border flex items-center justify-center">
+              <User size={32} className="text-muted" />
             </div>
           )}
           <div>
             <h2 className="text-xl font-bold">{authorName}</h2>
-            <p className="text-[13px] text-[#71767b] font-mono mt-1">{channelId}</p>
           </div>
         </div>
       </div>
@@ -102,36 +119,42 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
           </div>
         ) : (
           comments.map((c) => (
-            <div key={c.commentId} className="p-4 hover:bg-white/[0.03] transition-colors">
-              <div className="flex items-start gap-3">
-                <img
-                  src={c.authorThumb || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='15' r='8' fill='%2371767b'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='10' fill='%2371767b'/%3E%3C/svg%3E"}
-                  alt={c.authorName}
-                  className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                />
+            <article
+              key={c.commentId}
+              className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer"
+              onClick={() => router.push(`/thread/${c.commentId}`)}
+            >
+              <div className="flex gap-3">
+                <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                  {c.authorThumb ? (
+                    <img src={c.authorThumb} alt={safeName(c.authorName)} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                      <User size={20} className="text-muted" />
+                    </div>
+                  )}
+                </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-bold text-[15px]">{c.authorName}</span>
-                    <span className="text-[13px] text-[#71767b]">
-                      {new Date(c.publishedAt).toLocaleDateString("ja-JP")}
-                    </span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold text-[15px] truncate">{safeName(c.authorName)}</span>
+                    <span className="text-muted text-[15px]">·</span>
+                    <span className="text-muted text-[15px] shrink-0">{formatRelativeTime(c.publishedAt)}</span>
                   </div>
-                  <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">{c.content}</p>
-                  <div className="flex items-center gap-4 mt-3 text-[13px] text-[#71767b]">
-                    <span className="flex items-center gap-1">
-                      <span className="text-[#f91880]">♥</span> {c.likeCount}
+                  <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed break-words">{c.content}</p>
+
+                  <div className="flex items-center gap-4 mt-3 text-[13px] text-muted">
+                    <span className="flex items-center gap-1.5">
+                      <ThumbsUp size={16} />
+                      <span>{c.likeCount}</span>
                     </span>
-                    <span>返信 {c.replyCount}</span>
-                    <Link
-                      href={`/?v=${c.videoId}`}
-                      className="text-[#1d9bf0] hover:underline"
-                    >
-                      動画を見る
-                    </Link>
+                    <span className="flex items-center gap-1.5">
+                      <MessageCircle size={16} />
+                      <span>{c.replyCount}</span>
+                    </span>
                   </div>
                 </div>
               </div>
-            </div>
+            </article>
           ))
         )}
       </div>

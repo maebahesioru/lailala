@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
-import { ArrowLeft, List, Plus, Trash2, User, Loader2 } from "lucide-react";
+import { ArrowLeft, List, Plus, Trash2, User, Loader2, ThumbsUp, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
 interface ListItem {
@@ -27,6 +28,7 @@ interface UserList {
 
 export default function ListsPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [lists, setLists] = useState<UserList[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -118,29 +120,39 @@ export default function ListsPage() {
         <div className="divide-y divide-border">
           {selectedList.items && selectedList.items.length > 0 ? (
             selectedList.items.map((item) => (
-              <div key={item.id} className="p-4 hover:bg-white/[0.03] transition-colors">
-                <div className="flex items-start gap-3">
-                  {item.authorThumb ? (
-                    <img src={item.authorThumb} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center flex-shrink-0">
-                      <User size={20} className="text-muted" />
-                    </div>
-                  )}
+              <article
+                key={item.id}
+                className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer"
+                onClick={() => router.push(`/thread/${item.commentId}`)}
+              >
+                <div className="flex gap-3">
+                  <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                    {item.authorThumb ? (
+                      <img src={item.authorThumb} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                        <User size={20} className="text-muted" />
+                      </div>
+                    )}
+                  </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-[15px]">{item.authorName}</span>
-                      <span className="text-[13px] text-muted">{item.publishedTime}</span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-bold text-[15px] truncate">{item.authorName}</span>
+                      <span className="text-muted text-[15px]">·</span>
+                      <span className="text-muted text-[15px] shrink-0">{item.publishedTime}</span>
                     </div>
-                    <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">{item.content}</p>
+                    <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed break-words">{item.content}</p>
                     <div className="flex items-center gap-4 mt-3 text-[13px] text-muted">
-                      <span>♥ {item.likeCount}</span>
-                      <span>返信 {item.replyCount}</span>
-                      <Link href={`/?v=${item.videoId}`} className="text-primary hover:underline">
-                        動画を見る
-                      </Link>
+                      <span className="flex items-center gap-1.5">
+                        <ThumbsUp size={16} />
+                        <span>{item.likeCount}</span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <MessageCircle size={16} />
+                        <span>{item.replyCount}</span>
+                      </span>
                       <button
-                        onClick={() => removeItem(selectedList.id, item.commentId)}
+                        onClick={(e) => { e.stopPropagation(); removeItem(selectedList.id, item.commentId); }}
                         className="text-muted hover:text-red-500 transition-colors flex items-center gap-1"
                       >
                         <Trash2 size={14} />
@@ -149,7 +161,7 @@ export default function ListsPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </article>
             ))
           ) : (
             <div className="p-12 text-center text-muted">

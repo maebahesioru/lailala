@@ -1,51 +1,43 @@
-import type { Metadata } from "next";
-import { getSessionUserId } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
-import { ArrowLeft, User, MessageSquare, Heart, ThumbsDown, Trash2 } from "lucide-react";
+import { ArrowLeft, User, MessageCircle, ThumbsUp } from "lucide-react";
+import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "マイプロフィール",
-  description: "あなたのアクティビティと設定",
-};
+interface UserAction {
+  id: string;
+  videoId: string;
+  commentId: string;
+  actionType: string;
+  content: string | null;
+  createdAt: string;
+}
 
-export default async function MyProfilePage() {
-  const userId = await getSessionUserId();
-  if (!userId) {
-    redirect("/");
-  }
+export default function MyProfilePage() {
+  const router = useRouter();
+  const [user, setUser] = useState<{ name?: string | null; email?: string | null; image?: string | null } | null>(null);
+  const [actions, setActions] = useState<UserAction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"comments" | "replies">("comments");
 
-  const currentUser = await prisma.user.findUnique({ where: { id: userId } });
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/auth/me").then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/profile/actions").then((r) => (r.ok ? r.json() : null)),
+    ])
+      .then(([userData, actionsData]) => {
+        if (userData?.user) setUser(userData.user);
+        if (actionsData?.actions) setActions(actionsData.actions);
+      })
+      .catch(() => null)
+      .finally(() => setLoading(false));
+  }, []);
 
-  const actions = await prisma.userAction.findMany({
-    where: { userId },
-    orderBy: { createdAt: "desc" },
-    take: 50,
-  });
-
-  const grouped = actions.reduce((acc, action) => {
-    if (!acc[action.actionType]) acc[action.actionType] = [];
-    acc[action.actionType].push(action);
-    return acc;
-  }, {} as Record<string, typeof actions>);
-
-  const actionLabels: Record<string, string> = {
-    comment: "コメント",
-    reply: "返信",
-    like: "高評価",
-    dislike: "低評価",
-    delete: "削除",
-  };
-
-  const actionIcons: Record<string, any> = {
-    comment: MessageSquare,
-    reply: MessageSquare,
-    like: Heart,
-    dislike: ThumbsDown,
-    delete: Trash2,
-  };
+  const filtered = actions.filter((a) =>
+    activeTab === "comments" ? a.actionType === "comment" : a.actionType === "reply"
+  );
 
   return (
     <MainLayout>
@@ -59,52 +51,97 @@ export default async function MyProfilePage() {
 
       <div className="px-4 py-6 border-b border-[#2f3336]">
         <div className="flex items-center gap-4">
-          {currentUser?.image ? (
-            <img src={currentUser.image} alt={currentUser.name || ""} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
+          {user?.image ? (
+            <img src={user.image} alt={user.name || ""} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-[#2f3336] flex items-center justify-center">
-              <User size={32} className="text-[#71767b]" />
+            <div className="w-20 h-20 rounded-full bg-border flex items-center justify-center">
+              <User size={32} className="text-muted" />
             </div>
           )}
           <div>
-            <h2 className="text-xl font-bold">{currentUser?.name || "ユーザー"}</h2>
-            <p className="text-[13px] text-[#71767b]">{currentUser?.email}</p>
+            <h2 className="text-xl font-bold">{user?.name || "ユーザー"}</h2>
+            <p className="text-[13px] text-muted">{user?.email}</p>
           </div>
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="flex border-b border-[#2f3336]">
+        <button
+          onClick={() => setActiveTab("comments")}
+          className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${activeTab === "comments" ? "text-foreground" : "text-muted"}`}
+        >
+          投稿
+          {activeTab === "comments" && (
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab("replies")}
+          className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${activeTab === "replies" ? "text-foreground" : "text-muted"}`}
+        >
+          返信
+          {activeTab === "replies" && (
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
+          )}
+        </button>
+      </div>
+
       <div className="divide-y divide-[#2f3336]">
-        {actions.length === 0 ? (
-          <div className="p-12 text-center text-[#71767b]">
-            <p>まだアクションがありません</p>
+        {loading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="p-4 space-y-3 animate-pulse">
+              <div className="h-4 w-full bg-[#2f3336] rounded" />
+              <div className="h-4 w-2/3 bg-[#2f3336] rounded" />
+            </div>
+          ))
+        ) : filtered.length === 0 ? (
+          <div className="p-12 text-center text-muted">
+            <MessageCircle size={32} className="mx-auto mb-3 opacity-50" />
+            <p>まだ{activeTab === "comments" ? "投稿" : "返信"}がありません</p>
           </div>
         ) : (
-          actions.map((action) => {
-            const Icon = actionIcons[action.actionType] || MessageSquare;
-            return (
-              <div key={action.id} className="p-4 hover:bg-white/[0.03] transition-colors">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-[#202327] rounded-full">
-                    <Icon size={16} className="text-[#71767b]" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[13px] font-medium text-[#1d9bf0]">{actionLabels[action.actionType] || action.actionType}</span>
-                      <span className="text-[13px] text-[#71767b]">
-                        {new Date(action.createdAt).toLocaleDateString("ja-JP")}
-                      </span>
+          filtered.map((action) => (
+            <article
+              key={action.id}
+              className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer"
+              onClick={() => action.commentId && router.push(`/thread/${action.commentId}`)}
+            >
+              <div className="flex gap-3">
+                <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                  {user?.image ? (
+                    <img src={user.image} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                      <User size={20} className="text-muted" />
                     </div>
-                    {action.content && (
-                      <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">{action.content}</p>
-                    )}
-                    <Link href={`/?v=${action.videoId}`} className="text-[13px] text-[#1d9bf0] hover:underline mt-1 block">
-                      動画を見る
-                    </Link>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold text-[15px] truncate">{user?.name || "ユーザー"}</span>
+                    <span className="text-muted text-[15px]">·</span>
+                    <span className="text-muted text-[15px] shrink-0">
+                      {new Date(action.createdAt).toLocaleDateString("ja-JP", { month: "short", day: "numeric" })}
+                    </span>
+                  </div>
+                  {action.content && (
+                    <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed break-words">{action.content}</p>
+                  )}
+                  <div className="flex items-center gap-4 mt-3 text-[13px] text-muted">
+                    <span className="flex items-center gap-1.5">
+                      <ThumbsUp size={16} />
+                      <span>-</span>
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <MessageCircle size={16} />
+                      <span>-</span>
+                    </span>
                   </div>
                 </div>
               </div>
-            );
-          })
+            </article>
+          ))
         )}
       </div>
     </div>
