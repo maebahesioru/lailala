@@ -3,15 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "./auth-provider";
 import { Smile, Calendar, User, Clock, X } from "lucide-react";
+import dynamic from "next/dynamic";
 
-const EMOJIS = [
-  "😀","😂","🥰","😍","🤔","😭","😡","👍","👎","🙏",
-  "🔥","💯","❤️","💖","✨","🎉","👀","🤣","😅","😊",
-  "🥺","😤","😎","🤮","💀","👏","🙌","💪","🤝","🎁",
-  "🌟","💫","⭐","🌈","☀️","🌙","💧","🔔","📢","💬",
-  "🇯🇵","🇺🇸","🍎","🍊","🍋","🍌","🍉","🍇","🍓","🫐",
-  "🍈","🍒","🍑","🍍","🥝","🥑","🍆","🥕","🌽","🌮",
-];
+// Dynamically import emoji picker to avoid SSR issues
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 interface ScheduledPost {
   id: string;
@@ -43,12 +38,13 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
   const [scheduleTime, setScheduleTime] = useState("");
   const [scheduledList, setScheduledList] = useState<ScheduledPost[]>([]);
   const emojiRef = useRef<HTMLDivElement>(null);
+  const scheduleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setScheduledList(loadScheduled().filter((s) => s.videoId === videoId));
   }, [videoId]);
 
-  // Poll for scheduled posts
+  // Poll for scheduled posts (works while page is open)
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now();
@@ -65,10 +61,14 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoId]);
 
+  // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) {
         setShowEmoji(false);
+      }
+      if (scheduleRef.current && !scheduleRef.current.contains(e.target as Node)) {
+        setShowSchedule(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -117,11 +117,6 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     const updated = loadScheduled().filter((s) => s.id !== id);
     saveScheduled(updated);
     setScheduledList(updated.filter((s) => s.videoId === videoId));
-  };
-
-  const insertEmoji = (emoji: string) => {
-    setText((prev) => prev + emoji);
-    setShowEmoji(false);
   };
 
   if (!user) {
@@ -187,22 +182,22 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
                   <Smile size={18} />
                 </button>
                 {showEmoji && (
-                  <div className="absolute bottom-full left-0 mb-2 bg-card border border-border rounded-xl shadow-lg p-3 grid grid-cols-10 gap-2 w-[320px] z-20">
-                    {EMOJIS.map((emoji) => (
-                      <button
-                        key={emoji}
-                        onClick={() => insertEmoji(emoji)}
-                        className="text-xl hover:bg-white/10 rounded p-1 transition-colors"
-                      >
-                        {emoji}
-                      </button>
-                    ))}
+                  <div className="absolute top-full left-0 mt-2 z-20">
+                    <EmojiPicker
+                      onEmojiClick={(emojiData) => {
+                        setText((prev) => prev + emojiData.emoji);
+                      }}
+                      width={320}
+                      height={400}
+                      previewConfig={{ showPreview: false }}
+                      theme="dark"
+                    />
                   </div>
                 )}
               </div>
 
               {/* Schedule picker */}
-              <div className="relative">
+              <div className="relative" ref={scheduleRef}>
                 <button
                   onClick={() => setShowSchedule(!showSchedule)}
                   className="p-2 rounded-full hover:bg-[#1d9bf0]/10"
@@ -210,7 +205,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
                   <Calendar size={18} />
                 </button>
                 {showSchedule && (
-                  <div className="absolute bottom-full left-0 mb-2 bg-card border border-border rounded-xl shadow-lg p-4 w-64 z-20 space-y-3">
+                  <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-xl shadow-lg p-4 w-64 z-20 space-y-3">
                     <p className="text-sm font-bold">予約投稿</p>
                     <input
                       type="date"
@@ -224,6 +219,9 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
                       onChange={(e) => setScheduleTime(e.target.value)}
                       className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary"
                     />
+                    <p className="text-[12px] text-muted">
+                      ※ページを開いている間のみ自動投稿されます
+                    </p>
                     <div className="flex gap-2">
                       <button
                         onClick={handleSchedule}
