@@ -95,14 +95,23 @@ export async function GET(req: NextRequest) {
       const items = await innertube.account.getInfo(true);
       if (Array.isArray(items) && items.length > 0) {
         const primary = items[0];
-        if (primary.account_name?.text) name = primary.account_name.text;
-        if (primary.account_photo?.[0]?.url) thumbnail = primary.account_photo[0].url;
-        if (primary.channel_handle?.text) channelId = primary.channel_handle.text;
+        name = primary.account_name?.text || name;
+        thumbnail = primary.account_photo?.[0]?.url || thumbnail;
+        channelId = primary.channel_handle?.text || channelId;
+        if (!primary.account_name?.text && !primary.channel_handle?.text) {
+          accountError = "item has no name/handle. keys: " + Object.keys(primary).join(", ");
+        }
+      } else if (Array.isArray(items)) {
+        accountError = "empty account list";
       } else {
-        accountError = "getInfo returned empty or non-array: " + JSON.stringify(typeof items);
+        accountError = "not an array: " + typeof items;
       }
     } catch (e: any) {
-      accountError = e.message || "Unknown account error";
+      accountError = e.message || "getInfo failed";
+    }
+
+    if (channelId === sessionId) {
+      accountError = accountError || "channel handle not found in account items";
     }
 
     const email = `yt:${channelId}`;
