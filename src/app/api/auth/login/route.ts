@@ -95,30 +95,25 @@ export async function GET(req: NextRequest) {
       const info = await innertube.account.getInfo();
       const page = (info as any).page;
       const sections = page?.contents?.array?.();
+      let debugParts: string[] = [];
       if (sections) {
-        for (const section of sections) {
-          // Try contents (AccountItemSection → AccountItem)
+        for (let si = 0; si < sections.length; si++) {
+          const section = sections[si];
           const items = section?.contents;
+          debugParts.push(`s${si}:type=${section?.type},contentsLen=${items?.length || 0}`);
           if (items) {
-            for (const item of items) {
-              if (item?.account_name?.text) name = item.account_name.text;
-              if (item?.account_photo?.[0]?.url) thumbnail = item.account_photo[0].url;
-              if (item?.channel_handle?.text) channelId = item.channel_handle.text;
-            }
-          }
-          // Also try footers as fallback
-          const footers = section?.footers;
-          if (footers) {
-            for (const footer of footers) {
-              if (footer?.title?.text && name === "YouTube User") name = footer.title.text;
-              const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
-              if (cid && cid.startsWith("UC") && channelId === sessionId) channelId = cid;
+            for (let ii = 0; ii < items.length; ii++) {
+              const item = items[ii];
+              debugParts.push(`  i${ii}:type=${item?.type},name=${!!item?.account_name?.text},photo=${!!item?.account_photo?.[0]},handle=${!!item?.channel_handle?.text}`);
+              if (item?.account_name?.text && name === "YouTube User") name = item.account_name.text;
+              if (item?.account_photo?.[0]?.url && !thumbnail) thumbnail = item.account_photo[0].url;
+              if (item?.channel_handle?.text && channelId === sessionId) channelId = item.channel_handle.text;
             }
           }
         }
       }
       if (channelId === sessionId) {
-        accountError = "could not find channel in account data";
+        accountError = `no channel found. debug: ${debugParts.join(" | ")}`;
       }
     } catch (e: any) {
       accountError = e.message || "getInfo failed";
