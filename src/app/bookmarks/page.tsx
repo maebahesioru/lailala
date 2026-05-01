@@ -1,10 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
-import { ArrowLeft, Bookmark, Loader2, User, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Bookmark,
+  Loader2,
+  User,
+  Trash2,
+  ThumbsUp,
+  ThumbsDown,
+  MessageCircle,
+  Heart,
+} from "lucide-react";
 import Link from "next/link";
+import { ShareMenu } from "@/components/share-menu";
+import { LoginPopup } from "@/components/login-popup";
+import { MentionText } from "@/components/mention-text";
+import { stripHandlePrefix, stripEditedTag, localizeTime } from "@/lib/i18n";
 
 interface BookmarkItem {
   id: string;
@@ -21,11 +36,13 @@ interface BookmarkItem {
 
 export default function BookmarksPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) { setLoading(false); return; }
     fetch("/api/bookmarks")
       .then((r) => r.json())
       .then((data) => {
@@ -39,6 +56,32 @@ export default function BookmarksPage() {
     try {
       await fetch(`/api/bookmarks?commentId=${commentId}`, { method: "DELETE" });
       setBookmarks((prev) => prev.filter((b) => b.commentId !== commentId));
+    } catch {}
+  };
+
+  const handleLike = async (e: React.MouseEvent, b: BookmarkItem) => {
+    e.stopPropagation();
+    if (!user) { setShowLogin(true); return; }
+    // ブックマークページでは投票状態を持たないので軽くトースト表示でも…
+    // 一旦API叩くだけ
+    try {
+      await fetch("/api/comments/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ videoId: b.videoId, commentId: b.commentId, action: "like" }),
+      });
+    } catch {}
+  };
+
+  const handleDislike = async (e: React.MouseEvent, b: BookmarkItem) => {
+    e.stopPropagation();
+    if (!user) { setShowLogin(true); return; }
+    try {
+      await fetch("/api/comments/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ videoId: b.videoId, commentId: b.commentId, action: "dislike" }),
+      });
     } catch {}
   };
 
@@ -64,41 +107,96 @@ export default function BookmarksPage() {
           </div>
         ) : (
           bookmarks.map((b) => (
-            <div key={b.id} className="p-4 hover:bg-white/[0.03] transition-colors">
-              <div className="flex items-start gap-3">
-                {b.authorThumb ? (
-                  <img src={b.authorThumb} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center flex-shrink-0">
-                    <User size={20} className="text-muted" />
-                  </div>
-                )}
+            <article
+              key={b.id}
+              className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer"
+              onClick={() => router.push(`/thread/${b.commentId}`)}
+            >
+              <div className="flex gap-3">
+                <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                  {b.authorThumb ? (
+                    <img
+                      src={b.authorThumb}
+                      alt={b.authorName}
+                      className="w-10 h-10 rounded-full object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                      <User size={20} className="text-muted" />
+                    </div>
+                  )}
+                </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-bold text-[15px]">{b.authorName}</span>
-                    <span className="text-[13px] text-muted">{b.publishedTime}</span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold text-[15px] truncate">
+                      {stripHandlePrefix(b.authorName)}
+                    </span>
+                    <span className="text-muted text-[15px]">·</span>
+                    <span className="text-muted text-[15px] shrink-0">{localizeTime(b.publishedTime)}</span>
                   </div>
-                  <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">{b.content}</p>
-                  <div className="flex items-center gap-4 mt-3 text-[13px] text-muted">
-                    <span>♥ {b.likeCount}</span>
-                    <span>返信 {b.replyCount}</span>
-                    <Link href={`/?v=${b.videoId}`} className="text-primary hover:underline">
-                      動画を見る
-                    </Link>
+                  <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
+                    <MentionText content={stripEditedTag(b.content)} />
+                  </p>
+
+                  <div className="flex items-center justify-between mt-3 gap-1 flex-wrap">
                     <button
-                      onClick={() => removeBookmark(b.commentId)}
-                      className="text-muted hover:text-red-500 transition-colors flex items-center gap-1"
+                      onClick={(e) => handleLike(e, b)}
+                      className="flex items-center gap-1.5 text-[13px] text-muted hover:text-[#f91880] transition-colors"
+                      title="高評価"
                     >
-                      <Trash2 size={14} />
-                      削除
+                      <ThumbsUp size={18} />
+                      <span>{b.likeCount}</span>
                     </button>
+
+                    <button
+                      onClick={(e) => handleDislike(e, b)}
+                      className="flex items-center gap-1.5 text-[13px] text-muted hover:text-primary transition-colors"
+                      title="低評価"
+                    >
+                      <ThumbsDown size={18} />
+                    </button>
+
+                    <Link
+                      href={`/thread/${b.commentId}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center gap-1.5 text-[13px] text-muted hover:text-primary transition-colors"
+                    >
+                      <MessageCircle size={18} />
+                      <span>{b.replyCount || 0}</span>
+                    </Link>
+
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <ShareMenu
+                        url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${b.commentId}`}
+                        text={`${b.authorName}: ${b.content}`}
+                      />
+                    </div>
+
+                    <button
+                      onClick={(e) => { e.stopPropagation(); removeBookmark(b.commentId); }}
+                      className="flex items-center gap-1.5 text-[13px] text-primary transition-colors"
+                      title="ブックマーク解除"
+                    >
+                      <Bookmark size={18} fill="currentColor" />
+                    </button>
+
+                    {user && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); removeBookmark(b.commentId); }}
+                        className="flex items-center gap-1.5 text-[13px] text-muted hover:text-red-500 transition-colors"
+                        title="削除"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
+            </article>
           ))
         )}
       </div>
+      <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
     </MainLayout>
   );
 }
