@@ -16,6 +16,7 @@ interface ReplyCardProps {
   videoId?: string;
   parentCommentId?: string;
   onDelete?: (commentId: string) => void;
+  showDetailTime?: boolean;
 }
 
 function parseReplyTo(content: string): { replyTo: string | null; displayContent: string } {
@@ -29,7 +30,7 @@ function parseReplyTo(content: string): { replyTo: string | null; displayContent
   return { replyTo: null, displayContent: content };
 }
 
-export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onDelete }: ReplyCardProps) {
+export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onDelete, showDetailTime = false }: ReplyCardProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const [liked, setLiked] = useState(reply.isLiked || false);
@@ -165,11 +166,12 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
               <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
                 <MentionText content={stripEditedTag(displayContent)} />
               </p>
-              {/* X-style detailed timestamp */}
-              <p className="text-[13px] text-muted mt-2">{detailTime}</p>
+              {showDetailTime && (
+                <p className="text-[13px] text-muted mt-2">{detailTime}</p>
+              )}
             </div>
 
-            <div className="flex items-center justify-between mt-3 max-w-md">
+            <div className="flex items-center justify-between mt-3">
               <button
                 onClick={(e) => { e.stopPropagation(); handleLike(); }}
                 className={`flex items-center gap-1.5 text-[13px] transition-colors ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}

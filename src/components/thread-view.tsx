@@ -36,7 +36,7 @@ function NestedReply({
 
   return (
     <div className={indentClass}>
-      <ReplyCard reply={node} parentCommentId={commentId} />
+      <ReplyCard reply={node} parentCommentId={commentId} showDetailTime />
       {hasChildren && (
         <div className="relative">
           {depth < 3 && (
@@ -115,6 +115,7 @@ export function ThreadView({
           videoId={videoId}
           voteCounts={{ likes: 0, dislikes: 0 }}
           userVote={userVote}
+          showDetailTime
         />
       </div>
 

@@ -31,17 +31,17 @@
   --card: #f7f9f9;
 }
 
-[data-theme="dark"] {
-  --bg: #0a0a0a;
+[data-theme="dark-blue"] {
+  --bg: #15202b;
   --fg: #e7e9ea;
-  --muted: #71767b;
-  --border: #202020;
-  --primary: #f91880;
-  --primary-hover: #d9166e;
-  --card: #111111;
+  --muted: #8899a6;
+  --border: #38444d;
+  --primary: #1d9bf0;
+  --primary-hover: #1a8cd8;
+  --card: #192734;
 }
 
-[data-theme="dark-blue"] {
+[data-theme="black"] {
   --bg: #000000;
   --fg: #e7e9ea;
   --muted: #71767b;

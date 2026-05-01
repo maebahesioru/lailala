@@ -94,7 +94,18 @@ export default async function ThreadPage({ params }: PageProps) {
         loadedReplies = withReplies.replies || [];
         nextToken = (withReplies as any).continuation_token || null;
       } catch (e: any) {
-        replyError = e.message || "Failed to load replies";
+        // Fallback: fetch all comments and find this thread's replies manually
+        try {
+          const allComments = await innertube.getComments(videoId, "TOP_COMMENTS");
+          const foundThread = allComments.contents.find(
+            (t: any) => t.comment?.comment_id === commentId
+          );
+          if (foundThread?.replies) {
+            loadedReplies = foundThread.replies;
+          }
+        } catch {
+          replyError = e.message || "Failed to load replies";
+        }
       }
     }
   }

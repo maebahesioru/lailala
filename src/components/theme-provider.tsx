@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type Theme = "light" | "dark" | "dark-blue";
+type Theme = "light" | "dark-blue" | "black";
 
 interface ThemeContextType {
   theme: Theme;
@@ -10,21 +10,21 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "dark-blue",
+  theme: "black",
   setTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark-blue");
+  const [theme, setThemeState] = useState<Theme>("black");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("lailala-theme") as Theme | null;
-    if (saved && ["light", "dark", "dark-blue"].includes(saved)) {
+    if (saved && ["light", "dark-blue", "black"].includes(saved)) {
       setThemeState(saved);
       document.documentElement.setAttribute("data-theme", saved);
     } else {
-      document.documentElement.setAttribute("data-theme", "dark-blue");
+      document.documentElement.setAttribute("data-theme", "black");
     }
     setMounted(true);
   }, []);

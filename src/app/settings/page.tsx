@@ -14,7 +14,7 @@ export default function SettingsPage() {
   const themes = [
     { id: "light" as const, label: "ライト", icon: Sun },
     { id: "dark-blue" as const, label: "ダークブルー", icon: Palette },
-    { id: "dark" as const, label: "ダーク", icon: Moon },
+    { id: "black" as const, label: "ブラック", icon: Moon },
   ];
 
   const handleThemeChange = (t: typeof theme) => {

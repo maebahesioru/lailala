@@ -16,9 +16,10 @@ interface CommentCardProps {
   voteCounts: { likes: number; dislikes: number };
   userVote?: string;
   onDelete?: (commentId: string) => void;
+  showDetailTime?: boolean;
 }
 
-export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete }: CommentCardProps) {
+export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, showDetailTime = false }: CommentCardProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const [liked, setLiked] = useState(userVote === "like");
@@ -146,11 +147,12 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete }:
               <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
                 <MentionText content={stripEditedTag(thread.comment.content)} />
               </p>
-              {/* X-style detailed timestamp */}
-              <p className="text-[13px] text-muted mt-2">{detailTime}</p>
+              {showDetailTime && (
+                <p className="text-[13px] text-muted mt-2">{detailTime}</p>
+              )}
             </div>
 
-            <div className="flex items-center justify-between mt-3 max-w-md">
+            <div className="flex items-center justify-between mt-3">
               <button
                 onClick={(e) => { e.stopPropagation(); handleLike(); }}
                 className={`flex items-center gap-1.5 text-[13px] transition-colors ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}
