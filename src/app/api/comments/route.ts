@@ -149,12 +149,7 @@ export async function GET(req: NextRequest) {
         .filter(Boolean);
 
       hasContinuation = comments.has_continuation;
-      // Extract continuation token from comments object
-      const cont = (comments as any).continuation;
-      if (cont) {
-        const payload = cont.endpoint?.payload;
-        nextToken = payload?.continuationCommand?.token || payload?.token || null;
-      }
+      nextToken = (comments as any).continuation_token || null;
 
       // Extract comment count from header
       commentCount = (comments as any).header?.comments_count?.text || (comments as any).header?.comments_count?.toString?.() || null;
