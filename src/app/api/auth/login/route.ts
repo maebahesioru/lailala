@@ -93,25 +93,30 @@ export async function GET(req: NextRequest) {
 
     try {
       const info = await innertube.account.getInfo();
-      // AccountInfo structure: info.page.contents.array() → AccountSectionList → footers → AccountChannel
       const page = (info as any).page;
       const sections = page?.contents?.array?.();
+      let sectionDebug = "";
       if (sections) {
         for (const section of sections) {
           const footers = section?.footers;
-          if (!footers) continue;
-          for (const footer of footers) {
-            if (footer?.title?.text) name = footer.title.text;
-            const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
-            if (cid && cid.startsWith("UC")) {
-              channelId = cid;
-              thumbnail = footer?.thumbnails?.[0]?.url || null;
+          sectionDebug += `[section: type=${section?.type}, footers=${footers?.length || 0}, hasContents=${!!section?.contents}] `;
+          if (footers) {
+            for (const footer of footers) {
+              sectionDebug += `{footer: type=${footer?.type}, title=${footer?.title?.text}, endpoint=${!!footer?.endpoint}} `;
+              if (footer?.title?.text) name = footer.title.text;
+              const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
+              if (cid && cid.startsWith("UC")) {
+                channelId = cid;
+                thumbnail = footer?.thumbnails?.[0]?.url || null;
+              }
             }
           }
         }
+      } else {
+        sectionDebug = "no sections found";
       }
       if (channelId === sessionId) {
-        accountError = "could not find channel in account data";
+        accountError = `could not find channel. debug: ${sectionDebug}`;
       }
     } catch (e: any) {
       accountError = e.message || "getInfo failed";
