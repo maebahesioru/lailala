@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getInnertube } from "@/lib/youtube";
 import redis from "@/lib/redis";
 
-const CACHE_TTL = 1800; // 30 minutes
+const CACHE_TTL = 1800;
 const VIDEO_ID = "niKAylKNIEI";
-const QUICK_BATCHES = 3; // fast response: 3 batches (~1.5s)
-const FULL_BATCHES = 30; // full scan: 30 batches (~15s)
+const INITIAL_BATCHES = 5;  // fast first response (~2.5s)
+const FULL_BATCHES = 30;    // background full scan
 
 interface TrendWord {
   word: string;
@@ -26,7 +26,7 @@ function isJapaneseWord(w: string): boolean {
     || w.startsWith("@");
 }
 
-async function collectComments(innertube: any, videoId: string, maxBatches: number): Promise<string[]> {
+async function collectBatches(innertube: any, videoId: string, maxBatches: number): Promise<string[]> {
   let comments = await innertube.getComments(videoId, "NEWEST_FIRST");
   const contents: string[] = [];
   let batchCount = 0;
@@ -74,35 +74,12 @@ function extractTrendWords(contents: string[]): TrendWord[] {
     .map(([word, count]) => ({ word, count }));
 }
 
-async function computeAndCache(videoId: string, batches: number): Promise<TrendWord[]> {
-  const cacheKey = `trending:words:${videoId}`;
-  const innertube = await getInnertube();
-  const contents = await collectComments(innertube, videoId, batches);
-  const words = extractTrendWords(contents);
-  try {
-    await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(words));
-  } catch {}
-  return words;
-}
-
-// GET: fast cached response, or quick compute on cache miss
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId") || VIDEO_ID;
   const cacheKey = `trending:words:${videoId}`;
-  const doRefresh = searchParams.get("refresh") === "1";
 
-  // Full refresh mode (for cron/admin)
-  if (doRefresh) {
-    try {
-      const words = await computeAndCache(videoId, FULL_BATCHES);
-      return NextResponse.json({ words, cached: false, full: true, count: words.length });
-    } catch (e: any) {
-      return NextResponse.json({ error: e.message }, { status: 500 });
-    }
-  }
-
-  // Return cached data immediately
+  // Return cached data if available (already full accuracy)
   try {
     const cached = await redis.get(cacheKey);
     if (cached) {
@@ -110,22 +87,46 @@ export async function GET(req: NextRequest) {
     }
   } catch {}
 
-  // Cache miss: quick compute
+  // No cache: quick first response + trigger background full scan
   try {
-    const words = await computeAndCache(videoId, QUICK_BATCHES);
-    return NextResponse.json({ words, cached: false, quick: true, count: words.length });
+    const innertube = await getInnertube();
+
+    // 1. Fetch initial batches for fast response
+    const quickContents = await collectBatches(innertube, videoId, INITIAL_BATCHES);
+    const quickWords = extractTrendWords(quickContents);
+
+    // Save initial result to cache immediately
+    try {
+      await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(quickWords));
+    } catch {}
+
+    // 2. Fire background full scan (don't await - runs after response)
+    collectBatches(innertube, videoId, FULL_BATCHES - INITIAL_BATCHES)
+      .then(async (moreContents) => {
+        const allContents = [...quickContents, ...moreContents];
+        const fullWords = extractTrendWords(allContents);
+        try {
+          await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(fullWords));
+        } catch {}
+      })
+      .catch(() => {});
+
+    return NextResponse.json({
+      words: quickWords,
+      cached: false,
+      samples: quickContents.length,
+      updating: true,
+    });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed" }, { status: 500 });
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
 
-// DELETE: clear cache
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId") || VIDEO_ID;
-  const cacheKey = `trending:words:${videoId}`;
   try {
-    await redis.del(cacheKey);
+    await redis.del(`trending:words:${videoId}`);
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Redis unavailable" }, { status: 500 });
