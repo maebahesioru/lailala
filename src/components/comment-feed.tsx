@@ -241,7 +241,7 @@ export function CommentFeed({ videoId }: { videoId: string }) {
               }`}
             >
               {tab.id !== "top" && tab.id !== "new" && <List size={14} className="inline mr-1" />}
-              <span className="truncate inline-block max-w-full px-1">{tab.label}</span>
+              <span className="truncate inline-block max-w-full px-1 text-[15px]">{tab.label}</span>
               {activeTabId === tab.id && (
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
               )}
