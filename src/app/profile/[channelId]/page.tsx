@@ -104,7 +104,7 @@ export default function ProfilePage({ params }: { params: { channelId: string } 
             <div key={c.commentId} className="p-4 hover:bg-white/[0.03] transition-colors">
               <div className="flex items-start gap-3">
                 <img
-                  src={c.authorThumb || "/default-avatar.png"}
+                  src={c.authorThumb || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='15' r='8' fill='%2371767b'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='10' fill='%2371767b'/%3E%3C/svg%3E"}
                   alt={c.authorName}
                   className="w-10 h-10 rounded-full object-cover flex-shrink-0"
                 />

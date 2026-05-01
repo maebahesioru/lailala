@@ -89,19 +89,20 @@ export async function GET(req: NextRequest) {
     let channelId = sessionId;
     let name = "YouTube User";
     let thumbnail: string | null = null;
+    let accountError: string | null = null;
 
     try {
       const items = await innertube.account.getInfo(true);
-      console.log("getInfo result:", items);
       if (Array.isArray(items) && items.length > 0) {
         const primary = items[0];
-        console.log("primary:", { name: primary.account_name?.text, photo: primary.account_photo?.[0]?.url, handle: primary.channel_handle?.text });
         if (primary.account_name?.text) name = primary.account_name.text;
         if (primary.account_photo?.[0]?.url) thumbnail = primary.account_photo[0].url;
         if (primary.channel_handle?.text) channelId = primary.channel_handle.text;
+      } else {
+        accountError = "getInfo returned empty or non-array: " + JSON.stringify(typeof items);
       }
     } catch (e: any) {
-      console.log("getInfo failed:", e.message);
+      accountError = e.message || "Unknown account error";
     }
 
     const email = `yt:${channelId}`;
@@ -122,8 +123,12 @@ export async function GET(req: NextRequest) {
     // Delete only after all DB work succeeds
     oauthStates.delete(sessionId);
     await createSession(user.id);
-    console.log("auth complete for user:", user.id, user.name);
-    return NextResponse.json({ status: "complete" });
+    return NextResponse.json({
+      status: "complete",
+      accountError,
+      name,
+      thumbnail,
+    });
   } catch (e: any) {
     if (e.message === "TIMEOUT") return NextResponse.json({ status: "pending" });
     oauthStates.delete(sessionId);

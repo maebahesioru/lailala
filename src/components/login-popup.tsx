@@ -52,6 +52,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
         if (data.status === "complete") {
           setPolling(false);
           setError("");
+          if (data.accountError) setError("アカウント情報取得失敗: " + data.accountError);
           setStep("done");
         } else if (data.status === "error" || data.status === "expired") {
           console.log("setting error:", data.message);

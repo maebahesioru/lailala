@@ -39,7 +39,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     <div className="px-4 py-3 border-b border-[#2f3336]">
       <div className="flex gap-3">
         <img
-          src={user.image || "/default-avatar.png"}
+          src={user.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='15' r='8' fill='%2371767b'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='10' fill='%2371767b'/%3E%3C/svg%3E"}
           alt={user.name || "User"}
           className="w-10 h-10 rounded-full object-cover shrink-0"
         />
