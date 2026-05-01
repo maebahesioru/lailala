@@ -71,17 +71,15 @@ export async function GET(req: NextRequest) {
     let replyError: string | null = null;
     let nextToken: string | null = null;
 
-    if (thread.has_replies) {
-      try {
-        thread.setActions(innertube.actions);
-        (thread as any).__videoId = videoId;
-        (thread as any).__videoChannelId = channelId;
-        const withReplies = await thread.getReplies();
-        replies = withReplies.replies?.map(parseReply) || [];
-        nextToken = (withReplies as any).continuation_token || null;
-      } catch (e: any) {
-        replyError = e.message || "Failed to load replies";
-      }
+    try {
+      thread.setActions(innertube.actions);
+      (thread as any).__videoId = videoId;
+      (thread as any).__videoChannelId = channelId;
+      const withReplies = await thread.getReplies();
+      replies = withReplies.replies?.map(parseReply) || [];
+      nextToken = (withReplies as any).continuation_token || null;
+    } catch (e: any) {
+      replyError = e.message || "Failed to load replies";
     }
 
     const c = thread.comment;

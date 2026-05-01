@@ -84,28 +84,29 @@ export default async function ThreadPage({ params }: PageProps) {
 
   // Strategy 3: If it's a top-level comment, load its replies
   if (!isReplyThread) {
-    if (thread.has_replies) {
-      try {
-        thread.setActions(innertube.actions);
-        (thread as any).__videoId = videoId;
-        (thread as any).__videoChannelId = channelId;
+    // Always try to load replies, even if has_replies flag is false
+    try {
+      thread.setActions(innertube.actions);
+      (thread as any).__videoId = videoId;
+      (thread as any).__videoChannelId = channelId;
 
-        const withReplies = await thread.getReplies();
-        loadedReplies = withReplies.replies || [];
-        nextToken = (withReplies as any).continuation_token || null;
-      } catch (e: any) {
-        // Fallback: fetch all comments and find this thread's replies manually
-        try {
-          const allComments = await innertube.getComments(videoId, "TOP_COMMENTS");
-          const foundThread = allComments.contents.find(
-            (t: any) => t.comment?.comment_id === commentId
-          );
-          if (foundThread?.replies) {
-            loadedReplies = foundThread.replies;
-          }
-        } catch {
+      const withReplies = await thread.getReplies();
+      loadedReplies = withReplies.replies || [];
+      nextToken = (withReplies as any).continuation_token || null;
+    } catch (e: any) {
+      // Fallback: fetch all comments and find this thread's replies manually
+      try {
+        const allComments = await innertube.getComments(videoId, "TOP_COMMENTS");
+        const foundThread = allComments.contents.find(
+          (t: any) => t.comment?.comment_id === commentId
+        );
+        if (foundThread?.replies) {
+          loadedReplies = foundThread.replies;
+        } else {
           replyError = e.message || "Failed to load replies";
         }
+      } catch (e2: any) {
+        replyError = e2.message || e.message || "Failed to load replies";
       }
     }
   }
