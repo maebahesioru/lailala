@@ -53,6 +53,11 @@ export type List = $Result.DefaultSelection<Prisma.$ListPayload>
  * 
  */
 export type ListItem = $Result.DefaultSelection<Prisma.$ListItemPayload>
+/**
+ * Model ScheduledPost
+ * 
+ */
+export type ScheduledPost = $Result.DefaultSelection<Prisma.$ScheduledPostPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -251,6 +256,16 @@ export class PrismaClient<
     * ```
     */
   get listItem(): Prisma.ListItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.scheduledPost`: Exposes CRUD operations for the **ScheduledPost** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ScheduledPosts
+    * const scheduledPosts = await prisma.scheduledPost.findMany()
+    * ```
+    */
+  get scheduledPost(): Prisma.ScheduledPostDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -699,7 +714,8 @@ export namespace Prisma {
     CommentCache: 'CommentCache',
     Bookmark: 'Bookmark',
     List: 'List',
-    ListItem: 'ListItem'
+    ListItem: 'ListItem',
+    ScheduledPost: 'ScheduledPost'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -718,7 +734,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem"
+      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem" | "scheduledPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1314,6 +1330,80 @@ export namespace Prisma {
           }
         }
       }
+      ScheduledPost: {
+        payload: Prisma.$ScheduledPostPayload<ExtArgs>
+        fields: Prisma.ScheduledPostFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ScheduledPostFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ScheduledPostFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>
+          }
+          findFirst: {
+            args: Prisma.ScheduledPostFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ScheduledPostFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>
+          }
+          findMany: {
+            args: Prisma.ScheduledPostFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>[]
+          }
+          create: {
+            args: Prisma.ScheduledPostCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>
+          }
+          createMany: {
+            args: Prisma.ScheduledPostCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ScheduledPostCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>[]
+          }
+          delete: {
+            args: Prisma.ScheduledPostDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>
+          }
+          update: {
+            args: Prisma.ScheduledPostUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>
+          }
+          deleteMany: {
+            args: Prisma.ScheduledPostDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ScheduledPostUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ScheduledPostUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>[]
+          }
+          upsert: {
+            args: Prisma.ScheduledPostUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledPostPayload>
+          }
+          aggregate: {
+            args: Prisma.ScheduledPostAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateScheduledPost>
+          }
+          groupBy: {
+            args: Prisma.ScheduledPostGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ScheduledPostGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ScheduledPostCountArgs<ExtArgs>
+            result: $Utils.Optional<ScheduledPostCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1418,6 +1508,7 @@ export namespace Prisma {
     bookmark?: BookmarkOmit
     list?: ListOmit
     listItem?: ListItemOmit
+    scheduledPost?: ScheduledPostOmit
   }
 
   /* Types for Logging */
@@ -10361,6 +10452,1027 @@ export namespace Prisma {
 
 
   /**
+   * Model ScheduledPost
+   */
+
+  export type AggregateScheduledPost = {
+    _count: ScheduledPostCountAggregateOutputType | null
+    _min: ScheduledPostMinAggregateOutputType | null
+    _max: ScheduledPostMaxAggregateOutputType | null
+  }
+
+  export type ScheduledPostMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    videoId: string | null
+    text: string | null
+    scheduledAt: Date | null
+    posted: boolean | null
+    createdAt: Date | null
+  }
+
+  export type ScheduledPostMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    videoId: string | null
+    text: string | null
+    scheduledAt: Date | null
+    posted: boolean | null
+    createdAt: Date | null
+  }
+
+  export type ScheduledPostCountAggregateOutputType = {
+    id: number
+    userId: number
+    videoId: number
+    text: number
+    scheduledAt: number
+    posted: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ScheduledPostMinAggregateInputType = {
+    id?: true
+    userId?: true
+    videoId?: true
+    text?: true
+    scheduledAt?: true
+    posted?: true
+    createdAt?: true
+  }
+
+  export type ScheduledPostMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    videoId?: true
+    text?: true
+    scheduledAt?: true
+    posted?: true
+    createdAt?: true
+  }
+
+  export type ScheduledPostCountAggregateInputType = {
+    id?: true
+    userId?: true
+    videoId?: true
+    text?: true
+    scheduledAt?: true
+    posted?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ScheduledPostAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScheduledPost to aggregate.
+     */
+    where?: ScheduledPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScheduledPosts to fetch.
+     */
+    orderBy?: ScheduledPostOrderByWithRelationInput | ScheduledPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ScheduledPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScheduledPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScheduledPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ScheduledPosts
+    **/
+    _count?: true | ScheduledPostCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ScheduledPostMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ScheduledPostMaxAggregateInputType
+  }
+
+  export type GetScheduledPostAggregateType<T extends ScheduledPostAggregateArgs> = {
+        [P in keyof T & keyof AggregateScheduledPost]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScheduledPost[P]>
+      : GetScalarType<T[P], AggregateScheduledPost[P]>
+  }
+
+
+
+
+  export type ScheduledPostGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScheduledPostWhereInput
+    orderBy?: ScheduledPostOrderByWithAggregationInput | ScheduledPostOrderByWithAggregationInput[]
+    by: ScheduledPostScalarFieldEnum[] | ScheduledPostScalarFieldEnum
+    having?: ScheduledPostScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ScheduledPostCountAggregateInputType | true
+    _min?: ScheduledPostMinAggregateInputType
+    _max?: ScheduledPostMaxAggregateInputType
+  }
+
+  export type ScheduledPostGroupByOutputType = {
+    id: string
+    userId: string
+    videoId: string
+    text: string
+    scheduledAt: Date
+    posted: boolean
+    createdAt: Date
+    _count: ScheduledPostCountAggregateOutputType | null
+    _min: ScheduledPostMinAggregateOutputType | null
+    _max: ScheduledPostMaxAggregateOutputType | null
+  }
+
+  type GetScheduledPostGroupByPayload<T extends ScheduledPostGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ScheduledPostGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ScheduledPostGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ScheduledPostGroupByOutputType[P]>
+            : GetScalarType<T[P], ScheduledPostGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ScheduledPostSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    videoId?: boolean
+    text?: boolean
+    scheduledAt?: boolean
+    posted?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["scheduledPost"]>
+
+  export type ScheduledPostSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    videoId?: boolean
+    text?: boolean
+    scheduledAt?: boolean
+    posted?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["scheduledPost"]>
+
+  export type ScheduledPostSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    videoId?: boolean
+    text?: boolean
+    scheduledAt?: boolean
+    posted?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["scheduledPost"]>
+
+  export type ScheduledPostSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    videoId?: boolean
+    text?: boolean
+    scheduledAt?: boolean
+    posted?: boolean
+    createdAt?: boolean
+  }
+
+  export type ScheduledPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "videoId" | "text" | "scheduledAt" | "posted" | "createdAt", ExtArgs["result"]["scheduledPost"]>
+
+  export type $ScheduledPostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ScheduledPost"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      videoId: string
+      text: string
+      scheduledAt: Date
+      posted: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["scheduledPost"]>
+    composites: {}
+  }
+
+  type ScheduledPostGetPayload<S extends boolean | null | undefined | ScheduledPostDefaultArgs> = $Result.GetResult<Prisma.$ScheduledPostPayload, S>
+
+  type ScheduledPostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ScheduledPostFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ScheduledPostCountAggregateInputType | true
+    }
+
+  export interface ScheduledPostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ScheduledPost'], meta: { name: 'ScheduledPost' } }
+    /**
+     * Find zero or one ScheduledPost that matches the filter.
+     * @param {ScheduledPostFindUniqueArgs} args - Arguments to find a ScheduledPost
+     * @example
+     * // Get one ScheduledPost
+     * const scheduledPost = await prisma.scheduledPost.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ScheduledPostFindUniqueArgs>(args: SelectSubset<T, ScheduledPostFindUniqueArgs<ExtArgs>>): Prisma__ScheduledPostClient<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ScheduledPost that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ScheduledPostFindUniqueOrThrowArgs} args - Arguments to find a ScheduledPost
+     * @example
+     * // Get one ScheduledPost
+     * const scheduledPost = await prisma.scheduledPost.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ScheduledPostFindUniqueOrThrowArgs>(args: SelectSubset<T, ScheduledPostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScheduledPostClient<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ScheduledPost that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledPostFindFirstArgs} args - Arguments to find a ScheduledPost
+     * @example
+     * // Get one ScheduledPost
+     * const scheduledPost = await prisma.scheduledPost.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ScheduledPostFindFirstArgs>(args?: SelectSubset<T, ScheduledPostFindFirstArgs<ExtArgs>>): Prisma__ScheduledPostClient<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ScheduledPost that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledPostFindFirstOrThrowArgs} args - Arguments to find a ScheduledPost
+     * @example
+     * // Get one ScheduledPost
+     * const scheduledPost = await prisma.scheduledPost.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ScheduledPostFindFirstOrThrowArgs>(args?: SelectSubset<T, ScheduledPostFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScheduledPostClient<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ScheduledPosts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledPostFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ScheduledPosts
+     * const scheduledPosts = await prisma.scheduledPost.findMany()
+     * 
+     * // Get first 10 ScheduledPosts
+     * const scheduledPosts = await prisma.scheduledPost.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const scheduledPostWithIdOnly = await prisma.scheduledPost.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ScheduledPostFindManyArgs>(args?: SelectSubset<T, ScheduledPostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ScheduledPost.
+     * @param {ScheduledPostCreateArgs} args - Arguments to create a ScheduledPost.
+     * @example
+     * // Create one ScheduledPost
+     * const ScheduledPost = await prisma.scheduledPost.create({
+     *   data: {
+     *     // ... data to create a ScheduledPost
+     *   }
+     * })
+     * 
+     */
+    create<T extends ScheduledPostCreateArgs>(args: SelectSubset<T, ScheduledPostCreateArgs<ExtArgs>>): Prisma__ScheduledPostClient<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ScheduledPosts.
+     * @param {ScheduledPostCreateManyArgs} args - Arguments to create many ScheduledPosts.
+     * @example
+     * // Create many ScheduledPosts
+     * const scheduledPost = await prisma.scheduledPost.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ScheduledPostCreateManyArgs>(args?: SelectSubset<T, ScheduledPostCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ScheduledPosts and returns the data saved in the database.
+     * @param {ScheduledPostCreateManyAndReturnArgs} args - Arguments to create many ScheduledPosts.
+     * @example
+     * // Create many ScheduledPosts
+     * const scheduledPost = await prisma.scheduledPost.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ScheduledPosts and only return the `id`
+     * const scheduledPostWithIdOnly = await prisma.scheduledPost.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ScheduledPostCreateManyAndReturnArgs>(args?: SelectSubset<T, ScheduledPostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ScheduledPost.
+     * @param {ScheduledPostDeleteArgs} args - Arguments to delete one ScheduledPost.
+     * @example
+     * // Delete one ScheduledPost
+     * const ScheduledPost = await prisma.scheduledPost.delete({
+     *   where: {
+     *     // ... filter to delete one ScheduledPost
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ScheduledPostDeleteArgs>(args: SelectSubset<T, ScheduledPostDeleteArgs<ExtArgs>>): Prisma__ScheduledPostClient<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ScheduledPost.
+     * @param {ScheduledPostUpdateArgs} args - Arguments to update one ScheduledPost.
+     * @example
+     * // Update one ScheduledPost
+     * const scheduledPost = await prisma.scheduledPost.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ScheduledPostUpdateArgs>(args: SelectSubset<T, ScheduledPostUpdateArgs<ExtArgs>>): Prisma__ScheduledPostClient<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ScheduledPosts.
+     * @param {ScheduledPostDeleteManyArgs} args - Arguments to filter ScheduledPosts to delete.
+     * @example
+     * // Delete a few ScheduledPosts
+     * const { count } = await prisma.scheduledPost.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ScheduledPostDeleteManyArgs>(args?: SelectSubset<T, ScheduledPostDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScheduledPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledPostUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ScheduledPosts
+     * const scheduledPost = await prisma.scheduledPost.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ScheduledPostUpdateManyArgs>(args: SelectSubset<T, ScheduledPostUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScheduledPosts and returns the data updated in the database.
+     * @param {ScheduledPostUpdateManyAndReturnArgs} args - Arguments to update many ScheduledPosts.
+     * @example
+     * // Update many ScheduledPosts
+     * const scheduledPost = await prisma.scheduledPost.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ScheduledPosts and only return the `id`
+     * const scheduledPostWithIdOnly = await prisma.scheduledPost.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ScheduledPostUpdateManyAndReturnArgs>(args: SelectSubset<T, ScheduledPostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ScheduledPost.
+     * @param {ScheduledPostUpsertArgs} args - Arguments to update or create a ScheduledPost.
+     * @example
+     * // Update or create a ScheduledPost
+     * const scheduledPost = await prisma.scheduledPost.upsert({
+     *   create: {
+     *     // ... data to create a ScheduledPost
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ScheduledPost we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ScheduledPostUpsertArgs>(args: SelectSubset<T, ScheduledPostUpsertArgs<ExtArgs>>): Prisma__ScheduledPostClient<$Result.GetResult<Prisma.$ScheduledPostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ScheduledPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledPostCountArgs} args - Arguments to filter ScheduledPosts to count.
+     * @example
+     * // Count the number of ScheduledPosts
+     * const count = await prisma.scheduledPost.count({
+     *   where: {
+     *     // ... the filter for the ScheduledPosts we want to count
+     *   }
+     * })
+    **/
+    count<T extends ScheduledPostCountArgs>(
+      args?: Subset<T, ScheduledPostCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ScheduledPostCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ScheduledPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledPostAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ScheduledPostAggregateArgs>(args: Subset<T, ScheduledPostAggregateArgs>): Prisma.PrismaPromise<GetScheduledPostAggregateType<T>>
+
+    /**
+     * Group by ScheduledPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledPostGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ScheduledPostGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScheduledPostGroupByArgs['orderBy'] }
+        : { orderBy?: ScheduledPostGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ScheduledPostGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScheduledPostGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ScheduledPost model
+   */
+  readonly fields: ScheduledPostFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ScheduledPost.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ScheduledPostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ScheduledPost model
+   */
+  interface ScheduledPostFieldRefs {
+    readonly id: FieldRef<"ScheduledPost", 'String'>
+    readonly userId: FieldRef<"ScheduledPost", 'String'>
+    readonly videoId: FieldRef<"ScheduledPost", 'String'>
+    readonly text: FieldRef<"ScheduledPost", 'String'>
+    readonly scheduledAt: FieldRef<"ScheduledPost", 'DateTime'>
+    readonly posted: FieldRef<"ScheduledPost", 'Boolean'>
+    readonly createdAt: FieldRef<"ScheduledPost", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ScheduledPost findUnique
+   */
+  export type ScheduledPostFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * Filter, which ScheduledPost to fetch.
+     */
+    where: ScheduledPostWhereUniqueInput
+  }
+
+  /**
+   * ScheduledPost findUniqueOrThrow
+   */
+  export type ScheduledPostFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * Filter, which ScheduledPost to fetch.
+     */
+    where: ScheduledPostWhereUniqueInput
+  }
+
+  /**
+   * ScheduledPost findFirst
+   */
+  export type ScheduledPostFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * Filter, which ScheduledPost to fetch.
+     */
+    where?: ScheduledPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScheduledPosts to fetch.
+     */
+    orderBy?: ScheduledPostOrderByWithRelationInput | ScheduledPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScheduledPosts.
+     */
+    cursor?: ScheduledPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScheduledPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScheduledPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScheduledPosts.
+     */
+    distinct?: ScheduledPostScalarFieldEnum | ScheduledPostScalarFieldEnum[]
+  }
+
+  /**
+   * ScheduledPost findFirstOrThrow
+   */
+  export type ScheduledPostFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * Filter, which ScheduledPost to fetch.
+     */
+    where?: ScheduledPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScheduledPosts to fetch.
+     */
+    orderBy?: ScheduledPostOrderByWithRelationInput | ScheduledPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScheduledPosts.
+     */
+    cursor?: ScheduledPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScheduledPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScheduledPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScheduledPosts.
+     */
+    distinct?: ScheduledPostScalarFieldEnum | ScheduledPostScalarFieldEnum[]
+  }
+
+  /**
+   * ScheduledPost findMany
+   */
+  export type ScheduledPostFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * Filter, which ScheduledPosts to fetch.
+     */
+    where?: ScheduledPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScheduledPosts to fetch.
+     */
+    orderBy?: ScheduledPostOrderByWithRelationInput | ScheduledPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ScheduledPosts.
+     */
+    cursor?: ScheduledPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScheduledPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScheduledPosts.
+     */
+    skip?: number
+    distinct?: ScheduledPostScalarFieldEnum | ScheduledPostScalarFieldEnum[]
+  }
+
+  /**
+   * ScheduledPost create
+   */
+  export type ScheduledPostCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ScheduledPost.
+     */
+    data: XOR<ScheduledPostCreateInput, ScheduledPostUncheckedCreateInput>
+  }
+
+  /**
+   * ScheduledPost createMany
+   */
+  export type ScheduledPostCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ScheduledPosts.
+     */
+    data: ScheduledPostCreateManyInput | ScheduledPostCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ScheduledPost createManyAndReturn
+   */
+  export type ScheduledPostCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * The data used to create many ScheduledPosts.
+     */
+    data: ScheduledPostCreateManyInput | ScheduledPostCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ScheduledPost update
+   */
+  export type ScheduledPostUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ScheduledPost.
+     */
+    data: XOR<ScheduledPostUpdateInput, ScheduledPostUncheckedUpdateInput>
+    /**
+     * Choose, which ScheduledPost to update.
+     */
+    where: ScheduledPostWhereUniqueInput
+  }
+
+  /**
+   * ScheduledPost updateMany
+   */
+  export type ScheduledPostUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ScheduledPosts.
+     */
+    data: XOR<ScheduledPostUpdateManyMutationInput, ScheduledPostUncheckedUpdateManyInput>
+    /**
+     * Filter which ScheduledPosts to update
+     */
+    where?: ScheduledPostWhereInput
+    /**
+     * Limit how many ScheduledPosts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScheduledPost updateManyAndReturn
+   */
+  export type ScheduledPostUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * The data used to update ScheduledPosts.
+     */
+    data: XOR<ScheduledPostUpdateManyMutationInput, ScheduledPostUncheckedUpdateManyInput>
+    /**
+     * Filter which ScheduledPosts to update
+     */
+    where?: ScheduledPostWhereInput
+    /**
+     * Limit how many ScheduledPosts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScheduledPost upsert
+   */
+  export type ScheduledPostUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ScheduledPost to update in case it exists.
+     */
+    where: ScheduledPostWhereUniqueInput
+    /**
+     * In case the ScheduledPost found by the `where` argument doesn't exist, create a new ScheduledPost with this data.
+     */
+    create: XOR<ScheduledPostCreateInput, ScheduledPostUncheckedCreateInput>
+    /**
+     * In case the ScheduledPost was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ScheduledPostUpdateInput, ScheduledPostUncheckedUpdateInput>
+  }
+
+  /**
+   * ScheduledPost delete
+   */
+  export type ScheduledPostDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+    /**
+     * Filter which ScheduledPost to delete.
+     */
+    where: ScheduledPostWhereUniqueInput
+  }
+
+  /**
+   * ScheduledPost deleteMany
+   */
+  export type ScheduledPostDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScheduledPosts to delete
+     */
+    where?: ScheduledPostWhereInput
+    /**
+     * Limit how many ScheduledPosts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScheduledPost without action
+   */
+  export type ScheduledPostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledPost
+     */
+    select?: ScheduledPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledPost
+     */
+    omit?: ScheduledPostOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -10484,6 +11596,19 @@ export namespace Prisma {
   export type ListItemScalarFieldEnum = (typeof ListItemScalarFieldEnum)[keyof typeof ListItemScalarFieldEnum]
 
 
+  export const ScheduledPostScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    videoId: 'videoId',
+    text: 'text',
+    scheduledAt: 'scheduledAt',
+    posted: 'posted',
+    createdAt: 'createdAt'
+  };
+
+  export type ScheduledPostScalarFieldEnum = (typeof ScheduledPostScalarFieldEnum)[keyof typeof ScheduledPostScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -10552,6 +11677,13 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -11131,6 +12263,68 @@ export namespace Prisma {
     replyCount?: StringWithAggregatesFilter<"ListItem"> | string
     publishedTime?: StringWithAggregatesFilter<"ListItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ListItem"> | Date | string
+  }
+
+  export type ScheduledPostWhereInput = {
+    AND?: ScheduledPostWhereInput | ScheduledPostWhereInput[]
+    OR?: ScheduledPostWhereInput[]
+    NOT?: ScheduledPostWhereInput | ScheduledPostWhereInput[]
+    id?: StringFilter<"ScheduledPost"> | string
+    userId?: StringFilter<"ScheduledPost"> | string
+    videoId?: StringFilter<"ScheduledPost"> | string
+    text?: StringFilter<"ScheduledPost"> | string
+    scheduledAt?: DateTimeFilter<"ScheduledPost"> | Date | string
+    posted?: BoolFilter<"ScheduledPost"> | boolean
+    createdAt?: DateTimeFilter<"ScheduledPost"> | Date | string
+  }
+
+  export type ScheduledPostOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    videoId?: SortOrder
+    text?: SortOrder
+    scheduledAt?: SortOrder
+    posted?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScheduledPostWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ScheduledPostWhereInput | ScheduledPostWhereInput[]
+    OR?: ScheduledPostWhereInput[]
+    NOT?: ScheduledPostWhereInput | ScheduledPostWhereInput[]
+    userId?: StringFilter<"ScheduledPost"> | string
+    videoId?: StringFilter<"ScheduledPost"> | string
+    text?: StringFilter<"ScheduledPost"> | string
+    scheduledAt?: DateTimeFilter<"ScheduledPost"> | Date | string
+    posted?: BoolFilter<"ScheduledPost"> | boolean
+    createdAt?: DateTimeFilter<"ScheduledPost"> | Date | string
+  }, "id">
+
+  export type ScheduledPostOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    videoId?: SortOrder
+    text?: SortOrder
+    scheduledAt?: SortOrder
+    posted?: SortOrder
+    createdAt?: SortOrder
+    _count?: ScheduledPostCountOrderByAggregateInput
+    _max?: ScheduledPostMaxOrderByAggregateInput
+    _min?: ScheduledPostMinOrderByAggregateInput
+  }
+
+  export type ScheduledPostScalarWhereWithAggregatesInput = {
+    AND?: ScheduledPostScalarWhereWithAggregatesInput | ScheduledPostScalarWhereWithAggregatesInput[]
+    OR?: ScheduledPostScalarWhereWithAggregatesInput[]
+    NOT?: ScheduledPostScalarWhereWithAggregatesInput | ScheduledPostScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ScheduledPost"> | string
+    userId?: StringWithAggregatesFilter<"ScheduledPost"> | string
+    videoId?: StringWithAggregatesFilter<"ScheduledPost"> | string
+    text?: StringWithAggregatesFilter<"ScheduledPost"> | string
+    scheduledAt?: DateTimeWithAggregatesFilter<"ScheduledPost"> | Date | string
+    posted?: BoolWithAggregatesFilter<"ScheduledPost"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ScheduledPost"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -11750,6 +12944,76 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ScheduledPostCreateInput = {
+    id?: string
+    userId: string
+    videoId: string
+    text: string
+    scheduledAt: Date | string
+    posted?: boolean
+    createdAt?: Date | string
+  }
+
+  export type ScheduledPostUncheckedCreateInput = {
+    id?: string
+    userId: string
+    videoId: string
+    text: string
+    scheduledAt: Date | string
+    posted?: boolean
+    createdAt?: Date | string
+  }
+
+  export type ScheduledPostUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledPostUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledPostCreateManyInput = {
+    id?: string
+    userId: string
+    videoId: string
+    text: string
+    scheduledAt: Date | string
+    posted?: boolean
+    createdAt?: Date | string
+  }
+
+  export type ScheduledPostUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledPostUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12211,6 +13475,49 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type ScheduledPostCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    videoId?: SortOrder
+    text?: SortOrder
+    scheduledAt?: SortOrder
+    posted?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScheduledPostMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    videoId?: SortOrder
+    text?: SortOrder
+    scheduledAt?: SortOrder
+    posted?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ScheduledPostMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    videoId?: SortOrder
+    text?: SortOrder
+    scheduledAt?: SortOrder
+    posted?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type YtCredentialCreateNestedOneWithoutUserInput = {
     create?: XOR<YtCredentialCreateWithoutUserInput, YtCredentialUncheckedCreateWithoutUserInput>
     connectOrCreate?: YtCredentialCreateOrConnectWithoutUserInput
@@ -12501,6 +13808,10 @@ export namespace Prisma {
     update?: XOR<XOR<ListUpdateToOneWithWhereWithoutItemsInput, ListUpdateWithoutItemsInput>, ListUncheckedUpdateWithoutItemsInput>
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12635,6 +13946,19 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type YtCredentialCreateWithoutUserInput = {

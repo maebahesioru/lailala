@@ -207,6 +207,16 @@ exports.Prisma.ListItemScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ScheduledPostScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  videoId: 'videoId',
+  text: 'text',
+  scheduledAt: 'scheduledAt',
+  posted: 'posted',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -231,7 +241,8 @@ exports.Prisma.ModelName = {
   CommentCache: 'CommentCache',
   Bookmark: 'Bookmark',
   List: 'List',
-  ListItem: 'ListItem'
+  ListItem: 'ListItem',
+  ScheduledPost: 'ScheduledPost'
 };
 
 /**

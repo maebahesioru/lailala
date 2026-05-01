@@ -136,3 +136,17 @@ model ListItem {
   @@index([listId, createdAt])
   @@map("list_items")
 }
+
+model ScheduledPost {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  videoId     String   @map("video_id")
+  text        String   @db.Text
+  scheduledAt DateTime @map("scheduled_at")
+  posted      Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([posted, scheduledAt])
+  @@index([userId])
+  @@map("scheduled_posts")
+}
