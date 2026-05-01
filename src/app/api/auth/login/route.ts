@@ -6,23 +6,41 @@ import { createSession } from "@/lib/session";
 
 const oauthStates = new Map<string, Promise<string>>();
 
-// POST /api/auth/login - Start YouTube OAuth TV flow
 export async function POST(_req: NextRequest) {
   try {
     const innertube = await Innertube.create({ cache: new UniversalCache(false) });
     const sessionId = crypto.randomUUID();
     const timeout = 600_000;
 
-    // Collect verification data
-    let verificationUrl = "https://www.google.com/device";
-    let userCode = "";
+    // Wait for auth-pending with timeout
+    const pendingData = await new Promise<any>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error("OAuth flow timed out before auth-pending")), 15000);
 
-    innertube.session.on("auth-pending", (data: any) => {
-      verificationUrl = data?.verification_url || verificationUrl;
-      userCode = data?.user_code || "";
+      innertube.session.on("auth-pending", (data: any) => {
+        clearTimeout(timer);
+        resolve(data);
+      });
+
+      innertube.session.on("error", (err: any) => {
+        clearTimeout(timer);
+        reject(err instanceof Error ? err : new Error(String(err)));
+      });
+
+      // Start the sign-in flow AFTER listeners are set
+      innertube.session.signIn().catch((e: any) => {
+        clearTimeout(timer);
+        reject(e instanceof Error ? e : new Error(String(e)));
+      });
     });
 
-    // Build auth promise
+    const verificationUrl = pendingData?.verification_url || "https://www.google.com/device";
+    const userCode = pendingData?.user_code || "";
+
+    if (!userCode) {
+      return NextResponse.json({ error: "Failed to get verification code" }, { status: 500 });
+    }
+
+    // Build auth promise (for polling)
     const authPromise = new Promise<string>((resolve, reject) => {
       const timer = setTimeout(() => reject(new Error("OAuth timed out")), timeout);
 
@@ -56,26 +74,11 @@ export async function POST(_req: NextRequest) {
         }
       });
 
-      innertube.session.on("error", (err: any) => {
+      innertube.session.on("auth-error", (err: any) => {
         clearTimeout(timer);
         reject(err instanceof Error ? err : new Error(String(err)));
       });
     });
-
-    // Start sign-in (don't await - it resolves only when auth completes)
-    innertube.session.signIn().catch((e: any) => {
-      // If signIn rejects before auth-pending fires, clean up
-      if (!oauthStates.has(sessionId)) return;
-      oauthStates.delete(sessionId);
-    });
-
-    // Wait briefly for auth-pending to fire
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    if (!userCode) {
-      oauthStates.delete(sessionId);
-      return NextResponse.json({ error: "Failed to start OAuth flow. Please try again." }, { status: 500 });
-    }
 
     oauthStates.set(sessionId, authPromise);
     setTimeout(() => oauthStates.delete(sessionId), timeout + 5000);
@@ -90,7 +93,6 @@ export async function POST(_req: NextRequest) {
   }
 }
 
-// GET /api/auth/login/poll?sessionId=xxx - Poll completion
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get("sessionId");
