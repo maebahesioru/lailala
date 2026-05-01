@@ -1,20 +1,25 @@
 "use client";
 
-import { Home, Search, User, Settings, LogIn, LogOut, Bookmark } from "lucide-react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { Home, Search, User, Settings, LogOut, Bookmark } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { LoginPopup } from "./login-popup";
+import { useAuth } from "./auth-provider";
 
 export function Sidebar() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
 
-  const handleProtectedClick = (e: React.MouseEvent, path: string) => {
-    if (!session?.user) {
+  const handleProtectedClick = (e: React.MouseEvent) => {
+    if (!user) {
       e.preventDefault();
       setShowLogin(true);
     }
+  };
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/me", { method: "POST" });
+    window.location.reload();
   };
 
   const navItems = [
@@ -42,16 +47,16 @@ export function Sidebar() {
             </Link>
           ))}
           <Link
-            href={session?.user ? "/bookmarks" : "/"}
-            onClick={(e) => handleProtectedClick(e, "/bookmarks")}
+            href={user ? "/bookmarks" : "/"}
+            onClick={(e) => handleProtectedClick(e)}
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
           >
             <Bookmark size={26} />
             <span className="font-medium">ブックマーク</span>
           </Link>
           <Link
-            href={session?.user ? "/profile" : "/"}
-            onClick={(e) => handleProtectedClick(e, "/profile")}
+            href={user ? "/profile" : "/"}
+            onClick={(e) => handleProtectedClick(e)}
             className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
           >
             <User size={26} />
@@ -66,9 +71,9 @@ export function Sidebar() {
           </Link>
         </nav>
         <div className="mt-auto px-3 pb-4">
-          {session?.user ? (
+          {user ? (
             <button
-              onClick={() => signOut()}
+              onClick={handleLogout}
               className="flex items-center gap-3 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors w-full text-left text-foreground"
             >
               <LogOut size={26} />
@@ -76,16 +81,16 @@ export function Sidebar() {
             </button>
           ) : (
             <button
-              onClick={() => signIn("google")}
+              onClick={() => setShowLogin(true)}
               className="flex items-center gap-3 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors w-full text-left text-foreground"
             >
-              <LogIn size={26} />
+              <User size={26} />
               <span className="font-medium">ログイン</span>
             </button>
           )}
         </div>
       </aside>
-      <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} onLogin={() => signIn("google")} />
+      <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
     </>
   );
 }

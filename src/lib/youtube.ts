@@ -14,38 +14,20 @@ export async function getInnertube() {
 
 /**
  * 書き込み操作用: 認証が必要。
- * ユーザーのCredential → 管理者Cookie（env）→ DB内のCookie の順で探す。
+ * 指定ユーザーのCredentialのみ使用。フォールバックは一切なし。
  */
-export async function getInnertubeWithAuth(credentialId?: string) {
-  let cookie: string | undefined;
+export async function getInnertubeWithAuth(credentialId: string) {
+  const cred = await prisma.ytCredential.findUnique({
+    where: { userId: credentialId },
+  });
 
-  // 1. 指定されたユーザーの認証情報
-  if (credentialId) {
-    const cred = await prisma.ytCredential.findUnique({
-      where: { userId: credentialId },
-    });
-    if (cred) {
-      const decrypted = decrypt(cred.credential);
-      if (cred.type === "cookie") {
-        cookie = decrypted;
-      }
-    }
+  if (!cred) {
+    const error = new Error("YOUTUBE_AUTH_REQUIRED");
+    (error as any).code = "YOUTUBE_AUTH_REQUIRED";
+    throw error;
   }
 
-  // 2. フォールバック: 管理者Cookie（env）
-  if (!cookie) {
-    cookie = process.env.YOUTUBE_COOKIE || undefined;
-  }
-
-  // 3. 最終フォールバック: DB内で最初に見つかったCookie
-  if (!cookie) {
-    const firstCred = await prisma.ytCredential.findFirst({
-      where: { type: "cookie" },
-    });
-    if (firstCred) {
-      cookie = decrypt(firstCred.credential);
-    }
-  }
+  const cookie = decrypt(cred.credential);
 
   const innertube = await Innertube.create({
     cache: new UniversalCache(false),

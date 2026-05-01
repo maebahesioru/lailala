@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Share, Bookmark } from "lucide-react";
 import { YtComment } from "@/types/youtube";
-import { useSession, signIn } from "next-auth/react";
+import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
 import { localizeTime, stripHandlePrefix, stripEditedTag, formatDetailedTime } from "@/lib/i18n";
 import Link from "next/link";
@@ -31,7 +31,7 @@ function parseReplyTo(content: string): { replyTo: string | null; displayContent
 }
 
 export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onDelete, showDetailTime = false }: ReplyCardProps) {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const router = useRouter();
   const [liked, setLiked] = useState(reply.isLiked || false);
   const [disliked, setDisliked] = useState(reply.isDisliked || false);
@@ -44,7 +44,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   const detailTime = formatDetailedTime(reply.publishedTime);
 
   const handleLike = async () => {
-    if (!session?.user) { setShowLogin(true); return; }
+    if (!user) { setShowLogin(true); return; }
     try {
       const action = liked ? "unlike" : "like";
       await fetch("/api/comments/vote", {
@@ -59,7 +59,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   };
 
   const handleDislike = async () => {
-    if (!session?.user) { setShowLogin(true); return; }
+    if (!user) { setShowLogin(true); return; }
     try {
       const action = disliked ? "undislike" : "dislike";
       await fetch("/api/comments/vote", {
@@ -73,7 +73,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   };
 
   const handleDelete = async () => {
-    if (!session?.user) return;
+    if (!user) return;
     if (!confirm("この返信を削除しますか？")) return;
     try {
       await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${reply.commentId}`, { method: "DELETE" });
@@ -100,7 +100,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   };
 
   const handleBookmark = async () => {
-    if (!session?.user) { setShowLogin(true); return; }
+    if (!user) { setShowLogin(true); return; }
     try {
       if (bookmarked) {
         await fetch(`/api/bookmarks?commentId=${reply.commentId}`, { method: "DELETE" });
@@ -213,7 +213,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                 <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
               </button>
 
-              {session?.user && (
+              {user && (
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDelete(); }}
                   className="flex items-center gap-1.5 text-[13px] text-muted hover:text-red-500 transition-colors"
@@ -229,7 +229,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
           </div>
         </div>
       </article>
-      <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} onLogin={() => signIn("google")} />
+      <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
     </>
   );
 }

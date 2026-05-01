@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { getSessionUserId } from "@/lib/session";
 import { getInnertube, getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
@@ -57,12 +57,12 @@ function parseCommentThread(thread: any) {
 
 // POST: コメント投稿
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
+  const userId = await getSessionUserId();
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const limit = await rateLimit(`comment:${session.user.id}`, 10, 60);
+  const limit = await rateLimit(`comment:${userId}`, 10, 60);
   if (!limit.success) {
     return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
   }
@@ -76,12 +76,12 @@ export async function POST(req: NextRequest) {
   const { videoId, text } = parsed.data;
 
   try {
-    const innertube = await getInnertubeWithAuth(session.user.id);
+    const innertube = await getInnertubeWithAuth(userId);
     const response = await innertube.interact.comment(videoId, text);
 
     await prisma.userAction.create({
       data: {
-        userId: session.user.id,
+        userId,
         videoId,
         commentId: "pending",
         actionType: "comment",
@@ -91,7 +91,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, data: response });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to post comment" }, { status: 500 });
+    const msg = e.code === "YOUTUBE_AUTH_REQUIRED" ? "YouTube認証が必要です" : e.message || "Failed to post comment";
+    return NextResponse.json({ error: msg }, { status: e.code === "YOUTUBE_AUTH_REQUIRED" ? 401 : 500 });
   }
 }
 

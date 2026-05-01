@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { getSessionUserId } from "@/lib/session";
 import { getInnertube } from "@/lib/youtube";
 import { YTNodes } from "youtubei.js";
 
@@ -25,7 +25,6 @@ const parseReply = (r: any) => ({
 function extractContinuationToken(memo: any): string | null {
   const cont = memo?.getType(YTNodes.ContinuationItem)?.[0];
   if (!cont) return null;
-  // Try common paths for the token
   const payload = (cont as any).endpoint?.payload;
   return payload?.continuationCommand?.token || payload?.token || null;
 }
@@ -42,45 +41,28 @@ export async function GET(req: NextRequest) {
 
   try {
     const innertube = await getInnertube();
+    const userId = await getSessionUserId();
 
-    // If continuationToken is provided, fetch next batch directly
     if (continuationToken) {
       const cmd = new YTNodes.NavigationEndpoint({
-        continuationCommand: {
-          request: "CONTINUATION_REQUEST_TYPE_WATCH_NEXT",
-          token: continuationToken,
-        },
+        continuationCommand: { request: "CONTINUATION_REQUEST_TYPE_WATCH_NEXT", token: continuationToken },
       });
-
       const response = await cmd.call(innertube.actions, { parse: true });
-
       if (!response.on_response_received_endpoints_memo) {
         return NextResponse.json({ error: "Unexpected response" }, { status: 500 });
       }
-
       const moreReplies = response.on_response_received_endpoints_memo.getType(YTNodes.CommentView).map(parseReply) || [];
       const nextToken = extractContinuationToken(response.on_response_received_endpoints_memo);
-
-      return NextResponse.json({
-        replies: moreReplies,
-        continuationToken: nextToken,
-      });
+      return NextResponse.json({ replies: moreReplies, continuationToken: nextToken });
     }
 
-    // Initial load: fetch parent + first batch
     const comments = await innertube.getComments(videoId, "TOP_COMMENTS", commentId);
 
     let thread: any = null;
     for (const t of comments.contents) {
-      if (t.comment?.comment_id === commentId) {
-        thread = t;
-        break;
-      }
+      if (t.comment?.comment_id === commentId) { thread = t; break; }
     }
-
-    if (!thread) {
-      return NextResponse.json({ error: "Comment not found" }, { status: 404 });
-    }
+    if (!thread) return NextResponse.json({ error: "Comment not found" }, { status: 404 });
 
     const info = await innertube.getInfo(videoId);
     const channelId = info.basic_info.channel_id;
@@ -94,11 +76,8 @@ export async function GET(req: NextRequest) {
         thread.setActions(innertube.actions);
         (thread as any).__videoId = videoId;
         (thread as any).__videoChannelId = channelId;
-
         const withReplies = await thread.getReplies();
         replies = withReplies.replies?.map(parseReply) || [];
-
-        // Extract continuation token from the patched CommentThread
         nextToken = (withReplies as any).continuation_token || null;
       } catch (e: any) {
         replyError = e.message || "Failed to load replies";
@@ -125,12 +104,7 @@ export async function GET(req: NextRequest) {
       isHearted: c.is_hearted || false,
     };
 
-    return NextResponse.json({
-      parent,
-      replies,
-      replyError,
-      continuationToken: nextToken,
-    });
+    return NextResponse.json({ parent, replies, replyError, continuationToken: nextToken });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed" }, { status: 500 });
   }

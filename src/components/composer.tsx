@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "./auth-provider";
 import { Image, Smile, Calendar } from "lucide-react";
 
 export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: () => void }) {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!text.trim() || !session?.user) return;
+    if (!text.trim() || !user) return;
     setPosting(true);
     try {
       await fetch("/api/comments", {
@@ -27,7 +27,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     }
   };
 
-  if (!session?.user) {
+  if (!user) {
     return (
       <div className="px-4 py-6 border-b border-[#2f3336] text-center text-[#71767b]">
         コメントするにはログインしてください
@@ -39,8 +39,8 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     <div className="px-4 py-3 border-b border-[#2f3336]">
       <div className="flex gap-3">
         <img
-          src={session.user.image || "/default-avatar.png"}
-          alt={session.user.name || "User"}
+          src={user.image || "/default-avatar.png"}
+          alt={user.name || "User"}
           className="w-10 h-10 rounded-full object-cover shrink-0"
         />
         <div className="flex-1">

@@ -1,17 +1,19 @@
-import { auth } from "@/auth";
+import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, User, MessageSquare, Heart, ThumbsDown, Trash2 } from "lucide-react";
 
 export default async function MyProfilePage() {
-  const session = await auth();
-  if (!session?.user?.id) {
+  const userId = await getSessionUserId();
+  if (!userId) {
     redirect("/");
   }
 
+  const currentUser = await prisma.user.findUnique({ where: { id: userId } });
+
   const actions = await prisma.userAction.findMany({
-    where: { userId: session.user.id },
+    where: { userId },
     orderBy: { createdAt: "desc" },
     take: 50,
   });
@@ -49,16 +51,16 @@ export default async function MyProfilePage() {
 
       <div className="px-4 py-6 border-b border-[#2f3336]">
         <div className="flex items-center gap-4">
-          {session.user.image ? (
-            <img src={session.user.image} alt={session.user.name || ""} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
+          {currentUser?.image ? (
+            <img src={currentUser.image} alt={currentUser.name || ""} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
           ) : (
             <div className="w-20 h-20 rounded-full bg-[#2f3336] flex items-center justify-center">
               <User size={32} className="text-[#71767b]" />
             </div>
           )}
           <div>
-            <h2 className="text-xl font-bold">{session.user.name || "ユーザー"}</h2>
-            <p className="text-[13px] text-[#71767b]">{session.user.email}</p>
+            <h2 className="text-xl font-bold">{currentUser?.name || "ユーザー"}</h2>
+            <p className="text-[13px] text-[#71767b]">{currentUser?.email}</p>
           </div>
         </div>
       </div>

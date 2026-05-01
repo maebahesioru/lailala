@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Share, Bookmark } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
-import { useSession, signIn } from "next-auth/react";
+import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
 import { localizeTime, stripHandlePrefix, stripEditedTag, formatDetailedTime } from "@/lib/i18n";
 import Link from "next/link";
@@ -20,7 +20,7 @@ interface CommentCardProps {
 }
 
 export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, showDetailTime = false }: CommentCardProps) {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const router = useRouter();
   const [liked, setLiked] = useState(userVote === "like");
   const [disliked, setDisliked] = useState(userVote === "dislike");
@@ -30,7 +30,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   const [shareMessage, setShareMessage] = useState("");
 
   const handleLike = async () => {
-    if (!session?.user) { setShowLogin(true); return; }
+    if (!user) { setShowLogin(true); return; }
     try {
       const action = liked ? "unlike" : "like";
       await fetch("/api/comments/vote", {
@@ -45,7 +45,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   };
 
   const handleDislike = async () => {
-    if (!session?.user) { setShowLogin(true); return; }
+    if (!user) { setShowLogin(true); return; }
     try {
       const action = disliked ? "undislike" : "dislike";
       await fetch("/api/comments/vote", {
@@ -59,7 +59,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   };
 
   const handleDelete = async () => {
-    if (!session?.user) return;
+    if (!user) return;
     if (!confirm("このコメントを削除しますか？")) return;
     try {
       await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${thread.comment.commentId}`, { method: "DELETE" });
@@ -86,7 +86,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   };
 
   const handleBookmark = async () => {
-    if (!session?.user) { setShowLogin(true); return; }
+    if (!user) { setShowLogin(true); return; }
     try {
       if (bookmarked) {
         await fetch(`/api/bookmarks?commentId=${thread.comment.commentId}`, { method: "DELETE" });
@@ -194,7 +194,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                 <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
               </button>
 
-              {session?.user && (
+              {user && (
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDelete(); }}
                   className="flex items-center gap-1.5 text-[13px] text-muted hover:text-red-500 transition-colors"
@@ -210,7 +210,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
           </div>
         </div>
       </article>
-      <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} onLogin={() => signIn("google")} />
+      <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
     </>
   );
 }

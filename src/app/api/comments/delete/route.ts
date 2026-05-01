@@ -1,59 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { getSessionUserId } from "@/lib/session";
 import { getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
-import { z } from "zod";
-
-const schema = z.object({
-  videoId: z.string(),
-  commentId: z.string(),
-});
 
 export async function DELETE(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await getSessionUserId();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const limit = await rateLimit(`delete:${session.user.id}`, 10, 60);
-  if (!limit.success) {
-    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
-  }
+  const limit = await rateLimit(`delete:${userId}`, 10, 60);
+  if (!limit.success) return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
 
   const { searchParams } = new URL(req.url);
-  const parsed = schema.safeParse({
-    videoId: searchParams.get("videoId"),
-    commentId: searchParams.get("commentId"),
-  });
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid query" }, { status: 400 });
-  }
-
-  const { videoId, commentId } = parsed.data;
+  const videoId = searchParams.get("videoId");
+  const commentId = searchParams.get("commentId");
+  if (!videoId || !commentId) return NextResponse.json({ error: "Invalid query" }, { status: 400 });
 
   try {
-    const innertube = await getInnertubeWithAuth(session.user.id);
-
-    // Delete via direct innerTube action payload
-    // This is a best-effort implementation based on common InnerTube patterns.
-    // YouTube may change the exact payload.
+    const innertube = await getInnertubeWithAuth(userId);
     await (innertube as any).actions.execute("/comment/perform_comment_action", {
       action: "DELETE",
       targetId: commentId,
     });
 
     await prisma.userAction.create({
-      data: {
-        userId: session.user.id,
-        videoId,
-        commentId,
-        actionType: "delete",
-      },
+      data: { userId, videoId, commentId, actionType: "delete" },
     });
 
     return NextResponse.json({ success: true });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to delete" }, { status: 500 });
+    const msg = e.code === "YOUTUBE_AUTH_REQUIRED" ? "YouTube認証が必要です" : e.message || "Failed to delete";
+    return NextResponse.json({ error: msg }, { status: e.code === "YOUTUBE_AUTH_REQUIRED" ? 401 : 500 });
   }
 }

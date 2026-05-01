@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
+  const userId = await getSessionUserId();
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
     const bookmarks = await prisma.bookmark.findMany({
-      where: { userId: session.user.id },
+      where: { userId },
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json({ bookmarks });
@@ -20,8 +20,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
+  const userId = await getSessionUserId();
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -30,13 +30,13 @@ export async function POST(req: NextRequest) {
     const bookmark = await prisma.bookmark.upsert({
       where: {
         userId_commentId: {
-          userId: session.user.id,
+          userId,
           commentId: body.commentId,
         },
       },
       update: {},
       create: {
-        userId: session.user.id,
+        userId,
         commentId: body.commentId,
         videoId: body.videoId,
         authorName: body.authorName,
@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
+  const userId = await getSessionUserId();
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -67,7 +67,7 @@ export async function DELETE(req: NextRequest) {
 
   try {
     await prisma.bookmark.deleteMany({
-      where: { userId: session.user.id, commentId },
+      where: { userId, commentId },
     });
     return NextResponse.json({ success: true });
   } catch (e: any) {

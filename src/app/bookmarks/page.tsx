@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import { ArrowLeft, Bookmark, Loader2, User, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -20,12 +20,12 @@ interface BookmarkItem {
 }
 
 export default function BookmarksPage() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!session?.user) return;
+    if (!user) return;
     fetch("/api/bookmarks")
       .then((r) => r.json())
       .then((data) => {
@@ -33,7 +33,7 @@ export default function BookmarksPage() {
       })
       .catch(() => null)
       .finally(() => setLoading(false));
-  }, [session]);
+  }, [user]);
 
   const removeBookmark = async (commentId: string) => {
     try {

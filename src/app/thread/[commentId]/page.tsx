@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { auth } from "@/auth";
+import { getSessionUserId } from "@/lib/session";
 import { getInnertube } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { MainLayout } from "@/components/main-layout";
@@ -33,7 +33,7 @@ export default async function ThreadPage({ params }: PageProps) {
   const { commentId } = await params;
   const videoId = "niKAylKNIEI";
 
-  const session = await auth();
+  const userId = await getSessionUserId();
   const innertube = await getInnertube();
   const info = await innertube.getInfo(videoId);
   const channelId = info.basic_info.channel_id;
@@ -145,9 +145,9 @@ export default async function ThreadPage({ params }: PageProps) {
 
   // Fetch user's vote from DB if authenticated
   let userVote: string | undefined;
-  if (session?.user?.id) {
+  if (userId) {
     const like = await prisma.commentLike.findUnique({
-      where: { commentId_userId: { commentId, userId: session.user.id } },
+      where: { commentId_userId: { commentId, userId } },
     });
     userVote = like?.type;
   }

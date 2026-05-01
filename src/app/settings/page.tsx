@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import { useTheme } from "@/components/theme-provider";
 import { Sun, Moon, Palette, Check } from "lucide-react";
 
 export default function SettingsPage() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const { theme, setTheme } = useTheme();
   const [message, setMessage] = useState("");
 
@@ -63,18 +63,18 @@ export default function SettingsPage() {
         {/* Account Info */}
         <div className="bg-card rounded-2xl border border-border p-4">
           <h2 className="text-lg font-bold mb-4">アカウント</h2>
-          {session?.user ? (
+          {user ? (
             <div className="flex items-center gap-3">
-              {session.user.image ? (
-                <img src={session.user.image} alt="" className="w-12 h-12 rounded-full" />
+              {user.image ? (
+                <img src={user.image} alt="" className="w-12 h-12 rounded-full" />
               ) : (
                 <div className="w-12 h-12 rounded-full bg-border flex items-center justify-center">
-                  <span className="text-muted text-lg">{session.user.name?.[0]}</span>
+                  <span className="text-muted text-lg">{user.name?.[0]}</span>
                 </div>
               )}
               <div>
-                <p className="font-medium">{session.user.name}</p>
-                <p className="text-sm text-muted">{session.user.email}</p>
+                <p className="font-medium">{user.name}</p>
+                <p className="text-sm text-muted">{user.email}</p>
               </div>
             </div>
           ) : (
