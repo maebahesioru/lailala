@@ -46,28 +46,26 @@ export async function POST(_req: NextRequest) {
 
       innertube.session.on("auth", async ({ credentials }: any) => {
         clearTimeout(timer);
+        const encryptedCred = encrypt(JSON.stringify(credentials));
+
+        // Try to get account info, but never fail
+        let channelId = sessionId;
+        let name = "YouTube User";
+        let thumbnail: string | null = null;
+
         try {
-          const encryptedCred = encrypt(JSON.stringify(credentials));
-
-          // Get YouTube account info
-          let channelId = sessionId;
-          let name = "YouTube User";
-          let thumbnail: string | null = null;
-
-          try {
-            const items = await innertube.account.getInfo(true);
-            if (Array.isArray(items) && items.length > 0) {
-              const primary = items[0];
-              if (primary.account_name?.text) name = primary.account_name.text;
-              if (primary.account_photo?.[0]?.url) thumbnail = primary.account_photo[0].url;
-              if (primary.channel_handle?.text) channelId = primary.channel_handle.text;
-            }
-          } catch {
-            // Non-fatal
+          const items = await innertube.account.getInfo(true);
+          if (Array.isArray(items) && items.length > 0) {
+            const primary = items[0];
+            if (primary.account_name?.text) name = primary.account_name.text;
+            if (primary.account_photo?.[0]?.url) thumbnail = primary.account_photo[0].url;
+            if (primary.channel_handle?.text) channelId = primary.channel_handle.text;
           }
+        } catch {}
 
-          const email = `yt:${channelId}`;
+        const email = `yt:${channelId}`;
 
+        try {
           let user = await prisma.user.findFirst({ where: { email } });
           if (user) {
             user = await prisma.user.update({ where: { id: user.id }, data: { name, image: thumbnail } });
