@@ -118,8 +118,7 @@ export async function GET(req: NextRequest) {
 
     if (continuationToken) {
       // Use NavigationEndpoint to fetch next batch via continuation token
-      const { NavigationEndpoint } = await import("youtubei.js/dist/src/parser/classes/NavigationEndpoint.js");
-      const cmd = new NavigationEndpoint({
+      const cmd = new YTNodes.NavigationEndpoint({
         continuationCommand: {
           request: "CONTINUATION_REQUEST_TYPE_WATCH_NEXT",
           token: continuationToken,
