@@ -43,15 +43,18 @@ async function cacheVideoComments(videoId: string) {
       const likeCount = parseInt((c.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
       const replyCount = isReply ? 0 : parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
 
+      const authorName = typeof c.author?.name === "string" ? c.author.name : (c.author?.name?.text || "Unknown");
+      const authorThumb = c.author?.thumbnails?.[0]?.url || c.author?.thumbnail?.url || c.author?.thumbnail || null;
+
       await prisma.commentCache.upsert({
         where: { commentId: c.comment_id },
         update: {
           content: c.content?.text || "",
           likeCount,
           replyCount,
-          authorName: c.author?.name?.text || "Unknown",
+          authorName,
           authorChannelId: c.author?.id || null,
-          authorThumb: c.author?.thumbnails?.[0]?.url,
+          authorThumb,
           publishedAt,
           parentCommentId: parentCommentId || null,
         },
@@ -61,9 +64,9 @@ async function cacheVideoComments(videoId: string) {
           content: c.content?.text || "",
           likeCount,
           replyCount,
-          authorName: c.author?.name?.text || "Unknown",
+          authorName,
           authorChannelId: c.author?.id || null,
-          authorThumb: c.author?.thumbnails?.[0]?.url,
+          authorThumb,
           publishedAt,
           parentCommentId: parentCommentId || null,
         },

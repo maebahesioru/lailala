@@ -97,6 +97,7 @@ function SearchContent() {
 
   return (
     <MainLayout>
+      <div className="flex-1 flex flex-col">
       <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
         <div className="flex items-center gap-3 px-4 py-3">
           <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors shrink-0">
@@ -183,10 +184,11 @@ function SearchContent() {
         </div>
       )}
 
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-border flex-1">
         {results.map(({ thread, videoId }) => (
           <CommentCard key={thread.comment.commentId} thread={thread} videoId={videoId} voteCounts={{ likes: 0, dislikes: 0 }} />
         ))}
+      </div>
       </div>
     </MainLayout>
   );
