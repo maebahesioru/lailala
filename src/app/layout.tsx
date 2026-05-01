@@ -3,14 +3,8 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { startScheduledPostWorker } from "@/lib/scheduled-posts";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// Start scheduled post worker on server startup (Coolify/docker only)
-if (typeof window === "undefined") {
-  startScheduledPostWorker();
-}
 
 export const viewport: Viewport = {
   width: "device-width",
