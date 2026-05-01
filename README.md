@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# YTX - YouTube Comments X
 
-## Getting Started
+YouTube動画のコメント欄をX/Twitter風のUIで閲覧・操作できるWebアプリケーション。
 
-First, run the development server:
+対象動画: [https://www.youtube.com/watch?v=niKAylKNIEI](https://www.youtube.com/watch?v=niKAylKNIEI)
+
+## 機能
+
+- X/Twitter風タイムラインUI
+- コメント閲覧（人気順・新着順）
+- コメント投稿・返信・削除
+- 高評価・低評価（低評価数も自前表示）
+- 無限スクロール
+- 検索機能
+- トレンド機能（高評価コメントランキング）
+- プロフィール（過去の活動履歴）
+- リアルタイム同期（SSE）
+- クライアントサイド読み取り分散（レート制限対策）
+
+## 技術スタック
+
+- Next.js 16 / React 19 / TypeScript
+- Tailwind CSS
+- Prisma / PostgreSQL
+- Redis
+- Auth.js v5 (Google OAuth)
+- youtubei.js (InnerTube API)
+
+## セットアップ
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+npx prisma migrate dev
+npx prisma generate
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 環境変数
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`.env.example` を参照。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Docker
 
-## Learn More
+```bash
+docker-compose up --build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Coolifyデプロイ
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. リポジトリを連携
+2. ビルド設定で `Dockerfile` を選択
+3. 環境変数を設定
+4. PostgreSQLとRedisサービスを追加

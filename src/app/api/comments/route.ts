@@ -1,0 +1,174 @@
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import { getInnertube } from "@/lib/youtube";
+import { prisma } from "@/lib/prisma";
+import { rateLimit } from "@/lib/rate-limit";
+import { z } from "zod";
+import { YTNodes } from "youtubei.js";
+
+const postSchema = z.object({
+  videoId: z.string(),
+  text: z.string().min(1).max(5000),
+});
+
+function parseCommentThread(thread: any) {
+  const c = thread.comment;
+  if (!c) return null;
+  return {
+    comment: {
+      commentId: c.comment_id,
+      author: {
+        name: typeof c.author?.name === "string" ? c.author.name : (c.author?.name?.text || "Unknown"),
+        channelId: c.author?.id,
+        thumbnail: c.author?.thumbnails?.[0]?.url,
+        isChannelOwner: c.author_is_channel_owner || false,
+        isMember: c.is_member || false,
+      },
+      content: c.content?.text || "",
+      publishedTime: c.published_time || "",
+      likeCount: c.like_count || "0",
+      replyCount: c.reply_count || "0",
+      isLiked: c.is_liked || false,
+      isDisliked: c.is_disliked || false,
+      isPinned: c.is_pinned || false,
+      isHearted: c.is_hearted || false,
+    },
+    replies: thread.replies?.map((r: any) => ({
+      commentId: r.comment_id,
+      author: {
+        name: typeof r.author?.name === "string" ? r.author.name : (r.author?.name?.text || "Unknown"),
+        channelId: r.author?.id,
+        thumbnail: r.author?.thumbnails?.[0]?.url,
+        isChannelOwner: r.author_is_channel_owner || false,
+        isMember: r.is_member || false,
+      },
+      content: r.content?.text || "",
+      publishedTime: r.published_time || "",
+      likeCount: r.like_count || "0",
+      replyCount: r.reply_count || "0",
+      isLiked: r.is_liked || false,
+      isDisliked: r.is_disliked || false,
+      isPinned: r.is_pinned || false,
+      isHearted: r.is_hearted || false,
+    })) || [],
+    hasRepliesContinuation: thread.comment_replies_data != null,
+  };
+}
+
+// POST: コメント投稿
+export async function POST(req: NextRequest) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const limit = await rateLimit(`comment:${session.user.id}`, 10, 60);
+  if (!limit.success) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  }
+
+  const body = await req.json();
+  const parsed = postSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+  }
+
+  const { videoId, text } = parsed.data;
+
+  try {
+    const innertube = await getInnertube(session.user.id);
+    const response = await innertube.interact.comment(videoId, text);
+
+    await prisma.userAction.create({
+      data: {
+        userId: session.user.id,
+        videoId,
+        commentId: "pending",
+        actionType: "comment",
+        content: text,
+      },
+    });
+
+    return NextResponse.json({ success: true, data: response });
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message || "Failed to post comment" }, { status: 500 });
+  }
+}
+
+// GET: コメント取得 (サーバーサイドプロキシ)
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const videoId = searchParams.get("videoId");
+  const sortBy = (searchParams.get("sortBy") as "TOP_COMMENTS" | "NEWEST_FIRST") || "TOP_COMMENTS";
+  const continuationToken = searchParams.get("continuationToken");
+
+  if (!videoId) {
+    return NextResponse.json({ error: "videoId required" }, { status: 400 });
+  }
+
+  try {
+    const innertube = await getInnertube();
+
+    let threads: any[] = [];
+    let hasContinuation = false;
+    let nextToken: string | null = null;
+
+    let commentCount: string | null = null;
+
+    if (continuationToken) {
+      // Use NavigationEndpoint to fetch next batch via continuation token
+      const { NavigationEndpoint } = await import("youtubei.js/dist/src/parser/classes/NavigationEndpoint.js");
+      const cmd = new NavigationEndpoint({
+        continuationCommand: {
+          request: "CONTINUATION_REQUEST_TYPE_WATCH_NEXT",
+          token: continuationToken,
+        },
+      });
+
+      const response = await cmd.call(innertube.actions, { parse: true });
+
+      if (!response.on_response_received_endpoints_memo) {
+        return NextResponse.json({ error: "Unexpected response" }, { status: 500 });
+      }
+
+      const commentThreads = response.on_response_received_endpoints_memo.getType(YTNodes.CommentThread);
+      threads = commentThreads.map(parseCommentThread).filter(Boolean);
+
+      const cont = response.on_response_received_endpoints_memo.getType(YTNodes.ContinuationItem)?.[0];
+      if (cont) {
+        const payload = (cont as any).endpoint?.payload;
+        nextToken = payload?.continuationCommand?.token || payload?.token || null;
+        hasContinuation = !!nextToken;
+      }
+    } else {
+      const comments = await innertube.getComments(videoId, sortBy);
+
+      threads = comments.contents
+        .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)
+        .map(parseCommentThread)
+        .filter(Boolean);
+
+      hasContinuation = comments.has_continuation;
+      // Extract continuation token from comments object
+      const cont = (comments as any).continuation;
+      if (cont) {
+        const payload = cont.endpoint?.payload;
+        nextToken = payload?.continuationCommand?.token || payload?.token || null;
+      }
+
+      // Extract comment count from header
+      commentCount = (comments as any).header?.comments_count?.text || (comments as any).header?.comments_count?.toString?.() || null;
+    }
+
+    return NextResponse.json({
+      threads,
+      hasContinuation,
+      continuationToken: nextToken,
+      videoInfo: {
+        commentCount: commentCount || "0",
+      },
+    });
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message || "Failed to fetch comments" }, { status: 500 });
+  }
+}
