@@ -43,7 +43,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
     setStep("polling");
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`/api/auth/login/poll?sessionId=${sessionId}`);
+        const res = await fetch(`/api/auth/login?sessionId=${sessionId}`);
         const data = await res.json();
         if (data.status === "complete") {
           setStep("done");
