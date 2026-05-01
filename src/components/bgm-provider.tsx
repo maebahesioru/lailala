@@ -14,11 +14,14 @@ export function BgmProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem("ytx-bgm-enabled");
-    if (stored === "true") {
-      setEnabled(true);
-    }
+    const id = requestAnimationFrame(() => {
+      const stored = localStorage.getItem("ytx-bgm-enabled");
+      if (stored === "true") {
+        setEnabled(true);
+      }
+      setMounted(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   useEffect(() => {
