@@ -11,6 +11,15 @@ const postSchema = z.object({
   text: z.string().min(1).max(5000),
 });
 
+function isOlderThanOneYear(publishedTime: string): boolean {
+  if (!publishedTime) return false;
+  const match = publishedTime.match(/(\d+)\s*year/);
+  if (match) {
+    return parseInt(match[1], 10) >= 1;
+  }
+  return false;
+}
+
 function parseCommentThread(thread: any) {
   const c = thread.comment;
   if (!c) return null;
@@ -132,7 +141,7 @@ export async function GET(req: NextRequest) {
       }
 
       const commentThreads = response.on_response_received_endpoints_memo.getType(YTNodes.CommentThread);
-      threads = commentThreads.map(parseCommentThread).filter(Boolean);
+      threads = commentThreads.map(parseCommentThread).filter(Boolean).filter((t: any) => !isOlderThanOneYear(t.comment.publishedTime));
 
       const cont = response.on_response_received_endpoints_memo.getType(YTNodes.ContinuationItem)?.[0];
       if (cont) {
@@ -146,7 +155,8 @@ export async function GET(req: NextRequest) {
       threads = comments.contents
         .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)
         .map(parseCommentThread)
-        .filter(Boolean);
+        .filter(Boolean)
+        .filter((t: any) => !isOlderThanOneYear(t.comment.publishedTime));
 
       hasContinuation = comments.has_continuation;
       nextToken = (comments as any).continuation_token || null;
