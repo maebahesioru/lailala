@@ -14,7 +14,7 @@ export async function getInnertube() {
 
 /**
  * 書き込み操作用: 認証が必要。
- * 指定ユーザーのCredentialのみ使用。フォールバックは一切なし。
+ * 指定ユーザーのCredentialのみ使用。Cookie または OAuth トークン。
  */
 export async function getInnertubeWithAuth(credentialId: string) {
   const cred = await prisma.ytCredential.findUnique({
@@ -27,13 +27,22 @@ export async function getInnertubeWithAuth(credentialId: string) {
     throw error;
   }
 
-  const cookie = decrypt(cred.credential);
+  const raw = decrypt(cred.credential);
 
+  if (cred.type === "oauth") {
+    const tokens = JSON.parse(raw);
+    const innertube = await Innertube.create({
+      cache: new UniversalCache(false),
+    });
+    await innertube.session.signIn(tokens);
+    return innertube;
+  }
+
+  // cookie type
   const innertube = await Innertube.create({
     cache: new UniversalCache(false),
-    cookie,
+    cookie: raw,
   });
-
   return innertube;
 }
 
