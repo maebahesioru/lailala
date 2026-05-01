@@ -1,4 +1,4 @@
-# YTX - YouTube Comments X
+# ライララ (Lailala)
 
 YouTube動画のコメント欄をX/Twitter風のUIで閲覧・操作できるWebアプリケーション。
 
@@ -12,7 +12,7 @@ YouTube動画のコメント欄をX/Twitter風のUIで閲覧・操作できるWe
 - 高評価・低評価（低評価数も自前表示）
 - 無限スクロール
 - 検索機能
-- トレンド機能（高評価コメントランキング）
+- トレンド機能（ワードランキング）
 - プロフィール（過去の活動履歴）
 - リアルタイム同期（SSE）
 - クライアントサイド読み取り分散（レート制限対策）
@@ -51,3 +51,15 @@ docker-compose up --build
 2. ビルド設定で `Dockerfile` を選択
 3. 環境変数を設定
 4. PostgreSQLとRedisサービスを追加
+
+## ライセンス
+
+[MIT](./LICENSE)
+
+## コントリビューター
+
+- [maebahesioru](https://github.com/maebahesioru) - 作者・メンテナ
+
+## セキュリティ
+
+脆弱性の報告は [GitHub Security Advisories](https://github.com/maebahesioru/lailala/security/advisories/new) からお願いします。
