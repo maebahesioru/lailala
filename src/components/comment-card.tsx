@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Share, Bookmark } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { localizeTime, stripHandlePrefix, stripEditedTag, formatDetailedTime } from "@/lib/i18n";
 import Link from "next/link";
 import { MentionText } from "./mention-text";
@@ -19,6 +20,7 @@ interface CommentCardProps {
 
 export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete }: CommentCardProps) {
   const { data: session } = useSession();
+  const router = useRouter();
   const [liked, setLiked] = useState(userVote === "like");
   const [disliked, setDisliked] = useState(userVote === "dislike");
   const [localLikes, setLocalLikes] = useState(parseLikeCount(thread.comment.likeCount) + (voteCounts.likes || 0));
@@ -122,7 +124,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete }:
             />
           </Link>
           <div className="flex-1 min-w-0">
-            <Link href={`/thread/${thread.comment.commentId}`} className="block">
+            <div className="cursor-pointer" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>
               <div className="flex items-center gap-2 flex-wrap">
                 <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
                   {stripHandlePrefix(thread.comment.author.name)}
@@ -146,7 +148,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete }:
               </p>
               {/* X-style detailed timestamp */}
               <p className="text-[13px] text-muted mt-2">{detailTime}</p>
-            </Link>
+            </div>
 
             <div className="flex items-center justify-between mt-3 max-w-md">
               <button

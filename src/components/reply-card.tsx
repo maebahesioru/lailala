@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Share, Bookmark } from "lucide-react";
 import { YtComment } from "@/types/youtube";
 import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { localizeTime, stripHandlePrefix, stripEditedTag, formatDetailedTime } from "@/lib/i18n";
 import Link from "next/link";
 import { MentionText } from "./mention-text";
@@ -30,6 +31,7 @@ function parseReplyTo(content: string): { replyTo: string | null; displayContent
 
 export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onDelete }: ReplyCardProps) {
   const { data: session } = useSession();
+  const router = useRouter();
   const [liked, setLiked] = useState(reply.isLiked || false);
   const [disliked, setDisliked] = useState(reply.isDisliked || false);
   const [localLikes, setLocalLikes] = useState(parseLikeCount(reply.likeCount));
@@ -136,7 +138,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
             />
           </Link>
           <div className="flex-1 min-w-0">
-            <Link href={threadLink} className="block">
+            <div className="cursor-pointer" onClick={() => router.push(threadLink)}>
               <div className="flex items-center gap-2 flex-wrap">
                 <Link href={`/profile/${encodeURIComponent(reply.author.channelId || "")}`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
                   {stripHandlePrefix(reply.author.name)}
@@ -165,7 +167,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
               </p>
               {/* X-style detailed timestamp */}
               <p className="text-[13px] text-muted mt-2">{detailTime}</p>
-            </Link>
+            </div>
 
             <div className="flex items-center justify-between mt-3 max-w-md">
               <button
