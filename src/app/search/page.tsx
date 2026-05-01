@@ -4,7 +4,6 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
 import { CommentCard } from "@/components/comment-card";
-import { fetchComments } from "@/lib/youtube-client";
 import { CommentThread } from "@/types/youtube";
 import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp } from "lucide-react";
 import Link from "next/link";
@@ -20,7 +19,7 @@ function SearchContent() {
   const initialQuery = searchParams.get("q") || "";
   const [query, setQuery] = useState(initialQuery);
   const [inputValue, setInputValue] = useState(initialQuery);
-  const [threads, setThreads] = useState<CommentThread[]>([]);
+  const [results, setResults] = useState<{ thread: CommentThread; videoId: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [trendWords, setTrendWords] = useState<TrendWord[]>([]);
@@ -29,7 +28,7 @@ function SearchContent() {
   useEffect(() => {
     if (!initialQuery) {
       // Load trending words when no query
-      fetch("/api/trending/words?videoId=niKAylKNIEI")
+      fetch("/api/trending/words")
         .then((r) => r.json())
         .then((data) => {
           if (data.words) setTrendWords(data.words);
@@ -46,13 +45,17 @@ function SearchContent() {
     setLoading(true);
     setSearched(false);
     try {
-      const data = await fetchComments("niKAylKNIEI", "TOP_COMMENTS");
-      const filtered = data.threads.filter(
-        (t) =>
-          t.comment.content.toLowerCase().includes(q.toLowerCase()) ||
-          t.comment.author.name.toLowerCase().includes(q.toLowerCase())
-      );
-      setThreads(filtered);
+      const r = await fetch(`/api/search/comments?q=${encodeURIComponent(q)}`);
+      const data = await r.json();
+      const mapped = (data.threads || []).map((t: any) => ({
+        thread: {
+          comment: t.comment,
+          replies: t.replies,
+          hasRepliesContinuation: t.hasRepliesContinuation,
+        } as CommentThread,
+        videoId: t.videoId || "niKAylKNIEI",
+      }));
+      setResults(mapped);
     } catch {
       // ignore
     } finally {
@@ -134,7 +137,7 @@ function SearchContent() {
         </div>
       )}
 
-      {!loading && searched && threads.length === 0 && query && (
+      {!loading && searched && results.length === 0 && query && (
         <div className="p-12 flex flex-col items-center text-muted">
           <SearchX size={48} className="mb-4" />
           <p className="text-lg">該当するコメントが見つかりませんでした</p>
@@ -176,8 +179,8 @@ function SearchContent() {
       )}
 
       <div className="divide-y divide-border">
-        {threads.map((thread) => (
-          <CommentCard key={thread.comment.commentId} thread={thread} videoId="niKAylKNIEI" voteCounts={{ likes: 0, dislikes: 0 }} />
+        {results.map(({ thread, videoId }) => (
+          <CommentCard key={thread.comment.commentId} thread={thread} videoId={videoId} voteCounts={{ likes: 0, dislikes: 0 }} />
         ))}
       </div>
     </MainLayout>
