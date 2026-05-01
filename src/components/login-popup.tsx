@@ -48,16 +48,18 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
       try {
         const res = await fetch(`/api/auth/login?sessionId=${sessionId}`);
         const data = await res.json();
+        console.log("poll result:", data.status, data.message || "");
         if (data.status === "complete") {
           setPolling(false);
           setError("");
           setStep("done");
         } else if (data.status === "error" || data.status === "expired") {
+          console.log("setting error:", data.message);
           setPolling(false);
           setError(data.message || "認証に失敗しました");
         }
-      } catch {
-        // keep polling
+      } catch (e) {
+        console.log("poll network error:", e);
       }
     };
 
@@ -66,7 +68,6 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polling, sessionId]);
 
   const reset = () => {
