@@ -95,28 +95,30 @@ export async function GET(req: NextRequest) {
       const info = await innertube.account.getInfo();
       const page = (info as any).page;
       const sections = page?.contents?.array?.();
-      let sectionDebug = "";
       if (sections) {
         for (const section of sections) {
+          // Try contents (AccountItemSection → AccountItem)
+          const items = section?.contents;
+          if (items) {
+            for (const item of items) {
+              if (item?.account_name?.text) name = item.account_name.text;
+              if (item?.account_photo?.[0]?.url) thumbnail = item.account_photo[0].url;
+              if (item?.channel_handle?.text) channelId = item.channel_handle.text;
+            }
+          }
+          // Also try footers as fallback
           const footers = section?.footers;
-          sectionDebug += `[section: type=${section?.type}, footers=${footers?.length || 0}, hasContents=${!!section?.contents}] `;
           if (footers) {
             for (const footer of footers) {
-              sectionDebug += `{footer: type=${footer?.type}, title=${footer?.title?.text}, endpoint=${!!footer?.endpoint}} `;
-              if (footer?.title?.text) name = footer.title.text;
+              if (footer?.title?.text && name === "YouTube User") name = footer.title.text;
               const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
-              if (cid && cid.startsWith("UC")) {
-                channelId = cid;
-                thumbnail = footer?.thumbnails?.[0]?.url || null;
-              }
+              if (cid && cid.startsWith("UC") && channelId === sessionId) channelId = cid;
             }
           }
         }
-      } else {
-        sectionDebug = "no sections found";
       }
       if (channelId === sessionId) {
-        accountError = `could not find channel. debug: ${sectionDebug}`;
+        accountError = "could not find channel in account data";
       }
     } catch (e: any) {
       accountError = e.message || "getInfo failed";
