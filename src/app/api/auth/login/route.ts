@@ -112,7 +112,7 @@ export async function GET(req: NextRequest) {
         }
       }
       if (channelId === sessionId) {
-        accountError = "no channel found";
+        accountError = "no channel found in account data";
       }
     } catch (e: any) {
       accountError = e.message || "getInfo failed";

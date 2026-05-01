@@ -48,14 +48,13 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
       try {
         const res = await fetch(`/api/auth/login?sessionId=${sessionId}`);
         const data = await res.json();
-        console.log("poll result:", data.status, data.message || "");
         if (data.status === "complete") {
           setPolling(false);
-          setError("");
-          if (data.accountError) setError("アカウント情報取得失敗: " + data.accountError);
+          setError(data.accountError ? "アカウント情報取得失敗: " + data.accountError : "");
           setStep("done");
-        } else if (data.status === "error" || data.status === "expired") {
-          console.log("setting error:", data.message);
+        } else if (data.status === "expired") {
+          setPolling(false);
+        } else if (data.status === "error") {
           setPolling(false);
           setError(data.message || "認証に失敗しました");
         }
