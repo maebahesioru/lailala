@@ -5,7 +5,6 @@ import redis from "@/lib/redis";
 const CACHE_TTL = 1800;
 const VIDEO_ID = "niKAylKNIEI";
 const INITIAL_BATCHES = 5;
-const MAX_BATCHES = 100; // hard cap to prevent infinite loops
 
 interface TrendWord {
   word: string;
@@ -115,8 +114,8 @@ export async function GET(req: NextRequest) {
     const quickWords = extractTrendWords(quickContents);
     try { await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(quickWords)); } catch {}
 
-    // 2. Background: collect ALL comments from last 24 hours (up to 100 batches)
-    collectBatches(innertube, videoId, MAX_BATCHES, true)
+    // 2. Background: collect ALL comments from last 24 hours (no cap)
+    collectBatches(innertube, videoId, Number.MAX_SAFE_INTEGER, true)
       .then(async ({ contents, reached24h }) => {
         const words = extractTrendWords(contents);
         try { await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(words)); } catch {}
