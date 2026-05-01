@@ -11,7 +11,7 @@ import { useBgm } from "./bgm-provider";
 export function MobileNav() {
   const pathname = usePathname();
   const { user } = useAuth();
-  const { enabled: bgmEnabled, toggle: toggleBgm } = useBgm();
+  const { enabled: bgmEnabled, mounted: bgmMounted, toggle: toggleBgm } = useBgm();
   const [showLogin, setShowLogin] = useState(false);
 
   const handleProtectedClick = (e: React.MouseEvent) => {
@@ -63,12 +63,12 @@ export function MobileNav() {
           <button
             onClick={toggleBgm}
             className={`flex flex-col items-center justify-center gap-0.5 w-14 h-full transition-colors ${
-              bgmEnabled ? "text-primary" : "text-muted"
+              bgmMounted && bgmEnabled ? "text-primary" : "text-muted"
             }`}
             aria-label="BGM"
           >
-            <Music size={22} strokeWidth={bgmEnabled ? 2.5 : 2} />
-            <span className="text-[10px] font-medium" suppressHydrationWarning>BGM {bgmEnabled ? "ON" : "OFF"}</span>
+            <Music size={22} strokeWidth={bgmMounted && bgmEnabled ? 2.5 : 2} />
+            <span className="text-[10px] font-medium">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>
           </button>
         </div>
       </nav>

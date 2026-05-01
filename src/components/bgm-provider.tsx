@@ -4,24 +4,30 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const BgmContext = createContext<{
   enabled: boolean;
+  mounted: boolean;
   toggle: () => void;
-}>({ enabled: false, toggle: () => {} });
+}>({ enabled: false, mounted: false, toggle: () => {} });
 
 export function BgmProvider({ children }: { children: React.ReactNode }) {
-  const [enabled, setEnabled] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("ytx-bgm-enabled") === "true";
-    }
-    return false;
-  });
-
+  const [enabled, setEnabled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    localStorage.setItem("ytx-bgm-enabled", String(enabled));
-  }, [enabled]);
+    setMounted(true);
+    const stored = localStorage.getItem("ytx-bgm-enabled");
+    if (stored === "true") {
+      setEnabled(true);
+    }
+  }, []);
 
   useEffect(() => {
+    if (!mounted) return;
+    localStorage.setItem("ytx-bgm-enabled", String(enabled));
+  }, [enabled, mounted]);
+
+  useEffect(() => {
+    if (!mounted) return;
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -69,12 +75,12 @@ export function BgmProvider({ children }: { children: React.ReactNode }) {
       audio.muted = true;
       audio.pause();
     }
-  }, [enabled]);
+  }, [enabled, mounted]);
 
   const toggle = () => setEnabled((prev) => !prev);
 
   return (
-    <BgmContext.Provider value={{ enabled, toggle }}>
+    <BgmContext.Provider value={{ enabled, mounted, toggle }}>
       <audio
         ref={audioRef}
         src="/bgm.mp3"

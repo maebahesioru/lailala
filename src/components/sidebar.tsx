@@ -39,7 +39,7 @@ function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onCl
 
 export function Sidebar() {
   const { user } = useAuth();
-  const { enabled: bgmEnabled, toggle: toggleBgm } = useBgm();
+  const { enabled: bgmEnabled, mounted: bgmMounted, toggle: toggleBgm } = useBgm();
   const [showLogin, setShowLogin] = useState(false);
   const [showCompose, setShowCompose] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
@@ -142,11 +142,11 @@ export function Sidebar() {
           </Link>
           <button
             onClick={toggleBgm}
-            className={`flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors w-full text-left ${bgmEnabled ? "text-primary" : "text-foreground"}`}
+            className={`flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors w-full text-left ${bgmMounted && bgmEnabled ? "text-primary" : "text-foreground"}`}
             aria-label="BGM"
           >
             <Music size={26} aria-hidden="true" />
-            <span className="font-medium" suppressHydrationWarning>BGM {bgmEnabled ? "ON" : "OFF"}</span>
+            <span className="font-medium">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>
           </button>
           <button
             onClick={() => user ? setShowCompose(true) : setShowLogin(true)}
