@@ -96,6 +96,11 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('lailala-theme');if(t&&['light','dark-blue','black'].includes(t))document.documentElement.setAttribute('data-theme',t)})();`,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
             __html: `if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'))}`,
           }}
         />
