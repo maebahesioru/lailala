@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark, User } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark, User, MoreHorizontal } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
@@ -28,6 +28,27 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   const [localLikes, setLocalLikes] = useState(parseLikeCount(thread.comment.likeCount) + (voteCounts.likes || 0));
   const [showLogin, setShowLogin] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+  const [isOwnComment, setIsOwnComment] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    fetch(`/api/comments/own-check?commentId=${encodeURIComponent(thread.comment.commentId)}`)
+      .then((r) => r.json())
+      .then((data) => setIsOwnComment(data.isOwn))
+      .catch(() => setIsOwnComment(false));
+  }, [user, thread.comment.commentId]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setShowMore(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLike = async () => {
     if (!user) { setShowLogin(true); return; }
@@ -97,7 +118,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
 
   return (
     <>
-      <article className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text">
+      <article className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text relative">
         <div className="flex gap-3">
           <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0">
             {thread.comment.author.thumbnail ? (
@@ -113,34 +134,72 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
             )}
           </Link>
           <div className="flex-1 min-w-0">
-            <div className="cursor-pointer" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
-                  {stripHandlePrefix(thread.comment.author.name)}
-                </Link>
-                {thread.comment.author.isChannelOwner && (
-                  <span className="text-xs bg-primary text-white px-1.5 rounded-full flex items-center gap-0.5">
-                    <svg viewBox="0 0 24 24" className="w-3 h-3 fill-current"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    投稿者
-                  </span>
+            <div className="flex items-start justify-between gap-2">
+              <div className="cursor-pointer flex-1 min-w-0" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
+                    {stripHandlePrefix(thread.comment.author.name)}
+                  </Link>
+                  {thread.comment.author.isChannelOwner && (
+                    <span className="text-xs bg-primary text-white px-1.5 rounded-full flex items-center gap-0.5">
+                      <svg viewBox="0 0 24 24" className="w-3 h-3 fill-current"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                      投稿者
+                    </span>
+                  )}
+                  {thread.comment.isHearted && (
+                    <span className="bg-[#f91880] text-white p-1 rounded-full flex items-center justify-center" title="投稿者がハートしました">
+                      <Heart size={14} fill="currentColor" />
+                    </span>
+                  )}
+                  <span className="text-muted text-[15px]">·</span>
+                  <span className="text-muted text-[15px] shrink-0">{localizeTime(thread.comment.publishedTime)}</span>
+                </div>
+                <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
+                  <MentionText content={stripEditedTag(thread.comment.content)} />
+                </p>
+                {showDetailTime && (
+                  <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                 )}
-                {thread.comment.isHearted && (
-                  <span className="bg-[#f91880] text-white p-1 rounded-full flex items-center justify-center" title="投稿者がハートしました">
-                    <Heart size={14} fill="currentColor" />
-                  </span>
-                )}
-                <span className="text-muted text-[15px]">·</span>
-                <span className="text-muted text-[15px] shrink-0">{localizeTime(thread.comment.publishedTime)}</span>
               </div>
-              <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
-                <MentionText content={stripEditedTag(thread.comment.content)} />
-              </p>
-              {showDetailTime && (
-                <p className="text-[13px] text-muted mt-2">{detailTime}</p>
-              )}
+
+              {/* Top-right more menu */}
+              <div className="relative shrink-0" ref={moreRef}>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setShowMore(!showMore); }}
+                  className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
+                >
+                  <MoreHorizontal size={18} />
+                </button>
+                {showMore && (
+                  <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden w-48 z-20">
+                    <div onClick={(e) => e.stopPropagation()} className="px-4 py-2 hover:bg-white/5 cursor-pointer">
+                      <ShareMenu
+                        url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${thread.comment.commentId}`}
+                        text={`${thread.comment.author.name}: ${thread.comment.content}`}
+                      />
+                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleBookmark(); setShowMore(false); }}
+                      className="flex items-center gap-3 w-full px-4 py-2 hover:bg-white/5 text-left text-[14px]"
+                    >
+                      <Bookmark size={16} className={bookmarked ? "text-primary" : "text-muted"} fill={bookmarked ? "currentColor" : "none"} />
+                      <span>{bookmarked ? "ブックマーク解除" : "ブックマーク"}</span>
+                    </button>
+                    {isOwnComment && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleDelete(); setShowMore(false); }}
+                        className="flex items-center gap-3 w-full px-4 py-2 hover:bg-white/5 text-left text-[14px] text-red-500"
+                      >
+                        <Trash2 size={16} />
+                        <span>削除</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div className="flex items-center justify-between mt-3 gap-1 flex-wrap">
+            <div className="flex items-center justify-between mt-3 gap-1 flex-wrap max-w-[400px]">
               <button
                 onClick={(e) => { e.stopPropagation(); handleLike(); }}
                 className={`flex items-center gap-1.5 text-[13px] transition-colors ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}
@@ -165,31 +224,6 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                 <MessageCircle size={18} />
                 <span>{thread.comment.replyCount || 0}</span>
               </Link>
-
-              <div onClick={(e) => e.stopPropagation()}>
-                <ShareMenu
-                  url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${thread.comment.commentId}`}
-                  text={`${thread.comment.author.name}: ${thread.comment.content}`}
-                />
-              </div>
-
-              <button
-                onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
-                className={`flex items-center gap-1.5 text-[13px] transition-colors ${bookmarked ? "text-primary" : "text-muted hover:text-primary"}`}
-                title={bookmarked ? "ブックマーク済み" : "ブックマーク"}
-              >
-                <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
-              </button>
-
-              {user && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); handleDelete(); }}
-                  className="flex items-center gap-1.5 text-[13px] text-muted hover:text-red-500 transition-colors"
-                  title="削除"
-                >
-                  <Trash2 size={18} />
-                </button>
-              )}
             </div>
           </div>
         </div>

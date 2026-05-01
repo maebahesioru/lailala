@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma2"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String?
+  email        String?       @unique
+  image        String?
+  channelId    String?       @map("channel_id")
+  ytCredential YtCredential?
+  commentLikes CommentLike[]
+  actions      UserAction[]
+  lists        List[]
+
+  @@map("users")
+}
+
+// YouTube認証情報 (OAuth credentials)
+model YtCredential {
+  id         String   @id @default(cuid())
+  userId     String   @unique @map("user_id")
+  // 暗号化されたCookieまたはOAuth credentials JSON
+  credential String   @db.Text
+  // 'cookie' | 'oauth'
+  type       String
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("yt_credentials")
+}
+
+// コメントの高評価/低評価状態を自前で記録（X風表示用）
+model CommentLike {
+  id        String   @id @default(cuid())
+  commentId String   @map("comment_id")
+  videoId   String   @map("video_id")
+  userId    String   @map("user_id")
+  // 'like' | 'dislike'
+  type      String
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@map("comment_likes")
+}
+
+// ユーザーの行動ログ（プロフィール用）
+model UserAction {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  videoId    String   @map("video_id")
+  commentId  String   @map("comment_id")
+  // 'comment' | 'reply' | 'like' | 'dislike' | 'delete'
+  actionType String   @map("action_type")
+  content    String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_actions")
+}
+
+// コメントキャッシュ（トレンド・検索用）
+model CommentCache {
+  id              String   @id @default(cuid())
+  commentId       String   @unique @map("comment_id")
+  videoId         String   @map("video_id")
+  authorName      String   @map("author_name")
+  authorChannelId String?  @map("author_channel_id")
+  authorThumb     String?  @map("author_thumb")
+  content         String   @db.Text
+  likeCount       Int      @default(0) @map("like_count")
+  replyCount      Int      @default(0) @map("reply_count")
+  publishedAt     DateTime @map("published_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([videoId, likeCount])
+  @@index([publishedAt])
+  @@index([authorChannelId])
+  @@map("comment_cache")
+}
+
+model Bookmark {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  commentId     String   @map("comment_id")
+  videoId       String   @map("video_id")
+  authorName    String   @map("author_name")
+  authorThumb   String?  @map("author_thumb")
+  content       String   @db.Text
+  likeCount     String   @map("like_count")
+  replyCount    String   @map("reply_count")
+  publishedTime String   @map("published_time")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, commentId])
+  @@index([userId, createdAt])
+  @@map("bookmarks")
+}
+
+model List {
+  id          String     @id @default(cuid())
+  userId      String     @map("user_id")
+  name        String
+  description String?
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       ListItem[]
+
+  @@index([userId])
+  @@map("lists")
+}
+
+model ListItem {
+  id            String   @id @default(cuid())
+  listId        String   @map("list_id")
+  commentId     String   @map("comment_id")
+  videoId       String   @map("video_id")
+  authorName    String   @map("author_name")
+  authorThumb   String?  @map("author_thumb")
+  content       String   @db.Text
+  likeCount     String   @map("like_count")
+  replyCount    String   @map("reply_count")
+  publishedTime String   @map("published_time")
+  createdAt     DateTime @default(now()) @map("created_at")
+  list          List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, commentId])
+  @@index([listId, createdAt])
+  @@map("list_items")
+}

@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../generated/prisma2"
 }
 
 datasource db {
@@ -13,6 +13,7 @@ model User {
   name          String?
   email         String?  @unique
   image         String?
+  channelId     String?  @map("channel_id")
   ytCredential  YtCredential?
   commentLikes  CommentLike[]
   actions       UserAction[]
