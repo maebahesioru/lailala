@@ -5,13 +5,31 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
 import { CommentCard } from "@/components/comment-card";
 import { CommentThread } from "@/types/youtube";
-import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp } from "lucide-react";
+import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp, User, List } from "lucide-react";
 import Link from "next/link";
 
 interface TrendWord {
   word: string;
   count: number;
 }
+
+interface AccountResult {
+  channelId: string;
+  authorName: string;
+  authorThumb: string | null;
+  count: number;
+}
+
+interface ListResult {
+  id: string;
+  name: string;
+  description: string | null;
+  isPublic: boolean;
+  user: { name: string | null; image: string | null } | null;
+  _count?: { items: number; followers: number };
+}
+
+type SearchTab = "top" | "latest" | "accounts" | "lists";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -20,14 +38,16 @@ function SearchContent() {
   const [query, setQuery] = useState(initialQuery);
   const [inputValue, setInputValue] = useState(initialQuery);
   const [results, setResults] = useState<{ thread: CommentThread; videoId: string }[]>([]);
+  const [accounts, setAccounts] = useState<AccountResult[]>([]);
+  const [listResults, setListResults] = useState<ListResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [trendWords, setTrendWords] = useState<TrendWord[]>([]);
   const [listening, setListening] = useState(false);
+  const [activeTab, setActiveTab] = useState<SearchTab>("top");
 
   useEffect(() => {
     if (!initialQuery) {
-      // Load trending words when no query
       fetch("/api/trending/words")
         .then((r) => r.json())
         .then((data) => {
@@ -36,26 +56,43 @@ function SearchContent() {
         .catch(() => null);
       return;
     }
-    performSearch(initialQuery);
+    performSearch(initialQuery, activeTab);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery]);
 
-  const performSearch = async (q: string) => {
+  useEffect(() => {
+    if (query) {
+      performSearch(query, activeTab);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
+
+  const performSearch = async (q: string, tab: SearchTab) => {
     if (!q.trim()) return;
     setLoading(true);
     setSearched(false);
     try {
-      const r = await fetch(`/api/search/comments?q=${encodeURIComponent(q)}`);
-      const data = await r.json();
-      const mapped = (data.threads || []).map((t: any) => ({
-        thread: {
-          comment: t.comment,
-          replies: t.replies,
-          hasRepliesContinuation: t.hasRepliesContinuation,
-        } as CommentThread,
-        videoId: t.videoId || "niKAylKNIEI",
-      }));
-      setResults(mapped);
+      if (tab === "top" || tab === "latest") {
+        const r = await fetch(`/api/search/comments?q=${encodeURIComponent(q)}&type=${tab}`);
+        const data = await r.json();
+        const mapped = (data.threads || []).map((t: any) => ({
+          thread: {
+            comment: t.comment,
+            replies: t.replies,
+            hasRepliesContinuation: t.hasRepliesContinuation,
+          } as CommentThread,
+          videoId: t.videoId || "niKAylKNIEI",
+        }));
+        setResults(mapped);
+      } else if (tab === "accounts") {
+        const r = await fetch(`/api/search/comments?q=${encodeURIComponent(q)}&type=accounts`);
+        const data = await r.json();
+        setAccounts(data.accounts || []);
+      } else if (tab === "lists") {
+        const r = await fetch(`/api/lists/public?q=${encodeURIComponent(q)}`);
+        const data = await r.json();
+        setListResults(data.lists || []);
+      }
     } catch {
       // ignore
     } finally {
@@ -69,7 +106,7 @@ function SearchContent() {
     if (!inputValue.trim()) return;
     setQuery(inputValue.trim());
     router.push(`/search?q=${encodeURIComponent(inputValue.trim())}`);
-    performSearch(inputValue.trim());
+    performSearch(inputValue.trim(), activeTab);
   };
 
   const startVoiceInput = () => {
@@ -89,106 +126,209 @@ function SearchContent() {
       setInputValue(transcript);
       setQuery(transcript);
       router.push(`/search?q=${encodeURIComponent(transcript)}`);
-      performSearch(transcript);
+      performSearch(transcript, activeTab);
     };
     recognition.onerror = () => setListening(false);
     recognition.start();
   };
 
-  return (
-    <MainLayout>
-      <div className="flex-1 flex flex-col">
-      <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
-        <div className="flex items-center gap-3 px-4 py-3">
-          <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors shrink-0">
-            <ArrowLeft size={20} />
-          </Link>
-          <form onSubmit={handleSubmit} className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="コメントを検索"
-              className="w-full bg-card text-foreground rounded-full py-2.5 pl-10 pr-10 outline-none focus:ring-2 focus:ring-primary placeholder-muted border border-border"
-              autoFocus
-            />
-            <button
-              type="button"
-              onClick={startVoiceInput}
-              className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full transition-colors ${
-                listening ? "text-primary animate-pulse" : "text-muted hover:text-foreground"
-              }`}
-              title="音声入力"
-            >
-              {listening ? <Mic size={18} /> : <MicOff size={18} />}
-            </button>
-          </form>
-        </div>
-        {query && (
-          <div className="px-4 pb-3">
-            <h1 className="text-lg font-bold">「{query}」の検索結果</h1>
-          </div>
-        )}
-      </div>
+  const tabs: { id: SearchTab; label: string }[] = [
+    { id: "top", label: "話題のポスト" },
+    { id: "latest", label: "最新" },
+    { id: "accounts", label: "アカウント" },
+    { id: "lists", label: "リスト" },
+  ];
 
-      {loading && (
+  const renderResults = () => {
+    if (loading) {
+      return (
         <div className="p-8 flex justify-center">
           <Loader2 className="animate-spin text-primary" size={32} />
         </div>
-      )}
+      );
+    }
+    if (!searched) return null;
 
-      {!loading && searched && results.length === 0 && query && (
-        <div className="p-12 flex flex-col items-center text-muted">
-          <SearchX size={48} className="mb-4" />
-          <p className="text-lg">該当するコメントが見つかりませんでした</p>
-        </div>
-      )}
-
-      {!query && !loading && (
-        <div className="p-4">
-          <div className="bg-card rounded-2xl border border-border overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
-              <TrendingUp size={18} className="text-[#f91880]" />
-              <h2 className="text-lg font-bold">トレンドワード</h2>
-            </div>
-            {trendWords.length === 0 ? (
-              <div className="text-muted px-4 py-6 text-sm text-center">
-                トレンドワードを計算中...
-              </div>
-            ) : (
-              <div className="divide-y divide-border">
-                {trendWords.map((t, i) => (
-                  <button
-                    key={t.word}
-                    onClick={() => {
-                      setInputValue(t.word);
-                      setQuery(t.word);
-                      performSearch(t.word);
-                      window.history.pushState(null, "", `/search?q=${encodeURIComponent(t.word)}`);
-                    }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors w-full text-left"
-                  >
-                    <span className={`text-[15px] font-bold w-5 text-center ${i < 3 ? "text-[#f91880]" : "text-muted"}`}>
-                      {i + 1}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[14px] font-medium truncate">{t.word}</p>
-                      <p className="text-[13px] text-muted">{t.count} 件のコメント</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+    if (activeTab === "top" || activeTab === "latest") {
+      if (results.length === 0) {
+        return (
+          <div className="p-12 flex flex-col items-center text-muted">
+            <SearchX size={48} className="mb-4" />
+            <p className="text-lg">該当するコメントが見つかりませんでした</p>
           </div>
+        );
+      }
+      return (
+        <div className="divide-y divide-border flex-1">
+          {results.map(({ thread, videoId }) => (
+            <CommentCard key={thread.comment.commentId} thread={thread} videoId={videoId} voteCounts={{ likes: 0, dislikes: 0 }} />
+          ))}
         </div>
-      )}
+      );
+    }
 
-      <div className="divide-y divide-border flex-1">
-        {results.map(({ thread, videoId }) => (
-          <CommentCard key={thread.comment.commentId} thread={thread} videoId={videoId} voteCounts={{ likes: 0, dislikes: 0 }} />
-        ))}
-      </div>
+    if (activeTab === "accounts") {
+      if (accounts.length === 0) {
+        return (
+          <div className="p-12 flex flex-col items-center text-muted">
+            <SearchX size={48} className="mb-4" />
+            <p className="text-lg">該当するアカウントが見つかりませんでした</p>
+          </div>
+        );
+      }
+      return (
+        <div className="divide-y divide-border flex-1">
+          {accounts.map((acc) => (
+            <Link
+              key={acc.channelId}
+              href={`/profile/${encodeURIComponent(acc.channelId)}`}
+              className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors"
+            >
+              {acc.authorThumb ? (
+                <img src={acc.authorThumb} alt="" className="w-12 h-12 rounded-full object-cover" />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-border flex items-center justify-center">
+                  <User size={24} className="text-muted" />
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-[15px] truncate">{acc.authorName}</p>
+                <p className="text-[13px] text-muted">{acc.count} 件のコメント</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      );
+    }
+
+    if (activeTab === "lists") {
+      if (listResults.length === 0) {
+        return (
+          <div className="p-12 flex flex-col items-center text-muted">
+            <SearchX size={48} className="mb-4" />
+            <p className="text-lg">該当するリストが見つかりませんでした</p>
+          </div>
+        );
+      }
+      return (
+        <div className="divide-y divide-border flex-1">
+          {listResults.map((list) => (
+            <Link
+              key={list.id}
+              href={`/lists?id=${list.id}`}
+              className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors"
+            >
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <List size={24} className="text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-[15px] truncate">{list.name}</p>
+                <p className="text-[13px] text-muted">
+                  {list._count?.items || 0}件 · {list._count?.followers || 0}フォロワー
+                  {list.user && ` · ${list.user.name || "ユーザー"}`}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <MainLayout>
+      <div className="flex-1 flex flex-col">
+        <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
+          <div className="flex items-center gap-3 px-4 py-3">
+            <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors shrink-0">
+              <ArrowLeft size={20} />
+            </Link>
+            <form onSubmit={handleSubmit} className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="コメントを検索"
+                className="w-full bg-card text-foreground rounded-full py-2.5 pl-10 pr-10 outline-none focus:ring-2 focus:ring-primary placeholder-muted border border-border"
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={startVoiceInput}
+                className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full transition-colors ${
+                  listening ? "text-primary animate-pulse" : "text-muted hover:text-foreground"
+                }`}
+                title="音声入力"
+              >
+                {listening ? <Mic size={18} /> : <MicOff size={18} />}
+              </button>
+            </form>
+          </div>
+
+          {/* Tabs */}
+          {query && (
+            <div className="flex">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 py-3 text-center text-sm font-medium hover:bg-white/5 transition-colors relative ${
+                    activeTab === tab.id ? "text-foreground" : "text-muted"
+                  }`}
+                >
+                  {tab.label}
+                  {activeTab === tab.id && (
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-1 bg-primary rounded-full" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {!query && !loading && (
+          <div className="p-4">
+            <div className="bg-card rounded-2xl border border-border overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+                <TrendingUp size={18} className="text-[#f91880]" />
+                <h2 className="text-lg font-bold">トレンドワード</h2>
+              </div>
+              {trendWords.length === 0 ? (
+                <div className="text-muted px-4 py-6 text-sm text-center">
+                  トレンドワードを計算中...
+                </div>
+              ) : (
+                <div className="divide-y divide-border">
+                  {trendWords.map((t, i) => (
+                    <button
+                      key={t.word}
+                      onClick={() => {
+                        setInputValue(t.word);
+                        setQuery(t.word);
+                        router.push(`/search?q=${encodeURIComponent(t.word)}`);
+                        performSearch(t.word, "top");
+                      }}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors w-full text-left"
+                    >
+                      <span className={`text-[15px] font-bold w-5 text-center ${i < 3 ? "text-[#f91880]" : "text-muted"}`}>
+                        {i + 1}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[14px] font-medium truncate">{t.word}</p>
+                        <p className="text-[13px] text-muted">{t.count} 件のコメント</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {renderResults()}
       </div>
     </MainLayout>
   );

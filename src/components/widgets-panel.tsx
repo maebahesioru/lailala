@@ -22,29 +22,37 @@ interface TrendWord {
   count: number;
 }
 
+let cachedVideoInfo: VideoInfo | null = null;
+let cachedTrendWords: TrendWord[] = [];
+let cachedAt = 0;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 export function WidgetsPanel() {
   const [query, setQuery] = useState("");
-  const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
-  const [trendWords, setTrendWords] = useState<TrendWord[]>([]);
+  const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(cachedVideoInfo);
+  const [trendWords, setTrendWords] = useState<TrendWord[]>(cachedTrendWords);
   const [listening, setListening] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
+    if (cachedVideoInfo && Date.now() - cachedAt < CACHE_TTL) return;
     Promise.all([
       fetch("/api/youtube/video-info?videoId=niKAylKNIEI").then((r) => r.json()),
       fetch("/api/comments?videoId=niKAylKNIEI&sortBy=NEWEST_FIRST").then((r) => r.json()),
       fetch("/api/trending/words").then((r) => r.json()),
     ])
       .then(([infoData, commentsData, trendData]) => {
-        setVideoInfo({
+        const info = {
           ...infoData,
           commentCount: commentsData.videoInfo?.commentCount ?? infoData.commentCount ?? null,
-        });
-        if (trendData.words) {
-          setTrendWords(trendData.words);
-        }
+        };
+        cachedVideoInfo = info;
+        cachedTrendWords = trendData.words || [];
+        cachedAt = Date.now();
+        setVideoInfo(info);
+        setTrendWords(cachedTrendWords);
       })
       .catch(() => null);
   }, []);

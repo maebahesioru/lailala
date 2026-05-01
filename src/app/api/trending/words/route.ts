@@ -47,7 +47,7 @@ function extractTrendWords(contents: string[]): TrendWord[] {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const hours = parseInt(searchParams.get("hours") || "24", 10);
+  const hours = parseInt(searchParams.get("hours") || "168", 10); // default 7 days
 
   try {
     const since = new Date(Date.now() - hours * 60 * 60 * 1000);
@@ -58,6 +58,7 @@ export async function GET(req: NextRequest) {
       },
       select: { content: true },
       orderBy: { publishedAt: "desc" },
+      take: 10000,
     });
 
     const contents = comments.map((c) => c.content);

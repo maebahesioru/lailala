@@ -4,7 +4,7 @@ let started = false;
 
 const VIDEO_ID = "niKAylKNIEI";
 const INTERVAL_MS = 10 * 60 * 1000; // 10分ごと
-const MAX_PER_RUN = 500;
+const MAX_PER_RUN = 3000;
 
 function parsePublishedTime(text: string): Date | null {
   if (!text) return null;

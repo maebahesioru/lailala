@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark, User, MoreHorizontal } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User } from "lucide-react";
 import { YtComment } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ import Link from "next/link";
 import { MentionText } from "./mention-text";
 import { LoginPopup } from "./login-popup";
 import { ShareMenu } from "./share-menu";
+import { TweetMoreMenu } from "./tweet-more-menu";
 import { formatCount } from "./comment-card";
 
 interface ReplyCardProps {
@@ -39,27 +40,6 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   const [localLikes, setLocalLikes] = useState(parseLikeCount(reply.likeCount));
   const [showLogin, setShowLogin] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const [showMore, setShowMore] = useState(false);
-  const [isOwnComment, setIsOwnComment] = useState(false);
-  const moreRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!user) return;
-    fetch(`/api/comments/own-check?commentId=${encodeURIComponent(reply.commentId)}`)
-      .then((r) => r.json())
-      .then((data) => setIsOwnComment(data.isOwn))
-      .catch(() => setIsOwnComment(false));
-  }, [user, reply.commentId]);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
-        setShowMore(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const { replyTo, displayContent } = parseReplyTo(reply.content);
   const detailTime = formatDetailedTime(reply.publishedTime);
@@ -90,15 +70,6 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
       });
       setDisliked(!disliked);
       if (liked) { setLiked(false); setLocalLikes((prev) => prev - 1); }
-    } catch {}
-  };
-
-  const handleDelete = async () => {
-    if (!user) return;
-    if (!confirm("この返信を削除しますか？")) return;
-    try {
-      await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${reply.commentId}`, { method: "DELETE" });
-      onDelete?.(reply.commentId);
     } catch {}
   };
 
@@ -181,28 +152,20 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                 )}
               </div>
 
-              {/* Top-right more menu - delete only */}
-              {isOwnComment && (
-                <div className="relative shrink-0" ref={moreRef}>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setShowMore(!showMore); }}
-                    className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
-                  >
-                    <MoreHorizontal size={18} />
-                  </button>
-                  {showMore && (
-                    <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden w-48 z-20">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleDelete(); setShowMore(false); }}
-                        className="flex items-center gap-3 w-full px-4 py-2 hover:bg-white/5 text-left text-[14px] text-red-500"
-                      >
-                        <Trash2 size={16} />
-                        <span>削除</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
+              {/* Top-right more menu */}
+              <div className="relative shrink-0">
+                <TweetMoreMenu
+                  commentId={reply.commentId}
+                  videoId={videoId}
+                  authorName={reply.author.name}
+                  authorThumb={reply.author.thumbnail}
+                  content={reply.content}
+                  likeCount={reply.likeCount}
+                  replyCount={reply.replyCount}
+                  publishedTime={reply.publishedTime}
+                  authorChannelId={reply.author.channelId}
+                />
+              </div>
             </div>
 
             <div className="flex items-center justify-between mt-3">

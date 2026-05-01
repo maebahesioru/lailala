@@ -23,6 +23,7 @@ function getRelativeTimeString(date: Date): string {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
+  const type = searchParams.get("type") || "top";
   const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 200);
 
   if (!q.trim()) {
@@ -40,15 +41,50 @@ export async function GET(req: NextRequest) {
       blockedIds = new Set([...blocked.map((b) => b.channelId), ...muted.map((m) => m.channelId)]);
     }
 
+    if (type === "accounts") {
+      const comments = await prisma.commentCache.findMany({
+        where: {
+          authorName: { contains: q, mode: "insensitive" },
+          ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
+        },
+        select: { authorChannelId: true, authorName: true, authorThumb: true },
+        orderBy: { publishedAt: "desc" },
+        take: 500,
+      });
+
+      const grouped = new Map<string, AccountResult>();
+      for (const c of comments) {
+        if (!c.authorChannelId) continue;
+        const existing = grouped.get(c.authorChannelId);
+        if (existing) {
+          existing.count++;
+        } else {
+          grouped.set(c.authorChannelId, {
+            channelId: c.authorChannelId,
+            authorName: c.authorName,
+            authorThumb: c.authorThumb,
+            count: 1,
+          });
+        }
+      }
+      const accounts = Array.from(grouped.values())
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 20);
+
+      return NextResponse.json({ accounts });
+    }
+
+    const isTop = type === "top";
     const comments = await prisma.commentCache.findMany({
       where: {
         OR: [
           { content: { contains: q, mode: "insensitive" } },
           { authorName: { contains: q, mode: "insensitive" } },
         ],
+        ...(isTop ? { parentCommentId: null } : {}),
         ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
       },
-      orderBy: { likeCount: "desc" },
+      orderBy: isTop ? { likeCount: "desc" } : { publishedAt: "desc" },
       take: limit,
     });
 
@@ -80,4 +116,11 @@ export async function GET(req: NextRequest) {
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed" }, { status: 500 });
   }
+}
+
+interface AccountResult {
+  channelId: string;
+  authorName: string;
+  authorThumb: string | null;
+  count: number;
 }
