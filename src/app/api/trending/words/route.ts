@@ -10,6 +10,21 @@ interface TrendWord {
   count: number;
 }
 
+const STOP_WORDS = new Set([
+  "は", "が", "の", "に", "を", "で", "と", "も", "か", "な", "や", "へ", "ば",
+  "た", "だ", "て", "で", "し", "じ", "す", "ず", "せ", "ぜ", "そ", "ぞ",
+  "ます", "です", "した", "ない", "いる", "する", "ある", "こと", "これ", "それ", "あれ",
+  "この", "その", "あの", "から", "まで", "だけ", "ほど", "より", "など",
+  "です", "ます", "まする", "でした", "ました", "でしょう",
+]);
+
+function isJapaneseWord(w: string): boolean {
+  // Must contain at least one CJK or kana character
+  return /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(w)
+    || w.startsWith("#")
+    || w.startsWith("@");
+}
+
 function extractTrendWords(contents: string[]): TrendWord[] {
   const wordCounts = new Map<string, number>();
 
@@ -28,6 +43,9 @@ function extractTrendWords(contents: string[]): TrendWord[] {
       wordCounts.set(m, (wordCounts.get(m) || 0) + 2);
     }
     for (const w of words) {
+      // Skip non-Japanese words (Latin/Cyrillic/numbers only) and stop words
+      if (STOP_WORDS.has(w)) continue;
+      if (!isJapaneseWord(w)) continue;
       wordCounts.set(w, (wordCounts.get(w) || 0) + 1);
     }
   }
@@ -42,14 +60,20 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId") || VIDEO_ID;
   const cacheKey = `trending:words:${videoId}`;
+  const cachedOnly = searchParams.get("cached_only") === "1";
 
+  // Return cached data if available
   try {
     const cached = await redis.get(cacheKey);
     if (cached) {
       return NextResponse.json({ words: JSON.parse(cached) as TrendWord[], cached: true });
     }
   } catch {
-    // Redis unavailable, continue
+    // Redis unavailable
+  }
+
+  if (cachedOnly) {
+    return NextResponse.json({ words: [], cached: false, loading: true });
   }
 
   try {
@@ -58,7 +82,7 @@ export async function GET(req: NextRequest) {
 
     const contents: string[] = [];
     let batchCount = 0;
-    const maxBatches = 30; // 30 batches (~600 threads) for decent accuracy without too much delay
+    const maxBatches = 30;
 
     while (batchCount < maxBatches) {
       for (const thread of comments.contents) {
