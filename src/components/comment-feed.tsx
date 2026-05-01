@@ -48,7 +48,11 @@ export function CommentFeed({ videoId }: { videoId: string }) {
     setLoadingMore(true);
     try {
       const data = await fetchComments(videoId, sortBy, nextToken);
-      setThreads((prev) => [...prev, ...data.threads]);
+      setThreads((prev) => {
+        const existingIds = new Set(prev.map((t) => t.comment.commentId));
+        const newThreads = data.threads.filter((t) => !existingIds.has(t.comment.commentId));
+        return [...prev, ...newThreads];
+      });
       setHasMore(data.hasContinuation);
       setNextToken(data.continuationToken);
       fetchVoteData(data.threads);

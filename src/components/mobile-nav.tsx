@@ -19,8 +19,15 @@ export function MobileNav() {
     }
   };
 
+  const handleHomeClick = (e: React.MouseEvent) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent("lailala:scrollToTop"));
+    }
+  };
+
   const navItems = [
-    { icon: Home, label: "ホーム", href: "/", protected: false },
+    { icon: Home, label: "ホーム", href: "/", protected: false, onClick: handleHomeClick },
     { icon: Search, label: "検索", href: "/search", protected: false },
     { icon: Flame, label: "トレンド", href: "/trending", protected: false },
     { icon: List, label: "リスト", href: "/lists", protected: true },
@@ -40,7 +47,7 @@ export function MobileNav() {
               <Link
                 key={item.label}
                 href={item.href}
-                onClick={item.protected ? handleProtectedClick : undefined}
+                onClick={item.onClick ? item.onClick : item.protected ? handleProtectedClick : undefined}
                 className={`flex flex-col items-center justify-center gap-0.5 w-16 h-full transition-colors ${
                   isActive ? "text-primary" : "text-muted"
                 }`}
