@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
 function getRelativeTimeString(date: Date): string {
@@ -29,12 +30,23 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const userId = await getSessionUserId();
+    let blockedIds = new Set<string>();
+    if (userId) {
+      const [blocked, muted] = await Promise.all([
+        prisma.blockedUser.findMany({ where: { userId }, select: { channelId: true } }),
+        prisma.mutedUser.findMany({ where: { userId }, select: { channelId: true } }),
+      ]);
+      blockedIds = new Set([...blocked.map((b) => b.channelId), ...muted.map((m) => m.channelId)]);
+    }
+
     const comments = await prisma.commentCache.findMany({
       where: {
         OR: [
           { content: { contains: q, mode: "insensitive" } },
           { authorName: { contains: q, mode: "insensitive" } },
         ],
+        ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
       },
       orderBy: { likeCount: "desc" },
       take: limit,
@@ -45,6 +57,7 @@ export async function GET(req: NextRequest) {
         commentId: c.commentId,
         author: {
           name: c.authorName,
+          channelId: c.authorChannelId || undefined,
           thumbnail: c.authorThumb || undefined,
           isChannelOwner: false,
           isMember: false,

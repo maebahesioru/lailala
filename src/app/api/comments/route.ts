@@ -101,6 +101,23 @@ export async function POST(req: NextRequest) {
   }
 }
 
+async function getBlockedAndMutedChannelIds(userId: string | null): Promise<Set<string>> {
+  if (!userId) return new Set();
+  const [blocked, muted] = await Promise.all([
+    prisma.blockedUser.findMany({ where: { userId }, select: { channelId: true } }),
+    prisma.mutedUser.findMany({ where: { userId }, select: { channelId: true } }),
+  ]);
+  return new Set([...blocked.map((b) => b.channelId), ...muted.map((m) => m.channelId)]);
+}
+
+function filterBlockedThreads(threads: any[], blockedIds: Set<string>) {
+  if (blockedIds.size === 0) return threads;
+  return threads.filter((t) => {
+    const authorId = t.comment?.author?.channelId;
+    return authorId && !blockedIds.has(authorId);
+  });
+}
+
 // GET: コメント取得 (サーバーサイドプロキシ)
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -113,6 +130,9 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const userId = await getSessionUserId();
+    const blockedIds = await getBlockedAndMutedChannelIds(userId);
+
     const innertube = await getInnertube();
 
     let threads: any[] = [];
@@ -160,6 +180,8 @@ export async function GET(req: NextRequest) {
       // Extract comment count from header
       commentCount = (comments as any).header?.comments_count?.text || (comments as any).header?.comments_count?.toString?.() || null;
     }
+
+    threads = filterBlockedThreads(threads, blockedIds);
 
     return NextResponse.json({
       threads,
