@@ -77,12 +77,14 @@ model CommentCache {
   content         String   @db.Text
   likeCount       Int      @default(0) @map("like_count")
   replyCount      Int      @default(0) @map("reply_count")
+  parentCommentId String?  @map("parent_comment_id")
   publishedAt     DateTime @map("published_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@index([videoId, likeCount])
   @@index([publishedAt])
   @@index([authorChannelId])
+  @@index([parentCommentId])
   @@map("comment_cache")
 }
 

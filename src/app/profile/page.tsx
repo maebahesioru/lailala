@@ -59,7 +59,7 @@ export default function MyProfilePage() {
             </div>
           )}
           <div>
-            <h2 className="text-xl font-bold">{user?.name || "ユーザー"}</h2>
+            <h2 className="text-xl font-bold">{user?.name || user?.email?.split("@")[0] || "名無し"}</h2>
             <p className="text-[13px] text-muted">{user?.email}</p>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function MyProfilePage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-[15px] truncate">{user?.name || "ユーザー"}</span>
+                    <span className="font-bold text-[15px] truncate">{user?.name || user?.email?.split("@")[0] || "名無し"}</span>
                     <span className="text-muted text-[15px]">·</span>
                     <span className="text-muted text-[15px] shrink-0">
                       {new Date(action.createdAt).toLocaleDateString("ja-JP", { month: "short", day: "numeric" })}

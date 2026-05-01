@@ -166,6 +166,7 @@ exports.Prisma.CommentCacheScalarFieldEnum = {
   content: 'content',
   likeCount: 'likeCount',
   replyCount: 'replyCount',
+  parentCommentId: 'parentCommentId',
   publishedAt: 'publishedAt',
   updatedAt: 'updatedAt'
 };

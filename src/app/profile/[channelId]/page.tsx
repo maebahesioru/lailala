@@ -10,6 +10,7 @@ interface ProfileComment {
   commentId: string;
   videoId: string;
   authorName: string;
+  authorChannelId: string | null;
   authorThumb: string | null;
   content: string;
   likeCount: number;
@@ -28,9 +29,13 @@ function formatRelativeTime(dateStr: string): string {
   return date.toLocaleDateString("ja-JP", { year: "numeric", month: "short", day: "numeric" });
 }
 
-function safeName(name: string | null | undefined): string {
-  if (!name || name === "Unknown" || name.trim() === "") return "ユーザー";
-  return name;
+function safeName(name: string | null | undefined, channelId?: string | null): string {
+  if (name && name !== "Unknown" && name.trim() !== "") return name;
+  if (channelId) {
+    const id = channelId.startsWith("UC") ? channelId : `UC${channelId}`;
+    return `@${id.slice(0, 12)}…`;
+  }
+  return "名無し";
 }
 
 export default function ProfilePage({ params }: { params: Promise<{ channelId: string }> }) {
@@ -41,12 +46,14 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [authorName, setAuthorName] = useState<string>("ユーザー");
+  const [authorName, setAuthorName] = useState<string>("");
   const [authorThumb, setAuthorThumb] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"comments" | "replies">("comments");
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/profile/comments?channelId=${encodeURIComponent(channelId)}&page=${page}`)
+    const type = activeTab === "comments" ? "comment" : "reply";
+    fetch(`/api/profile/comments?channelId=${encodeURIComponent(channelId)}&page=${page}&type=${type}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.error) {
@@ -55,14 +62,24 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
           setComments(data.comments);
           setTotalPages(data.totalPages);
           if (data.comments.length > 0) {
-            setAuthorName(safeName(data.comments[0].authorName));
+            setAuthorName(safeName(data.comments[0].authorName, data.comments[0].authorChannelId));
             setAuthorThumb(data.comments[0].authorThumb);
+          } else {
+            // Keep previous name if we already have it, otherwise derive from channelId
+            setAuthorName((prev) => prev || safeName(null, channelId));
           }
         }
       })
       .catch(() => setError("読み込みに失敗しました"))
       .finally(() => setLoading(false));
-  }, [channelId, page]);
+  }, [channelId, page, activeTab]);
+
+  const handleTabChange = (tab: "comments" | "replies") => {
+    setActiveTab(tab);
+    setPage(1);
+  };
+
+  const displayName = authorName || safeName(null, channelId);
 
   return (
     <MainLayout>
@@ -73,7 +90,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-lg font-bold">{authorName}</h1>
+          <h1 className="text-lg font-bold">{displayName}</h1>
           <p className="text-[13px] text-[#71767b]">{comments.length} 件のコメント</p>
         </div>
       </div>
@@ -82,16 +99,38 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
       <div className="px-4 py-6 border-b border-[#2f3336]">
         <div className="flex items-center gap-4">
           {authorThumb ? (
-            <img src={authorThumb} alt={authorName} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
+            <img src={authorThumb} alt={displayName} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
           ) : (
             <div className="w-20 h-20 rounded-full bg-border flex items-center justify-center">
               <User size={32} className="text-muted" />
             </div>
           )}
           <div>
-            <h2 className="text-xl font-bold">{authorName}</h2>
+            <h2 className="text-xl font-bold">{displayName}</h2>
           </div>
         </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex border-b border-[#2f3336]">
+        <button
+          onClick={() => handleTabChange("comments")}
+          className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${activeTab === "comments" ? "text-foreground" : "text-muted"}`}
+        >
+          投稿
+          {activeTab === "comments" && (
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
+          )}
+        </button>
+        <button
+          onClick={() => handleTabChange("replies")}
+          className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${activeTab === "replies" ? "text-foreground" : "text-muted"}`}
+        >
+          返信
+          {activeTab === "replies" && (
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
+          )}
+        </button>
       </div>
 
       {/* Comments */}
@@ -114,8 +153,12 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
         ) : comments.length === 0 ? (
           <div className="p-12 text-center text-[#71767b]">
             <User size={32} className="mx-auto mb-3 opacity-50" />
-            <p>コメントが見つかりませんでした</p>
-            <p className="text-[13px] mt-2">このユーザーのコメントはまだキャッシュされていません。</p>
+            <p>{activeTab === "comments" ? "投稿" : "返信"}が見つかりませんでした</p>
+            <p className="text-[13px] mt-2">
+              {activeTab === "replies"
+                ? "このユーザーの返信はまだキャッシュされていません。"
+                : "このユーザーのコメントはまだキャッシュされていません。"}
+            </p>
           </div>
         ) : (
           comments.map((c) => (
@@ -127,7 +170,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
               <div className="flex gap-3">
                 <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
                   {c.authorThumb ? (
-                    <img src={c.authorThumb} alt={safeName(c.authorName)} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                    <img src={c.authorThumb} alt={safeName(c.authorName, c.authorChannelId)} className="w-10 h-10 rounded-full object-cover shrink-0" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
                       <User size={20} className="text-muted" />
@@ -136,7 +179,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-[15px] truncate">{safeName(c.authorName)}</span>
+                    <span className="font-bold text-[15px] truncate">{safeName(c.authorName, c.authorChannelId)}</span>
                     <span className="text-muted text-[15px]">·</span>
                     <span className="text-muted text-[15px] shrink-0">{formatRelativeTime(c.publishedAt)}</span>
                   </div>

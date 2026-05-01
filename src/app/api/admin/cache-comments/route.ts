@@ -31,42 +31,58 @@ export async function POST(req: NextRequest) {
     let comments = await innertube.getComments(videoId, "NEWEST_FIRST");
     let count = 0;
 
+    const saveComment = async (c: any, isReply = false, parentCommentId?: string) => {
+      if (count >= max) return;
+      if (!c || !c.comment_id) return;
+
+      const publishedText = c.published_time?.text || String(c.published_time || "");
+      const publishedAt = parsePublishedTime(publishedText) || new Date();
+
+      const likeCount = parseInt((c.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+      const replyCount = isReply ? 0 : parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+
+      await prisma.commentCache.upsert({
+        where: { commentId: c.comment_id },
+        update: {
+          content: c.content?.text || "",
+          likeCount,
+          replyCount,
+          authorName: c.author?.name?.text || "Unknown",
+          authorChannelId: c.author?.id || null,
+          authorThumb: c.author?.thumbnails?.[0]?.url,
+          publishedAt,
+          parentCommentId: parentCommentId || null,
+        },
+        create: {
+          commentId: c.comment_id,
+          videoId,
+          content: c.content?.text || "",
+          likeCount,
+          replyCount,
+          authorName: c.author?.name?.text || "Unknown",
+          authorChannelId: c.author?.id || null,
+          authorThumb: c.author?.thumbnails?.[0]?.url,
+          publishedAt,
+          parentCommentId: parentCommentId || null,
+        },
+      });
+      count++;
+    };
+
     const saveBatch = async (batch: any[]) => {
       for (const thread of batch) {
         if (count >= max) return;
         const c = thread.comment;
         if (!c) continue;
 
-        const publishedText = c.published_time?.text || String(c.published_time || "");
-        const publishedAt = parsePublishedTime(publishedText) || new Date();
+        await saveComment(c, false);
 
-        const likeCount = parseInt((c.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
-        const replyCount = parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
-
-        await prisma.commentCache.upsert({
-          where: { commentId: c.comment_id },
-          update: {
-            content: c.content?.text || "",
-            likeCount,
-            replyCount,
-            authorName: c.author?.name?.text || "Unknown",
-            authorChannelId: c.author?.id || null,
-            authorThumb: c.author?.thumbnails?.[0]?.url,
-            publishedAt,
-          },
-          create: {
-            commentId: c.comment_id,
-            videoId,
-            content: c.content?.text || "",
-            likeCount,
-            replyCount,
-            authorName: c.author?.name?.text || "Unknown",
-            authorChannelId: c.author?.id || null,
-            authorThumb: c.author?.thumbnails?.[0]?.url,
-            publishedAt,
-          },
-        });
-        count++;
+        // Cache replies too
+        if (thread.replies && Array.isArray(thread.replies)) {
+          for (const reply of thread.replies) {
+            await saveComment(reply, true, c.comment_id);
+          }
+        }
       }
     };
 

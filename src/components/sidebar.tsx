@@ -161,7 +161,7 @@ export function Sidebar() {
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-[15px] truncate">{user.name || "ユーザー"}</p>
+                  <p className="font-bold text-[15px] truncate">{user.name || user.email?.split("@")[0] || "名無し"}</p>
                   <p className="text-[13px] text-muted truncate">{user.email || "@user"}</p>
                 </div>
                 <MoreHorizontal size={18} className="text-muted shrink-0" />

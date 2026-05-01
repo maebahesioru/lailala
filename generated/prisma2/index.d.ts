@@ -6062,6 +6062,7 @@ export namespace Prisma {
     content: string | null
     likeCount: number | null
     replyCount: number | null
+    parentCommentId: string | null
     publishedAt: Date | null
     updatedAt: Date | null
   }
@@ -6076,6 +6077,7 @@ export namespace Prisma {
     content: string | null
     likeCount: number | null
     replyCount: number | null
+    parentCommentId: string | null
     publishedAt: Date | null
     updatedAt: Date | null
   }
@@ -6090,6 +6092,7 @@ export namespace Prisma {
     content: number
     likeCount: number
     replyCount: number
+    parentCommentId: number
     publishedAt: number
     updatedAt: number
     _all: number
@@ -6116,6 +6119,7 @@ export namespace Prisma {
     content?: true
     likeCount?: true
     replyCount?: true
+    parentCommentId?: true
     publishedAt?: true
     updatedAt?: true
   }
@@ -6130,6 +6134,7 @@ export namespace Prisma {
     content?: true
     likeCount?: true
     replyCount?: true
+    parentCommentId?: true
     publishedAt?: true
     updatedAt?: true
   }
@@ -6144,6 +6149,7 @@ export namespace Prisma {
     content?: true
     likeCount?: true
     replyCount?: true
+    parentCommentId?: true
     publishedAt?: true
     updatedAt?: true
     _all?: true
@@ -6245,6 +6251,7 @@ export namespace Prisma {
     content: string
     likeCount: number
     replyCount: number
+    parentCommentId: string | null
     publishedAt: Date
     updatedAt: Date
     _count: CommentCacheCountAggregateOutputType | null
@@ -6278,6 +6285,7 @@ export namespace Prisma {
     content?: boolean
     likeCount?: boolean
     replyCount?: boolean
+    parentCommentId?: boolean
     publishedAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["commentCache"]>
@@ -6292,6 +6300,7 @@ export namespace Prisma {
     content?: boolean
     likeCount?: boolean
     replyCount?: boolean
+    parentCommentId?: boolean
     publishedAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["commentCache"]>
@@ -6306,6 +6315,7 @@ export namespace Prisma {
     content?: boolean
     likeCount?: boolean
     replyCount?: boolean
+    parentCommentId?: boolean
     publishedAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["commentCache"]>
@@ -6320,11 +6330,12 @@ export namespace Prisma {
     content?: boolean
     likeCount?: boolean
     replyCount?: boolean
+    parentCommentId?: boolean
     publishedAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CommentCacheOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "commentId" | "videoId" | "authorName" | "authorChannelId" | "authorThumb" | "content" | "likeCount" | "replyCount" | "publishedAt" | "updatedAt", ExtArgs["result"]["commentCache"]>
+  export type CommentCacheOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "commentId" | "videoId" | "authorName" | "authorChannelId" | "authorThumb" | "content" | "likeCount" | "replyCount" | "parentCommentId" | "publishedAt" | "updatedAt", ExtArgs["result"]["commentCache"]>
 
   export type $CommentCachePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CommentCache"
@@ -6339,6 +6350,7 @@ export namespace Prisma {
       content: string
       likeCount: number
       replyCount: number
+      parentCommentId: string | null
       publishedAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["commentCache"]>
@@ -6773,6 +6785,7 @@ export namespace Prisma {
     readonly content: FieldRef<"CommentCache", 'String'>
     readonly likeCount: FieldRef<"CommentCache", 'Int'>
     readonly replyCount: FieldRef<"CommentCache", 'Int'>
+    readonly parentCommentId: FieldRef<"CommentCache", 'String'>
     readonly publishedAt: FieldRef<"CommentCache", 'DateTime'>
     readonly updatedAt: FieldRef<"CommentCache", 'DateTime'>
   }
@@ -11543,6 +11556,7 @@ export namespace Prisma {
     content: 'content',
     likeCount: 'likeCount',
     replyCount: 'replyCount',
+    parentCommentId: 'parentCommentId',
     publishedAt: 'publishedAt',
     updatedAt: 'updatedAt'
   };
@@ -11962,6 +11976,7 @@ export namespace Prisma {
     content?: StringFilter<"CommentCache"> | string
     likeCount?: IntFilter<"CommentCache"> | number
     replyCount?: IntFilter<"CommentCache"> | number
+    parentCommentId?: StringNullableFilter<"CommentCache"> | string | null
     publishedAt?: DateTimeFilter<"CommentCache"> | Date | string
     updatedAt?: DateTimeFilter<"CommentCache"> | Date | string
   }
@@ -11976,6 +11991,7 @@ export namespace Prisma {
     content?: SortOrder
     likeCount?: SortOrder
     replyCount?: SortOrder
+    parentCommentId?: SortOrderInput | SortOrder
     publishedAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11993,6 +12009,7 @@ export namespace Prisma {
     content?: StringFilter<"CommentCache"> | string
     likeCount?: IntFilter<"CommentCache"> | number
     replyCount?: IntFilter<"CommentCache"> | number
+    parentCommentId?: StringNullableFilter<"CommentCache"> | string | null
     publishedAt?: DateTimeFilter<"CommentCache"> | Date | string
     updatedAt?: DateTimeFilter<"CommentCache"> | Date | string
   }, "id" | "commentId">
@@ -12007,6 +12024,7 @@ export namespace Prisma {
     content?: SortOrder
     likeCount?: SortOrder
     replyCount?: SortOrder
+    parentCommentId?: SortOrderInput | SortOrder
     publishedAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CommentCacheCountOrderByAggregateInput
@@ -12029,6 +12047,7 @@ export namespace Prisma {
     content?: StringWithAggregatesFilter<"CommentCache"> | string
     likeCount?: IntWithAggregatesFilter<"CommentCache"> | number
     replyCount?: IntWithAggregatesFilter<"CommentCache"> | number
+    parentCommentId?: StringNullableWithAggregatesFilter<"CommentCache"> | string | null
     publishedAt?: DateTimeWithAggregatesFilter<"CommentCache"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CommentCache"> | Date | string
   }
@@ -12595,6 +12614,7 @@ export namespace Prisma {
     content: string
     likeCount?: number
     replyCount?: number
+    parentCommentId?: string | null
     publishedAt: Date | string
     updatedAt?: Date | string
   }
@@ -12609,6 +12629,7 @@ export namespace Prisma {
     content: string
     likeCount?: number
     replyCount?: number
+    parentCommentId?: string | null
     publishedAt: Date | string
     updatedAt?: Date | string
   }
@@ -12623,6 +12644,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     likeCount?: IntFieldUpdateOperationsInput | number
     replyCount?: IntFieldUpdateOperationsInput | number
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12637,6 +12659,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     likeCount?: IntFieldUpdateOperationsInput | number
     replyCount?: IntFieldUpdateOperationsInput | number
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12651,6 +12674,7 @@ export namespace Prisma {
     content: string
     likeCount?: number
     replyCount?: number
+    parentCommentId?: string | null
     publishedAt: Date | string
     updatedAt?: Date | string
   }
@@ -12665,6 +12689,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     likeCount?: IntFieldUpdateOperationsInput | number
     replyCount?: IntFieldUpdateOperationsInput | number
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12679,6 +12704,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     likeCount?: IntFieldUpdateOperationsInput | number
     replyCount?: IntFieldUpdateOperationsInput | number
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13281,6 +13307,7 @@ export namespace Prisma {
     content?: SortOrder
     likeCount?: SortOrder
     replyCount?: SortOrder
+    parentCommentId?: SortOrder
     publishedAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13300,6 +13327,7 @@ export namespace Prisma {
     content?: SortOrder
     likeCount?: SortOrder
     replyCount?: SortOrder
+    parentCommentId?: SortOrder
     publishedAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13314,6 +13342,7 @@ export namespace Prisma {
     content?: SortOrder
     likeCount?: SortOrder
     replyCount?: SortOrder
+    parentCommentId?: SortOrder
     publishedAt?: SortOrder
     updatedAt?: SortOrder
   }
