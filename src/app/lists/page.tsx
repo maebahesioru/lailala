@@ -7,6 +7,8 @@ import { MainLayout } from "@/components/main-layout";
 import { ArrowLeft, List, Plus, Trash2, User, Loader2, ThumbsUp, MessageCircle, Search, Globe, Lock, Heart, FolderOpen, Pencil, CheckSquare, Square, X } from "lucide-react";
 import Link from "next/link";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { CommentCard } from "@/components/comment-card";
+import { CommentThread } from "@/types/youtube";
 
 interface ListItem {
   id: string;
@@ -205,7 +207,9 @@ function ListsPageInner() {
         await fetch("/api/lists/follow", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ listId }) });
       }
       setFollowedLists((prev) =>
-        currentlyFollowing ? prev.filter((l) => l.id !== listId) : [...prev, publicLists.find((l) => l.id === listId)! || containingMe.find((l) => l.id === listId)!].filter(Boolean)
+        currentlyFollowing
+          ? prev.filter((l) => l.id !== listId)
+          : [...prev, (publicLists.find((l) => l.id === listId) || containingMe.find((l) => l.id === listId) || selectedList) as UserList].filter((l): l is UserList => !!l && l.id === listId)
       );
       setPublicLists((prev) =>
         prev.map((l) => (l.id === listId ? { ...l, isFollowing: !currentlyFollowing } : l))
@@ -226,7 +230,7 @@ function ListsPageInner() {
       <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 py-3 flex items-center gap-3">
         {selectedList ? (
           <>
-            <button onClick={() => setSelectedList(null)} className="p-2 rounded-full hover:bg-white/10 transition-colors">
+            <button onClick={() => { setSelectedList(null); router.push('/lists'); }} className="p-2 rounded-full hover:bg-white/10 transition-colors">
               <ArrowLeft size={20} />
             </button>
             {isEditing ? (
@@ -323,62 +327,58 @@ function ListsPageInner() {
 
           <div className="divide-y divide-border">
             {selectedList.items && selectedList.items.length > 0 ? (
-              selectedList.items.map((item) => (
-                <article
-                  key={item.id}
-                  className={`px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer ${selectedItemIds.has(item.commentId) ? "bg-primary/5" : ""}`}
-                  onClick={() => {
-                    if (isBulkMode) toggleItemSelect(item.commentId);
-                    else router.push(`/thread/${item.commentId}`);
-                  }}
-                >
-                  <div className="flex gap-3">
+              selectedList.items.map((item) => {
+                const thread: CommentThread = {
+                  comment: {
+                    commentId: item.commentId,
+                    author: {
+                      name: item.authorName,
+                      thumbnail: item.authorThumb || undefined,
+                      isChannelOwner: false,
+                      isMember: false,
+                    },
+                    content: item.content,
+                    publishedTime: item.publishedTime,
+                    likeCount: item.likeCount,
+                    replyCount: item.replyCount,
+                    isLiked: false,
+                    isDisliked: false,
+                    isPinned: false,
+                    isHearted: false,
+                  },
+                  replies: [],
+                  hasRepliesContinuation: false,
+                };
+                return (
+                  <div key={item.id} className={`relative ${selectedItemIds.has(item.commentId) ? "bg-primary/5" : ""}`}>
                     {isBulkMode && (
-                      <div className="shrink-0 flex items-start pt-2" onClick={(e) => e.stopPropagation()}>
+                      <div className="absolute left-2 top-3 z-10">
                         <button onClick={() => toggleItemSelect(item.commentId)} className="text-muted hover:text-primary transition-colors">
                           {selectedItemIds.has(item.commentId) ? <CheckSquare size={20} /> : <Square size={20} />}
                         </button>
                       </div>
                     )}
-                    <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
-                      {item.authorThumb ? (
-                        <img src={item.authorThumb} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
-                          <User size={20} className="text-muted" />
+                    <div className={isBulkMode ? "pl-9" : ""}>
+                      <CommentCard
+                        thread={thread}
+                        videoId={item.videoId}
+                        voteCounts={{ likes: 0, dislikes: 0 }}
+                      />
+                      {!isBulkMode && selectedList.isOwner && (
+                        <div className="px-4 pb-3">
+                          <button
+                            onClick={() => removeItem(selectedList.id, item.commentId)}
+                            className="text-[13px] text-muted hover:text-red-500 transition-colors flex items-center gap-1"
+                          >
+                            <Trash2 size={14} />
+                            リストから削除
+                          </button>
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-[15px] truncate">{item.authorName}</span>
-                        <span className="text-muted text-[15px]">·</span>
-                        <span className="text-muted text-[15px] shrink-0">{item.publishedTime}</span>
-                      </div>
-                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed break-words">{item.content}</p>
-                      <div className="flex items-center justify-between mt-3 text-[13px] text-muted">
-                        <span className="flex items-center gap-1.5">
-                          <ThumbsUp size={16} />
-                          <span>{item.likeCount}</span>
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <MessageCircle size={16} />
-                          <span>{item.replyCount}</span>
-                        </span>
-                        {!isBulkMode && selectedList.isOwner && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); removeItem(selectedList.id, item.commentId); }}
-                            className="text-muted hover:text-red-500 transition-colors flex items-center gap-1"
-                          >
-                            <Trash2 size={14} />
-                            削除
-                          </button>
-                        )}
-                      </div>
-                    </div>
                   </div>
-                </article>
-              ))
+                );
+              })
             ) : (
               <div className="p-12 text-center text-muted">
                 <List size={32} className="mx-auto mb-3 opacity-50" />
