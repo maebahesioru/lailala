@@ -264,6 +264,9 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
                               height={400}
                               previewConfig={{ showPreview: false }}
                               theme="dark"
+                              emojiStyle="twitter"
+                              searchPlaceholder="絵文字を検索"
+                              skinTonesDisabled
                             />
                           </div>
                         )}

@@ -167,6 +167,9 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
                       height={400}
                       previewConfig={{ showPreview: false }}
                       theme="dark"
+                      emojiStyle="twitter"
+                      searchPlaceholder="絵文字を検索"
+                      skinTonesDisabled
                     />
                   </div>
                 )}
