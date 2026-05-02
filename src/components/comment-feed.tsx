@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter, usePathname } from "next/navigation";
 import { CommentCard } from "./comment-card";
 import { Composer } from "./composer";
 import { fetchComments } from "@/lib/youtube-client";
@@ -21,6 +22,8 @@ interface FollowedList {
 }
 
 export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId: string; defaultSort?: "TOP_COMMENTS" | "NEWEST_FIRST" | "OLDEST_FIRST" }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [threads, setThreads] = useState<CommentThread[]>([]);
   const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST" | "OLDEST_FIRST">(defaultSort);
   const [loading, setLoading] = useState(false);
@@ -238,8 +241,8 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   }, [videoId, sortBy, threads, activeListId]);
 
   const baseTabs = [
-    { id: "top", label: "人気", onClick: () => { setActiveListId(null); setSortBy("TOP_COMMENTS"); } },
-    { id: "new", label: "新着", onClick: () => { setActiveListId(null); setSortBy("NEWEST_FIRST"); } },
+    { id: "top", label: "人気", href: "/popular/", onClick: () => { setActiveListId(null); setSortBy("TOP_COMMENTS"); } },
+    { id: "new", label: "新着", href: "/latest/", onClick: () => { setActiveListId(null); setSortBy("NEWEST_FIRST"); } },
   ];
   const listTabs = mounted
     ? followedLists.map((list) => ({
@@ -250,7 +253,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     : [];
   const tabs = [...baseTabs, ...listTabs];
 
-  const activeTabId = activeListId || (sortBy === "TOP_COMMENTS" ? "top" : "new");
+  const activeTabId = activeListId || (pathname === "/latest/" ? "new" : "top");
 
   return (
     <div>
@@ -259,7 +262,12 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={tab.onClick}
+              onClick={() => {
+                tab.onClick();
+                if ("href" in tab && tab.href && pathname !== tab.href) {
+                  router.push(tab.href);
+                }
+              }}
               className={`flex-1 py-4 text-center text-sm font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap inline-flex items-center justify-center ${
                 activeTabId === tab.id ? "text-foreground" : "text-muted"
               }`}
