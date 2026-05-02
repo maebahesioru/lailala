@@ -12,23 +12,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-async function ensureCache() {
-  const count = await prisma.commentCache.count();
-  if (count === 0) {
-    try {
-      await fetch("http://localhost:3000/api/admin/cache-comments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId: "niKAylKNIEI", max: 200 }),
-      });
-    } catch {
-      // ignore auto-fetch errors
-    }
-  }
-}
-
 export default async function TrendingPage() {
-  await ensureCache();
 
   const cached = await prisma.commentCache.findMany({
     orderBy: { likeCount: "desc" },

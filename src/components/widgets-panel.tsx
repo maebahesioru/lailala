@@ -40,12 +40,15 @@ export function WidgetsPanel() {
 
   useEffect(() => {
     if (cachedVideoInfo && Date.now() - cachedAt < CACHE_TTL) return;
-    Promise.all([
+    Promise.allSettled([
       fetch("/api/youtube/video-info?videoId=niKAylKNIEI").then((r) => r.json()),
       fetch("/api/comments?videoId=niKAylKNIEI&sortBy=NEWEST_FIRST").then((r) => r.json()),
       fetch("/api/trending/words").then((r) => r.json()),
     ])
-      .then(([infoData, commentsData, trendData]) => {
+      .then(([infoRes, commentsRes, trendRes]) => {
+        const infoData = infoRes.status === "fulfilled" ? infoRes.value : {};
+        const commentsData = commentsRes.status === "fulfilled" ? commentsRes.value : {};
+        const trendData = trendRes.status === "fulfilled" ? trendRes.value : {};
         const info = {
           ...infoData,
           commentCount: commentsData.videoInfo?.commentCount ?? infoData.commentCount ?? null,
@@ -55,8 +58,7 @@ export function WidgetsPanel() {
         cachedAt = Date.now();
         setVideoInfo(info);
         setTrendWords(cachedTrendWords);
-      })
-      .catch(() => null);
+      });
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
