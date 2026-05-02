@@ -9,10 +9,11 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <MainLayout>
-      <div className="border-b border-border px-4 py-4">
-        <h1 className="text-xl font-bold">利用規約</h1>
-      </div>
-      <div className="p-4 max-w-2xl space-y-6 text-[15px] leading-relaxed">
+      <div className="flex-1 flex flex-col">
+        <div className="border-b border-border px-4 py-4">
+          <h1 className="text-xl font-bold">利用規約</h1>
+        </div>
+        <div className="flex-1 p-4 max-w-2xl space-y-6 text-[15px] leading-relaxed">
         <section>
           <h2 className="text-lg font-bold mb-2">第1条（適用）</h2>
           <p className="text-muted">
@@ -69,6 +70,7 @@ export default function TermsPage() {
             本規約の解釈にあたっては、日本法を準拠法とします。本サービスに関して紛争が生じた場合には、運営者の所在地を管轄する裁判所を専属的合意管轄とします。
           </p>
         </section>
+        </div>
       </div>
     </MainLayout>
   );

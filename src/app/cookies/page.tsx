@@ -9,10 +9,11 @@ export const metadata: Metadata = {
 export default function CookiesPage() {
   return (
     <MainLayout>
-      <div className="border-b border-border px-4 py-4">
-        <h1 className="text-xl font-bold">Cookieポリシー</h1>
-      </div>
-      <div className="p-4 max-w-2xl space-y-6 text-[15px] leading-relaxed">
+      <div className="flex-1 flex flex-col">
+        <div className="border-b border-border px-4 py-4">
+          <h1 className="text-xl font-bold">Cookieポリシー</h1>
+        </div>
+        <div className="flex-1 p-4 max-w-2xl space-y-6 text-[15px] leading-relaxed">
         <section>
           <h2 className="text-lg font-bold mb-2">1. Cookieとは</h2>
           <p className="text-muted">
@@ -64,6 +65,7 @@ export default function CookiesPage() {
             本ポリシーは、必要に応じて変更される場合があります。変更後は、本サービス上で告知します。
           </p>
         </section>
+        </div>
       </div>
     </MainLayout>
   );
