@@ -48,9 +48,13 @@ export default function SecurityPage() {
               認証情報の保存
             </h2>
             <p className="text-[15px] text-muted leading-relaxed">
-              YouTubeから受け取る認証トークンは、データベースに保存する前に
-              <b>AES-256-GCM</b> で暗号化されます。
-              暗号化キーはサーバー管理者のみが知る環境変数で管理されています。
+              あなたの<b>Googleパスワードはこのサイトに入力されません</b>。
+              YouTubeの公式画面で入力されるため、このサービスがパスワードを知ることはありません。
+            </p>
+            <p className="text-[15px] text-muted leading-relaxed mt-3">
+              YouTubeから発行された認証トークンはデータベースに保存されますが、
+              <b>AES-256-GCM</b> で暗号化されています。
+              ただし、本サービスは個人運営のため、サーバー管理者が技術的に復号できる可能性があることをご了承ください。
             </p>
           </section>
 
