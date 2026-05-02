@@ -48,24 +48,15 @@ export function MobileNav() {
 
   return (
     <>
-      {/* Mobile Header */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-b border-border">
-        <div className="flex items-center h-12 px-3">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setOpen(true)}
-            className="p-2 -ml-2 rounded-full hover:bg-white/10"
-            aria-label="メニュー"
-          >
-            <Menu size={22} />
-          </motion.button>
-          <Link href="/" className="ml-2 text-lg font-bold" onClick={() => setOpen(false)}>
-            ライララ(仮)
-          </Link>
-        </div>
-      </header>
-      {/* Spacer for fixed header */}
-      <div className="md:hidden h-12" />
+      {/* Hamburger button */}
+      <motion.button
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setOpen(true)}
+        className="md:hidden fixed top-3 left-3 z-50 p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border"
+        aria-label="メニュー"
+      >
+        <Menu size={22} />
+      </motion.button>
 
       {/* Overlay */}
       <AnimatePresence>
