@@ -266,7 +266,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                       className="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
                     >
                       <MessageCircle size={18} />
-                      {reply.replyCount !== "0" && <span>{reply.replyCount}</span>}
+                      {reply.replyCount && reply.replyCount !== "0" && reply.replyCount !== "-" && <span>{reply.replyCount}</span>}
                     </Link>
                   </motion.div>
 

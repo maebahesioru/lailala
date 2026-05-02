@@ -502,7 +502,7 @@ function ListsPageInner() {
                     onClick={() => setActiveTab(tab)}
                     className={`flex-1 py-3 text-center text-sm font-medium transition-colors relative ${activeTab === tab ? "text-foreground" : "text-muted"}`}
                   >
-                    {tab === "mine" ? "マイリスト" : tab === "public" ? "公開リスト" : tab === "followed" ? "フォロー中" : "自分が載ってる"}
+                    {tab === "mine" ? "マイリスト" : tab === "public" ? "公開" : tab === "followed" ? "フォロー中" : "メンション"}
                     {activeTab === tab && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-primary rounded-full" />}
                   </button>
                 ))}

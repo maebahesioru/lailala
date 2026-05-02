@@ -1,11 +1,11 @@
 "use client";
 
-import { Home, Search, List, User, Music, Bell, Bookmark, Settings } from "lucide-react";
-import { motion } from "framer-motion";
+import { Home, Search, List, User, Music, Bell, Bookmark, Settings, Menu, X, PenSquare } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "./auth-provider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LoginPopup } from "./login-popup";
 import { useBgm } from "./bgm-provider";
 import { useNotifications } from "./use-notifications";
@@ -16,6 +16,7 @@ export function MobileNav() {
   const { enabled: bgmEnabled, mounted: bgmMounted, toggle: toggleBgm } = useBgm();
   const { unreadCount } = useNotifications();
   const [showLogin, setShowLogin] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleProtectedClick = (e: React.MouseEvent) => {
     if (!user) {
@@ -37,68 +38,108 @@ export function MobileNav() {
     { icon: Bell, label: "通知", href: "/notifications", protected: true, badge: unreadCount },
     { icon: Bookmark, label: "ブックマーク", href: "/bookmarks", protected: true },
     { icon: List, label: "リスト", href: "/lists", protected: true },
-    { icon: User, label: "プロフ", href: "/profile", protected: true },
+    { icon: User, label: "プロフィール", href: "/profile", protected: true },
     { icon: Settings, label: "設定", href: "/settings", protected: false },
   ];
 
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   return (
     <>
-      <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-t border-border"
-        aria-label="モバイルナビゲーション"
+      {/* Hamburger button */}
+      <motion.button
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setOpen(true)}
+        className="md:hidden fixed top-3 left-3 z-50 p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border"
+        aria-label="メニュー"
       >
-        <div className="flex items-center h-14 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={item.onClick ? item.onClick : item.protected ? handleProtectedClick : undefined}
-                className={`relative flex flex-col items-center justify-center gap-0.5 min-w-[3.5rem] h-full transition-colors ${
-                  isActive ? "text-primary" : "text-muted"
-                }`}
-                aria-current={isActive ? "page" : undefined}
-              >
-                <motion.div
-                  whileTap={{ scale: 0.8 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                  className="relative"
-                >
-                  <item.icon size={22} strokeWidth={2} />
-                  {item.badge > 0 && (
-                    <span className="absolute -top-1.5 -right-2 bg-primary text-white text-[9px] font-bold rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-0.5">
-                      {item.badge > 99 ? "99+" : item.badge}
-                    </span>
-                  )}
-                </motion.div>
-                <span className="text-[10px] font-medium whitespace-nowrap">{item.label}</span>
-                {isActive && (
-                  <motion.div
-                    layoutId="mobileNavIndicator"
-                    className="absolute -top-px left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full"
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-              </Link>
-            );
-          })}
-          <motion.button
-            onClick={toggleBgm}
-            whileTap={{ scale: 0.8 }}
-            className={`flex flex-col items-center justify-center gap-0.5 min-w-[3.5rem] h-full transition-colors ${
-              bgmMounted && bgmEnabled ? "text-primary" : "text-muted"
-            }`}
-            aria-label="BGM"
-            suppressHydrationWarning
+        <Menu size={22} />
+      </motion.button>
+
+      {/* Overlay */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
+            onClick={() => setOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Drawer */}
+      <AnimatePresence>
+        {open && (
+          <motion.aside
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="md:hidden fixed top-0 left-0 bottom-0 z-[70] w-[280px] bg-background border-r border-border flex flex-col"
           >
-            <Music size={22} strokeWidth={2} />
-            <span className="text-[10px] font-medium whitespace-nowrap">BGM</span>
-          </motion.button>
-        </div>
-      </nav>
-      {/* Safe area padding for bottom nav */}
-      <div className="md:hidden h-14" />
+            <div className="flex items-center justify-between p-4">
+              <Link href="/" onClick={() => setOpen(false)} className="text-xl font-bold">
+                ライララ(仮)
+              </Link>
+              <motion.button whileTap={{ scale: 0.9 }} onClick={() => setOpen(false)} className="p-2 rounded-full hover:bg-white/10">
+                <X size={20} />
+              </motion.button>
+            </div>
+
+            <nav className="flex-1 px-2 space-y-1">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={item.onClick ? item.onClick : item.protected ? handleProtectedClick : undefined}
+                    className={`flex items-center gap-3 px-3 py-3 rounded-full transition-colors ${isActive ? "text-primary font-bold" : "text-foreground hover:bg-white/10"}`}
+                  >
+                    <div className="relative">
+                      <item.icon size={22} />
+                      {item.badge > 0 && (
+                        <span className="absolute -top-1.5 -right-2 bg-primary text-white text-[9px] font-bold rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-0.5">
+                          {item.badge > 99 ? "99+" : item.badge}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[15px]">{item.label}</span>
+                  </Link>
+                );
+              })}
+              {bgmMounted && (
+                <button
+                  onClick={toggleBgm}
+                  className="flex items-center gap-3 px-3 py-3 rounded-full transition-colors w-full text-left hover:bg-white/10"
+                >
+                  <Music size={22} className={bgmEnabled ? "text-primary" : "text-muted"} />
+                  <span className="text-[15px]">{bgmEnabled ? "BGM ON" : "BGM OFF"}</span>
+                </button>
+              )}
+            </nav>
+
+            <div className="p-4">
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  user ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true);
+                }}
+                className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-full font-bold shadow-lg"
+              >
+                <PenSquare size={18} />
+                投稿する
+              </button>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+
       <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
     </>
   );
