@@ -112,10 +112,6 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
   }
 }
 
-async function run() {
-  await cacheVideoComments(VIDEO_ID, MAX_PER_RUN);
-}
-
 export function startCommentCacheWorker() {
   if (started) return;
   started = true;
