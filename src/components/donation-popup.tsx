@@ -86,11 +86,11 @@ export function DonationPopup() {
                 閉じる
               </button>
               <button
-                onClick={() => { localStorage.setItem("donation-hidden-until", String(Date.now() + 30 * 24 * 3600 * 1000)); setShow(false); }}
+                onClick={hideForAWeek}
                 className="w-full flex items-center justify-center gap-1.5 py-2 text-[13px] text-muted hover:text-red-400 transition-colors"
               >
                 <EyeOff size={14} />
-                今後表示しない
+                1週間表示しない
               </button>
             </div>
           </motion.div>
