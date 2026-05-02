@@ -35,6 +35,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   const [hasMore, setHasMore] = useState(false);
   const [nextToken, setNextToken] = useState<string | null>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
+  const isRestoring = useRef(false);
 
   const [followedLists, setFollowedLists] = useState<FollowedList[]>([]);
   const [activeListId, setActiveListId] = useState<string | null>(null);
@@ -43,8 +44,19 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   const [newArrivalCount, setNewArrivalCount] = useState(0);
   const [showNewBadge, setShowNewBadge] = useState(false);
 
+  // Restore saved tab state on mount (from sessionStorage)
   useEffect(() => {
     setMounted(true);
+    const savedSort = sessionStorage.getItem("lailala-sort");
+    const savedList = sessionStorage.getItem("lailala-list");
+    if (savedSort) {
+      setSortBy(savedSort as any);
+      sessionStorage.removeItem("lailala-sort");
+    }
+    if (savedList) {
+      setActiveListId(savedList);
+      sessionStorage.removeItem("lailala-list");
+    }
     fetch("/api/lists/follow")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
@@ -101,6 +113,19 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     }
   }, [videoId, sortBy, activeListId]);
 
+  const loadInitialAndRestoreScroll = useCallback(async () => {
+    await loadInitial();
+    if (isRestoring.current) {
+      const savedScroll = sessionStorage.getItem("lailala-scroll");
+      if (savedScroll) {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: parseInt(savedScroll, 10), behavior: "auto" });
+        });
+      }
+      isRestoring.current = false;
+    }
+  }, [loadInitial]);
+
   const loadMore = useCallback(async () => {
     if (activeListId || !nextToken || loadingMore) return;
     setLoadingMore(true);
@@ -147,9 +172,11 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   };
 
   useEffect(() => {
-    setThreads([]);
-    loadInitial();
-  }, [videoId, sortBy, activeListId, loadInitial]);
+    if (!isRestoring.current) {
+      setThreads([]);
+    }
+    loadInitialAndRestoreScroll();
+  }, [videoId, sortBy, activeListId, loadInitialAndRestoreScroll]);
 
   // Listen for scroll-to-top event from sidebar home button
   useEffect(() => {
@@ -165,27 +192,34 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     return () => window.removeEventListener("lailala:scrollToTop", handleScrollToTop);
   }, [sortBy, loadInitial, activeListId]);
 
-  // Restore scroll position on back button, then refresh data
-  useEffect(() => {
-    const handlePageShow = (e: PageTransitionEvent) => {
-      if (e.persisted) {
-        const saved = sessionStorage.getItem("lailala-scroll");
-        if (saved) {
-          window.scrollTo({ top: parseInt(saved, 10), behavior: "auto" });
-        }
-        setTimeout(() => loadInitial(), 0);
-      }
-    };
-    window.addEventListener("pageshow", handlePageShow);
-    return () => window.removeEventListener("pageshow", handlePageShow);
-  }, [loadInitial]);
-
+  // Save scroll position before leaving
   useEffect(() => {
     const onScroll = () => {
       sessionStorage.setItem("lailala-scroll", String(window.scrollY));
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Save tab state before navigating away
+  useEffect(() => {
+    sessionStorage.setItem("lailala-sort", sortBy);
+    if (activeListId) {
+      sessionStorage.setItem("lailala-list", activeListId);
+    } else {
+      sessionStorage.removeItem("lailala-list");
+    }
+  }, [sortBy, activeListId]);
+
+  // Restore scroll position on back button
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        isRestoring.current = true;
+      }
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
   }, []);
 
   // Infinite scroll

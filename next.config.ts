@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
       {
         source: "/",
         destination: "/popular/",
-        permanent: true,
+        permanent: false,
       },
     ];
   },
