@@ -5,19 +5,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Heart, X, ExternalLink, EyeOff } from "lucide-react";
 
 const STORAGE_KEY = "lailala-hide-donation";
+const HIDE_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 1週間
+
+function isHidden(): boolean {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return false;
+  const until = parseInt(raw, 10);
+  if (isNaN(until)) return false;
+  return Date.now() < until;
+}
 
 export function DonationPopup() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const hidden = localStorage.getItem(STORAGE_KEY);
-    if (!hidden) {
+    if (!isHidden()) {
       setShow(true);
     }
   }, []);
 
-  const hideForever = () => {
-    localStorage.setItem(STORAGE_KEY, "true");
+  const hideForAWeek = () => {
+    localStorage.setItem(STORAGE_KEY, String(Date.now() + HIDE_DURATION_MS));
     setShow(false);
   };
 
@@ -78,7 +86,7 @@ export function DonationPopup() {
                 閉じる
               </button>
               <button
-                onClick={hideForever}
+                onClick={() => { localStorage.setItem("donation-hidden-until", String(Date.now() + 30 * 24 * 3600 * 1000)); setShow(false); }}
                 className="w-full flex items-center justify-center gap-1.5 py-2 text-[13px] text-muted hover:text-red-400 transition-colors"
               >
                 <EyeOff size={14} />
