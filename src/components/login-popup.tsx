@@ -169,7 +169,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
                           await navigator.clipboard.writeText(userCode);
                           setCopied(true);
                           setTimeout(() => setCopied(false), 2000);
-                        } catch {}
+                        } catch (e) { console.error(e); }
                       }}
                       className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-white/10 text-muted transition-colors"
                       title="コードをコピー"

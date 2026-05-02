@@ -42,7 +42,7 @@ function setCachedUser(user: User | null) {
     } else {
       localStorage.removeItem("lailala-user-cache");
     }
-  } catch {}
+    } catch (e) { console.error(e); }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {

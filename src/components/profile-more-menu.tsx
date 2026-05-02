@@ -41,7 +41,7 @@ export function ProfileMoreMenu({ channelId, channelName }: ProfileMoreMenuProps
       const res = await fetch("/api/lists");
       const data = await res.json();
       setLists(data.lists || []);
-    } catch {}
+    } catch (e) { console.error(e); }
     setLoadingLists(false);
   };
 
@@ -54,7 +54,7 @@ export function ProfileMoreMenu({ channelId, channelName }: ProfileMoreMenuProps
       });
       setShowListMenu(false);
       setOpen(false);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleBlock = async () => {
@@ -67,7 +67,7 @@ export function ProfileMoreMenu({ channelId, channelName }: ProfileMoreMenuProps
       });
       setShowBlockConfirm(false);
       setOpen(false);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleMute = async () => {
@@ -80,7 +80,7 @@ export function ProfileMoreMenu({ channelId, channelName }: ProfileMoreMenuProps
       });
       setShowMuteConfirm(false);
       setOpen(false);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleOpen = (e: React.MouseEvent) => {

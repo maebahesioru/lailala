@@ -66,7 +66,7 @@ export function TweetMoreMenu({
       const res = await fetch("/api/lists");
       const data = await res.json();
       setLists(data.lists || []);
-    } catch {}
+    } catch (e) { console.error(e); }
     setLoadingLists(false);
   };
 
@@ -90,7 +90,7 @@ export function TweetMoreMenu({
       setShowListMenu(false);
       setOpen(false);
       onListChange?.();
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const removeFromList = async (listId: string) => {
@@ -99,7 +99,7 @@ export function TweetMoreMenu({
       setShowListMenu(false);
       setOpen(false);
       onListChange?.();
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleBlock = async () => {
@@ -112,7 +112,7 @@ export function TweetMoreMenu({
       });
       setShowBlockConfirm(false);
       setOpen(false);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleMute = async () => {
@@ -125,7 +125,7 @@ export function TweetMoreMenu({
       });
       setShowMuteConfirm(false);
       setOpen(false);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleOpen = (e: React.MouseEvent) => {

@@ -67,7 +67,7 @@ export function PushProvider({ children }: { children: ReactNode }) {
       });
 
       setSubscribed(true);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const unsubscribe = async () => {

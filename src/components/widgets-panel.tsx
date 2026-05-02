@@ -91,7 +91,7 @@ export function WidgetsPanel() {
   const stopVoiceInput = () => {
     try {
       recognitionRef.current?.stop();
-    } catch {}
+    } catch (e) { console.error(e); }
     setListening(false);
   };
 

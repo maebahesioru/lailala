@@ -349,7 +349,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   );
 }
 
-function parseLikeCount(str: string): number {
+export function parseLikeCount(str: string): number {
   if (!str) return 0;
   const upper = str.toUpperCase().trim();
   const numMatch = upper.match(/^(\d+(?:\.\d+)?)\s*([K万MB]?)/);

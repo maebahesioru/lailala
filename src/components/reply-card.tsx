@@ -12,7 +12,7 @@ import { MentionText } from "./mention-text";
 import { LoginPopup } from "./login-popup";
 import { ShareMenu } from "./share-menu";
 import { TweetMoreMenu } from "./tweet-more-menu";
-import { formatCount } from "./comment-card";
+import { formatCount, parseLikeCount } from "./comment-card";
 import { useDataSaver } from "./data-saver-provider";
 import { LinkCard } from "./link-card";
 
@@ -308,15 +308,3 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   );
 }
 
-function parseLikeCount(str: string): number {
-  if (!str) return 0;
-  const upper = str.toUpperCase().trim();
-  const numMatch = upper.match(/^(\d+(?:\.\d+)?)\s*([K万MB]?)/);
-  if (!numMatch) return parseInt(str.replace(/[^0-9]/g, ""), 10) || 0;
-  const num = parseFloat(numMatch[1]);
-  const unit = numMatch[2];
-  if (unit === "K") return Math.round(num * 1000);
-  if (unit === "M") return Math.round(num * 1000000);
-  if (unit === "万") return Math.round(num * 10000);
-  return Math.round(num);
-}

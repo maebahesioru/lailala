@@ -89,12 +89,12 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
     return () => clearTimeout(timer);
   }, [text, activeDraftId]);
 
-  const loadScheduled = async () => {
+    const loadScheduled = async () => {
     try {
       const res = await fetch(`/api/scheduled-posts?videoId=${videoId}`);
       const data = await res.json();
       if (data.posts) setScheduledList(data.posts);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   useEffect(() => {
@@ -191,7 +191,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
     try {
       await fetch(`/api/scheduled-posts?id=${id}`, { method: "DELETE" });
       loadScheduled();
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const loadDraft = (draft: Draft) => {

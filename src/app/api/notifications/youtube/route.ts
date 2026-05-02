@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     let unseenCount = 0;
     try {
       unseenCount = await innertube.getUnseenNotificationsCount();
-    } catch {}
+    } catch (e) { console.error(e); }
 
     return NextResponse.json({ notifications: ytNotifications, unseenCount });
   } catch (e: any) {

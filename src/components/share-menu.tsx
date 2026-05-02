@@ -32,7 +32,7 @@ export function ShareMenu({ url, text, buttonClass }: ShareMenuProps) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
       setOpen(false);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleNativeShare = async (e: React.MouseEvent) => {
@@ -41,7 +41,7 @@ export function ShareMenu({ url, text, buttonClass }: ShareMenuProps) {
       if (navigator.share) {
         await navigator.share({ title: "ライララ", text, url });
       }
-    } catch {}
+    } catch (e) { console.error(e); }
     setOpen(false);
   };
 
