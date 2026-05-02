@@ -24,6 +24,7 @@ interface FollowedList {
 export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId: string; defaultSort?: "TOP_COMMENTS" | "NEWEST_FIRST" }) {
 
   const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST">(defaultSort);
+  const [threads, setThreads] = useState<CommentThread[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -236,7 +237,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
       }
     }, 30000);
     return () => clearInterval(interval);
-  }, [videoId, sortBy, threads, activeListId]);
+  }, [videoId, sortBy, activeListId]);
 
   const baseTabs = [
     { id: "top", label: "人気", href: "/popular/", onClick: () => { setActiveListId(null); setSortBy("TOP_COMMENTS"); } },
