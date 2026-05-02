@@ -145,7 +145,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
               </Link>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="cursor-pointer flex-1 min-w-0" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
                         {stripHandlePrefix(thread.comment.author.name)}
@@ -170,6 +170,53 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                       <span className="text-muted text-[15px]">·</span>
                       <span className="text-muted text-[15px] shrink-0">{localizeTime(thread.comment.publishedTime)}</span>
                     </div>
+                    {editing ? (
+                      <div className="mt-2 space-y-2">
+                        <textarea
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          className="w-full bg-background border border-border rounded-lg px-3 py-2 text-[15px] outline-none focus:ring-2 focus:ring-primary resize-none"
+                          rows={3}
+                          autoFocus
+                        />
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setEditing(false); setEditText(thread.comment.content); }}
+                            className="px-3 py-1.5 rounded-full text-sm font-bold border border-border hover:bg-white/5"
+                          >
+                            キャンセル
+                          </button>
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                await fetch("/api/comments/edit", {
+                                  method: "PATCH",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ videoId, commentId: thread.comment.commentId, text: editText }),
+                                });
+                                setEditing(false);
+                                if (onContentChange) onContentChange(thread.comment.commentId, editText);
+                              } catch (err) { console.error(err); }
+                            }}
+                            className="px-3 py-1.5 rounded-full text-sm font-bold bg-primary text-white hover:bg-primary-hover"
+                          >
+                            保存
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed cursor-pointer" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>
+                        <MentionText content={stripEditedTag(thread.comment.content)} />
+                      </p>
+                    )}
+                    <div onClick={() => router.push(`/thread/${thread.comment.commentId}`)} className="cursor-pointer">
+                      <LinkCard text={thread.comment.content} />
+                    </div>
+                    {showDetailTime && (
+                      <p className="text-[13px] text-muted mt-2">{detailTime}</p>
+                    )}
+                  </div>
                     {editing ? (
                       <div className="mt-2 space-y-2">
                         <textarea
