@@ -173,6 +173,18 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                       )}
                       <span className="text-muted text-[15px]">·</span>
                       <span className="text-muted text-[15px] shrink-0 cursor-help" title={detailTime}>{localizeTime(reply.publishedTime)}</span>
+                      {reply.timestamp && (
+                        <a
+                          href={`https://www.youtube.com/watch?v=${videoId}&t=${encodeURIComponent(reply.timestamp)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-1 text-[13px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                        >
+                          <Clock size={12} />
+                          {reply.timestamp}
+                        </a>
+                      )}
                     </div>
                     {replyTo && (
                       <div className="text-[13px] text-muted mt-0.5">

@@ -170,6 +170,7 @@ exports.Prisma.UserActionScalarFieldEnum = {
   commentId: 'commentId',
   actionType: 'actionType',
   content: 'content',
+  timestamp: 'timestamp',
   createdAt: 'createdAt'
 };
 
@@ -184,6 +185,7 @@ exports.Prisma.CommentCacheScalarFieldEnum = {
   likeCount: 'likeCount',
   replyCount: 'replyCount',
   parentCommentId: 'parentCommentId',
+  timestamp: 'timestamp',
   publishedAt: 'publishedAt',
   updatedAt: 'updatedAt'
 };

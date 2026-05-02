@@ -9,6 +9,7 @@ export interface YtComment {
   };
   content: string;
   publishedTime: string;
+  timestamp?: string;
   likeCount: string;
   replyCount: string;
   isLiked?: boolean;

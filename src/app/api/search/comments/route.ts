@@ -140,6 +140,7 @@ export async function GET(req: NextRequest) {
         },
         content: c.content,
         publishedTime: getRelativeTimeString(c.publishedAt),
+        timestamp: c.timestamp || undefined,
         likeCount: String(c.likeCount),
         replyCount: String(c.replyCount),
         isLiked: false,

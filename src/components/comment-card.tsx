@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User, Clock } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
@@ -162,6 +162,18 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                       )}
                       <span className="text-muted text-[15px]">·</span>
                       <span className="text-muted text-[15px] shrink-0 cursor-help" title={detailTime}>{localizeTime(thread.comment.publishedTime)}</span>
+                      {thread.comment.timestamp && (
+                        <a
+                          href={`https://www.youtube.com/watch?v=${videoId}&t=${encodeURIComponent(thread.comment.timestamp)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-1 text-[13px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                        >
+                          <Clock size={12} />
+                          {thread.comment.timestamp}
+                        </a>
+                      )}
                     </div>
                     {editing ? (
                       <div className="mt-2 space-y-2">

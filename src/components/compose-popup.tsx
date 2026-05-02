@@ -48,6 +48,9 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("");
   const [scheduledList, setScheduledList] = useState<ScheduledPost[]>([]);
+  const [timestamp, setTimestamp] = useState("");
+  const [showTimestamp, setShowTimestamp] = useState(false);
+  const timestampRef = useRef<HTMLDivElement>(null);
   const [activeDraftId, setActiveDraftId] = useState<string | null>(null);
   const [showDraftConfirm, setShowDraftConfirm] = useState(false);
   const [pendingClose, setPendingClose] = useState(false);
@@ -145,6 +148,9 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
       if (scheduleRef.current && !scheduleRef.current.contains(e.target as Node)) {
         setShowSchedule(false);
       }
+      if (timestampRef.current && !timestampRef.current.contains(e.target as Node)) {
+        setShowTimestamp(false);
+      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -158,17 +164,18 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
         await fetch("/api/comments/reply", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ videoId, parentCommentId: replyParentId, text: text.trim() }),
+          body: JSON.stringify({ videoId, parentCommentId: replyParentId, text: text.trim(), timestamp: timestamp || undefined }),
         });
       } else {
         const postText = threadParentId ? `${text.trim()}\n(続き)` : text.trim();
         await fetch("/api/comments", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ videoId, text: postText }),
+          body: JSON.stringify({ videoId, text: postText, timestamp: timestamp || undefined }),
         });
       }
       setText("");
+      setTimestamp("");
       setActiveDraftId(null);
       setThreadParentId(null);
       setReplyParentId(null);
@@ -470,6 +477,35 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
                             キャンセル
                           </button>
                         </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative" ref={timestampRef}>
+                    <button
+                      onClick={() => setShowTimestamp(!showTimestamp)}
+                      className={`p-2 rounded-full hover:bg-primary/10 ${timestamp ? "text-primary bg-primary/10" : ""}`}
+                      title="時間を指定"
+                    >
+                      <Clock size={18} />
+                    </button>
+                    {showTimestamp && (
+                      <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-xl shadow-lg p-3 w-48 z-20">
+                        <p className="text-sm font-bold mb-2">時間指定</p>
+                        <input
+                          type="text"
+                          value={timestamp}
+                          onChange={(e) => setTimestamp(e.target.value)}
+                          placeholder="5:23"
+                          className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary text-sm"
+                        />
+                        <p className="text-[12px] text-muted mt-1">例: 5:23, 1:23:45</p>
+                        <button
+                          onClick={() => setTimestamp("")}
+                          className="mt-2 w-full py-1.5 text-[13px] text-red-400 hover:bg-white/5 rounded-full transition-colors"
+                        >
+                          クリア
+                        </button>
                       </div>
                     )}
                   </div>
