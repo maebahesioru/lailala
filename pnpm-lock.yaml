@@ -42,8 +42,8 @@ importers:
         specifier: ^3.6.7
         version: 3.6.7
       youtubei.js:
-        specifier: file:../YouTube.js
-        version: file:../YouTube.js
+        specifier: github:maebahesioru/YouTube.js#fix-comment-replies-fallback
+        version: https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/fab320f8e653c0fc7082fb4b1e408212d30234af
       zod:
         specifier: ^4.4.1
         version: 4.4.1
@@ -2169,8 +2169,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  youtubei.js@file:../YouTube.js:
-    resolution: {directory: ../YouTube.js, type: directory}
+  youtubei.js@https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/fab320f8e653c0fc7082fb4b1e408212d30234af:
+    resolution: {tarball: https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/fab320f8e653c0fc7082fb4b1e408212d30234af}
+    version: 17.0.1
 
   zod-validation-error@4.0.2:
     resolution: {integrity: sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ==}
@@ -4512,7 +4513,7 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  youtubei.js@file:../YouTube.js:
+  youtubei.js@https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/fab320f8e653c0fc7082fb4b1e408212d30234af:
     dependencies:
       '@bufbuild/protobuf': 2.12.0
       meriyah: 6.1.4
