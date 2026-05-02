@@ -264,7 +264,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
               onClick={() => {
                 tab.onClick();
                 if ("href" in tab && tab.href && pathname !== tab.href) {
-                  router.push(tab.href);
+                  router.push(tab.href as string);
                 }
               }}
               className={`flex-1 py-4 text-center text-sm font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap inline-flex items-center justify-center ${
