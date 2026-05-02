@@ -9,7 +9,6 @@ import { YTNodes } from "youtubei.js";
 const postSchema = z.object({
   videoId: z.string(),
   text: z.string().min(1).max(5000),
-  timestamp: z.string().optional(),
 });
 
 function isOlderThanOneYear(publishedTime: string): boolean {
@@ -99,7 +98,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const { videoId, text, timestamp } = parsed.data;
+  const { videoId, text } = parsed.data;
 
   try {
     const innertube = await getInnertubeWithAuth(userId);
@@ -112,7 +111,6 @@ export async function POST(req: NextRequest) {
         commentId: "pending",
         actionType: "comment",
         content: text,
-        timestamp,
       },
     });
 
@@ -204,21 +202,6 @@ export async function GET(req: NextRequest) {
     }
 
     threads = filterBlockedThreads(threads, blockedIds);
-
-    // Merge timestamps from DB for display
-    const commentIds = threads.map((t: any) => t.comment?.commentId).filter(Boolean);
-    if (commentIds.length > 0) {
-      const cached = await prisma.commentCache.findMany({
-        where: { commentId: { in: commentIds } },
-        select: { commentId: true, timestamp: true },
-      });
-      const tsMap = new Map(cached.map((c) => [c.commentId, c.timestamp]));
-      for (const t of threads) {
-        if (t.comment?.commentId && tsMap.has(t.comment.commentId)) {
-          t.comment.timestamp = tsMap.get(t.comment.commentId) || undefined;
-        }
-      }
-    }
 
     // Fire-and-forget: cache fetched comments to DB
     Promise.resolve().then(async () => {

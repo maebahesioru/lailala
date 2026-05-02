@@ -55,7 +55,6 @@ export async function GET(req: NextRequest) {
           likeCount: c?.likeCount || 0,
           replyCount: c?.replyCount || 0,
           publishedAt: c?.publishedAt || l.createdAt,
-          timestamp: c?.timestamp || null,
         };
       });
 

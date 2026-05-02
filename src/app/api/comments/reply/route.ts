@@ -10,7 +10,6 @@ const schema = z.object({
   videoId: z.string(),
   commentId: z.string(),
   text: z.string().min(1).max(5000),
-  timestamp: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -24,7 +23,7 @@ export async function POST(req: NextRequest) {
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
-  const { videoId, commentId, text, timestamp } = parsed.data;
+  const { videoId, commentId, text } = parsed.data;
 
   try {
     const innertube = await getInnertubeWithAuth(userId);
@@ -46,7 +45,7 @@ export async function POST(req: NextRequest) {
     const response = await targetComment.reply(text);
 
     await prisma.userAction.create({
-      data: { userId, videoId, commentId, actionType: "reply", content: text, timestamp },
+      data: { userId, videoId, commentId, actionType: "reply", content: text },
     });
 
     // Send notification to comment author

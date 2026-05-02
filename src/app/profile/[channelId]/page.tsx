@@ -3,11 +3,12 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
-import { ArrowLeft, User, ThumbsUp, MessageCircle, Bell, BellOff, Heart, ThumbsDown, Bookmark, Clock } from "lucide-react";
+import { ArrowLeft, User, ThumbsUp, MessageCircle, Bell, BellOff, Heart, ThumbsDown, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { ProfileMoreMenu } from "@/components/profile-more-menu";
-import { useAuth } from "@/components/auth-provider";
+import { useAuth } from "./auth-provider";
 import { ContributionHeatmap } from "@/components/contribution-heatmap";
+import { MentionText } from "@/components/mention-text";
 
 interface ProfileComment {
   commentId: string;
@@ -19,7 +20,6 @@ interface ProfileComment {
   likeCount: number;
   replyCount: number;
   publishedAt: string;
-  timestamp?: string | null;
 }
 
 interface PrivacySettings {
@@ -270,20 +270,10 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
                     <span className="font-bold text-[15px] truncate">{safeName(c.authorName, c.authorChannelId)}</span>
                     <span className="text-muted text-[15px]">·</span>
                     <span className="text-muted text-[15px] shrink-0">{formatRelativeTime(c.publishedAt)}</span>
-                    {c.timestamp && (
-                      <a
-                        href={`https://www.youtube.com/watch?v=${c.videoId}&t=${encodeURIComponent(c.timestamp)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center gap-1 text-[13px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full hover:bg-primary/20 transition-colors"
-                      >
-                        <Clock size={12} />
-                        {c.timestamp}
-                      </a>
-                    )}
                   </div>
-                  <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed break-words">{c.content}</p>
+                  <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed break-words">
+                    <MentionText content={c.content} videoId={c.videoId} />
+                  </p>
 
                   <div className="flex items-center gap-4 mt-3 text-[13px] text-muted">
                     <span className="flex items-center gap-1.5">

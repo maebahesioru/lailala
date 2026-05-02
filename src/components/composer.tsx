@@ -24,12 +24,9 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("");
   const [scheduledList, setScheduledList] = useState<ScheduledPost[]>([]);
-  const [timestamp, setTimestamp] = useState("");
-  const [showTimestamp, setShowTimestamp] = useState(false);
   const [mounted, setMounted] = useState(false);
   const emojiRef = useRef<HTMLDivElement>(null);
   const scheduleRef = useRef<HTMLDivElement>(null);
-  const timestampRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -56,9 +53,6 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
       if (scheduleRef.current && !scheduleRef.current.contains(e.target as Node)) {
         setShowSchedule(false);
       }
-      if (timestampRef.current && !timestampRef.current.contains(e.target as Node)) {
-        setShowTimestamp(false);
-      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -69,17 +63,16 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
     setPosting(true);
     try {
       const url = parentCommentId ? "/api/comments/reply" : "/api/comments";
-      const bodyObj: any = { videoId, text: text.trim() };
-      if (parentCommentId) bodyObj.parentCommentId = parentCommentId;
-      if (timestamp) bodyObj.timestamp = timestamp;
+      const body = parentCommentId
+        ? JSON.stringify({ videoId, parentCommentId, text: text.trim() })
+        : JSON.stringify({ videoId, text: text.trim() });
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bodyObj),
+        body,
       });
       if (res.ok) {
         setText("");
-        setTimestamp("");
         onPosted?.();
       } else {
         const data = await res.json();
@@ -233,34 +226,6 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
                 )}
               </div>
 
-              <div className="relative" ref={timestampRef}>
-                <button
-                  onClick={() => setShowTimestamp(!showTimestamp)}
-                  className={`p-2 rounded-full hover:bg-[#1d9bf0]/10 ${timestamp ? "text-[#1d9bf0] bg-[#1d9bf0]/10" : ""}`}
-                  title="時間を指定"
-                >
-                  <Clock size={18} />
-                </button>
-                {showTimestamp && (
-                  <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-xl shadow-lg p-3 w-48 z-20">
-                    <p className="text-sm font-bold mb-2">時間指定</p>
-                    <input
-                      type="text"
-                      value={timestamp}
-                      onChange={(e) => setTimestamp(e.target.value)}
-                      placeholder="5:23"
-                      className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary text-sm"
-                    />
-                    <p className="text-[12px] text-muted mt-1">例: 5:23, 1:23:45</p>
-                    <button
-                      onClick={() => setTimestamp("")}
-                      className="mt-2 w-full py-1.5 text-[13px] text-red-400 hover:bg-white/5 rounded-full transition-colors"
-                    >
-                      クリア
-                    </button>
-                  </div>
-                )}
-              </div>
             </div>
             <button
               onClick={handleSubmit}
