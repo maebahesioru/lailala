@@ -125,7 +125,7 @@ export function MobileNav() {
                   >
                     <div className="relative">
                       <item.icon size={22} />
-                      {item.badge > 0 && (
+                      {item.badge && item.badge > 0 && (
                         <span className="absolute -top-1.5 -right-2 bg-primary text-white text-[9px] font-bold rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-0.5">
                           {item.badge > 99 ? "99+" : item.badge}
                         </span>
