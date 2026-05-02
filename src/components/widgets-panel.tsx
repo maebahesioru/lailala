@@ -233,6 +233,7 @@ export function WidgetsPanel() {
         <Link href="/terms" className="hover:underline">利用規約</Link>
         <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
         <Link href="/cookies" className="hover:underline">Cookieポリシー</Link>
+        <Link href="/security" className="hover:underline">セキュリティ</Link>
         <span>&copy; 2025 ライララ(仮)</span>
       </div>
 
