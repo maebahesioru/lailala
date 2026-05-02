@@ -409,7 +409,7 @@ export default function SettingsPage() {
             <Type size={20} className="text-muted" />
             ミュートワード
           </h2>
-          <div className="flex gap-2 mb-3">
+          <div className="flex flex-col sm:flex-row gap-2 mb-3">
             <input
               value={newWord}
               onChange={(e) => setNewWord(e.target.value)}
@@ -417,22 +417,24 @@ export default function SettingsPage() {
               className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
               onKeyDown={(e) => { if (e.key === "Enter") addMutedWord(); }}
             />
-            <select
-              value={newWordMode}
-              onChange={(e) => setNewWordMode(e.target.value)}
-              className="bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="partial">部分一致</option>
-              <option value="exact">完全一致</option>
-              <option value="regex">正規表現</option>
-            </select>
-            <button
-              onClick={addMutedWord}
-              disabled={!newWord.trim()}
-              className="px-4 py-2 bg-primary text-white rounded-full text-sm font-bold hover:bg-primary-hover disabled:opacity-50"
-            >
-              追加
-            </button>
+            <div className="flex gap-2">
+              <select
+                value={newWordMode}
+                onChange={(e) => setNewWordMode(e.target.value)}
+                className="flex-1 sm:flex-none bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="partial">部分一致</option>
+                <option value="exact">完全一致</option>
+                <option value="regex">正規表現</option>
+              </select>
+              <button
+                onClick={addMutedWord}
+                disabled={!newWord.trim()}
+                className="flex-1 sm:flex-none px-4 py-2 bg-primary text-white rounded-full text-sm font-bold hover:bg-primary-hover disabled:opacity-50"
+              >
+                追加
+              </button>
+            </div>
           </div>
           {mutedWords.length === 0 ? (
             <p className="text-sm text-muted">ミュートするワードがありません</p>
