@@ -25,7 +25,10 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
 
   const router = useRouter();
   const pathname = usePathname();
-  const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST">(defaultSort);
+  const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST">(() => {
+    if (typeof window === "undefined") return defaultSort;
+    return (sessionStorage.getItem("lailala-sort") as any) || defaultSort;
+  });
   const [threads, setThreads] = useState<CommentThread[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);

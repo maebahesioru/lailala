@@ -22,10 +22,11 @@ interface CommentCardProps {
   voteCounts: { likes: number; dislikes: number };
   userVote?: string;
   onDelete?: (commentId: string) => void;
+  onContentChange?: (commentId: string, content: string) => void;
   showDetailTime?: boolean;
 }
 
-export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, showDetailTime = false }: CommentCardProps) {
+export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, onContentChange, showDetailTime = false }: CommentCardProps) {
   const { user } = useAuth();
   const router = useRouter();
   const [liked, setLiked] = useState(userVote === "like");
@@ -206,7 +207,11 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                         </div>
                       </div>
                     ) : (
-                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed cursor-pointer" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>
+                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed" onClick={() => {
+                        const sel = window.getSelection();
+                        if (sel && sel.toString().length > 0) return;
+                        router.push(`/thread/${thread.comment.commentId}`);
+                      }}>
                         <MentionText content={stripEditedTag(thread.comment.content)} />
                       </p>
                     )}
@@ -215,56 +220,6 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                     </div>
                     {showDetailTime && (
                       <p className="text-[13px] text-muted mt-2">{detailTime}</p>
-                    )}
-                  </div>
-                    {editing ? (
-                      <div className="mt-2 space-y-2">
-                        <textarea
-                          value={editText}
-                          onChange={(e) => setEditText(e.target.value)}
-                          rows={3}
-                          className="w-full bg-background border border-border rounded-lg p-3 text-[15px] outline-none focus:ring-2 focus:ring-primary resize-none"
-                          autoFocus
-                        />
-                        <div className="flex gap-2 justify-end">
-                          <motion.button
-                            whileTap={{ scale: 0.95 }}
-                            onClick={(e) => { e.stopPropagation(); setEditing(false); setEditText(thread.comment.content); }}
-                            className="px-4 py-1.5 rounded-full border border-border text-sm font-bold hover:bg-white/5"
-                          >
-                            キャンセル
-                          </motion.button>
-                          <motion.button
-                            whileTap={{ scale: 0.95 }}
-                            onClick={async (e) => {
-                              e.stopPropagation();
-                              if (!editText.trim()) return;
-                              try {
-                                await fetch("/api/comments/edit", {
-                                  method: "PATCH",
-                                  headers: { "Content-Type": "application/json" },
-                                  body: JSON.stringify({ videoId, commentId: thread.comment.commentId, text: editText.trim() }),
-                                });
-                                thread.comment.content = editText.trim();
-                                setEditing(false);
-                              } catch (e) { console.error(e); }
-                            }}
-                            className="px-4 py-1.5 rounded-full bg-primary text-white text-sm font-bold hover:bg-primary-hover"
-                          >
-                            保存
-                          </motion.button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
-                          <MentionText content={stripEditedTag(thread.comment.content)} />
-                        </p>
-                        <LinkCard text={thread.comment.content} />
-                        {showDetailTime && (
-                          <p className="text-[13px] text-muted mt-2">{detailTime}</p>
-                        )}
-                      </>
                     )}
                   </div>
 
