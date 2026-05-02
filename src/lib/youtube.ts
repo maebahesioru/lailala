@@ -33,6 +33,7 @@ export async function getInnertubeWithAuth(credentialId: string) {
     const tokens = JSON.parse(raw);
     const innertube = await Innertube.create({
       cache: new UniversalCache(false),
+      client_type: "TV",
     });
     await innertube.session.signIn(tokens);
     return innertube;
