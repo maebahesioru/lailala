@@ -97,6 +97,7 @@ model CommentCache {
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@index([videoId, likeCount])
+  @@index([videoId, publishedAt])
   @@index([publishedAt])
   @@index([authorChannelId])
   @@index([parentCommentId])

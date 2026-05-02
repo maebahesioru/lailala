@@ -47,7 +47,7 @@ function extractTrendWords(contents: string[]): TrendWord[] {
   }
     return Array.from(wordCounts.entries())
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 50)
+    .slice(0, 10)
     .map(([word, count]) => ({ word, count }));
 }
 
@@ -58,14 +58,11 @@ export async function GET(req: NextRequest) {
   try {
     const since = new Date(Date.now() - hours * 60 * 60 * 1000);
 
-    const comments = await prisma.commentCache.findMany({
-      where: {
-        publishedAt: { gte: since },
-      },
-      select: { content: true },
-      orderBy: { publishedAt: "desc" },
-      take: 50000,
-    });
+    // Fetch ALL comments within the time range (no limit) using raw query for efficiency
+    const comments = await prisma.$queryRaw<{ content: string }[]>`
+      SELECT content FROM comment_cache
+      WHERE video_id = ${VIDEO_ID} AND published_at >= ${since}
+    `;
 
     const contents = comments.map((c) => c.content);
     const words = extractTrendWords(contents);
