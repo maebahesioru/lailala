@@ -74,6 +74,16 @@ export type BlockedUser = $Result.DefaultSelection<Prisma.$BlockedUserPayload>
  */
 export type MutedUser = $Result.DefaultSelection<Prisma.$MutedUserPayload>
 /**
+ * Model MutedWord
+ * 
+ */
+export type MutedWord = $Result.DefaultSelection<Prisma.$MutedWordPayload>
+/**
+ * Model OgpCache
+ * 
+ */
+export type OgpCache = $Result.DefaultSelection<Prisma.$OgpCachePayload>
+/**
  * Model ScheduledPost
  * 
  */
@@ -331,6 +341,26 @@ export class PrismaClient<
     * ```
     */
   get mutedUser(): Prisma.MutedUserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mutedWord`: Exposes CRUD operations for the **MutedWord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MutedWords
+    * const mutedWords = await prisma.mutedWord.findMany()
+    * ```
+    */
+  get mutedWord(): Prisma.MutedWordDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.ogpCache`: Exposes CRUD operations for the **OgpCache** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OgpCaches
+    * const ogpCaches = await prisma.ogpCache.findMany()
+    * ```
+    */
+  get ogpCache(): Prisma.OgpCacheDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.scheduledPost`: Exposes CRUD operations for the **ScheduledPost** model.
@@ -824,6 +854,8 @@ export namespace Prisma {
     BookmarkFolder: 'BookmarkFolder',
     BlockedUser: 'BlockedUser',
     MutedUser: 'MutedUser',
+    MutedWord: 'MutedWord',
+    OgpCache: 'OgpCache',
     ScheduledPost: 'ScheduledPost',
     Notification: 'Notification',
     NotificationSetting: 'NotificationSetting',
@@ -846,7 +878,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "scheduledPost" | "notification" | "notificationSetting" | "pushSubscription"
+      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "mutedWord" | "ogpCache" | "scheduledPost" | "notification" | "notificationSetting" | "pushSubscription"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1738,6 +1770,154 @@ export namespace Prisma {
           }
         }
       }
+      MutedWord: {
+        payload: Prisma.$MutedWordPayload<ExtArgs>
+        fields: Prisma.MutedWordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MutedWordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MutedWordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>
+          }
+          findFirst: {
+            args: Prisma.MutedWordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MutedWordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>
+          }
+          findMany: {
+            args: Prisma.MutedWordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>[]
+          }
+          create: {
+            args: Prisma.MutedWordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>
+          }
+          createMany: {
+            args: Prisma.MutedWordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MutedWordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>[]
+          }
+          delete: {
+            args: Prisma.MutedWordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>
+          }
+          update: {
+            args: Prisma.MutedWordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>
+          }
+          deleteMany: {
+            args: Prisma.MutedWordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MutedWordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MutedWordUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>[]
+          }
+          upsert: {
+            args: Prisma.MutedWordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MutedWordPayload>
+          }
+          aggregate: {
+            args: Prisma.MutedWordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMutedWord>
+          }
+          groupBy: {
+            args: Prisma.MutedWordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MutedWordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MutedWordCountArgs<ExtArgs>
+            result: $Utils.Optional<MutedWordCountAggregateOutputType> | number
+          }
+        }
+      }
+      OgpCache: {
+        payload: Prisma.$OgpCachePayload<ExtArgs>
+        fields: Prisma.OgpCacheFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OgpCacheFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OgpCacheFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>
+          }
+          findFirst: {
+            args: Prisma.OgpCacheFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OgpCacheFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>
+          }
+          findMany: {
+            args: Prisma.OgpCacheFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>[]
+          }
+          create: {
+            args: Prisma.OgpCacheCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>
+          }
+          createMany: {
+            args: Prisma.OgpCacheCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OgpCacheCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>[]
+          }
+          delete: {
+            args: Prisma.OgpCacheDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>
+          }
+          update: {
+            args: Prisma.OgpCacheUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>
+          }
+          deleteMany: {
+            args: Prisma.OgpCacheDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OgpCacheUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OgpCacheUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>[]
+          }
+          upsert: {
+            args: Prisma.OgpCacheUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OgpCachePayload>
+          }
+          aggregate: {
+            args: Prisma.OgpCacheAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOgpCache>
+          }
+          groupBy: {
+            args: Prisma.OgpCacheGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OgpCacheGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OgpCacheCountArgs<ExtArgs>
+            result: $Utils.Optional<OgpCacheCountAggregateOutputType> | number
+          }
+        }
+      }
       ScheduledPost: {
         payload: Prisma.$ScheduledPostPayload<ExtArgs>
         fields: Prisma.ScheduledPostFieldRefs
@@ -2142,6 +2322,8 @@ export namespace Prisma {
     bookmarkFolder?: BookmarkFolderOmit
     blockedUser?: BlockedUserOmit
     mutedUser?: MutedUserOmit
+    mutedWord?: MutedWordOmit
+    ogpCache?: OgpCacheOmit
     scheduledPost?: ScheduledPostOmit
     notification?: NotificationOmit
     notificationSetting?: NotificationSettingOmit
@@ -2233,6 +2415,7 @@ export namespace Prisma {
     bookmarkFolders: number
     blockedUsers: number
     mutedUsers: number
+    mutedWords: number
     notifications: number
     notificationSettings: number
     pushSubscriptions: number
@@ -2246,6 +2429,7 @@ export namespace Prisma {
     bookmarkFolders?: boolean | UserCountOutputTypeCountBookmarkFoldersArgs
     blockedUsers?: boolean | UserCountOutputTypeCountBlockedUsersArgs
     mutedUsers?: boolean | UserCountOutputTypeCountMutedUsersArgs
+    mutedWords?: boolean | UserCountOutputTypeCountMutedWordsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     notificationSettings?: boolean | UserCountOutputTypeCountNotificationSettingsArgs
     pushSubscriptions?: boolean | UserCountOutputTypeCountPushSubscriptionsArgs
@@ -2309,6 +2493,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMutedUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MutedUserWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMutedWordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MutedWordWhereInput
   }
 
   /**
@@ -2684,6 +2875,7 @@ export namespace Prisma {
     bookmarkFolders?: boolean | User$bookmarkFoldersArgs<ExtArgs>
     blockedUsers?: boolean | User$blockedUsersArgs<ExtArgs>
     mutedUsers?: boolean | User$mutedUsersArgs<ExtArgs>
+    mutedWords?: boolean | User$mutedWordsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     notificationSettings?: boolean | User$notificationSettingsArgs<ExtArgs>
     pushSubscriptions?: boolean | User$pushSubscriptionsArgs<ExtArgs>
@@ -2763,6 +2955,7 @@ export namespace Prisma {
     bookmarkFolders?: boolean | User$bookmarkFoldersArgs<ExtArgs>
     blockedUsers?: boolean | User$blockedUsersArgs<ExtArgs>
     mutedUsers?: boolean | User$mutedUsersArgs<ExtArgs>
+    mutedWords?: boolean | User$mutedWordsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     notificationSettings?: boolean | User$notificationSettingsArgs<ExtArgs>
     pushSubscriptions?: boolean | User$pushSubscriptionsArgs<ExtArgs>
@@ -2782,6 +2975,7 @@ export namespace Prisma {
       bookmarkFolders: Prisma.$BookmarkFolderPayload<ExtArgs>[]
       blockedUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
       mutedUsers: Prisma.$MutedUserPayload<ExtArgs>[]
+      mutedWords: Prisma.$MutedWordPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       notificationSettings: Prisma.$NotificationSettingPayload<ExtArgs>[]
       pushSubscriptions: Prisma.$PushSubscriptionPayload<ExtArgs>[]
@@ -3207,6 +3401,7 @@ export namespace Prisma {
     bookmarkFolders<T extends User$bookmarkFoldersArgs<ExtArgs> = {}>(args?: Subset<T, User$bookmarkFoldersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkFolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     blockedUsers<T extends User$blockedUsersArgs<ExtArgs> = {}>(args?: Subset<T, User$blockedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mutedUsers<T extends User$mutedUsersArgs<ExtArgs> = {}>(args?: Subset<T, User$mutedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mutedWords<T extends User$mutedWordsArgs<ExtArgs> = {}>(args?: Subset<T, User$mutedWordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notificationSettings<T extends User$notificationSettingsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationSettingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pushSubscriptions<T extends User$pushSubscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, User$pushSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3829,6 +4024,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MutedUserScalarFieldEnum | MutedUserScalarFieldEnum[]
+  }
+
+  /**
+   * User.mutedWords
+   */
+  export type User$mutedWordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    where?: MutedWordWhereInput
+    orderBy?: MutedWordOrderByWithRelationInput | MutedWordOrderByWithRelationInput[]
+    cursor?: MutedWordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MutedWordScalarFieldEnum | MutedWordScalarFieldEnum[]
   }
 
   /**
@@ -15950,6 +16169,2098 @@ export namespace Prisma {
 
 
   /**
+   * Model MutedWord
+   */
+
+  export type AggregateMutedWord = {
+    _count: MutedWordCountAggregateOutputType | null
+    _min: MutedWordMinAggregateOutputType | null
+    _max: MutedWordMaxAggregateOutputType | null
+  }
+
+  export type MutedWordMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    word: string | null
+    mode: string | null
+    createdAt: Date | null
+  }
+
+  export type MutedWordMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    word: string | null
+    mode: string | null
+    createdAt: Date | null
+  }
+
+  export type MutedWordCountAggregateOutputType = {
+    id: number
+    userId: number
+    word: number
+    mode: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type MutedWordMinAggregateInputType = {
+    id?: true
+    userId?: true
+    word?: true
+    mode?: true
+    createdAt?: true
+  }
+
+  export type MutedWordMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    word?: true
+    mode?: true
+    createdAt?: true
+  }
+
+  export type MutedWordCountAggregateInputType = {
+    id?: true
+    userId?: true
+    word?: true
+    mode?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MutedWordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MutedWord to aggregate.
+     */
+    where?: MutedWordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MutedWords to fetch.
+     */
+    orderBy?: MutedWordOrderByWithRelationInput | MutedWordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MutedWordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MutedWords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MutedWords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MutedWords
+    **/
+    _count?: true | MutedWordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MutedWordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MutedWordMaxAggregateInputType
+  }
+
+  export type GetMutedWordAggregateType<T extends MutedWordAggregateArgs> = {
+        [P in keyof T & keyof AggregateMutedWord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMutedWord[P]>
+      : GetScalarType<T[P], AggregateMutedWord[P]>
+  }
+
+
+
+
+  export type MutedWordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MutedWordWhereInput
+    orderBy?: MutedWordOrderByWithAggregationInput | MutedWordOrderByWithAggregationInput[]
+    by: MutedWordScalarFieldEnum[] | MutedWordScalarFieldEnum
+    having?: MutedWordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MutedWordCountAggregateInputType | true
+    _min?: MutedWordMinAggregateInputType
+    _max?: MutedWordMaxAggregateInputType
+  }
+
+  export type MutedWordGroupByOutputType = {
+    id: string
+    userId: string
+    word: string
+    mode: string
+    createdAt: Date
+    _count: MutedWordCountAggregateOutputType | null
+    _min: MutedWordMinAggregateOutputType | null
+    _max: MutedWordMaxAggregateOutputType | null
+  }
+
+  type GetMutedWordGroupByPayload<T extends MutedWordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MutedWordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MutedWordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MutedWordGroupByOutputType[P]>
+            : GetScalarType<T[P], MutedWordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MutedWordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    word?: boolean
+    mode?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mutedWord"]>
+
+  export type MutedWordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    word?: boolean
+    mode?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mutedWord"]>
+
+  export type MutedWordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    word?: boolean
+    mode?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mutedWord"]>
+
+  export type MutedWordSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    word?: boolean
+    mode?: boolean
+    createdAt?: boolean
+  }
+
+  export type MutedWordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "word" | "mode" | "createdAt", ExtArgs["result"]["mutedWord"]>
+  export type MutedWordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MutedWordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MutedWordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MutedWordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MutedWord"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      word: string
+      mode: string
+      createdAt: Date
+    }, ExtArgs["result"]["mutedWord"]>
+    composites: {}
+  }
+
+  type MutedWordGetPayload<S extends boolean | null | undefined | MutedWordDefaultArgs> = $Result.GetResult<Prisma.$MutedWordPayload, S>
+
+  type MutedWordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MutedWordFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MutedWordCountAggregateInputType | true
+    }
+
+  export interface MutedWordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MutedWord'], meta: { name: 'MutedWord' } }
+    /**
+     * Find zero or one MutedWord that matches the filter.
+     * @param {MutedWordFindUniqueArgs} args - Arguments to find a MutedWord
+     * @example
+     * // Get one MutedWord
+     * const mutedWord = await prisma.mutedWord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MutedWordFindUniqueArgs>(args: SelectSubset<T, MutedWordFindUniqueArgs<ExtArgs>>): Prisma__MutedWordClient<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MutedWord that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MutedWordFindUniqueOrThrowArgs} args - Arguments to find a MutedWord
+     * @example
+     * // Get one MutedWord
+     * const mutedWord = await prisma.mutedWord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MutedWordFindUniqueOrThrowArgs>(args: SelectSubset<T, MutedWordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MutedWordClient<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MutedWord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedWordFindFirstArgs} args - Arguments to find a MutedWord
+     * @example
+     * // Get one MutedWord
+     * const mutedWord = await prisma.mutedWord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MutedWordFindFirstArgs>(args?: SelectSubset<T, MutedWordFindFirstArgs<ExtArgs>>): Prisma__MutedWordClient<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MutedWord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedWordFindFirstOrThrowArgs} args - Arguments to find a MutedWord
+     * @example
+     * // Get one MutedWord
+     * const mutedWord = await prisma.mutedWord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MutedWordFindFirstOrThrowArgs>(args?: SelectSubset<T, MutedWordFindFirstOrThrowArgs<ExtArgs>>): Prisma__MutedWordClient<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MutedWords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedWordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MutedWords
+     * const mutedWords = await prisma.mutedWord.findMany()
+     * 
+     * // Get first 10 MutedWords
+     * const mutedWords = await prisma.mutedWord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mutedWordWithIdOnly = await prisma.mutedWord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MutedWordFindManyArgs>(args?: SelectSubset<T, MutedWordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MutedWord.
+     * @param {MutedWordCreateArgs} args - Arguments to create a MutedWord.
+     * @example
+     * // Create one MutedWord
+     * const MutedWord = await prisma.mutedWord.create({
+     *   data: {
+     *     // ... data to create a MutedWord
+     *   }
+     * })
+     * 
+     */
+    create<T extends MutedWordCreateArgs>(args: SelectSubset<T, MutedWordCreateArgs<ExtArgs>>): Prisma__MutedWordClient<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MutedWords.
+     * @param {MutedWordCreateManyArgs} args - Arguments to create many MutedWords.
+     * @example
+     * // Create many MutedWords
+     * const mutedWord = await prisma.mutedWord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MutedWordCreateManyArgs>(args?: SelectSubset<T, MutedWordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MutedWords and returns the data saved in the database.
+     * @param {MutedWordCreateManyAndReturnArgs} args - Arguments to create many MutedWords.
+     * @example
+     * // Create many MutedWords
+     * const mutedWord = await prisma.mutedWord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MutedWords and only return the `id`
+     * const mutedWordWithIdOnly = await prisma.mutedWord.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MutedWordCreateManyAndReturnArgs>(args?: SelectSubset<T, MutedWordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MutedWord.
+     * @param {MutedWordDeleteArgs} args - Arguments to delete one MutedWord.
+     * @example
+     * // Delete one MutedWord
+     * const MutedWord = await prisma.mutedWord.delete({
+     *   where: {
+     *     // ... filter to delete one MutedWord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MutedWordDeleteArgs>(args: SelectSubset<T, MutedWordDeleteArgs<ExtArgs>>): Prisma__MutedWordClient<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MutedWord.
+     * @param {MutedWordUpdateArgs} args - Arguments to update one MutedWord.
+     * @example
+     * // Update one MutedWord
+     * const mutedWord = await prisma.mutedWord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MutedWordUpdateArgs>(args: SelectSubset<T, MutedWordUpdateArgs<ExtArgs>>): Prisma__MutedWordClient<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MutedWords.
+     * @param {MutedWordDeleteManyArgs} args - Arguments to filter MutedWords to delete.
+     * @example
+     * // Delete a few MutedWords
+     * const { count } = await prisma.mutedWord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MutedWordDeleteManyArgs>(args?: SelectSubset<T, MutedWordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MutedWords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedWordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MutedWords
+     * const mutedWord = await prisma.mutedWord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MutedWordUpdateManyArgs>(args: SelectSubset<T, MutedWordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MutedWords and returns the data updated in the database.
+     * @param {MutedWordUpdateManyAndReturnArgs} args - Arguments to update many MutedWords.
+     * @example
+     * // Update many MutedWords
+     * const mutedWord = await prisma.mutedWord.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MutedWords and only return the `id`
+     * const mutedWordWithIdOnly = await prisma.mutedWord.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MutedWordUpdateManyAndReturnArgs>(args: SelectSubset<T, MutedWordUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MutedWord.
+     * @param {MutedWordUpsertArgs} args - Arguments to update or create a MutedWord.
+     * @example
+     * // Update or create a MutedWord
+     * const mutedWord = await prisma.mutedWord.upsert({
+     *   create: {
+     *     // ... data to create a MutedWord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MutedWord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MutedWordUpsertArgs>(args: SelectSubset<T, MutedWordUpsertArgs<ExtArgs>>): Prisma__MutedWordClient<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MutedWords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedWordCountArgs} args - Arguments to filter MutedWords to count.
+     * @example
+     * // Count the number of MutedWords
+     * const count = await prisma.mutedWord.count({
+     *   where: {
+     *     // ... the filter for the MutedWords we want to count
+     *   }
+     * })
+    **/
+    count<T extends MutedWordCountArgs>(
+      args?: Subset<T, MutedWordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MutedWordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MutedWord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedWordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MutedWordAggregateArgs>(args: Subset<T, MutedWordAggregateArgs>): Prisma.PrismaPromise<GetMutedWordAggregateType<T>>
+
+    /**
+     * Group by MutedWord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MutedWordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MutedWordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MutedWordGroupByArgs['orderBy'] }
+        : { orderBy?: MutedWordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MutedWordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMutedWordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MutedWord model
+   */
+  readonly fields: MutedWordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MutedWord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MutedWordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MutedWord model
+   */
+  interface MutedWordFieldRefs {
+    readonly id: FieldRef<"MutedWord", 'String'>
+    readonly userId: FieldRef<"MutedWord", 'String'>
+    readonly word: FieldRef<"MutedWord", 'String'>
+    readonly mode: FieldRef<"MutedWord", 'String'>
+    readonly createdAt: FieldRef<"MutedWord", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MutedWord findUnique
+   */
+  export type MutedWordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedWord to fetch.
+     */
+    where: MutedWordWhereUniqueInput
+  }
+
+  /**
+   * MutedWord findUniqueOrThrow
+   */
+  export type MutedWordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedWord to fetch.
+     */
+    where: MutedWordWhereUniqueInput
+  }
+
+  /**
+   * MutedWord findFirst
+   */
+  export type MutedWordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedWord to fetch.
+     */
+    where?: MutedWordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MutedWords to fetch.
+     */
+    orderBy?: MutedWordOrderByWithRelationInput | MutedWordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MutedWords.
+     */
+    cursor?: MutedWordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MutedWords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MutedWords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MutedWords.
+     */
+    distinct?: MutedWordScalarFieldEnum | MutedWordScalarFieldEnum[]
+  }
+
+  /**
+   * MutedWord findFirstOrThrow
+   */
+  export type MutedWordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedWord to fetch.
+     */
+    where?: MutedWordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MutedWords to fetch.
+     */
+    orderBy?: MutedWordOrderByWithRelationInput | MutedWordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MutedWords.
+     */
+    cursor?: MutedWordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MutedWords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MutedWords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MutedWords.
+     */
+    distinct?: MutedWordScalarFieldEnum | MutedWordScalarFieldEnum[]
+  }
+
+  /**
+   * MutedWord findMany
+   */
+  export type MutedWordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * Filter, which MutedWords to fetch.
+     */
+    where?: MutedWordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MutedWords to fetch.
+     */
+    orderBy?: MutedWordOrderByWithRelationInput | MutedWordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MutedWords.
+     */
+    cursor?: MutedWordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MutedWords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MutedWords.
+     */
+    skip?: number
+    distinct?: MutedWordScalarFieldEnum | MutedWordScalarFieldEnum[]
+  }
+
+  /**
+   * MutedWord create
+   */
+  export type MutedWordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MutedWord.
+     */
+    data: XOR<MutedWordCreateInput, MutedWordUncheckedCreateInput>
+  }
+
+  /**
+   * MutedWord createMany
+   */
+  export type MutedWordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MutedWords.
+     */
+    data: MutedWordCreateManyInput | MutedWordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MutedWord createManyAndReturn
+   */
+  export type MutedWordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * The data used to create many MutedWords.
+     */
+    data: MutedWordCreateManyInput | MutedWordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MutedWord update
+   */
+  export type MutedWordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MutedWord.
+     */
+    data: XOR<MutedWordUpdateInput, MutedWordUncheckedUpdateInput>
+    /**
+     * Choose, which MutedWord to update.
+     */
+    where: MutedWordWhereUniqueInput
+  }
+
+  /**
+   * MutedWord updateMany
+   */
+  export type MutedWordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MutedWords.
+     */
+    data: XOR<MutedWordUpdateManyMutationInput, MutedWordUncheckedUpdateManyInput>
+    /**
+     * Filter which MutedWords to update
+     */
+    where?: MutedWordWhereInput
+    /**
+     * Limit how many MutedWords to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MutedWord updateManyAndReturn
+   */
+  export type MutedWordUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * The data used to update MutedWords.
+     */
+    data: XOR<MutedWordUpdateManyMutationInput, MutedWordUncheckedUpdateManyInput>
+    /**
+     * Filter which MutedWords to update
+     */
+    where?: MutedWordWhereInput
+    /**
+     * Limit how many MutedWords to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MutedWord upsert
+   */
+  export type MutedWordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MutedWord to update in case it exists.
+     */
+    where: MutedWordWhereUniqueInput
+    /**
+     * In case the MutedWord found by the `where` argument doesn't exist, create a new MutedWord with this data.
+     */
+    create: XOR<MutedWordCreateInput, MutedWordUncheckedCreateInput>
+    /**
+     * In case the MutedWord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MutedWordUpdateInput, MutedWordUncheckedUpdateInput>
+  }
+
+  /**
+   * MutedWord delete
+   */
+  export type MutedWordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+    /**
+     * Filter which MutedWord to delete.
+     */
+    where: MutedWordWhereUniqueInput
+  }
+
+  /**
+   * MutedWord deleteMany
+   */
+  export type MutedWordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MutedWords to delete
+     */
+    where?: MutedWordWhereInput
+    /**
+     * Limit how many MutedWords to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MutedWord without action
+   */
+  export type MutedWordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MutedWord
+     */
+    select?: MutedWordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MutedWord
+     */
+    omit?: MutedWordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MutedWordInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OgpCache
+   */
+
+  export type AggregateOgpCache = {
+    _count: OgpCacheCountAggregateOutputType | null
+    _min: OgpCacheMinAggregateOutputType | null
+    _max: OgpCacheMaxAggregateOutputType | null
+  }
+
+  export type OgpCacheMinAggregateOutputType = {
+    id: string | null
+    url: string | null
+    title: string | null
+    description: string | null
+    image: string | null
+    siteName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OgpCacheMaxAggregateOutputType = {
+    id: string | null
+    url: string | null
+    title: string | null
+    description: string | null
+    image: string | null
+    siteName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OgpCacheCountAggregateOutputType = {
+    id: number
+    url: number
+    title: number
+    description: number
+    image: number
+    siteName: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OgpCacheMinAggregateInputType = {
+    id?: true
+    url?: true
+    title?: true
+    description?: true
+    image?: true
+    siteName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OgpCacheMaxAggregateInputType = {
+    id?: true
+    url?: true
+    title?: true
+    description?: true
+    image?: true
+    siteName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OgpCacheCountAggregateInputType = {
+    id?: true
+    url?: true
+    title?: true
+    description?: true
+    image?: true
+    siteName?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OgpCacheAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OgpCache to aggregate.
+     */
+    where?: OgpCacheWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OgpCaches to fetch.
+     */
+    orderBy?: OgpCacheOrderByWithRelationInput | OgpCacheOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OgpCacheWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OgpCaches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OgpCaches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OgpCaches
+    **/
+    _count?: true | OgpCacheCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OgpCacheMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OgpCacheMaxAggregateInputType
+  }
+
+  export type GetOgpCacheAggregateType<T extends OgpCacheAggregateArgs> = {
+        [P in keyof T & keyof AggregateOgpCache]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOgpCache[P]>
+      : GetScalarType<T[P], AggregateOgpCache[P]>
+  }
+
+
+
+
+  export type OgpCacheGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OgpCacheWhereInput
+    orderBy?: OgpCacheOrderByWithAggregationInput | OgpCacheOrderByWithAggregationInput[]
+    by: OgpCacheScalarFieldEnum[] | OgpCacheScalarFieldEnum
+    having?: OgpCacheScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OgpCacheCountAggregateInputType | true
+    _min?: OgpCacheMinAggregateInputType
+    _max?: OgpCacheMaxAggregateInputType
+  }
+
+  export type OgpCacheGroupByOutputType = {
+    id: string
+    url: string
+    title: string | null
+    description: string | null
+    image: string | null
+    siteName: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: OgpCacheCountAggregateOutputType | null
+    _min: OgpCacheMinAggregateOutputType | null
+    _max: OgpCacheMaxAggregateOutputType | null
+  }
+
+  type GetOgpCacheGroupByPayload<T extends OgpCacheGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OgpCacheGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OgpCacheGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OgpCacheGroupByOutputType[P]>
+            : GetScalarType<T[P], OgpCacheGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OgpCacheSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+    title?: boolean
+    description?: boolean
+    image?: boolean
+    siteName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["ogpCache"]>
+
+  export type OgpCacheSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+    title?: boolean
+    description?: boolean
+    image?: boolean
+    siteName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["ogpCache"]>
+
+  export type OgpCacheSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    url?: boolean
+    title?: boolean
+    description?: boolean
+    image?: boolean
+    siteName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["ogpCache"]>
+
+  export type OgpCacheSelectScalar = {
+    id?: boolean
+    url?: boolean
+    title?: boolean
+    description?: boolean
+    image?: boolean
+    siteName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OgpCacheOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "title" | "description" | "image" | "siteName" | "createdAt" | "updatedAt", ExtArgs["result"]["ogpCache"]>
+
+  export type $OgpCachePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OgpCache"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      url: string
+      title: string | null
+      description: string | null
+      image: string | null
+      siteName: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["ogpCache"]>
+    composites: {}
+  }
+
+  type OgpCacheGetPayload<S extends boolean | null | undefined | OgpCacheDefaultArgs> = $Result.GetResult<Prisma.$OgpCachePayload, S>
+
+  type OgpCacheCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OgpCacheFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OgpCacheCountAggregateInputType | true
+    }
+
+  export interface OgpCacheDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OgpCache'], meta: { name: 'OgpCache' } }
+    /**
+     * Find zero or one OgpCache that matches the filter.
+     * @param {OgpCacheFindUniqueArgs} args - Arguments to find a OgpCache
+     * @example
+     * // Get one OgpCache
+     * const ogpCache = await prisma.ogpCache.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OgpCacheFindUniqueArgs>(args: SelectSubset<T, OgpCacheFindUniqueArgs<ExtArgs>>): Prisma__OgpCacheClient<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OgpCache that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OgpCacheFindUniqueOrThrowArgs} args - Arguments to find a OgpCache
+     * @example
+     * // Get one OgpCache
+     * const ogpCache = await prisma.ogpCache.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OgpCacheFindUniqueOrThrowArgs>(args: SelectSubset<T, OgpCacheFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OgpCacheClient<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OgpCache that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OgpCacheFindFirstArgs} args - Arguments to find a OgpCache
+     * @example
+     * // Get one OgpCache
+     * const ogpCache = await prisma.ogpCache.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OgpCacheFindFirstArgs>(args?: SelectSubset<T, OgpCacheFindFirstArgs<ExtArgs>>): Prisma__OgpCacheClient<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OgpCache that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OgpCacheFindFirstOrThrowArgs} args - Arguments to find a OgpCache
+     * @example
+     * // Get one OgpCache
+     * const ogpCache = await prisma.ogpCache.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OgpCacheFindFirstOrThrowArgs>(args?: SelectSubset<T, OgpCacheFindFirstOrThrowArgs<ExtArgs>>): Prisma__OgpCacheClient<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OgpCaches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OgpCacheFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OgpCaches
+     * const ogpCaches = await prisma.ogpCache.findMany()
+     * 
+     * // Get first 10 OgpCaches
+     * const ogpCaches = await prisma.ogpCache.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const ogpCacheWithIdOnly = await prisma.ogpCache.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OgpCacheFindManyArgs>(args?: SelectSubset<T, OgpCacheFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OgpCache.
+     * @param {OgpCacheCreateArgs} args - Arguments to create a OgpCache.
+     * @example
+     * // Create one OgpCache
+     * const OgpCache = await prisma.ogpCache.create({
+     *   data: {
+     *     // ... data to create a OgpCache
+     *   }
+     * })
+     * 
+     */
+    create<T extends OgpCacheCreateArgs>(args: SelectSubset<T, OgpCacheCreateArgs<ExtArgs>>): Prisma__OgpCacheClient<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OgpCaches.
+     * @param {OgpCacheCreateManyArgs} args - Arguments to create many OgpCaches.
+     * @example
+     * // Create many OgpCaches
+     * const ogpCache = await prisma.ogpCache.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OgpCacheCreateManyArgs>(args?: SelectSubset<T, OgpCacheCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OgpCaches and returns the data saved in the database.
+     * @param {OgpCacheCreateManyAndReturnArgs} args - Arguments to create many OgpCaches.
+     * @example
+     * // Create many OgpCaches
+     * const ogpCache = await prisma.ogpCache.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OgpCaches and only return the `id`
+     * const ogpCacheWithIdOnly = await prisma.ogpCache.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OgpCacheCreateManyAndReturnArgs>(args?: SelectSubset<T, OgpCacheCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OgpCache.
+     * @param {OgpCacheDeleteArgs} args - Arguments to delete one OgpCache.
+     * @example
+     * // Delete one OgpCache
+     * const OgpCache = await prisma.ogpCache.delete({
+     *   where: {
+     *     // ... filter to delete one OgpCache
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OgpCacheDeleteArgs>(args: SelectSubset<T, OgpCacheDeleteArgs<ExtArgs>>): Prisma__OgpCacheClient<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OgpCache.
+     * @param {OgpCacheUpdateArgs} args - Arguments to update one OgpCache.
+     * @example
+     * // Update one OgpCache
+     * const ogpCache = await prisma.ogpCache.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OgpCacheUpdateArgs>(args: SelectSubset<T, OgpCacheUpdateArgs<ExtArgs>>): Prisma__OgpCacheClient<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OgpCaches.
+     * @param {OgpCacheDeleteManyArgs} args - Arguments to filter OgpCaches to delete.
+     * @example
+     * // Delete a few OgpCaches
+     * const { count } = await prisma.ogpCache.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OgpCacheDeleteManyArgs>(args?: SelectSubset<T, OgpCacheDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OgpCaches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OgpCacheUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OgpCaches
+     * const ogpCache = await prisma.ogpCache.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OgpCacheUpdateManyArgs>(args: SelectSubset<T, OgpCacheUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OgpCaches and returns the data updated in the database.
+     * @param {OgpCacheUpdateManyAndReturnArgs} args - Arguments to update many OgpCaches.
+     * @example
+     * // Update many OgpCaches
+     * const ogpCache = await prisma.ogpCache.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OgpCaches and only return the `id`
+     * const ogpCacheWithIdOnly = await prisma.ogpCache.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OgpCacheUpdateManyAndReturnArgs>(args: SelectSubset<T, OgpCacheUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OgpCache.
+     * @param {OgpCacheUpsertArgs} args - Arguments to update or create a OgpCache.
+     * @example
+     * // Update or create a OgpCache
+     * const ogpCache = await prisma.ogpCache.upsert({
+     *   create: {
+     *     // ... data to create a OgpCache
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OgpCache we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OgpCacheUpsertArgs>(args: SelectSubset<T, OgpCacheUpsertArgs<ExtArgs>>): Prisma__OgpCacheClient<$Result.GetResult<Prisma.$OgpCachePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OgpCaches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OgpCacheCountArgs} args - Arguments to filter OgpCaches to count.
+     * @example
+     * // Count the number of OgpCaches
+     * const count = await prisma.ogpCache.count({
+     *   where: {
+     *     // ... the filter for the OgpCaches we want to count
+     *   }
+     * })
+    **/
+    count<T extends OgpCacheCountArgs>(
+      args?: Subset<T, OgpCacheCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OgpCacheCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OgpCache.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OgpCacheAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OgpCacheAggregateArgs>(args: Subset<T, OgpCacheAggregateArgs>): Prisma.PrismaPromise<GetOgpCacheAggregateType<T>>
+
+    /**
+     * Group by OgpCache.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OgpCacheGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OgpCacheGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OgpCacheGroupByArgs['orderBy'] }
+        : { orderBy?: OgpCacheGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OgpCacheGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOgpCacheGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OgpCache model
+   */
+  readonly fields: OgpCacheFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OgpCache.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OgpCacheClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OgpCache model
+   */
+  interface OgpCacheFieldRefs {
+    readonly id: FieldRef<"OgpCache", 'String'>
+    readonly url: FieldRef<"OgpCache", 'String'>
+    readonly title: FieldRef<"OgpCache", 'String'>
+    readonly description: FieldRef<"OgpCache", 'String'>
+    readonly image: FieldRef<"OgpCache", 'String'>
+    readonly siteName: FieldRef<"OgpCache", 'String'>
+    readonly createdAt: FieldRef<"OgpCache", 'DateTime'>
+    readonly updatedAt: FieldRef<"OgpCache", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OgpCache findUnique
+   */
+  export type OgpCacheFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * Filter, which OgpCache to fetch.
+     */
+    where: OgpCacheWhereUniqueInput
+  }
+
+  /**
+   * OgpCache findUniqueOrThrow
+   */
+  export type OgpCacheFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * Filter, which OgpCache to fetch.
+     */
+    where: OgpCacheWhereUniqueInput
+  }
+
+  /**
+   * OgpCache findFirst
+   */
+  export type OgpCacheFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * Filter, which OgpCache to fetch.
+     */
+    where?: OgpCacheWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OgpCaches to fetch.
+     */
+    orderBy?: OgpCacheOrderByWithRelationInput | OgpCacheOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OgpCaches.
+     */
+    cursor?: OgpCacheWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OgpCaches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OgpCaches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OgpCaches.
+     */
+    distinct?: OgpCacheScalarFieldEnum | OgpCacheScalarFieldEnum[]
+  }
+
+  /**
+   * OgpCache findFirstOrThrow
+   */
+  export type OgpCacheFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * Filter, which OgpCache to fetch.
+     */
+    where?: OgpCacheWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OgpCaches to fetch.
+     */
+    orderBy?: OgpCacheOrderByWithRelationInput | OgpCacheOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OgpCaches.
+     */
+    cursor?: OgpCacheWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OgpCaches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OgpCaches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OgpCaches.
+     */
+    distinct?: OgpCacheScalarFieldEnum | OgpCacheScalarFieldEnum[]
+  }
+
+  /**
+   * OgpCache findMany
+   */
+  export type OgpCacheFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * Filter, which OgpCaches to fetch.
+     */
+    where?: OgpCacheWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OgpCaches to fetch.
+     */
+    orderBy?: OgpCacheOrderByWithRelationInput | OgpCacheOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OgpCaches.
+     */
+    cursor?: OgpCacheWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OgpCaches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OgpCaches.
+     */
+    skip?: number
+    distinct?: OgpCacheScalarFieldEnum | OgpCacheScalarFieldEnum[]
+  }
+
+  /**
+   * OgpCache create
+   */
+  export type OgpCacheCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * The data needed to create a OgpCache.
+     */
+    data: XOR<OgpCacheCreateInput, OgpCacheUncheckedCreateInput>
+  }
+
+  /**
+   * OgpCache createMany
+   */
+  export type OgpCacheCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OgpCaches.
+     */
+    data: OgpCacheCreateManyInput | OgpCacheCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OgpCache createManyAndReturn
+   */
+  export type OgpCacheCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * The data used to create many OgpCaches.
+     */
+    data: OgpCacheCreateManyInput | OgpCacheCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OgpCache update
+   */
+  export type OgpCacheUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * The data needed to update a OgpCache.
+     */
+    data: XOR<OgpCacheUpdateInput, OgpCacheUncheckedUpdateInput>
+    /**
+     * Choose, which OgpCache to update.
+     */
+    where: OgpCacheWhereUniqueInput
+  }
+
+  /**
+   * OgpCache updateMany
+   */
+  export type OgpCacheUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OgpCaches.
+     */
+    data: XOR<OgpCacheUpdateManyMutationInput, OgpCacheUncheckedUpdateManyInput>
+    /**
+     * Filter which OgpCaches to update
+     */
+    where?: OgpCacheWhereInput
+    /**
+     * Limit how many OgpCaches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OgpCache updateManyAndReturn
+   */
+  export type OgpCacheUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * The data used to update OgpCaches.
+     */
+    data: XOR<OgpCacheUpdateManyMutationInput, OgpCacheUncheckedUpdateManyInput>
+    /**
+     * Filter which OgpCaches to update
+     */
+    where?: OgpCacheWhereInput
+    /**
+     * Limit how many OgpCaches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OgpCache upsert
+   */
+  export type OgpCacheUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * The filter to search for the OgpCache to update in case it exists.
+     */
+    where: OgpCacheWhereUniqueInput
+    /**
+     * In case the OgpCache found by the `where` argument doesn't exist, create a new OgpCache with this data.
+     */
+    create: XOR<OgpCacheCreateInput, OgpCacheUncheckedCreateInput>
+    /**
+     * In case the OgpCache was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OgpCacheUpdateInput, OgpCacheUncheckedUpdateInput>
+  }
+
+  /**
+   * OgpCache delete
+   */
+  export type OgpCacheDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+    /**
+     * Filter which OgpCache to delete.
+     */
+    where: OgpCacheWhereUniqueInput
+  }
+
+  /**
+   * OgpCache deleteMany
+   */
+  export type OgpCacheDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OgpCaches to delete
+     */
+    where?: OgpCacheWhereInput
+    /**
+     * Limit how many OgpCaches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OgpCache without action
+   */
+  export type OgpCacheDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OgpCache
+     */
+    select?: OgpCacheSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OgpCache
+     */
+    omit?: OgpCacheOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model ScheduledPost
    */
 
@@ -20430,6 +22741,31 @@ export namespace Prisma {
   export type MutedUserScalarFieldEnum = (typeof MutedUserScalarFieldEnum)[keyof typeof MutedUserScalarFieldEnum]
 
 
+  export const MutedWordScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    word: 'word',
+    mode: 'mode',
+    createdAt: 'createdAt'
+  };
+
+  export type MutedWordScalarFieldEnum = (typeof MutedWordScalarFieldEnum)[keyof typeof MutedWordScalarFieldEnum]
+
+
+  export const OgpCacheScalarFieldEnum: {
+    id: 'id',
+    url: 'url',
+    title: 'title',
+    description: 'description',
+    image: 'image',
+    siteName: 'siteName',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OgpCacheScalarFieldEnum = (typeof OgpCacheScalarFieldEnum)[keyof typeof OgpCacheScalarFieldEnum]
+
+
   export const ScheduledPostScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -20609,6 +22945,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderListRelationFilter
     blockedUsers?: BlockedUserListRelationFilter
     mutedUsers?: MutedUserListRelationFilter
+    mutedWords?: MutedWordListRelationFilter
     notifications?: NotificationListRelationFilter
     notificationSettings?: NotificationSettingListRelationFilter
     pushSubscriptions?: PushSubscriptionListRelationFilter
@@ -20641,6 +22978,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderOrderByRelationAggregateInput
     blockedUsers?: BlockedUserOrderByRelationAggregateInput
     mutedUsers?: MutedUserOrderByRelationAggregateInput
+    mutedWords?: MutedWordOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     notificationSettings?: NotificationSettingOrderByRelationAggregateInput
     pushSubscriptions?: PushSubscriptionOrderByRelationAggregateInput
@@ -20676,6 +23014,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderListRelationFilter
     blockedUsers?: BlockedUserListRelationFilter
     mutedUsers?: MutedUserListRelationFilter
+    mutedWords?: MutedWordListRelationFilter
     notifications?: NotificationListRelationFilter
     notificationSettings?: NotificationSettingListRelationFilter
     pushSubscriptions?: PushSubscriptionListRelationFilter
@@ -21466,6 +23805,129 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"MutedUser"> | Date | string
   }
 
+  export type MutedWordWhereInput = {
+    AND?: MutedWordWhereInput | MutedWordWhereInput[]
+    OR?: MutedWordWhereInput[]
+    NOT?: MutedWordWhereInput | MutedWordWhereInput[]
+    id?: StringFilter<"MutedWord"> | string
+    userId?: StringFilter<"MutedWord"> | string
+    word?: StringFilter<"MutedWord"> | string
+    mode?: StringFilter<"MutedWord"> | string
+    createdAt?: DateTimeFilter<"MutedWord"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type MutedWordOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    mode?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type MutedWordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_word?: MutedWordUserIdWordCompoundUniqueInput
+    AND?: MutedWordWhereInput | MutedWordWhereInput[]
+    OR?: MutedWordWhereInput[]
+    NOT?: MutedWordWhereInput | MutedWordWhereInput[]
+    userId?: StringFilter<"MutedWord"> | string
+    word?: StringFilter<"MutedWord"> | string
+    mode?: StringFilter<"MutedWord"> | string
+    createdAt?: DateTimeFilter<"MutedWord"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_word">
+
+  export type MutedWordOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    mode?: SortOrder
+    createdAt?: SortOrder
+    _count?: MutedWordCountOrderByAggregateInput
+    _max?: MutedWordMaxOrderByAggregateInput
+    _min?: MutedWordMinOrderByAggregateInput
+  }
+
+  export type MutedWordScalarWhereWithAggregatesInput = {
+    AND?: MutedWordScalarWhereWithAggregatesInput | MutedWordScalarWhereWithAggregatesInput[]
+    OR?: MutedWordScalarWhereWithAggregatesInput[]
+    NOT?: MutedWordScalarWhereWithAggregatesInput | MutedWordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MutedWord"> | string
+    userId?: StringWithAggregatesFilter<"MutedWord"> | string
+    word?: StringWithAggregatesFilter<"MutedWord"> | string
+    mode?: StringWithAggregatesFilter<"MutedWord"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"MutedWord"> | Date | string
+  }
+
+  export type OgpCacheWhereInput = {
+    AND?: OgpCacheWhereInput | OgpCacheWhereInput[]
+    OR?: OgpCacheWhereInput[]
+    NOT?: OgpCacheWhereInput | OgpCacheWhereInput[]
+    id?: StringFilter<"OgpCache"> | string
+    url?: StringFilter<"OgpCache"> | string
+    title?: StringNullableFilter<"OgpCache"> | string | null
+    description?: StringNullableFilter<"OgpCache"> | string | null
+    image?: StringNullableFilter<"OgpCache"> | string | null
+    siteName?: StringNullableFilter<"OgpCache"> | string | null
+    createdAt?: DateTimeFilter<"OgpCache"> | Date | string
+    updatedAt?: DateTimeFilter<"OgpCache"> | Date | string
+  }
+
+  export type OgpCacheOrderByWithRelationInput = {
+    id?: SortOrder
+    url?: SortOrder
+    title?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    siteName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OgpCacheWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    url?: string
+    AND?: OgpCacheWhereInput | OgpCacheWhereInput[]
+    OR?: OgpCacheWhereInput[]
+    NOT?: OgpCacheWhereInput | OgpCacheWhereInput[]
+    title?: StringNullableFilter<"OgpCache"> | string | null
+    description?: StringNullableFilter<"OgpCache"> | string | null
+    image?: StringNullableFilter<"OgpCache"> | string | null
+    siteName?: StringNullableFilter<"OgpCache"> | string | null
+    createdAt?: DateTimeFilter<"OgpCache"> | Date | string
+    updatedAt?: DateTimeFilter<"OgpCache"> | Date | string
+  }, "id" | "url">
+
+  export type OgpCacheOrderByWithAggregationInput = {
+    id?: SortOrder
+    url?: SortOrder
+    title?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    siteName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OgpCacheCountOrderByAggregateInput
+    _max?: OgpCacheMaxOrderByAggregateInput
+    _min?: OgpCacheMinOrderByAggregateInput
+  }
+
+  export type OgpCacheScalarWhereWithAggregatesInput = {
+    AND?: OgpCacheScalarWhereWithAggregatesInput | OgpCacheScalarWhereWithAggregatesInput[]
+    OR?: OgpCacheScalarWhereWithAggregatesInput[]
+    NOT?: OgpCacheScalarWhereWithAggregatesInput | OgpCacheScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OgpCache"> | string
+    url?: StringWithAggregatesFilter<"OgpCache"> | string
+    title?: StringNullableWithAggregatesFilter<"OgpCache"> | string | null
+    description?: StringNullableWithAggregatesFilter<"OgpCache"> | string | null
+    image?: StringNullableWithAggregatesFilter<"OgpCache"> | string | null
+    siteName?: StringNullableWithAggregatesFilter<"OgpCache"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"OgpCache"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OgpCache"> | Date | string
+  }
+
   export type ScheduledPostWhereInput = {
     AND?: ScheduledPostWhereInput | ScheduledPostWhereInput[]
     OR?: ScheduledPostWhereInput[]
@@ -21762,6 +24224,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -21794,6 +24257,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -21826,6 +24290,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -21858,6 +24323,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -22704,6 +25170,138 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MutedWordCreateInput = {
+    id?: string
+    word: string
+    mode?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutMutedWordsInput
+  }
+
+  export type MutedWordUncheckedCreateInput = {
+    id?: string
+    userId: string
+    word: string
+    mode?: string
+    createdAt?: Date | string
+  }
+
+  export type MutedWordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutMutedWordsNestedInput
+  }
+
+  export type MutedWordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedWordCreateManyInput = {
+    id?: string
+    userId: string
+    word: string
+    mode?: string
+    createdAt?: Date | string
+  }
+
+  export type MutedWordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedWordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OgpCacheCreateInput = {
+    id?: string
+    url: string
+    title?: string | null
+    description?: string | null
+    image?: string | null
+    siteName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OgpCacheUncheckedCreateInput = {
+    id?: string
+    url: string
+    title?: string | null
+    description?: string | null
+    image?: string | null
+    siteName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OgpCacheUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    siteName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OgpCacheUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    siteName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OgpCacheCreateManyInput = {
+    id?: string
+    url: string
+    title?: string | null
+    description?: string | null
+    image?: string | null
+    siteName?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OgpCacheUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    siteName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OgpCacheUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    siteName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ScheduledPostCreateInput = {
     id?: string
     userId: string
@@ -23077,6 +25675,12 @@ export namespace Prisma {
     none?: MutedUserWhereInput
   }
 
+  export type MutedWordListRelationFilter = {
+    every?: MutedWordWhereInput
+    some?: MutedWordWhereInput
+    none?: MutedWordWhereInput
+  }
+
   export type NotificationListRelationFilter = {
     every?: NotificationWhereInput
     some?: NotificationWhereInput
@@ -23125,6 +25729,10 @@ export namespace Prisma {
   }
 
   export type MutedUserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MutedWordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -23707,6 +26315,68 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type MutedWordUserIdWordCompoundUniqueInput = {
+    userId: string
+    word: string
+  }
+
+  export type MutedWordCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    mode?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MutedWordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    mode?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MutedWordMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    mode?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type OgpCacheCountOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    siteName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OgpCacheMaxOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    siteName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OgpCacheMinOrderByAggregateInput = {
+    id?: SortOrder
+    url?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    siteName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type ScheduledPostCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -23898,6 +26568,13 @@ export namespace Prisma {
     connect?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
   }
 
+  export type MutedWordCreateNestedManyWithoutUserInput = {
+    create?: XOR<MutedWordCreateWithoutUserInput, MutedWordUncheckedCreateWithoutUserInput> | MutedWordCreateWithoutUserInput[] | MutedWordUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MutedWordCreateOrConnectWithoutUserInput | MutedWordCreateOrConnectWithoutUserInput[]
+    createMany?: MutedWordCreateManyUserInputEnvelope
+    connect?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+  }
+
   export type NotificationCreateNestedManyWithoutUserInput = {
     create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
@@ -23972,6 +26649,13 @@ export namespace Prisma {
     connectOrCreate?: MutedUserCreateOrConnectWithoutUserInput | MutedUserCreateOrConnectWithoutUserInput[]
     createMany?: MutedUserCreateManyUserInputEnvelope
     connect?: MutedUserWhereUniqueInput | MutedUserWhereUniqueInput[]
+  }
+
+  export type MutedWordUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<MutedWordCreateWithoutUserInput, MutedWordUncheckedCreateWithoutUserInput> | MutedWordCreateWithoutUserInput[] | MutedWordUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MutedWordCreateOrConnectWithoutUserInput | MutedWordCreateOrConnectWithoutUserInput[]
+    createMany?: MutedWordCreateManyUserInputEnvelope
+    connect?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
   }
 
   export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
@@ -24113,6 +26797,20 @@ export namespace Prisma {
     update?: MutedUserUpdateWithWhereUniqueWithoutUserInput | MutedUserUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: MutedUserUpdateManyWithWhereWithoutUserInput | MutedUserUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: MutedUserScalarWhereInput | MutedUserScalarWhereInput[]
+  }
+
+  export type MutedWordUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MutedWordCreateWithoutUserInput, MutedWordUncheckedCreateWithoutUserInput> | MutedWordCreateWithoutUserInput[] | MutedWordUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MutedWordCreateOrConnectWithoutUserInput | MutedWordCreateOrConnectWithoutUserInput[]
+    upsert?: MutedWordUpsertWithWhereUniqueWithoutUserInput | MutedWordUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MutedWordCreateManyUserInputEnvelope
+    set?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+    disconnect?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+    delete?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+    connect?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+    update?: MutedWordUpdateWithWhereUniqueWithoutUserInput | MutedWordUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MutedWordUpdateManyWithWhereWithoutUserInput | MutedWordUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MutedWordScalarWhereInput | MutedWordScalarWhereInput[]
   }
 
   export type NotificationUpdateManyWithoutUserNestedInput = {
@@ -24263,6 +26961,20 @@ export namespace Prisma {
     update?: MutedUserUpdateWithWhereUniqueWithoutUserInput | MutedUserUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: MutedUserUpdateManyWithWhereWithoutUserInput | MutedUserUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: MutedUserScalarWhereInput | MutedUserScalarWhereInput[]
+  }
+
+  export type MutedWordUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MutedWordCreateWithoutUserInput, MutedWordUncheckedCreateWithoutUserInput> | MutedWordCreateWithoutUserInput[] | MutedWordUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MutedWordCreateOrConnectWithoutUserInput | MutedWordCreateOrConnectWithoutUserInput[]
+    upsert?: MutedWordUpsertWithWhereUniqueWithoutUserInput | MutedWordUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MutedWordCreateManyUserInputEnvelope
+    set?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+    disconnect?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+    delete?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+    connect?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+    update?: MutedWordUpdateWithWhereUniqueWithoutUserInput | MutedWordUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MutedWordUpdateManyWithWhereWithoutUserInput | MutedWordUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MutedWordScalarWhereInput | MutedWordScalarWhereInput[]
   }
 
   export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
@@ -24599,6 +27311,20 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutMutedUsersInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMutedUsersInput, UserUpdateWithoutMutedUsersInput>, UserUncheckedUpdateWithoutMutedUsersInput>
+  }
+
+  export type UserCreateNestedOneWithoutMutedWordsInput = {
+    create?: XOR<UserCreateWithoutMutedWordsInput, UserUncheckedCreateWithoutMutedWordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMutedWordsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutMutedWordsNestedInput = {
+    create?: XOR<UserCreateWithoutMutedWordsInput, UserUncheckedCreateWithoutMutedWordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMutedWordsInput
+    upsert?: UserUpsertWithoutMutedWordsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMutedWordsInput, UserUpdateWithoutMutedWordsInput>, UserUncheckedUpdateWithoutMutedWordsInput>
   }
 
   export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -24991,6 +27717,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MutedWordCreateWithoutUserInput = {
+    id?: string
+    word: string
+    mode?: string
+    createdAt?: Date | string
+  }
+
+  export type MutedWordUncheckedCreateWithoutUserInput = {
+    id?: string
+    word: string
+    mode?: string
+    createdAt?: Date | string
+  }
+
+  export type MutedWordCreateOrConnectWithoutUserInput = {
+    where: MutedWordWhereUniqueInput
+    create: XOR<MutedWordCreateWithoutUserInput, MutedWordUncheckedCreateWithoutUserInput>
+  }
+
+  export type MutedWordCreateManyUserInputEnvelope = {
+    data: MutedWordCreateManyUserInput | MutedWordCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type NotificationCreateWithoutUserInput = {
     id?: string
     type: string
@@ -25296,6 +28046,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"MutedUser"> | Date | string
   }
 
+  export type MutedWordUpsertWithWhereUniqueWithoutUserInput = {
+    where: MutedWordWhereUniqueInput
+    update: XOR<MutedWordUpdateWithoutUserInput, MutedWordUncheckedUpdateWithoutUserInput>
+    create: XOR<MutedWordCreateWithoutUserInput, MutedWordUncheckedCreateWithoutUserInput>
+  }
+
+  export type MutedWordUpdateWithWhereUniqueWithoutUserInput = {
+    where: MutedWordWhereUniqueInput
+    data: XOR<MutedWordUpdateWithoutUserInput, MutedWordUncheckedUpdateWithoutUserInput>
+  }
+
+  export type MutedWordUpdateManyWithWhereWithoutUserInput = {
+    where: MutedWordScalarWhereInput
+    data: XOR<MutedWordUpdateManyMutationInput, MutedWordUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type MutedWordScalarWhereInput = {
+    AND?: MutedWordScalarWhereInput | MutedWordScalarWhereInput[]
+    OR?: MutedWordScalarWhereInput[]
+    NOT?: MutedWordScalarWhereInput | MutedWordScalarWhereInput[]
+    id?: StringFilter<"MutedWord"> | string
+    userId?: StringFilter<"MutedWord"> | string
+    word?: StringFilter<"MutedWord"> | string
+    mode?: StringFilter<"MutedWord"> | string
+    createdAt?: DateTimeFilter<"MutedWord"> | Date | string
+  }
+
   export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
     where: NotificationWhereUniqueInput
     update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
@@ -25411,6 +28188,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -25442,6 +28220,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -25489,6 +28268,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -25520,6 +28300,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -25551,6 +28332,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -25582,6 +28364,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -25629,6 +28412,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -25660,6 +28444,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -25691,6 +28476,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -25722,6 +28508,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -25769,6 +28556,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -25800,6 +28588,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -25875,6 +28664,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -25906,6 +28696,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -26011,6 +28802,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -26042,6 +28834,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -26182,6 +28975,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -26213,6 +29007,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -26287,6 +29082,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -26318,6 +29114,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -26382,6 +29179,7 @@ export namespace Prisma {
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -26413,6 +29211,7 @@ export namespace Prisma {
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -26498,6 +29297,7 @@ export namespace Prisma {
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -26529,6 +29329,7 @@ export namespace Prisma {
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -26594,6 +29395,7 @@ export namespace Prisma {
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -26625,6 +29427,7 @@ export namespace Prisma {
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -26672,6 +29475,7 @@ export namespace Prisma {
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -26703,6 +29507,7 @@ export namespace Prisma {
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -26734,6 +29539,7 @@ export namespace Prisma {
     listFollows?: ListFollowCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -26765,6 +29571,7 @@ export namespace Prisma {
     listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -26812,6 +29619,7 @@ export namespace Prisma {
     listFollows?: ListFollowUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -26843,6 +29651,151 @@ export namespace Prisma {
     listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutMutedWordsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
+    ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    actions?: UserActionCreateNestedManyWithoutUserInput
+    lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutMutedWordsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
+    ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
+    commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
+    lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutMutedWordsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMutedWordsInput, UserUncheckedCreateWithoutMutedWordsInput>
+  }
+
+  export type UserUpsertWithoutMutedWordsInput = {
+    update: XOR<UserUpdateWithoutMutedWordsInput, UserUncheckedUpdateWithoutMutedWordsInput>
+    create: XOR<UserCreateWithoutMutedWordsInput, UserUncheckedCreateWithoutMutedWordsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMutedWordsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMutedWordsInput, UserUncheckedUpdateWithoutMutedWordsInput>
+  }
+
+  export type UserUpdateWithoutMutedWordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
+    ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    actions?: UserActionUpdateManyWithoutUserNestedInput
+    lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMutedWordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
+    ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
+    commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
+    lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -26875,6 +29828,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
@@ -26906,6 +29860,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -26953,6 +29908,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
@@ -26984,6 +29940,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -27015,6 +29972,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
@@ -27046,6 +30004,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -27093,6 +30052,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
@@ -27124,6 +30084,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -27155,6 +30116,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
   }
@@ -27186,6 +30148,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
   }
@@ -27233,6 +30196,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
   }
@@ -27264,6 +30228,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -27317,6 +30282,13 @@ export namespace Prisma {
     id?: string
     channelId: string
     channelName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MutedWordCreateManyUserInput = {
+    id?: string
+    word: string
+    mode?: string
     createdAt?: Date | string
   }
 
@@ -27508,6 +30480,27 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     channelId?: StringFieldUpdateOperationsInput | string
     channelName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedWordUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedWordUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MutedWordUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

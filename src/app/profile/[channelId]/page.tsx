@@ -7,6 +7,7 @@ import { ArrowLeft, User, ThumbsUp, MessageCircle, Bell, BellOff, Heart, ThumbsD
 import Link from "next/link";
 import { ProfileMoreMenu } from "@/components/profile-more-menu";
 import { useAuth } from "@/components/auth-provider";
+import { ContributionHeatmap } from "@/components/contribution-heatmap";
 
 interface ProfileComment {
   commentId: string;
@@ -193,6 +194,11 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
             </button>
           )}
         </div>
+      </div>
+
+      {/* Heatmap */}
+      <div className="px-4 py-4 border-b border-[#2f3336]">
+        <ContributionHeatmap channelId={channelId} />
       </div>
 
       {/* Tabs */}

@@ -5,6 +5,7 @@ import { useAuth } from "./auth-provider";
 import { Smile, Calendar, User, Clock, X, Loader2 } from "lucide-react";
 import { ConfirmDialog } from "./confirm-dialog";
 import { DraftsPopup } from "./drafts-popup";
+import { MentionAutocomplete } from "./mention-autocomplete";
 import dynamic from "next/dynamic";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
@@ -292,14 +293,21 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
                   )}
                 </div>
               )}
-              <textarea
-                ref={textareaRef}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder={threadParentId ? "続きのコメントを投稿" : "コメントを投稿"}
-                rows={4}
-                className="w-full bg-transparent text-xl placeholder-muted outline-none resize-none"
-              />
+              <div className="relative">
+                <textarea
+                  ref={textareaRef}
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  placeholder={threadParentId ? "続きのコメントを投稿" : "コメントを投稿"}
+                  rows={4}
+                  className="w-full bg-transparent text-xl placeholder-muted outline-none resize-none"
+                />
+                <MentionAutocomplete
+                  textareaRef={textareaRef}
+                  text={text}
+                  onSelect={(newText) => setText(newText)}
+                />
+              </div>
 
               {scheduledList.length > 0 && (
                 <div className="mb-2 space-y-1">

@@ -13,6 +13,7 @@ import { ShareMenu } from "./share-menu";
 import { TweetMoreMenu } from "./tweet-more-menu";
 import { ConfirmDialog } from "./confirm-dialog";
 import { useDataSaver } from "./data-saver-provider";
+import { LinkCard } from "./link-card";
 
 interface CommentCardProps {
   thread: CommentThread;
@@ -190,6 +191,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                     <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
                       <MentionText content={stripEditedTag(thread.comment.content)} />
                     </p>
+                    <LinkCard text={thread.comment.content} />
                     {showDetailTime && (
                       <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                     )}

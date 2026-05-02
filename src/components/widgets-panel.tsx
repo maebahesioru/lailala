@@ -4,6 +4,7 @@ import { Search, ThumbsUp, ThumbsDown, Eye, Clock, MessageSquare, TrendingUp, Mi
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SearchSuggestions } from "./search-suggestions";
 
 interface VideoInfo {
   title: string;
@@ -32,6 +33,7 @@ export function WidgetsPanel() {
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(cachedVideoInfo);
   const [trendWords, setTrendWords] = useState<TrendWord[]>(cachedTrendWords);
   const [listening, setListening] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
@@ -110,27 +112,38 @@ export function WidgetsPanel() {
 
   return (
     <aside className="w-[440px] hidden lg:block px-8 py-4 space-y-4">
-      <form onSubmit={handleSearch} className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={18} />
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="コメントを検索"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full bg-card text-foreground rounded-full py-3 pl-12 pr-10 outline-none focus:ring-2 focus:ring-primary placeholder-muted border border-border"
-        />
-        <button
-          type="button"
-          onClick={startVoiceInput}
-          className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full transition-colors ${
-            listening ? "text-primary animate-pulse" : "text-muted hover:text-foreground"
-          }`}
-          title="音声入力"
-        >
-          {listening ? <Mic size={18} /> : <MicOff size={18} />}
-        </button>
-      </form>
+      <div className="relative">
+        <form onSubmit={handleSearch} className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={18} />
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="コメントを検索"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setShowSuggestions(true)}
+            className="w-full bg-card text-foreground rounded-full py-3 pl-12 pr-10 outline-none focus:ring-2 focus:ring-primary placeholder-muted border border-border"
+          />
+          <button
+            type="button"
+            onClick={startVoiceInput}
+            className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full transition-colors ${
+              listening ? "text-primary animate-pulse" : "text-muted hover:text-foreground"
+            }`}
+            title="音声入力"
+          >
+            {listening ? <Mic size={18} /> : <MicOff size={18} />}
+          </button>
+        </form>
+        {showSuggestions && (
+          <SearchSuggestions
+            inputRef={inputRef}
+            query={query}
+            onSelect={(q) => { setQuery(q); setShowSuggestions(false); router.push(`/search?q=${encodeURIComponent(q)}`); }}
+            trendWords={trendWords.map((t) => t.word)}
+          />
+        )}
+      </div>
 
       {videoInfo && (
         <div className="bg-card rounded-2xl border border-border overflow-hidden">

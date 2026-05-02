@@ -253,6 +253,25 @@ exports.Prisma.MutedUserScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.MutedWordScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  word: 'word',
+  mode: 'mode',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.OgpCacheScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  title: 'title',
+  description: 'description',
+  image: 'image',
+  siteName: 'siteName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ScheduledPostScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -324,6 +343,8 @@ exports.Prisma.ModelName = {
   BookmarkFolder: 'BookmarkFolder',
   BlockedUser: 'BlockedUser',
   MutedUser: 'MutedUser',
+  MutedWord: 'MutedWord',
+  OgpCache: 'OgpCache',
   ScheduledPost: 'ScheduledPost',
   Notification: 'Notification',
   NotificationSetting: 'NotificationSetting',

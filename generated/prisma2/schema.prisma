@@ -22,6 +22,7 @@ model User {
   bookmarkFolders      BookmarkFolder[]
   blockedUsers         BlockedUser[]
   mutedUsers           MutedUser[]
+  mutedWords           MutedWord[]
   notifications        Notification[]
   notificationSettings NotificationSetting[]
   pushSubscriptions    PushSubscription[]
@@ -219,6 +220,33 @@ model MutedUser {
   @@unique([userId, channelId])
   @@index([userId])
   @@map("muted_users")
+}
+
+model MutedWord {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  word      String   @map("word")
+  // 'partial' | 'exact' | 'regex'
+  mode      String   @default("partial") @map("mode")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, word])
+  @@index([userId])
+  @@map("muted_words")
+}
+
+model OgpCache {
+  id          String   @id @default(cuid())
+  url         String   @unique @map("url")
+  title       String?  @map("title")
+  description String?  @map("description")
+  image       String?  @map("image")
+  siteName    String?  @map("site_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("ogp_cache")
 }
 
 model ScheduledPost {

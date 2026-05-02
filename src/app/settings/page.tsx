@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import { useTheme } from "@/components/theme-provider";
-import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight, Monitor, Hash, Bell, BellOff, Eye, EyeOff, Shield, Wifi, WifiOff } from "lucide-react";
+import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight, Monitor, Hash, Bell, BellOff, Eye, EyeOff, Shield, Wifi, WifiOff, Type, X } from "lucide-react";
 import { usePush } from "@/components/push-provider";
 import { useDataSaver } from "@/components/data-saver-provider";
 import Link from "next/link";
@@ -41,6 +41,9 @@ export default function SettingsPage() {
   const { enabled: dataSaverEnabled, setEnabled: setDataSaver } = useDataSaver();
   const [message, setMessage] = useState("");
   const [mentionColor, setMentionColor] = useState("#1d9bf0");
+  const [mutedWords, setMutedWords] = useState<{ id: string; word: string; mode: string }[]>([]);
+  const [newWord, setNewWord] = useState("");
+  const [newWordMode, setNewWordMode] = useState("partial");
   const [privacy, setPrivacy] = useState<PrivacyState>({
     showLikesTab: true,
     showDislikesTab: true,
@@ -72,7 +75,38 @@ export default function SettingsPage() {
         }
       })
       .catch(() => {});
+    loadMutedWords();
   }, []);
+
+  const loadMutedWords = async () => {
+    try {
+      const res = await fetch("/api/muted-words");
+      const data = await res.json();
+      if (data.words) setMutedWords(data.words);
+    } catch {}
+  };
+
+  const addMutedWord = async () => {
+    if (!newWord.trim()) return;
+    try {
+      const res = await fetch("/api/muted-words", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ word: newWord.trim(), mode: newWordMode }),
+      });
+      if (res.ok) {
+        setNewWord("");
+        loadMutedWords();
+      }
+    } catch {}
+  };
+
+  const removeMutedWord = async (id: string) => {
+    try {
+      await fetch(`/api/muted-words?id=${id}`, { method: "DELETE" });
+      loadMutedWords();
+    } catch {}
+  };
 
   const updatePrivacy = async (key: keyof PrivacyState, value: boolean) => {
     const next = { ...privacy, [key]: value };
@@ -354,6 +388,58 @@ export default function SettingsPage() {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+        </div>
+
+        {/* Muted Words */}
+        <div className="bg-card rounded-2xl border border-border p-4">
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <Type size={20} className="text-muted" />
+            ミュートワード
+          </h2>
+          <div className="flex gap-2 mb-3">
+            <input
+              value={newWord}
+              onChange={(e) => setNewWord(e.target.value)}
+              placeholder="ワードを入力"
+              className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+              onKeyDown={(e) => { if (e.key === "Enter") addMutedWord(); }}
+            />
+            <select
+              value={newWordMode}
+              onChange={(e) => setNewWordMode(e.target.value)}
+              className="bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="partial">部分一致</option>
+              <option value="exact">完全一致</option>
+              <option value="regex">正規表現</option>
+            </select>
+            <button
+              onClick={addMutedWord}
+              disabled={!newWord.trim()}
+              className="px-4 py-2 bg-primary text-white rounded-full text-sm font-bold hover:bg-primary-hover disabled:opacity-50"
+            >
+              追加
+            </button>
+          </div>
+          {mutedWords.length === 0 ? (
+            <p className="text-sm text-muted">ミュートするワードがありません</p>
+          ) : (
+            <div className="space-y-2">
+              {mutedWords.map((w) => (
+                <div key={w.id} className="flex items-center justify-between bg-background border border-border rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">{w.word}</span>
+                    <span className="text-xs text-muted bg-card px-1.5 py-0.5 rounded">
+                      {w.mode === "partial" ? "部分" : w.mode === "exact" ? "完全一致" : "正規表現"}
+                    </span>
+                  </div>
+                  <button onClick={() => removeMutedWord(w.id)} className="p-1 rounded-full hover:bg-white/10 text-muted">
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
             </div>
           )}
         </div>

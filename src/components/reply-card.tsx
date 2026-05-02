@@ -13,6 +13,7 @@ import { ShareMenu } from "./share-menu";
 import { TweetMoreMenu } from "./tweet-more-menu";
 import { formatCount } from "./comment-card";
 import { useDataSaver } from "./data-saver-provider";
+import { LinkCard } from "./link-card";
 
 interface ReplyCardProps {
   reply: YtComment;
@@ -157,6 +158,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                 <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
                   <MentionText content={stripEditedTag(displayContent)} />
                 </p>
+                <LinkCard text={reply.content} />
                 {showDetailTime && (
                   <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                 )}

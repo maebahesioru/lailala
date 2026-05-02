@@ -7,6 +7,7 @@ import { fetchComments } from "@/lib/youtube-client";
 import { CommentThread } from "@/types/youtube";
 import { RefreshCw, Loader2, List } from "lucide-react";
 import { SkeletonCard } from "./skeleton-card";
+import { useMutedWords } from "./use-muted-words";
 
 interface VoteCounts {
   likes: number;
@@ -33,6 +34,7 @@ export function CommentFeed({ videoId }: { videoId: string }) {
   const [followedLists, setFollowedLists] = useState<FollowedList[]>([]);
   const [activeListId, setActiveListId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const { isMuted } = useMutedWords();
 
   useEffect(() => {
     setMounted(true);
@@ -255,16 +257,18 @@ export function CommentFeed({ videoId }: { videoId: string }) {
       <div className="divide-y divide-border">
         {threads.length === 0 && loading
           ? Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)
-          : threads.map((thread) => (
-              <CommentCard
-                key={thread.comment.commentId}
-                thread={thread}
-                videoId={videoId}
-                voteCounts={voteCounts[thread.comment.commentId] || { likes: 0, dislikes: 0 }}
-                userVote={userVotes[thread.comment.commentId]}
-                onDelete={(id) => setThreads((prev) => prev.filter((t) => t.comment.commentId !== id))}
-              />
-            ))}
+          : threads
+              .filter((thread) => !isMuted(thread.comment.content))
+              .map((thread) => (
+                <CommentCard
+                  key={thread.comment.commentId}
+                  thread={thread}
+                  videoId={videoId}
+                  voteCounts={voteCounts[thread.comment.commentId] || { likes: 0, dislikes: 0 }}
+                  userVote={userVotes[thread.comment.commentId]}
+                  onDelete={(id) => setThreads((prev) => prev.filter((t) => t.comment.commentId !== id))}
+                />
+              ))}
       </div>
 
       {/* Infinite scroll sentinel */}
