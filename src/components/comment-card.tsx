@@ -169,7 +169,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         </motion.span>
                       )}
                       <span className="text-muted text-[15px]">·</span>
-                      <span className="text-muted text-[15px] shrink-0">{localizeTime(thread.comment.publishedTime)}</span>
+                      <span className="text-muted text-[15px] shrink-0 cursor-help" title={detailTime}>{localizeTime(thread.comment.publishedTime)}</span>
                     </div>
                     {editing ? (
                       <div className="mt-2 space-y-2">

@@ -172,7 +172,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                         </motion.span>
                       )}
                       <span className="text-muted text-[15px]">·</span>
-                      <span className="text-muted text-[15px] shrink-0">{localizeTime(reply.publishedTime)}</span>
+                      <span className="text-muted text-[15px] shrink-0 cursor-help" title={detailTime}>{localizeTime(reply.publishedTime)}</span>
                     </div>
                     {replyTo && (
                       <div className="text-[13px] text-muted mt-0.5">
