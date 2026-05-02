@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+*.md
+.env*
+generated/
+*.tmp*
+pnpm-lock.yaml
+package-lock.json
+tests/
+examples/

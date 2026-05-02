@@ -3,8 +3,8 @@ import { prisma } from "./prisma";
 let started = false;
 
 const VIDEO_ID = "niKAylKNIEI";
-const INTERVAL_MS = 15 * 60 * 1000;
-const MAX_PER_RUN = 10000;
+const INTERVAL_MS = 30 * 60 * 1000; // 30分ごと
+const MAX_PER_RUN = 5000; // 1回の取得数を減らす
 
 function parsePublishedTime(text: string): Date | null {
   if (!text || text.trim() === "") return null;
