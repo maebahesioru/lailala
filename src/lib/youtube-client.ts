@@ -2,7 +2,7 @@ import { CommentThread } from "@/types/youtube";
 
 export async function fetchComments(
   videoId: string,
-  sortBy: "TOP_COMMENTS" | "NEWEST_FIRST" = "TOP_COMMENTS",
+  sortBy: "TOP_COMMENTS" | "NEWEST_FIRST" | "OLDEST_FIRST" = "TOP_COMMENTS",
   continuationToken?: string
 ): Promise<{ threads: CommentThread[]; hasContinuation: boolean; continuationToken: string | null }> {
   let url = `/api/comments?videoId=${encodeURIComponent(videoId)}&sortBy=${sortBy}`;
