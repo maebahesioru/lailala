@@ -1,7 +1,7 @@
 const CACHE_NAME = "lailala-v1";
 
-self.addEventListener("push", (event: any) => {
-  const data = event.data?.json() || {};
+self.addEventListener("push", (event) => {
+  const data = event.data ? event.data.json() : {};
   const title = data.title || "Lailala";
   const options = {
     body: data.body || "",
@@ -15,14 +15,14 @@ self.addEventListener("push", (event: any) => {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
-self.addEventListener("notificationclick", (event: any) => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = event.notification.data?.url || "/";
+  const url = event.notification.data ? event.notification.data.url : "/";
   event.waitUntil(
-    (self as any).clients.openWindow(url)
+    self.clients.openWindow(url)
   );
 });
 
-self.addEventListener("activate", (event: any) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(self.clients.claim());
 });
