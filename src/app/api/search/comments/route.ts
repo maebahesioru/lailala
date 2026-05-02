@@ -113,8 +113,10 @@ export async function GET(req: NextRequest) {
       orderBy = { likeCount: "desc" };
     } else if (sort === "newest") {
       orderBy = { publishedAt: "desc" };
+    } else if (type === "latest") {
+      orderBy = { publishedAt: "desc" };
     } else {
-      // relevance: prioritize like count but also recent
+      // top / relevance: prioritize like count
       orderBy = { likeCount: "desc" };
     }
 
