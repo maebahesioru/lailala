@@ -166,7 +166,7 @@ export async function GET(req: NextRequest) {
         hasContinuation = !!nextToken;
       }
     } else {
-      const comments = await innertube.getComments(videoId, sortBy);
+      const comments = await innertube.getComments(videoId, sortBy as any);
 
       threads = comments.contents
         .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)
