@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "./auth-provider";
-import { Smile, Calendar, User, Clock, X, FileText, Trash2, Loader2 } from "lucide-react";
+import { Smile, Calendar, User, Clock, X, Loader2 } from "lucide-react";
 import { ConfirmDialog } from "./confirm-dialog";
+import { DraftsPopup } from "./drafts-popup";
 import dynamic from "next/dynamic";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
@@ -41,11 +42,10 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
   const [posting, setPosting] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
   const [showSchedule, setShowSchedule] = useState(false);
-  const [showDrafts, setShowDrafts] = useState(false);
+  const [showDraftsPopup, setShowDraftsPopup] = useState(false);
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("");
   const [scheduledList, setScheduledList] = useState<ScheduledPost[]>([]);
-  const [drafts, setDrafts] = useState<Draft[]>([]);
   const [activeDraftId, setActiveDraftId] = useState<string | null>(null);
   const [showDraftConfirm, setShowDraftConfirm] = useState(false);
   const [pendingClose, setPendingClose] = useState(false);
@@ -63,7 +63,6 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
 
   useEffect(() => {
     if (open) {
-      setDrafts(loadDrafts());
       textareaRef.current?.focus();
     }
   }, [open]);
@@ -76,12 +75,10 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
       if (activeDraftId) {
         const updated = all.map((d) => (d.id === activeDraftId ? { ...d, text, updatedAt: Date.now() } : d));
         saveDrafts(updated);
-        setDrafts(updated);
       } else {
         const newDraft: Draft = { id: generateId(), text, updatedAt: Date.now() };
         const updated = [newDraft, ...all];
         saveDrafts(updated);
-        setDrafts(updated);
         setActiveDraftId(newDraft.id);
       }
     }, 2000);
@@ -128,7 +125,6 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
       if (activeDraftId) {
         const all = loadDrafts().filter((d) => d.id !== activeDraftId);
         saveDrafts(all);
-        setDrafts(all);
       }
       onPosted?.();
       onClose();
@@ -174,23 +170,15 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
   const loadDraft = (draft: Draft) => {
     setText(draft.text);
     setActiveDraftId(draft.id);
-    setShowDrafts(false);
     textareaRef.current?.focus();
   };
 
-  const deleteDraft = (id: string) => {
-    const updated = loadDrafts().filter((d) => d.id !== id);
-    saveDrafts(updated);
-    setDrafts(updated);
-    if (activeDraftId === id) {
-      setText("");
-      setActiveDraftId(null);
-    }
-  };
-
   const newDraft = () => {
+    const all = loadDrafts();
+    const emptyDraft: Draft = { id: generateId(), text: "", updatedAt: Date.now() };
+    saveDrafts([emptyDraft, ...all]);
     setText("");
-    setActiveDraftId(null);
+    setActiveDraftId(emptyDraft.id);
     textareaRef.current?.focus();
   };
 
@@ -209,6 +197,7 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
     saveDrafts([draft, ...all]);
     setShowDraftConfirm(false);
     setPendingClose(false);
+    setActiveDraftId(draft.id);
     onClose();
   };
 
@@ -239,172 +228,133 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
           </button>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setShowDrafts(!showDrafts)}
-              className={`text-[14px] font-bold px-3 py-1.5 rounded-full transition-colors ${showDrafts ? "bg-primary text-white" : "text-primary hover:bg-primary/10"}`}
+              onClick={() => setShowDraftsPopup(true)}
+              className="text-[14px] font-bold px-3 py-1.5 rounded-full transition-colors text-primary hover:bg-primary/10"
             >
-              下書き ({drafts.length})
+              下書き
             </button>
           </div>
         </div>
 
-        <div className="flex">
-          {/* Main composer */}
-          <div className={`flex-1 transition-all ${showDrafts ? "hidden md:block md:w-2/3" : "w-full"}`}>
-            <div className="p-4">
-              <div className="flex gap-3">
-                {user.image ? (
-                  <img src={user.image} alt={user.name || "User"} className="w-10 h-10 rounded-full object-cover shrink-0" />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
-                    <User size={20} className="text-muted" />
-                  </div>
-                )}
-                <div className="flex-1">
-                  <textarea
-                    ref={textareaRef}
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="コメントを投稿"
-                    rows={4}
-                    className="w-full bg-transparent text-xl placeholder-muted outline-none resize-none"
-                  />
+        <div className="p-4">
+          <div className="flex gap-3">
+            {user.image ? (
+              <img src={user.image} alt={user.name || "User"} className="w-10 h-10 rounded-full object-cover shrink-0" />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                <User size={20} className="text-muted" />
+              </div>
+            )}
+            <div className="flex-1">
+              <textarea
+                ref={textareaRef}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="コメントを投稿"
+                rows={4}
+                className="w-full bg-transparent text-xl placeholder-muted outline-none resize-none"
+              />
 
-                  {scheduledList.length > 0 && (
-                    <div className="mb-2 space-y-1">
-                      {scheduledList.map((s) => (
-                        <div key={s.id} className="flex items-center justify-between bg-background border border-border rounded-lg px-3 py-2 text-[13px]">
-                          <div className="flex items-center gap-2 text-muted min-w-0">
-                            <Clock size={14} />
-                            <span className="truncate">{new Date(s.scheduledAt).toLocaleString("ja-JP")}</span>
-                            <span className="truncate text-foreground">{s.text}</span>
-                          </div>
-                          <button onClick={() => cancelSchedule(s.id)} className="p-1 rounded-full hover:bg-white/10 text-muted shrink-0">
-                            <X size={14} />
+              {scheduledList.length > 0 && (
+                <div className="mb-2 space-y-1">
+                  {scheduledList.map((s) => (
+                    <div key={s.id} className="flex items-center justify-between bg-background border border-border rounded-lg px-3 py-2 text-[13px]">
+                      <div className="flex items-center gap-2 text-muted min-w-0">
+                        <Clock size={14} />
+                        <span className="truncate">{new Date(s.scheduledAt).toLocaleString("ja-JP")}</span>
+                        <span className="truncate text-foreground">{s.text}</span>
+                      </div>
+                      <button onClick={() => cancelSchedule(s.id)} className="p-1 rounded-full hover:bg-white/10 text-muted shrink-0">
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex gap-1 text-primary">
+                  <div className="relative" ref={emojiRef}>
+                    <button onClick={() => setShowEmoji(!showEmoji)} className="p-2 rounded-full hover:bg-primary/10">
+                      <Smile size={18} />
+                    </button>
+                    {showEmoji && (
+                      <div className="absolute top-full left-0 mt-2 z-20">
+                        <EmojiPicker
+                          onEmojiClick={(emojiData) => setText((prev) => prev + emojiData.emoji)}
+                          width={320}
+                          height={400}
+                          previewConfig={{ showPreview: false }}
+                          theme={EmojiTheme.DARK}
+                          emojiStyle={EmojiStyle.TWITTER}
+                          searchPlaceholder="絵文字を検索"
+                          skinTonesDisabled
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative" ref={scheduleRef}>
+                    <button onClick={() => setShowSchedule(!showSchedule)} className="p-2 rounded-full hover:bg-primary/10">
+                      <Calendar size={18} />
+                    </button>
+                    {showSchedule && (
+                      <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-xl shadow-lg p-4 w-64 z-20 space-y-3">
+                        <p className="text-sm font-bold">予約投稿</p>
+                        <input
+                          type="date"
+                          value={scheduleDate}
+                          onChange={(e) => setScheduleDate(e.target.value)}
+                          className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary"
+                        />
+                        <input
+                          type="time"
+                          value={scheduleTime}
+                          onChange={(e) => setScheduleTime(e.target.value)}
+                          className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary"
+                        />
+                        <p className="text-[12px] text-muted">
+                          ※サーバーで自動投稿されます
+                        </p>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={handleSchedule}
+                            disabled={!text.trim() || !scheduleDate || !scheduleTime}
+                            className="flex-1 py-2 bg-primary text-white rounded-full font-bold hover:bg-primary-hover disabled:opacity-50 transition-colors text-sm"
+                          >
+                            予約
+                          </button>
+                          <button
+                            onClick={() => setShowSchedule(false)}
+                            className="flex-1 py-2 border border-border rounded-full font-bold hover:bg-white/5 transition-colors text-sm"
+                          >
+                            キャンセル
                           </button>
                         </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="flex gap-1 text-primary">
-                      <div className="relative" ref={emojiRef}>
-                        <button onClick={() => setShowEmoji(!showEmoji)} className="p-2 rounded-full hover:bg-primary/10">
-                          <Smile size={18} />
-                        </button>
-                        {showEmoji && (
-                          <div className="absolute top-full left-0 mt-2 z-20">
-                            <EmojiPicker
-                              onEmojiClick={(emojiData) => setText((prev) => prev + emojiData.emoji)}
-                              width={320}
-                              height={400}
-                              previewConfig={{ showPreview: false }}
-                              theme={EmojiTheme.DARK}
-                              emojiStyle={EmojiStyle.TWITTER}
-                              searchPlaceholder="絵文字を検索"
-                              skinTonesDisabled
-                            />
-                          </div>
-                        )}
                       </div>
-
-                      <div className="relative" ref={scheduleRef}>
-                        <button onClick={() => setShowSchedule(!showSchedule)} className="p-2 rounded-full hover:bg-primary/10">
-                          <Calendar size={18} />
-                        </button>
-                        {showSchedule && (
-                          <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-xl shadow-lg p-4 w-64 z-20 space-y-3">
-                            <p className="text-sm font-bold">予約投稿</p>
-                            <input
-                              type="date"
-                              value={scheduleDate}
-                              onChange={(e) => setScheduleDate(e.target.value)}
-                              className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary"
-                            />
-                            <input
-                              type="time"
-                              value={scheduleTime}
-                              onChange={(e) => setScheduleTime(e.target.value)}
-                              className="w-full bg-background text-foreground rounded-lg px-3 py-2 border border-border outline-none focus:ring-2 focus:ring-primary"
-                            />
-                            <p className="text-[12px] text-muted">
-                              ※サーバーで自動投稿されます
-                            </p>
-                            <div className="flex gap-2">
-                              <button
-                                onClick={handleSchedule}
-                                disabled={!text.trim() || !scheduleDate || !scheduleTime}
-                                className="flex-1 py-2 bg-primary text-white rounded-full font-bold hover:bg-primary-hover disabled:opacity-50 transition-colors text-sm"
-                              >
-                                予約
-                              </button>
-                              <button
-                                onClick={() => setShowSchedule(false)}
-                                className="flex-1 py-2 border border-border rounded-full font-bold hover:bg-white/5 transition-colors text-sm"
-                              >
-                                キャンセル
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <button
-                      onClick={handleSubmit}
-                      disabled={posting || !text.trim()}
-                      className="px-5 py-2 bg-primary text-white rounded-full font-bold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      {posting ? <Loader2 size={18} className="animate-spin" /> : "投稿"}
-                    </button>
+                    )}
                   </div>
                 </div>
+                <button
+                  onClick={handleSubmit}
+                  disabled={posting || !text.trim()}
+                  className="px-5 py-2 bg-primary text-white rounded-full font-bold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {posting ? <Loader2 size={18} className="animate-spin" /> : "投稿"}
+                </button>
               </div>
             </div>
           </div>
-
-          {/* Drafts sidebar */}
-          {showDrafts && (
-            <div className="w-full md:w-1/3 border-l border-border bg-background/50">
-              <div className="p-3 border-b border-border flex items-center justify-between">
-                <span className="text-sm font-bold">下書き</span>
-                <button onClick={newDraft} className="text-[13px] text-primary hover:underline">
-                  新規作成
-                </button>
-              </div>
-              <div className="max-h-[300px] overflow-y-auto">
-                {drafts.length === 0 ? (
-                  <div className="p-6 text-center text-muted text-[13px]">
-                    <FileText size={24} className="mx-auto mb-2 opacity-50" />
-                    <p>下書きがありません</p>
-                  </div>
-                ) : (
-                  drafts.map((draft) => (
-                    <div
-                      key={draft.id}
-                      className={`p-3 border-b border-border cursor-pointer hover:bg-white/5 transition-colors ${activeDraftId === draft.id ? "bg-white/5" : ""}`}
-                    >
-                      <div onClick={() => loadDraft(draft)}>
-                        <p className="text-[14px] whitespace-pre-wrap line-clamp-2 leading-snug">{draft.text || "（無題）"}</p>
-                        <p className="text-[12px] text-muted mt-1">
-                          {new Date(draft.updatedAt).toLocaleString("ja-JP", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-end mt-1">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); deleteDraft(draft.id); }}
-                          className="p-1.5 rounded-full hover:bg-red-500/10 text-muted hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      <DraftsPopup
+        open={showDraftsPopup}
+        onClose={() => setShowDraftsPopup(false)}
+        onSelect={loadDraft}
+        onNewDraft={newDraft}
+        activeDraftId={activeDraftId}
+      />
 
       <ConfirmDialog
         open={showDraftConfirm}
