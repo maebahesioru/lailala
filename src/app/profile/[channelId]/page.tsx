@@ -6,7 +6,7 @@ import { MainLayout } from "@/components/main-layout";
 import { ArrowLeft, User, ThumbsUp, MessageCircle, Bell, BellOff, Heart, ThumbsDown, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { ProfileMoreMenu } from "@/components/profile-more-menu";
-import { useAuth } from "./auth-provider";
+import { useAuth } from "@/components/auth-provider";
 import { ContributionHeatmap } from "@/components/contribution-heatmap";
 import { MentionText } from "@/components/mention-text";
 
