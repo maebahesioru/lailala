@@ -37,15 +37,24 @@ function extractTrendWords(contents: string[]): TrendWord[] {
       .replace(/[#@]/g, "")
       .split(/[\s\n\p{P}]+/u)
       .filter((w: string) => w.length >= 2 && !/^[\d\.]+$/.test(w));
-    for (const h of hashtags) wordCounts.set(h, (wordCounts.get(h) || 0) + 3);
-    for (const m of mentions) wordCounts.set(m, (wordCounts.get(m) || 0) + 2);
+
+    // Deduplicate per-comment so one comment cannot spam the same word
+    const uniqueWords = new Set<string>();
+    for (const h of hashtags) uniqueWords.add(h);
+    for (const m of mentions) uniqueWords.add(m);
     for (const w of words) {
       if (STOP_WORDS.has(w)) continue;
       if (!isJapaneseWord(w)) continue;
-      wordCounts.set(w, (wordCounts.get(w) || 0) + 1);
+      uniqueWords.add(w);
+    }
+
+    for (const word of uniqueWords) {
+      const weight = word.startsWith("#") ? 3 : word.startsWith("@") ? 2 : 1;
+      wordCounts.set(word, (wordCounts.get(word) || 0) + weight);
     }
   }
-    return Array.from(wordCounts.entries())
+
+  return Array.from(wordCounts.entries())
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
     .map(([word, count]) => ({ word, count }));

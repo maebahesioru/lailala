@@ -3,9 +3,33 @@ import { getCurrentUser, destroySession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
-  const user = await getCurrentUser();
+  let user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ user: null }, { status: 401 });
+  }
+
+  // Auto-fix legacy users missing channelId
+  if (!user.channelId) {
+    let channelId: string | null = null;
+    if (user.selectedAccountId) {
+      channelId = user.selectedAccountId;
+    } else if (user.email?.startsWith("yt:")) {
+      channelId = user.email.slice(3);
+    } else {
+      const cred = await prisma.ytCredential.findFirst({
+        where: { userId: user.id },
+        select: { accountChannelId: true },
+        orderBy: { updatedAt: "desc" },
+      });
+      if (cred?.accountChannelId) channelId = cred.accountChannelId;
+    }
+
+    if (channelId) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { channelId },
+      });
+    }
   }
 
   const accounts = await prisma.ytCredential.findMany({

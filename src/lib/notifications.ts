@@ -29,7 +29,7 @@ const TYPE_LABELS: Record<NotificationType, string> = {
  */
 export async function createNotification(params: CreateNotificationParams) {
   // Find user by channelId
-  const user = await prisma.user.findFirst({
+  let user = await prisma.user.findFirst({
     where: { channelId: params.recipientChannelId },
     select: {
       id: true, name: true,
@@ -37,6 +37,19 @@ export async function createNotification(params: CreateNotificationParams) {
       pushNotifyLikes: true, pushNotifyDislikes: true, pushNotifyBookmarks: true, pushNotifyReplies: true, pushNotifyMentions: true,
     },
   });
+
+  // Fallback for legacy users whose channelId wasn't saved on login
+  if (!user && params.recipientChannelId) {
+    user = await prisma.user.findFirst({
+      where: { email: `yt:${params.recipientChannelId}` },
+      select: {
+        id: true, name: true,
+        notifyLikes: true, notifyDislikes: true, notifyBookmarks: true, notifyReplies: true,
+        pushNotifyLikes: true, pushNotifyDislikes: true, pushNotifyBookmarks: true, pushNotifyReplies: true, pushNotifyMentions: true,
+      },
+    });
+  }
+
   if (!user) return null;
 
   // Check per-type notification privacy settings (in-app)

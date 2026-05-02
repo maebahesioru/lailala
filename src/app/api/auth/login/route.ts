@@ -126,8 +126,8 @@ export async function GET(req: NextRequest) {
 
     const user = await prisma.user.upsert({
       where: { email },
-      update: { name, image: thumbnail },
-      create: { name, email, image: thumbnail },
+      update: { name, image: thumbnail, channelId },
+      create: { name, email, image: thumbnail, channelId },
     });
 
     // Upsert credential by [userId, accountChannelId]
