@@ -5,7 +5,7 @@ import { CommentCard } from "./comment-card";
 import { Composer } from "./composer";
 import { fetchComments } from "@/lib/youtube-client";
 import { CommentThread } from "@/types/youtube";
-import { RefreshCw, Loader2, List } from "lucide-react";
+import { RefreshCw, Loader2, List, ArrowUp } from "lucide-react";
 import { SkeletonCard } from "./skeleton-card";
 import { useMutedWords } from "./use-muted-words";
 
@@ -35,6 +35,8 @@ export function CommentFeed({ videoId }: { videoId: string }) {
   const [activeListId, setActiveListId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const { isMuted } = useMutedWords();
+  const [newArrivalCount, setNewArrivalCount] = useState(0);
+  const [showNewBadge, setShowNewBadge] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -215,6 +217,25 @@ export function CommentFeed({ videoId }: { videoId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoId, sortBy]);
 
+  // Poll for new comments (new arrivals badge)
+  useEffect(() => {
+    if (activeListId) return; // Only for main timeline
+    const interval = setInterval(async () => {
+      try {
+        const data = await fetchComments(videoId, sortBy);
+        const currentTopIds = new Set(threads.map((t) => t.comment.commentId));
+        const newComments = data.threads.filter((t) => !currentTopIds.has(t.comment.commentId));
+        if (newComments.length > 0) {
+          setNewArrivalCount(newComments.length);
+          setShowNewBadge(true);
+        }
+      } catch {
+        // ignore polling errors
+      }
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [videoId, sortBy, threads, activeListId]);
+
   const baseTabs = [
     { id: "top", label: "人気", onClick: () => { setActiveListId(null); setSortBy("TOP_COMMENTS"); } },
     { id: "new", label: "新着", onClick: () => { setActiveListId(null); setSortBy("NEWEST_FIRST"); } },
@@ -251,6 +272,24 @@ export function CommentFeed({ videoId }: { videoId: string }) {
           ))}
         </div>
       </div>
+
+      {/* New arrivals badge */}
+      {showNewBadge && !activeListId && (
+        <div className="sticky top-[57px] z-20 flex justify-center -mb-2 pointer-events-none">
+          <button
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              loadInitial();
+              setShowNewBadge(false);
+              setNewArrivalCount(0);
+            }}
+            className="pointer-events-auto flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-lg hover:bg-primary-hover transition-colors -translate-y-2"
+          >
+            <ArrowUp size={14} />
+            新しいコメントが{newArrivalCount}件
+          </button>
+        </div>
+      )}
 
       {!activeListId && <Composer videoId={videoId} onPosted={() => loadInitial()} />}
 

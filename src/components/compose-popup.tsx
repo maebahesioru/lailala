@@ -309,6 +309,23 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
                 />
               </div>
 
+              {/* Character count */}
+              {text.length > 0 && (
+                <div className="flex justify-end mt-1">
+                  <span
+                    className={`text-[13px] font-medium ${
+                      text.length > 5000
+                        ? "text-red-500"
+                        : text.length > 4500
+                        ? "text-yellow-500"
+                        : "text-muted"
+                    }`}
+                  >
+                    {text.length} / 5000
+                  </span>
+                </div>
+              )}
+
               {scheduledList.length > 0 && (
                 <div className="mb-2 space-y-1">
                   {scheduledList.map((s) => (
@@ -391,7 +408,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
                 </div>
                 <button
                   onClick={handleSubmit}
-                  disabled={posting || !text.trim()}
+                  disabled={posting || !text.trim() || text.length > 5000}
                   className="px-5 py-2 bg-primary text-white rounded-full font-bold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {posting ? <Loader2 size={18} className="animate-spin" /> : "投稿"}
