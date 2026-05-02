@@ -92,8 +92,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <head />
-      <body className={`${inter.className} min-h-screen antialiased`}>
+      <head>
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
@@ -106,6 +105,8 @@ export default function RootLayout({
             __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').then(function(reg){reg.addEventListener('updatefound',function(){var newWorker=reg.installing;newWorker.addEventListener('statechange',function(){if(newWorker.state==='activated'){window.location.reload()}})});setInterval(function(){reg.update()},3600000)})})}`,
           }}
         />
+      </head>
+      <body className={`${inter.className} min-h-screen antialiased`}>
         <Providers>
           <div className="min-h-screen flex flex-col">
             {children}
