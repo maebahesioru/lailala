@@ -45,9 +45,9 @@ function extractTrendWords(contents: string[]): TrendWord[] {
       wordCounts.set(w, (wordCounts.get(w) || 0) + 1);
     }
   }
-  return Array.from(wordCounts.entries())
+    return Array.from(wordCounts.entries())
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
+    .slice(0, 50)
     .map(([word, count]) => ({ word, count }));
 }
 
