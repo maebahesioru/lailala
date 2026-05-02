@@ -150,7 +150,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   }, [videoId, sortBy, nextToken, loadingMore, activeListId]);
 
   const fetchVoteData = async (threadList: CommentThread[]) => {
-    const commentIds = threadList.map((t) => t.comment.commentId);
+    const commentIds = threadList.slice(0, 20).map((t) => t.comment.commentId);
     if (commentIds.length === 0) return;
     try {
       const [countsRes, userRes] = await Promise.all([
@@ -286,7 +286,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
       } catch {
         // ignore polling errors
       }
-    }, 30000);
+    }, 60000);
     return () => clearInterval(interval);
   }, [videoId, sortBy, activeListId]);
 
