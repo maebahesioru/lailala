@@ -2,15 +2,24 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, X, ExternalLink } from "lucide-react";
+import { Heart, X, ExternalLink, EyeOff } from "lucide-react";
+
+const STORAGE_KEY = "lailala-hide-donation";
 
 export function DonationPopup() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Show on every fresh page load
-    setShow(true);
+    const hidden = localStorage.getItem(STORAGE_KEY);
+    if (!hidden) {
+      setShow(true);
+    }
   }, []);
+
+  const hideForever = () => {
+    localStorage.setItem(STORAGE_KEY, "true");
+    setShow(false);
+  };
 
   return (
     <AnimatePresence>
@@ -61,12 +70,21 @@ export function DonationPopup() {
               <ExternalLink size={16} />
             </a>
 
-            <button
-              onClick={() => setShow(false)}
-              className="w-full mt-3 py-2 text-[13px] text-muted hover:text-foreground transition-colors"
-            >
-              閉じる
-            </button>
+            <div className="flex flex-col gap-2 mt-3">
+              <button
+                onClick={() => setShow(false)}
+                className="w-full py-2 text-[13px] text-muted hover:text-foreground transition-colors"
+              >
+                閉じる
+              </button>
+              <button
+                onClick={hideForever}
+                className="w-full flex items-center justify-center gap-1.5 py-2 text-[13px] text-muted hover:text-red-400 transition-colors"
+              >
+                <EyeOff size={14} />
+                今後表示しない
+              </button>
+            </div>
           </motion.div>
         </motion.div>
       )}
