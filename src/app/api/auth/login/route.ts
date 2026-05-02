@@ -124,12 +124,11 @@ export async function GET(req: NextRequest) {
 
     const email = `yt:${channelId}`;
 
-    let user = await prisma.user.findFirst({ where: { email } });
-    if (user) {
-      user = await prisma.user.update({ where: { id: user.id }, data: { name, image: thumbnail } });
-    } else {
-      user = await prisma.user.create({ data: { name, email, image: thumbnail } });
-    }
+    const user = await prisma.user.upsert({
+      where: { email },
+      update: { name, image: thumbnail },
+      create: { name, email, image: thumbnail },
+    });
 
     await prisma.ytCredential.upsert({
       where: { userId: user.id },
