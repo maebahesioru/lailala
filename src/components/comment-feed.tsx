@@ -87,7 +87,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
         setThreads(mapped);
         fetchVoteData(mapped);
       } else {
-        const data = await fetchComments(videoId, sortBy);
+        const data = await fetchComments(videoId, sortBy as any);
         setThreads(data.threads);
         setHasMore(data.hasContinuation);
         setNextToken(data.continuationToken);
@@ -226,7 +226,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     if (activeListId) return; // Only for main timeline
     const interval = setInterval(async () => {
       try {
-        const data = await fetchComments(videoId, sortBy);
+        const data = await fetchComments(videoId, sortBy as any);
         const currentTopIds = new Set(threads.map((t) => t.comment.commentId));
         const newComments = data.threads.filter((t) => !currentTopIds.has(t.comment.commentId));
         if (newComments.length > 0) {
