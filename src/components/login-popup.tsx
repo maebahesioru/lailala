@@ -124,9 +124,12 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
             <AnimatePresence mode="wait">
               {step === "idle" && (
                 <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                  <p className="text-muted text-sm mb-6">
+                  <p className="text-muted text-sm mb-4">
                     コメント投稿や評価にはYouTubeアカウントの連携が必要です。google.com/device でコードを入力して連携します。
                   </p>
+                  <a href="/security" target="_blank" rel="noopener noreferrer" className="block text-primary text-sm mb-4 hover:underline">
+                    安全性について確認する
+                  </a>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}

@@ -121,25 +121,14 @@ export function startCommentCacheWorker() {
   started = true;
 
   (async () => {
-    // Full scan on startup - run continuously until all comments cached
-    console.log(`[CommentCacheWorker] Starting continuous full scan...`);
-    let totalBatches = 0;
-    while (true) {
-      const count = await cacheVideoComments(VIDEO_ID, MAX_PER_RUN);
-      totalBatches++;
-      console.log(`[CommentCacheWorker] Batch #${totalBatches}: ${count} comments`);
-      // If we got less than the limit, there are no more comments to cache
-      if (count < MAX_PER_RUN * 0.5) {
-        console.log(`[CommentCacheWorker] Full scan complete after ${totalBatches} batches`);
-        break;
-      }
-      // Small delay to avoid rate limiting
-      await new Promise(r => setTimeout(r, 2000));
-    }
+    console.log(`[CommentCacheWorker] Starting full initial scan...`);
+    // One big continuous scan - single Comments object, many getContinuation()
+    await cacheVideoComments(VIDEO_ID);
+    console.log(`[CommentCacheWorker] Initial scan complete`);
 
     // Switch to periodic updates
     console.log(`[CommentCacheWorker] Switching to periodic mode (${INTERVAL_MS / 1000}s)`);
-    setInterval(run, INTERVAL_MS);
+    setInterval(() => cacheVideoComments(VIDEO_ID, MAX_PER_RUN), INTERVAL_MS);
   })();
 
   console.log(`[CommentCacheWorker] Started for ${VIDEO_ID}`);
