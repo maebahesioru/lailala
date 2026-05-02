@@ -207,20 +207,13 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         </div>
                       </div>
                     ) : (
-                      <Link
-                        href={`/thread/${thread.comment.commentId}`}
-                        onClick={(e) => {
-                          const sel = window.getSelection();
-                          if (sel && sel.toString().length > 0) {
-                            e.preventDefault();
-                          }
-                        }}
-                        className="block"
-                      >
-                        <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
-                          <MentionText content={stripEditedTag(thread.comment.content)} />
-                        </p>
-                      </Link>
+                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed" onClick={() => {
+                        const sel = window.getSelection();
+                        if (sel && sel.toString().length > 0) return;
+                        router.push(`/thread/${thread.comment.commentId}`);
+                      }}>
+                        <MentionText content={stripEditedTag(thread.comment.content)} />
+                      </p>
                     )}
                     <Link href={`/thread/${thread.comment.commentId}`} className="block">
                       <LinkCard text={thread.comment.content} />
