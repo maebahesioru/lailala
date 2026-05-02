@@ -1,11 +1,8 @@
 #!/bin/sh
 set -e
 
-echo "Generating Prisma Client..."
-pnpm prisma generate
-
 echo "Deploying Prisma migrations..."
-pnpm prisma migrate deploy
+npx prisma@6.19.3 migrate deploy
 
 echo "Starting Next.js..."
 exec "$@"
