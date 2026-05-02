@@ -21,18 +21,33 @@ export async function getTokenizer() {
 }
 
 const EXCLUDED_POS_DETAIL = new Set([
-  "非自立",    // ている → てる, られる → られ  etc.
-  "助数詞",    // 匹、回、個
-  "代名詞",    // これ、それ、あれ
-  "接尾",      // ～さん、～化
-  "接頭",      // お～、ご～
-  "副詞可能",  // すぐ、もっと (nouns that act as adverbs)
+  "非自立",
+  "助数詞",
+  "代名詞",
+  "接尾",
+  "接頭",
+  "副詞可能",
 ]);
+
+function pushIfValid(words: string[], word: string) {
+  if (word.length >= 2 && !/^\d+$/.test(word)) {
+    words.push(word);
+  }
+}
 
 export async function tokenizeKuromoji(text: string): Promise<string[]> {
   const tok = await getTokenizer();
-  const tokens = tok.tokenize(text);
+
+  // Protect patterns like "YAJU&U" before tokenization
+  const protectedPatterns: string[] = [];
+  const processedText = text.replace(/[a-zA-Z0-9]+(?:&[a-zA-Z0-9]+)+/g, (match) => {
+    protectedPatterns.push(match);
+    return `PROTECTED_${protectedPatterns.length - 1}_`;
+  });
+
+  const tokens = tok.tokenize(processedText);
   const words: string[] = [];
+  let nounBuffer = "";
 
   for (const t of tokens) {
     const pos: string = t.pos;
@@ -40,35 +55,54 @@ export async function tokenizeKuromoji(text: string): Promise<string[]> {
     const posDetail2: string = t.pos_detail_2 || "";
     const surface: string = t.surface_form;
 
-    // Strict filtering: mostly nouns, proper nouns, foreign words
+    // Exclude by POS detail: flush buffer
+    if (EXCLUDED_POS_DETAIL.has(posDetail1) || EXCLUDED_POS_DETAIL.has(posDetail2)) {
+      if (nounBuffer) {
+        pushIfValid(words, nounBuffer);
+        nounBuffer = "";
+      }
+      continue;
+    }
+
     const isNoun = pos === "名詞";
-    const isProperNoun = pos === "名詞" && posDetail1 === "固有名詞";
-    const isForeign = pos === "名詞" && posDetail1 === "外国語";
-    const isAlphabet = /^[a-zA-Z0-9]+$/.test(surface) && surface.length >= 3;
+    const isForeign = isNoun && posDetail1 === "外国語";
 
-    // Exclude by POS detail for ALL tokens
-    if (EXCLUDED_POS_DETAIL.has(posDetail1) || EXCLUDED_POS_DETAIL.has(posDetail2)) continue;
-
-    // Exclude single-character non-kanji
-    if (surface.length === 1 && !/[\u4E00-\u9FFF]/.test(surface)) continue;
-
-    let word: string | null = null;
-
-    if (isProperNoun || isForeign) {
-      // Always include proper nouns and foreign words
-      word = surface;
-    } else if (isNoun) {
-      // General nouns: use surface form
-      word = surface;
-    } else if (isAlphabet) {
-      // Standalone alphabet/number words 3+ chars
-      word = surface;
+    // Check if it's a protected pattern (YAJU&U etc.)
+    const protectedMatch = surface.match(/^PROTECTED_(\d+)_$/);
+    if (protectedMatch) {
+      if (nounBuffer) {
+        pushIfValid(words, nounBuffer);
+        nounBuffer = "";
+      }
+      const idx = parseInt(protectedMatch[1], 10);
+      if (protectedPatterns[idx]) {
+        pushIfValid(words, protectedPatterns[idx]);
+      }
+      continue;
     }
 
-    // Exclude very short garbage
-    if (word && word.length >= 2) {
-      words.push(word);
+    // Single character non-kanji breaks noun chain
+    if (surface.length === 1 && !/[\u4E00-\u9FFF]/.test(surface)) {
+      if (nounBuffer) {
+        pushIfValid(words, nounBuffer);
+        nounBuffer = "";
+      }
+      continue;
     }
+
+    // Accumulate nouns into compound
+    if (isNoun || isForeign) {
+      nounBuffer += surface;
+    } else {
+      if (nounBuffer) {
+        pushIfValid(words, nounBuffer);
+        nounBuffer = "";
+      }
+    }
+  }
+
+  if (nounBuffer) {
+    pushIfValid(words, nounBuffer);
   }
 
   return words;
