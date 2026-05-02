@@ -15,7 +15,7 @@ interface ScheduledPost {
   scheduledAt: string;
 }
 
-export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: () => void }) {
+export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { videoId: string; parentCommentId?: string; placeholder?: string; onPosted?: () => void }) {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
@@ -70,10 +70,14 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     if (!text.trim() || !user) return;
     setPosting(true);
     try {
-      const res = await fetch("/api/comments", {
+      const url = parentCommentId ? "/api/comments/reply" : "/api/comments";
+      const body = parentCommentId
+        ? JSON.stringify({ videoId, parentCommentId, text: text.trim() })
+        : JSON.stringify({ videoId, text: text.trim() });
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId, text: text.trim() }),
+        body,
       });
       if (res.ok) {
         setText("");
@@ -145,7 +149,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="コメントを投稿"
+            placeholder={placeholder || "コメントを投稿"}
             rows={2}
             className="w-full bg-transparent text-xl placeholder-[#71767b] outline-none resize-none"
           />

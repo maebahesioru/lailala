@@ -38,7 +38,7 @@ function saveDrafts(list: Draft[]) {
   localStorage.setItem("lailala-drafts", JSON.stringify(list));
 }
 
-export function ComposePopup({ open, onClose, videoId, initialThreadParentId, initialThreadContent, onPosted }: { open: boolean; onClose: () => void; videoId: string; initialThreadParentId?: string | null; initialThreadContent?: string | null; onPosted?: () => void }) {
+export function ComposePopup({ open, onClose, videoId, initialThreadParentId, initialThreadContent, replyParentId: initialReplyParentId, replyAuthorName, onPosted }: { open: boolean; onClose: () => void; videoId: string; initialThreadParentId?: string | null; initialThreadContent?: string | null; replyParentId?: string | null; replyAuthorName?: string | null; onPosted?: () => void }) {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
@@ -52,6 +52,8 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
   const [showDraftConfirm, setShowDraftConfirm] = useState(false);
   const [pendingClose, setPendingClose] = useState(false);
   const [threadParentId, setThreadParentId] = useState<string | null>(null);
+  const [replyParentId, setReplyParentId] = useState<string | null>(null);
+  const [replyAuthorName, setReplyAuthorName] = useState<string | null>(null);
   const [lastOwnComment, setLastOwnComment] = useState<{ commentId: string; content: string } | null>(null);
   const emojiRef = useRef<HTMLDivElement>(null);
   const scheduleRef = useRef<HTMLDivElement>(null);
@@ -100,6 +102,10 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
   useEffect(() => {
     if (open && user) {
       loadScheduled();
+      if (initialReplyParentId) {
+        setReplyParentId(initialReplyParentId);
+        setReplyAuthorName(initialReplyAuthorName || null);
+      }
       if (initialThreadParentId) {
         setThreadParentId(initialThreadParentId);
         setLastOwnComment({
@@ -120,7 +126,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
           .catch(() => {});
       }
     }
-  }, [open, user, videoId, initialThreadParentId, initialThreadContent]);
+  }, [open, user, videoId, initialThreadParentId, initialThreadContent, initialReplyParentId, initialReplyAuthorName]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -139,15 +145,25 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
     if (!text.trim() || !user) return;
     setPosting(true);
     try {
-      const postText = threadParentId ? `${text.trim()}\n(続き)` : text.trim();
-      await fetch("/api/comments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId, text: postText }),
-      });
+      if (replyParentId) {
+        await fetch("/api/comments/reply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ videoId, parentCommentId: replyParentId, text: text.trim() }),
+        });
+      } else {
+        const postText = threadParentId ? `${text.trim()}\n(続き)` : text.trim();
+        await fetch("/api/comments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ videoId, text: postText }),
+        });
+      }
       setText("");
       setActiveDraftId(null);
       setThreadParentId(null);
+      setReplyParentId(null);
+      setReplyAuthorName(null);
       // Remove this draft from storage
       if (activeDraftId) {
         const all = loadDrafts().filter((d) => d.id !== activeDraftId);
@@ -301,8 +317,22 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
               </div>
             )}
             <div className="flex-1">
+              {/* Reply mode indicator */}
+              {replyParentId && replyAuthorName && (
+                <div className="mb-3 p-3 bg-background border border-border rounded-xl">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[13px] font-bold text-muted">返信先: {replyAuthorName}</span>
+                    <button
+                      onClick={() => { setReplyParentId(null); setReplyAuthorName(null); }}
+                      className="text-[13px] text-muted hover:text-foreground px-2 py-1 rounded-full hover:bg-white/10"
+                    >
+                      キャンセル
+                    </button>
+                  </div>
+                </div>
+              )}
               {/* Thread mode indicator */}
-              {lastOwnComment && (
+              {lastOwnComment && !replyParentId && (
                 <div className="mb-3 p-3 bg-background border border-border rounded-xl">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[13px] font-bold text-muted">前のコメント</span>
@@ -327,7 +357,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
                   ref={textareaRef}
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  placeholder={threadParentId ? "続きのコメントを投稿" : "コメントを投稿"}
+                  placeholder={replyParentId ? `${replyAuthorName}さんへ返信` : threadParentId ? "続きのコメントを投稿" : "コメントを投稿"}
                   rows={4}
                   className="w-full bg-transparent text-xl placeholder-muted outline-none resize-none"
                 />

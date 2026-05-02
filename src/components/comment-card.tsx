@@ -34,20 +34,12 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
   const [localLikes, setLocalLikes] = useState(parseLikeCount(thread.comment.likeCount) + (voteCounts.likes || 0));
   const [showLogin, setShowLogin] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const [isOwnComment, setIsOwnComment] = useState(false);
+  const isOwnComment = user?.channelId === thread.comment.author.channelId;
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(thread.comment.content);
   const { enabled: dataSaver } = useDataSaver();
   const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    if (!user) return;
-    fetch(`/api/comments/own-check?commentId=${encodeURIComponent(thread.comment.commentId)}`)
-      .then((r) => r.json())
-      .then((data) => setIsOwnComment(data.isOwn))
-      .catch(() => setIsOwnComment(false));
-  }, [user, thread.comment.commentId]);
 
   const handleLike = async () => {
     if (!user) { setShowLogin(true); return; }
@@ -294,15 +286,17 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                     </AnimatePresence>
                   </motion.button>
 
-                  <motion.div whileTap={{ scale: 0.9 }} className="flex-1">
-                    <Link
-                      href={`/thread/${thread.comment.commentId}`}
-                      className="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
-                    >
-                      <MessageCircle size={18} />
-                      <span>{thread.comment.replyCount || 0}</span>
-                    </Link>
-                  </motion.div>
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.dispatchEvent(new CustomEvent("lailala:openReply", { detail: { videoId, parentCommentId: thread.comment.commentId, authorName: thread.comment.author.name } }));
+                    }}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
+                  >
+                    <MessageCircle size={18} />
+                    <span>{thread.comment.replyCount || 0}</span>
+                  </motion.button>
 
                   <div onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center">
                     <ShareMenu
