@@ -33,31 +33,66 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
     let comments = await innertube.getComments(videoId, "NEWEST_FIRST");
     let count = 0;
 
-    const saveComment = async (c: any) => {
-      if (!c || !c.comment_id) return;
-      const publishedText = c.published_time?.text || String(c.published_time || "");
-      const publishedAt = parsePublishedTime(publishedText) || new Date();
-      const likeCount = parseInt((c.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
-      const replyCount = parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
-      const authorName = typeof c.author?.name === "string" ? c.author.name : (c.author?.name?.text || "Unknown");
-      const authorThumb = c.author?.thumbnails?.[0]?.url || c.author?.thumbnail?.url || null;
-
-      await prisma.commentCache.upsert({
-        where: { commentId: c.comment_id },
-        update: { content: c.content?.text || "", likeCount, replyCount, authorName, authorChannelId: c.author?.id || null, authorThumb, publishedAt },
-        create: { commentId: c.comment_id, videoId, content: c.content?.text || "", likeCount, replyCount, authorName, authorChannelId: c.author?.id || null, authorThumb, publishedAt },
-      });
-      count++;
-    };
-
     const saveBatch = async (batch: any[]) => {
+      const operations: any[] = [];
       for (const thread of batch) {
-        if (maxItems && count >= maxItems) return;
+        if (maxItems && count >= maxItems) break;
         const c = thread.comment;
         if (!c) continue;
-        await saveComment(c);
+
+        const publishedText = c.published_time?.text || String(c.published_time || "");
+        const publishedAt = parsePublishedTime(publishedText) || new Date();
+        const likeCount = parseInt((c.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+        const replyCount = parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+        const authorName = typeof c.author?.name === "string" ? c.author.name : (c.author?.name?.text || "Unknown");
+        const authorThumb = c.author?.thumbnails?.[0]?.url || c.author?.thumbnail?.url || null;
+
+        operations.push({
+          commentId: c.comment_id,
+          videoId,
+          content: c.content?.text || "",
+          likeCount,
+          replyCount,
+          authorName,
+          authorChannelId: c.author?.id || null,
+          authorThumb,
+          publishedAt,
+        });
+        count++;
+
         if (thread.replies) {
-          for (const reply of thread.replies) await saveComment(reply);
+          for (const reply of thread.replies) {
+            if (!reply?.comment_id) continue;
+            const rPublishedText = reply.published_time?.text || String(reply.published_time || "");
+            const rPublishedAt = parsePublishedTime(rPublishedText) || new Date();
+            const rLikeCount = parseInt((reply.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+            const rAuthorName = typeof reply.author?.name === "string" ? reply.author.name : (reply.author?.name?.text || "Unknown");
+            const rAuthorThumb = reply.author?.thumbnails?.[0]?.url || reply.author?.thumbnail?.url || null;
+
+            operations.push({
+              commentId: reply.comment_id,
+              videoId,
+              content: reply.content?.text || "",
+              likeCount: rLikeCount,
+              replyCount: 0,
+              authorName: rAuthorName,
+              authorChannelId: reply.author?.id || null,
+              authorThumb: rAuthorThumb,
+              publishedAt: rPublishedAt,
+            });
+            count++;
+          }
+        }
+      }
+
+      // Batch upsert all at once
+      if (operations.length > 0) {
+        for (const op of operations) {
+          await prisma.commentCache.upsert({
+            where: { commentId: op.commentId },
+            update: { content: op.content, likeCount: op.likeCount, replyCount: op.replyCount, authorName: op.authorName, authorChannelId: op.authorChannelId, authorThumb: op.authorThumb, publishedAt: op.publishedAt },
+            create: op,
+          });
         }
       }
     };
