@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Search, List, User, Music, Bell, Bookmark, Settings, Menu, X, PenSquare } from "lucide-react";
+import { Home, Search, List, User, Music, Bell, Bookmark, Settings, Menu, X, PenSquare, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -91,7 +91,7 @@ export function MobileNav() {
               </motion.button>
             </div>
 
-            <nav className="flex-1 px-2 space-y-1">
+            <nav className="flex-1 px-2 space-y-1 overflow-y-auto">
               {navItems.map((item) => {
                 const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                 return (
@@ -122,19 +122,55 @@ export function MobileNav() {
                   <span className="text-[15px]">{bgmEnabled ? "BGM ON" : "BGM OFF"}</span>
                 </button>
               )}
-            </nav>
-
-            <div className="p-4">
               <button
                 onClick={() => {
                   setOpen(false);
                   user ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true);
                 }}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-full font-bold shadow-lg"
+                className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-full font-bold shadow-lg mt-2"
               >
                 <PenSquare size={18} />
                 投稿する
               </button>
+            </nav>
+
+            {/* Account */}
+            <div className="p-4 border-t border-border">
+              {user ? (
+                <div className="flex items-center gap-3">
+                  {user.image ? (
+                    <img src={user.image} alt="" className="w-10 h-10 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
+                      <User size={20} className="text-muted" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-sm truncate">{user.name}</p>
+                    <p className="text-muted text-xs truncate">{user.email}</p>
+                  </div>
+                  <button
+                    onClick={() => { setOpen(false); window.location.href = "/api/auth/signout"; }}
+                    className="p-2 rounded-full hover:bg-white/10 text-muted"
+                    title="ログアウト"
+                  >
+                    <LogOut size={18} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => { setOpen(false); setShowLogin(true); }}
+                  className="flex items-center gap-3 w-full"
+                >
+                  <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
+                    <User size={20} className="text-muted" />
+                  </div>
+                  <div className="flex-1 text-left min-w-0">
+                    <p className="font-bold text-sm truncate">ゲスト</p>
+                    <p className="text-muted text-xs truncate">ログインして投稿</p>
+                  </div>
+                </button>
+              )}
             </div>
           </motion.aside>
         )}
