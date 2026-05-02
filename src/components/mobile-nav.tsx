@@ -1,11 +1,11 @@
 "use client";
 
-import { Home, Search, List, User, Music, Bell, Bookmark, Settings, Menu, X, PenSquare, LogOut } from "lucide-react";
+import { Home, Search, List, User, Music, Bell, Bookmark, Settings, X, PenSquare, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "./auth-provider";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { LoginPopup } from "./login-popup";
 import { useBgm } from "./bgm-provider";
 import { useNotifications } from "./use-notifications";
@@ -17,6 +17,8 @@ export function MobileNav() {
   const { unreadCount } = useNotifications();
   const [showLogin, setShowLogin] = useState(false);
   const [open, setOpen] = useState(false);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
   const handleProtectedClick = (e: React.MouseEvent) => {
     if (!user) {
@@ -46,18 +48,38 @@ export function MobileNav() {
     setOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const x = e.touches[0].clientX;
+      const y = e.touches[0].clientY;
+      const dx = x - touchStartX.current;
+      const dy = y - touchStartY.current;
+
+      // Open: swipe right from left edge (within 30px)
+      if (!open && touchStartX.current < 30 && dx > 50 && Math.abs(dy) < 80) {
+        setOpen(true);
+      }
+      // Close: swipe left on drawer
+      if (open && touchStartX.current < 280 && dx < -50 && Math.abs(dy) < 80) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("touchstart", onTouchStart, { passive: true });
+    document.addEventListener("touchmove", onTouchMove, { passive: true });
+    return () => {
+      document.removeEventListener("touchstart", onTouchStart);
+      document.removeEventListener("touchmove", onTouchMove);
+    };
+  }, [open]);
+
   return (
     <>
-      {/* Hamburger button */}
-      <motion.button
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setOpen(true)}
-        className="md:hidden fixed top-3 left-3 z-50 p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border"
-        aria-label="メニュー"
-      >
-        <Menu size={22} />
-      </motion.button>
-
       {/* Overlay */}
       <AnimatePresence>
         {open && (
