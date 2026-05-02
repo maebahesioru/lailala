@@ -49,6 +49,8 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
   const [activeDraftId, setActiveDraftId] = useState<string | null>(null);
   const [showDraftConfirm, setShowDraftConfirm] = useState(false);
   const [pendingClose, setPendingClose] = useState(false);
+  const [threadParentId, setThreadParentId] = useState<string | null>(null);
+  const [lastOwnComment, setLastOwnComment] = useState<{ commentId: string; content: string } | null>(null);
   const emojiRef = useRef<HTMLDivElement>(null);
   const scheduleRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -94,7 +96,23 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
   };
 
   useEffect(() => {
-    if (open && user) loadScheduled();
+    if (open && user) {
+      loadScheduled();
+      // Load latest own comment for threading
+      if (user.channelId) {
+        fetch(`/api/profile/comments?channelId=${encodeURIComponent(user.channelId)}&type=comment&limit=1`)
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.comments?.length > 0) {
+              setLastOwnComment({
+                commentId: data.comments[0].commentId,
+                content: data.comments[0].content,
+              });
+            }
+          })
+          .catch(() => {});
+      }
+    }
   }, [open, user, videoId]);
 
   useEffect(() => {
@@ -114,13 +132,15 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
     if (!text.trim() || !user) return;
     setPosting(true);
     try {
+      const postText = threadParentId ? `${text.trim()}\n(続き)` : text.trim();
       await fetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId, text: text.trim() }),
+        body: JSON.stringify({ videoId, text: postText }),
       });
       setText("");
       setActiveDraftId(null);
+      setThreadParentId(null);
       // Remove this draft from storage
       if (activeDraftId) {
         const all = loadDrafts().filter((d) => d.id !== activeDraftId);
@@ -246,11 +266,32 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
               </div>
             )}
             <div className="flex-1">
+              {/* Thread mode indicator */}
+              {lastOwnComment && (
+                <div className="mb-3 p-3 bg-background border border-border rounded-xl">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[13px] font-bold text-muted">前のコメント</span>
+                    <button
+                      onClick={() => {
+                        setThreadParentId(threadParentId ? null : lastOwnComment.commentId);
+                      }}
+                      className={`text-[13px] font-bold px-2 py-1 rounded-full transition-colors ${
+                        threadParentId ? "bg-primary text-white" : "text-primary hover:bg-primary/10"
+                      }`}
+                    >
+                      {threadParentId ? "スレッドON" : "続きを投稿"}
+                    </button>
+                  </div>
+                  {threadParentId && (
+                    <p className="text-[14px] text-muted line-clamp-2">{lastOwnComment.content}</p>
+                  )}
+                </div>
+              )}
               <textarea
                 ref={textareaRef}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="コメントを投稿"
+                placeholder={threadParentId ? "続きのコメントを投稿" : "コメントを投稿"}
                 rows={4}
                 className="w-full bg-transparent text-xl placeholder-muted outline-none resize-none"
               />

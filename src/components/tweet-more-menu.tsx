@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MoreHorizontal, ListPlus, ListMinus, Ban, VolumeX, Loader2 } from "lucide-react";
+import { MoreHorizontal, ListPlus, ListMinus, Ban, VolumeX, Loader2, Pencil, Trash2 } from "lucide-react";
 import { useAuth } from "./auth-provider";
 import { LoginPopup } from "./login-popup";
 import { ConfirmDialog } from "./confirm-dialog";
@@ -17,6 +17,9 @@ interface TweetMoreMenuProps {
   publishedTime: string;
   authorChannelId?: string | null;
   onListChange?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  isOwner?: boolean;
 }
 
 export function TweetMoreMenu({
@@ -30,6 +33,9 @@ export function TweetMoreMenu({
   publishedTime,
   authorChannelId,
   onListChange,
+  onEdit,
+  onDelete,
+  isOwner,
 }: TweetMoreMenuProps) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
@@ -148,6 +154,25 @@ export function TweetMoreMenu({
           <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden w-56 z-20">
             {!showListMenu ? (
               <>
+                {isOwner && (
+                  <>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onEdit?.(); setOpen(false); }}
+                      className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px]"
+                    >
+                      <Pencil size={16} className="text-muted" />
+                      <span>編集</span>
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onDelete?.(); setOpen(false); }}
+                      className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px] text-red-500"
+                    >
+                      <Trash2 size={16} />
+                      <span>削除</span>
+                    </button>
+                    <div className="border-b border-border" />
+                  </>
+                )}
                 <button
                   onClick={(e) => { e.stopPropagation(); setShowListMenu(true); }}
                   className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px]"
@@ -155,7 +180,7 @@ export function TweetMoreMenu({
                   <ListPlus size={16} className="text-muted" />
                   <span>リストに追加・削除</span>
                 </button>
-                {authorChannelId && (
+                {authorChannelId && !isOwner && (
                   <>
                     <button
                       onClick={(e) => { e.stopPropagation(); setShowBlockConfirm(true); }}

@@ -5,7 +5,6 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LoginPopup } from "./login-popup";
-import { ComposePopup } from "./compose-popup";
 import { useAuth } from "./auth-provider";
 import { useBgm } from "./bgm-provider";
 import { useNotifications } from "./use-notifications";
@@ -43,7 +42,6 @@ export function Sidebar() {
   const { enabled: bgmEnabled, mounted: bgmMounted, toggle: toggleBgm } = useBgm();
   const { unreadCount } = useNotifications();
   const [showLogin, setShowLogin] = useState(false);
-  const [showCompose, setShowCompose] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -173,7 +171,7 @@ export function Sidebar() {
             <span className="font-medium">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>
           </button>
           <button
-            onClick={() => user ? setShowCompose(true) : setShowLogin(true)}
+            onClick={() => user ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true)}
             className="mt-4 compose-btn flex items-center justify-center gap-2 px-4 py-3 text-xl rounded-full font-bold transition-colors w-full"
           >
             <PenSquare size={22} />
@@ -224,7 +222,6 @@ export function Sidebar() {
         </div>
       </aside>
       <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
-      <ComposePopup open={showCompose} onClose={() => setShowCompose(false)} videoId="niKAylKNIEI" />
       <LogoutConfirmDialog
         open={showLogoutConfirm}
         onClose={() => setShowLogoutConfirm(false)}

@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
 import { CommentCard } from "@/components/comment-card";
 import { CommentThread } from "@/types/youtube";
-import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp, User, List } from "lucide-react";
+import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp, User, List, SlidersHorizontal, X, Heart, Clock } from "lucide-react";
 import Link from "next/link";
 
 interface TrendWord {
@@ -30,6 +30,8 @@ interface ListResult {
 }
 
 type SearchTab = "top" | "latest" | "accounts" | "lists";
+type Period = "all" | "today" | "week" | "month";
+type SortBy = "relevance" | "newest" | "likes";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -45,9 +47,16 @@ function SearchContent() {
   const [trendWords, setTrendWords] = useState<TrendWord[]>([]);
   const [listening, setListening] = useState(false);
   const [activeTab, setActiveTab] = useState<SearchTab>("top");
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Filters
+  const [period, setPeriod] = useState<Period>((searchParams.get("period") as Period) || "all");
+  const [minLikes, setMinLikes] = useState(parseInt(searchParams.get("minLikes") || "0", 10));
+  const [sortBy, setSortBy] = useState<SortBy>((searchParams.get("sort") as SortBy) || "relevance");
+  const [userFilter, setUserFilter] = useState(searchParams.get("user") || "");
 
   useEffect(() => {
-    if (!initialQuery) {
+    if (!initialQuery && !userFilter) {
       fetch("/api/trending/words")
         .then((r) => r.json())
         .then((data) => {
@@ -61,19 +70,38 @@ function SearchContent() {
   }, [initialQuery]);
 
   useEffect(() => {
-    if (query) {
+    if (query || userFilter) {
       performSearch(query, activeTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab]);
+  }, [activeTab, period, minLikes, sortBy, userFilter]);
+
+  const buildSearchUrl = (q: string, tab: SearchTab) => {
+    const params = new URLSearchParams();
+    if (q.trim()) params.set("q", q.trim());
+    if (tab !== "top") params.set("type", tab);
+    if (period !== "all") params.set("period", period);
+    if (minLikes > 0) params.set("minLikes", String(minLikes));
+    if (sortBy !== "relevance") params.set("sort", sortBy);
+    if (userFilter.trim()) params.set("user", userFilter.trim());
+    return `/search?${params.toString()}`;
+  };
 
   const performSearch = async (q: string, tab: SearchTab) => {
-    if (!q.trim()) return;
+    if (!q.trim() && !userFilter.trim() && tab !== "accounts" && tab !== "lists") return;
     setLoading(true);
     setSearched(false);
     try {
       if (tab === "top" || tab === "latest") {
-        const r = await fetch(`/api/search/comments?q=${encodeURIComponent(q)}&type=${tab}`);
+        const params = new URLSearchParams();
+        if (q.trim()) params.set("q", q.trim());
+        params.set("type", tab);
+        if (period !== "all") params.set("period", period);
+        if (minLikes > 0) params.set("minLikes", String(minLikes));
+        if (sortBy !== "relevance") params.set("sort", sortBy);
+        if (userFilter.trim()) params.set("user", userFilter.trim());
+
+        const r = await fetch(`/api/search/comments?${params.toString()}`);
         const data = await r.json();
         const mapped = (data.threads || []).map((t: any) => ({
           thread: {
@@ -103,9 +131,9 @@ function SearchContent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() && !userFilter.trim()) return;
     setQuery(inputValue.trim());
-    router.push(`/search?q=${encodeURIComponent(inputValue.trim())}`);
+    router.push(buildSearchUrl(inputValue.trim(), activeTab));
     performSearch(inputValue.trim(), activeTab);
   };
 
@@ -125,7 +153,7 @@ function SearchContent() {
       const transcript = event.results[0][0].transcript;
       setInputValue(transcript);
       setQuery(transcript);
-      router.push(`/search?q=${encodeURIComponent(transcript)}`);
+      router.push(buildSearchUrl(transcript, activeTab));
       performSearch(transcript, activeTab);
     };
     recognition.onerror = () => setListening(false);
@@ -138,6 +166,21 @@ function SearchContent() {
     { id: "accounts", label: "アカウント" },
     { id: "lists", label: "リスト" },
   ];
+
+  const periods: { id: Period; label: string }[] = [
+    { id: "all", label: "全期間" },
+    { id: "today", label: "今日" },
+    { id: "week", label: "今週" },
+    { id: "month", label: "今月" },
+  ];
+
+  const sorts: { id: SortBy; label: string; icon: typeof Heart }[] = [
+    { id: "relevance", label: "関連度", icon: Search },
+    { id: "newest", label: "新着", icon: Clock },
+    { id: "likes", label: "いいね数", icon: Heart },
+  ];
+
+  const minLikeOptions = [0, 10, 50, 100, 500];
 
   const renderResults = () => {
     if (loading) {
@@ -155,6 +198,7 @@ function SearchContent() {
           <div className="p-12 flex flex-col items-center text-muted">
             <SearchX size={48} className="mb-4" />
             <p className="text-lg">該当するコメントが見つかりませんでした</p>
+            <p className="text-sm mt-2">フィルターを変更してみてください</p>
           </div>
         );
       }
@@ -237,6 +281,8 @@ function SearchContent() {
     return null;
   };
 
+  const hasActiveFilters = period !== "all" || minLikes > 0 || sortBy !== "relevance" || userFilter.trim();
+
   return (
     <MainLayout>
       <div className="flex-1 flex flex-col">
@@ -266,7 +312,146 @@ function SearchContent() {
                 {listening ? <Mic size={18} /> : <MicOff size={18} />}
               </button>
             </form>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`p-2 rounded-full transition-colors shrink-0 ${showFilters || hasActiveFilters ? "bg-primary/10 text-primary" : "hover:bg-white/10 text-muted"}`}
+              title="高度な検索"
+            >
+              <SlidersHorizontal size={20} />
+            </button>
           </div>
+
+          {/* Advanced Filters Panel */}
+          {showFilters && (
+            <div className="px-4 pb-4 border-b border-border space-y-4">
+              {/* Period */}
+              <div>
+                <p className="text-[13px] font-bold text-muted mb-2">期間</p>
+                <div className="flex gap-2 flex-wrap">
+                  {periods.map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => setPeriod(p.id)}
+                      className={`px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors ${
+                        period === p.id
+                          ? "bg-primary text-white"
+                          : "bg-card border border-border hover:border-primary/50"
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Min Likes */}
+              <div>
+                <p className="text-[13px] font-bold text-muted mb-2">いいね数以上</p>
+                <div className="flex gap-2 flex-wrap">
+                  {minLikeOptions.map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => setMinLikes(n)}
+                      className={`px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors ${
+                        minLikes === n
+                          ? "bg-primary text-white"
+                          : "bg-card border border-border hover:border-primary/50"
+                      }`}
+                    >
+                      {n === 0 ? "指定なし" : `${n}以上`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sort */}
+              <div>
+                <p className="text-[13px] font-bold text-muted mb-2">並び替え</p>
+                <div className="flex gap-2 flex-wrap">
+                  {sorts.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => setSortBy(s.id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors ${
+                        sortBy === s.id
+                          ? "bg-primary text-white"
+                          : "bg-card border border-border hover:border-primary/50"
+                      }`}
+                    >
+                      <s.icon size={14} />
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* User filter */}
+              <div>
+                <p className="text-[13px] font-bold text-muted mb-2">ユーザーで絞り込み</p>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
+                    <input
+                      type="text"
+                      value={userFilter}
+                      onChange={(e) => setUserFilter(e.target.value)}
+                      placeholder="ユーザー名または@ID"
+                      className="w-full bg-card text-foreground rounded-full py-2 pl-9 pr-3 outline-none focus:ring-2 focus:ring-primary placeholder-muted border border-border text-[13px]"
+                    />
+                  </div>
+                  {userFilter && (
+                    <button
+                      onClick={() => setUserFilter("")}
+                      className="p-2 rounded-full hover:bg-white/10 text-muted"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Active filter chips */}
+              {hasActiveFilters && (
+                <div className="flex flex-wrap gap-2 pt-2 border-t border-border">
+                  {period !== "all" && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-full text-[12px]">
+                      {periods.find((p) => p.id === period)?.label}
+                      <button onClick={() => setPeriod("all")}><X size={12} /></button>
+                    </span>
+                  )}
+                  {minLikes > 0 && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-full text-[12px]">
+                      いいね{minLikes}以上
+                      <button onClick={() => setMinLikes(0)}><X size={12} /></button>
+                    </span>
+                  )}
+                  {sortBy !== "relevance" && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-full text-[12px]">
+                      {sorts.find((s) => s.id === sortBy)?.label}
+                      <button onClick={() => setSortBy("relevance")}><X size={12} /></button>
+                    </span>
+                  )}
+                  {userFilter && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-full text-[12px]">
+                      @{userFilter}
+                      <button onClick={() => setUserFilter("")}><X size={12} /></button>
+                    </span>
+                  )}
+                  <button
+                    onClick={() => {
+                      setPeriod("all");
+                      setMinLikes(0);
+                      setSortBy("relevance");
+                      setUserFilter("");
+                    }}
+                    className="text-[12px] text-muted hover:text-foreground underline"
+                  >
+                    すべてクリア
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Tabs */}
           {query && (
@@ -289,7 +474,7 @@ function SearchContent() {
           )}
         </div>
 
-        {!query && !loading && (
+        {!query && !userFilter && !loading && (
           <div className="p-4">
             <div className="bg-card rounded-2xl border border-border overflow-hidden">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
@@ -308,7 +493,7 @@ function SearchContent() {
                       onClick={() => {
                         setInputValue(t.word);
                         setQuery(t.word);
-                        router.push(`/search?q=${encodeURIComponent(t.word)}`);
+                        router.push(buildSearchUrl(t.word, "top"));
                         performSearch(t.word, "top");
                       }}
                       className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors w-full text-left"

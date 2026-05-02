@@ -30,10 +30,10 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   const [localLikes, setLocalLikes] = useState(parseLikeCount(thread.comment.likeCount) + (voteCounts.likes || 0));
   const [showLogin, setShowLogin] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const [showMore, setShowMore] = useState(false);
   const [isOwnComment, setIsOwnComment] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const moreRef = useRef<HTMLDivElement>(null);
+  const [editing, setEditing] = useState(false);
+  const [editText, setEditText] = useState(thread.comment.content);
 
   useEffect(() => {
     if (!user) return;
@@ -42,16 +42,6 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
       .then((data) => setIsOwnComment(data.isOwn))
       .catch(() => setIsOwnComment(false));
   }, [user, thread.comment.commentId]);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
-        setShowMore(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleLike = async () => {
     if (!user) { setShowLogin(true); return; }
@@ -156,38 +146,69 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                   <span className="text-muted text-[15px]">·</span>
                   <span className="text-muted text-[15px] shrink-0">{localizeTime(thread.comment.publishedTime)}</span>
                 </div>
-                <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
-                  <MentionText content={stripEditedTag(thread.comment.content)} />
-                </p>
-                {showDetailTime && (
-                  <p className="text-[13px] text-muted mt-2">{detailTime}</p>
+                {editing ? (
+                  <div className="mt-2 space-y-2">
+                    <textarea
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      rows={3}
+                      className="w-full bg-background border border-border rounded-lg p-3 text-[15px] outline-none focus:ring-2 focus:ring-primary resize-none"
+                      autoFocus
+                    />
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setEditing(false); setEditText(thread.comment.content); }}
+                        className="px-4 py-1.5 rounded-full border border-border text-sm font-bold hover:bg-white/5"
+                      >
+                        キャンセル
+                      </button>
+                      <button
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (!editText.trim()) return;
+                          try {
+                            await fetch("/api/comments/edit", {
+                              method: "PATCH",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ videoId, commentId: thread.comment.commentId, text: editText.trim() }),
+                            });
+                            thread.comment.content = editText.trim();
+                            setEditing(false);
+                          } catch {}
+                        }}
+                        className="px-4 py-1.5 rounded-full bg-primary text-white text-sm font-bold hover:bg-primary-hover"
+                      >
+                        保存
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
+                      <MentionText content={stripEditedTag(thread.comment.content)} />
+                    </p>
+                    {showDetailTime && (
+                      <p className="text-[13px] text-muted mt-2">{detailTime}</p>
+                    )}
+                  </>
                 )}
               </div>
 
               {/* Top-right more menu */}
-              <div className="flex items-center gap-1 shrink-0">
-                <TweetMoreMenu
-                  commentId={thread.comment.commentId}
-                  videoId={videoId}
-                  authorName={thread.comment.author.name}
-                  authorThumb={thread.comment.author.thumbnail}
-                  content={thread.comment.content}
-                  likeCount={thread.comment.likeCount}
-                  replyCount={thread.comment.replyCount}
-                  publishedTime={thread.comment.publishedTime}
-                  authorChannelId={thread.comment.author.channelId}
-                />
-                {isOwnComment && (
-                  <div className="relative shrink-0" ref={moreRef}>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setShowDeleteConfirm(true); }}
-                      className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                )}
-              </div>
+              <TweetMoreMenu
+                commentId={thread.comment.commentId}
+                videoId={videoId}
+                authorName={thread.comment.author.name}
+                authorThumb={thread.comment.author.thumbnail}
+                content={thread.comment.content}
+                likeCount={thread.comment.likeCount}
+                replyCount={thread.comment.replyCount}
+                publishedTime={thread.comment.publishedTime}
+                authorChannelId={thread.comment.author.channelId}
+                isOwner={isOwnComment}
+                onEdit={() => setEditing(true)}
+                onDelete={() => setShowDeleteConfirm(true)}
+              />
             </div>
 
             <div className="flex items-center justify-between mt-3">

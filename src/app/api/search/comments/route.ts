@@ -25,8 +25,12 @@ export async function GET(req: NextRequest) {
   const q = searchParams.get("q") || "";
   const type = searchParams.get("type") || "top";
   const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 200);
+  const period = searchParams.get("period") || "all"; // today / week / month / all
+  const minLikes = parseInt(searchParams.get("minLikes") || "0", 10);
+  const sort = searchParams.get("sort") || "relevance"; // relevance / newest / likes
+  const userFilter = searchParams.get("user") || ""; // channelId or author name
 
-  if (!q.trim()) {
+  if (!q.trim() && !userFilter.trim()) {
     return NextResponse.json({ threads: [] });
   }
 
@@ -39,6 +43,17 @@ export async function GET(req: NextRequest) {
         prisma.mutedUser.findMany({ where: { userId }, select: { channelId: true } }),
       ]);
       blockedIds = new Set([...blocked.map((b) => b.channelId), ...muted.map((m) => m.channelId)]);
+    }
+
+    // Date range filter
+    let dateFilter: any = {};
+    const now = new Date();
+    if (period === "today") {
+      dateFilter = { gte: new Date(now.getTime() - 24 * 60 * 60 * 1000) };
+    } else if (period === "week") {
+      dateFilter = { gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) };
+    } else if (period === "month") {
+      dateFilter = { gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000) };
     }
 
     if (type === "accounts") {
@@ -74,17 +89,38 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ accounts });
     }
 
-    const isTop = type === "top";
+    // Build where clause for comments
+    const where: any = {
+      ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
+      ...(minLikes > 0 ? { likeCount: { gte: minLikes } } : {}),
+      ...(Object.keys(dateFilter).length > 0 ? { publishedAt: dateFilter } : {}),
+    };
+
+    if (userFilter.trim()) {
+      where.authorName = { contains: userFilter, mode: "insensitive" };
+    }
+
+    if (q.trim()) {
+      where.OR = [
+        { content: { contains: q, mode: "insensitive" } },
+        { authorName: { contains: q, mode: "insensitive" } },
+      ];
+    }
+
+    // Sort order
+    let orderBy: any = {};
+    if (sort === "likes") {
+      orderBy = { likeCount: "desc" };
+    } else if (sort === "newest") {
+      orderBy = { publishedAt: "desc" };
+    } else {
+      // relevance: prioritize like count but also recent
+      orderBy = { likeCount: "desc" };
+    }
+
     const comments = await prisma.commentCache.findMany({
-      where: {
-        OR: [
-          { content: { contains: q, mode: "insensitive" } },
-          { authorName: { contains: q, mode: "insensitive" } },
-        ],
-        ...(isTop ? { parentCommentId: null } : {}),
-        ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
-      },
-      orderBy: isTop ? { likeCount: "desc" } : { publishedAt: "desc" },
+      where,
+      orderBy,
       take: limit,
     });
 
