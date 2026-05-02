@@ -73,6 +73,15 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
     }
   }, [open]);
 
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = "auto";
+      el.style.height = el.scrollHeight + "px";
+    }
+  }, [text]);
+
   // Auto-save draft
   useEffect(() => {
     if (!text.trim()) return;
@@ -358,8 +367,8 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder={replyParentId ? `${replyAuthorName}さんへ返信` : threadParentId ? "続きのコメントを投稿" : "コメントを投稿"}
-                  rows={4}
-                  className="w-full bg-transparent text-xl placeholder-muted outline-none resize-none"
+                  rows={1}
+                  className="w-full bg-transparent text-xl placeholder-muted outline-none resize-none min-h-[100px]"
                 />
                 <MentionAutocomplete
                   textareaRef={textareaRef}

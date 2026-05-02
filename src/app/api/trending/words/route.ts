@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { tokenizeKuromoji } from "@/lib/tokenizer";
 
 const VIDEO_ID = "niKAylKNIEI";
 
@@ -9,34 +10,18 @@ interface TrendWord {
 }
 
 const STOP_WORDS = new Set([
-  "は", "が", "の", "に", "を", "で", "と", "も", "か", "な", "や", "へ", "ば",
-  "た", "だ", "て", "し", "じ", "す", "ず", "せ", "ぜ", "そ", "ぞ",
-  "ます", "です", "した", "ない", "いる", "する", "ある", "こと", "これ", "それ", "あれ",
-  "この", "その", "あの", "から", "まで", "だけ", "ほど", "より", "など",
-  "ました", "でしょう", "ましょう", "いました",
-  "おはよう", "おやすみ", "こんにちは", "こんばんは", "こんばんはー", "ただいま", "おかえり",
-  "ありがとう", "ありがとうございます", "すみません", "ごめん", "ごめんなさい",
-  "よろしく", "お願いします", "お疲れ", "お疲れ様", "お疲れさま",
-  "うお", "うおw", "w", "www", "笑", "草",
-  "いいね", "いい", "良い", "最高", "好き", "大好き", "嫌い",
-  "初見", "初見です", "こん", "こーん",
+  "こと", "これ", "それ", "あれ", "もの", "よう", "そう", "ああ",
+  "わたし", "あなた", "おれ", "ぼく", "きみ",
 ]);
 
-function isJapaneseWord(w: string): boolean {
-  return /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/.test(w)
-    || w.startsWith("#")
-    || w.startsWith("@");
-}
-
-function extractTrendWords(contents: string[]): TrendWord[] {
+async function extractTrendWords(contents: string[]): Promise<TrendWord[]> {
   const wordCounts = new Map<string, number>();
   for (const content of contents) {
     const hashtags = content.match(/#[^\s#]+/g) || [];
     const mentions = content.match(/@[^\s@]+/g) || [];
-    const words = content
-      .replace(/[#@]/g, "")
-      .split(/[\s\n\p{P}]+/u)
-      .filter((w: string) => w.length >= 2 && !/^[\d\.]+$/.test(w));
+
+    // Use kuromoji morphological analysis for high-quality tokenization
+    const words = await tokenizeKuromoji(content.replace(/[#@]/g, ""));
 
     // Deduplicate per-comment so one comment cannot spam the same word
     const uniqueWords = new Set<string>();
@@ -44,7 +29,6 @@ function extractTrendWords(contents: string[]): TrendWord[] {
     for (const m of mentions) uniqueWords.add(m);
     for (const w of words) {
       if (STOP_WORDS.has(w)) continue;
-      if (!isJapaneseWord(w)) continue;
       uniqueWords.add(w);
     }
 
@@ -74,7 +58,7 @@ export async function GET(req: NextRequest) {
     `;
 
     const contents = comments.map((c) => c.content);
-    const words = extractTrendWords(contents);
+    const words = await extractTrendWords(contents);
 
     return NextResponse.json({ words, total: contents.length });
   } catch (e: any) {

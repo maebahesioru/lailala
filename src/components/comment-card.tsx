@@ -167,9 +167,14 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                       <div className="mt-2 space-y-2">
                         <textarea
                           value={editText}
-                          onChange={(e) => setEditText(e.target.value)}
-                          className="w-full bg-background border border-border rounded-lg px-3 py-2 text-[15px] outline-none focus:ring-2 focus:ring-primary resize-none"
-                          rows={3}
+                          onChange={(e) => {
+                            setEditText(e.target.value);
+                            const el = e.target;
+                            el.style.height = "auto";
+                            el.style.height = el.scrollHeight + "px";
+                          }}
+                          className="w-full bg-background border border-border rounded-lg px-3 py-2 text-[15px] outline-none focus:ring-2 focus:ring-primary resize-none min-h-[80px]"
+                          rows={1}
                           autoFocus
                         />
                         <div className="flex items-center gap-2">

@@ -8,8 +8,8 @@ export async function GET() {
     return NextResponse.json({ user: null }, { status: 401 });
   }
 
-  // Auto-fix legacy users missing channelId
-  if (!user.channelId) {
+  // Auto-fix legacy users missing channelId or selectedAccountId
+  if (!user.channelId || !user.selectedAccountId) {
     let channelId: string | null = null;
     if (user.selectedAccountId) {
       channelId = user.selectedAccountId;
@@ -25,9 +25,12 @@ export async function GET() {
     }
 
     if (channelId) {
+      const data: any = {};
+      if (!user.channelId) data.channelId = channelId;
+      if (!user.selectedAccountId) data.selectedAccountId = channelId;
       user = await prisma.user.update({
         where: { id: user.id },
-        data: { channelId },
+        data,
       });
     }
   }

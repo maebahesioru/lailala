@@ -198,7 +198,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
 
       {/* Heatmap */}
       <div className="px-4 py-4 border-b border-border">
-        <ContributionHeatmap channelId={channelId} />
+        <ContributionHeatmap channelId={channelId} authorName={authorName || displayName} />
       </div>
 
       {/* Tabs */}

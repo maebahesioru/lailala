@@ -18,12 +18,13 @@
     "date-fns": "^4.1.0",
     "emoji-picker-react": "^4.19.1",
     "framer-motion": "^12.38.0",
+    "kuromoji": "^0.1.2",
     "lucide-react": "^1.14.0",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "web-push": "^3.6.7",
-      "youtubei.js": "github:maebahesioru/YouTube.js#fix-comment-replies-fallback",
+    "youtubei.js": "github:maebahesioru/YouTube.js#fix-comment-replies-fallback",
     "zod": "^4.4.1"
   },
   "devDependencies": {
@@ -42,6 +43,8 @@
     "overrides": {
       "postcss": ">=8.5.10"
     },
-    "onlyBuiltDependencies": ["youtubei.js"]
+    "onlyBuiltDependencies": [
+      "youtubei.js"
+    ]
   }
 }

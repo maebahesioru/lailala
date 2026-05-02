@@ -17,19 +17,38 @@ export async function getInnertube() {
  * 指定ユーザーの選択中アカウントのCredentialを使用。Cookie または OAuth トークン。
  */
 export async function getInnertubeWithAuth(userId: string) {
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { selectedAccountId: true },
+    select: { id: true, selectedAccountId: true },
   });
 
-  if (!user?.selectedAccountId) {
+  let selectedAccountId = user?.selectedAccountId;
+
+  // Fallback: if no selected account, pick the most recent credential
+  if (!selectedAccountId) {
+    const fallbackCred = await prisma.ytCredential.findFirst({
+      where: { userId },
+      orderBy: { updatedAt: "desc" },
+      select: { accountChannelId: true },
+    });
+    if (fallbackCred?.accountChannelId) {
+      selectedAccountId = fallbackCred.accountChannelId;
+      // Persist for next time
+      await prisma.user.update({
+        where: { id: userId },
+        data: { selectedAccountId },
+      });
+    }
+  }
+
+  if (!selectedAccountId) {
     const error = new Error("YOUTUBE_AUTH_REQUIRED");
     (error as any).code = "YOUTUBE_AUTH_REQUIRED";
     throw error;
   }
 
   const cred = await prisma.ytCredential.findFirst({
-    where: { userId, accountChannelId: user.selectedAccountId },
+    where: { userId, accountChannelId: selectedAccountId },
   });
 
   if (!cred) {

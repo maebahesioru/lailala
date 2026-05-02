@@ -37,20 +37,23 @@ function getColor(count: number): string {
 
 const MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 
-export function ContributionHeatmap({ channelId }: { channelId: string }) {
+export function ContributionHeatmap({ channelId, authorName }: { channelId: string; authorName?: string }) {
   const [data, setData] = useState<HeatmapData>({});
   const [loading, setLoading] = useState(true);
   const weeks = getYearGrid();
 
   useEffect(() => {
-    fetch(`/api/profile/heatmap?channelId=${encodeURIComponent(channelId)}`)
+    const url = new URL(`/api/profile/heatmap`, window.location.origin);
+    url.searchParams.set("channelId", channelId);
+    if (authorName) url.searchParams.set("authorName", authorName);
+    fetch(url.toString())
       .then((r) => r.json())
       .then((res) => {
         if (res.heatmap) setData(res.heatmap);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [channelId]);
+  }, [channelId, authorName]);
 
   if (loading) return <div className="h-24 bg-border/20 rounded-xl animate-pulse" />;
 
@@ -63,7 +66,7 @@ export function ContributionHeatmap({ channelId }: { channelId: string }) {
         <span className="text-sm font-bold">{total} 投稿</span>
       </div>
       <div className="overflow-x-auto">
-        <div className="flex gap-1 min-w-max">
+        <div className="flex gap-1 min-w-max flex-row-reverse justify-end">
           {weeks.map((week, wi) => (
             <div key={wi} className="flex flex-col gap-1">
               {week.map((date) => {

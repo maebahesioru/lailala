@@ -40,18 +40,10 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
     } catch (e) { console.error(e); }
   };
 
+  // Only load scheduled posts when schedule popup opens
   useEffect(() => {
-    if (user) loadScheduled();
-  }, [user, videoId]);
-
-  // Poll for newly posted scheduled posts
-  useEffect(() => {
-    if (!user) return;
-    const interval = setInterval(() => {
-      loadScheduled();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, [user, videoId]);
+    if (user && showSchedule) loadScheduled();
+  }, [user, videoId, showSchedule]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

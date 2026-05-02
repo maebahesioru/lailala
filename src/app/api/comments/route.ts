@@ -16,6 +16,26 @@ function isOlderThanOneYear(publishedTime: string): boolean {
   return /(\d+)\s*(年|year)/.test(publishedTime);
 }
 
+function parsePublishedTime(text: string): Date | null {
+  if (!text || text.trim() === "") return null;
+  const now = new Date();
+  const match = text.match(/(\d+)\s*(年|ヶ月|週間|日|時間|分|秒|year|month|week|day|hour|minute|second)s?\s*(前|ago)?/);
+  if (!match) return now;
+  const num = parseInt(match[1], 10);
+  const unit = match[2];
+  const d = new Date(now);
+  switch (unit) {
+    case "year": case "年": d.setFullYear(d.getFullYear() - num); break;
+    case "month": case "ヶ月": d.setMonth(d.getMonth() - num); break;
+    case "week": case "週間": d.setDate(d.getDate() - num * 7); break;
+    case "day": case "日": d.setDate(d.getDate() - num); break;
+    case "hour": case "時間": d.setHours(d.getHours() - num); break;
+    case "minute": case "分": d.setMinutes(d.getMinutes() - num); break;
+    case "second": case "秒": d.setSeconds(d.getSeconds() - num); break;
+  }
+  return d;
+}
+
 function parseCommentThread(thread: any) {
   const c = thread.comment;
   if (!c) return null;
@@ -189,6 +209,7 @@ export async function GET(req: NextRequest) {
         const c = t.comment;
         if (!c?.commentId) continue;
         try {
+          const publishedAt = parsePublishedTime(c.publishedTime) || new Date();
           await prisma.commentCache.upsert({
             where: { commentId: c.commentId },
             update: {
@@ -198,7 +219,7 @@ export async function GET(req: NextRequest) {
               authorName: c.author?.name || "Unknown",
               authorChannelId: c.author?.channelId || null,
               authorThumb: c.author?.thumbnail || null,
-              publishedAt: new Date(),
+              publishedAt,
             },
             create: {
               commentId: c.commentId,
@@ -209,7 +230,7 @@ export async function GET(req: NextRequest) {
               authorName: c.author?.name || "Unknown",
               authorChannelId: c.author?.channelId || null,
               authorThumb: c.author?.thumbnail || null,
-              publishedAt: new Date(),
+              publishedAt,
             },
           });
         } catch (e) { console.error(e); }
