@@ -23,6 +23,8 @@ interface FollowedList {
 
 export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId: string; defaultSort?: "TOP_COMMENTS" | "NEWEST_FIRST" }) {
 
+  const router = useRouter();
+  const pathname = usePathname();
   const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST">(defaultSort);
   const [threads, setThreads] = useState<CommentThread[]>([]);
   const [loading, setLoading] = useState(false);
