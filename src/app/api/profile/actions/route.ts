@@ -22,11 +22,39 @@ export async function GET(req: NextRequest) {
       select: { channelId: true },
     });
 
+    // If user has UUID as channelId, try to fix it from YouTube
+    let fixedChannelId = user?.channelId || null;
+    if (fixedChannelId && /^[0-9a-f-]+$/.test(fixedChannelId)) {
+      try {
+        const { getInnertubeWithAuth } = await import("@/lib/youtube");
+        const innertube = await getInnertubeWithAuth(userId);
+        const info = await innertube.account.getInfo();
+        const page = (info as any).page;
+        const sections = page?.contents?.array?.();
+        if (sections) {
+          for (const section of sections) {
+            const footers = section?.footers;
+            if (footers) {
+              for (const footer of footers) {
+                const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
+                if (cid && cid.startsWith("UC")) {
+                  fixedChannelId = cid;
+                  await prisma.user.update({ where: { id: userId }, data: { channelId: cid } });
+                  break;
+                }
+              }
+            }
+            if (fixedChannelId && fixedChannelId.startsWith("UC")) break;
+          }
+        }
+      } catch {}
+    }
+
     let cachedComments: any[] = [];
-    if (user?.channelId && !user.channelId.includes("-")) {
+    if (fixedChannelId?.startsWith("UC")) {
       // Only if we have a real UC channel ID (not UUID)
       const cache = await prisma.commentCache.findMany({
-        where: { authorChannelId: user.channelId, videoId: "niKAylKNIEI" },
+        where: { authorChannelId: fixedChannelId, videoId: "niKAylKNIEI" },
         orderBy: { publishedAt: "desc" },
         take: 100,
       });
