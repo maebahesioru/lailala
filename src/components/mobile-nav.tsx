@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Search, Flame, List, User, Music } from "lucide-react";
+import { Home, Search, List, User, Music } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,9 +32,8 @@ export function MobileNav() {
   const navItems = [
     { icon: Home, label: "ホーム", href: "/", protected: false, onClick: handleHomeClick },
     { icon: Search, label: "検索", href: "/search", protected: false },
-    { icon: Flame, label: "トレンド", href: "/trending", protected: false },
     { icon: List, label: "リスト", href: "/lists", protected: true },
-    { icon: User, label: "プロフィール", href: "/profile", protected: true },
+    { icon: User, label: "プロフ", href: "/profile", protected: true },
   ];
 
   return (
@@ -59,7 +58,7 @@ export function MobileNav() {
                 <motion.div whileTap={{ scale: 0.8 }} transition={{ type: "spring", stiffness: 500, damping: 15 }}>
                   <item.icon size={22} strokeWidth={2} />
                 </motion.div>
-                <span className="text-[10px] font-medium">{item.label}</span>
+                <span className="text-[10px] font-medium whitespace-nowrap">{item.label}</span>
                 {isActive && (
                   <motion.div
                     layoutId="mobileNavIndicator"
@@ -80,7 +79,7 @@ export function MobileNav() {
             suppressHydrationWarning
           >
             <Music size={22} strokeWidth={2} />
-            <span className="text-[10px] font-medium">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>
+            <span className="text-[10px] font-medium whitespace-nowrap">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>
           </motion.button>
         </div>
       </nav>
