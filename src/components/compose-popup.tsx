@@ -38,7 +38,7 @@ function saveDrafts(list: Draft[]) {
   localStorage.setItem("lailala-drafts", JSON.stringify(list));
 }
 
-export function ComposePopup({ open, onClose, videoId, initialThreadParentId, initialThreadContent, replyParentId: initialReplyParentId, replyAuthorName, onPosted }: { open: boolean; onClose: () => void; videoId: string; initialThreadParentId?: string | null; initialThreadContent?: string | null; replyParentId?: string | null; replyAuthorName?: string | null; onPosted?: () => void }) {
+export function ComposePopup({ open, onClose, videoId, initialThreadParentId, initialThreadContent, replyParentId: initialReplyParentId, replyAuthorName: initialReplyAuthorName, onPosted }: { open: boolean; onClose: () => void; videoId: string; initialThreadParentId?: string | null; initialThreadContent?: string | null; replyParentId?: string | null; replyAuthorName?: string | null; onPosted?: () => void }) {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
