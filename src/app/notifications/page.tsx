@@ -40,8 +40,9 @@ const TYPE_LABELS: Record<string, string> = {
 
 export default function NotificationsPage() {
   const [tab, setTab] = useState<"all" | "mentions">("all");
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [loading, setLoading] = useState(true);
+    const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+    const [youtubeNotifications, setYoutubeNotifications] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const { refresh } = useNotifications();
@@ -56,6 +57,7 @@ export default function NotificationsPage() {
       const data = await res.json();
       const items = data.notifications || [];
       setNotifications((prev) => (reset ? items : [...prev, ...items]));
+      setYoutubeNotifications(data.youtubeNotifications || []);
       setHasMore(items.length === 50);
       if (reset) setOffset(50);
       else setOffset((o) => o + 50);

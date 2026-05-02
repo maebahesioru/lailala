@@ -3,6 +3,15 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   trailingSlash: true,
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/popular/",
+        permanent: true,
+      },
+    ];
+  },
   outputFileTracingExcludes: {
     "*": [
       "./generated/prisma2/**/*",

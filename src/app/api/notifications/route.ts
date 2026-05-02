@@ -3,8 +3,9 @@ import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { markNotificationsAsRead } from "@/lib/notifications";
+import { getInnertubeWithAuth } from "@/lib/youtube";
 
-// GET: fetch notifications
+// GET: fetch notifications (app + YouTube)
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -13,32 +14,47 @@ export async function GET(req: NextRequest) {
   const type = searchParams.get("type"); // 'all' | 'mentions'
   const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 100);
   const offset = parseInt(searchParams.get("offset") || "0", 10);
-  const videoId = searchParams.get("videoId");
 
   try {
     const where: any = { userId };
     if (type === "mentions") {
       where.type = { in: ["reply", "mention"] };
     }
-    if (videoId) {
-      where.videoId = videoId;
-    } else {
-      // Default: filter to the main video only
-      where.videoId = "niKAylKNIEI";
-    }
 
     const [notifications, total, unreadCount] = await Promise.all([
-      prisma.notification.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        take: limit,
-        skip: offset,
-      }),
+      prisma.notification.findMany({ where, orderBy: { createdAt: "desc" }, take: limit, skip: offset }),
       prisma.notification.count({ where: { userId } }),
       prisma.notification.count({ where: { userId, isRead: false } }),
     ]);
 
-    return NextResponse.json({ notifications, total, unreadCount });
+    // Also fetch YouTube native notifications
+    let youtubeNotifications: any[] = [];
+    try {
+      const innertube = await getInnertubeWithAuth(userId);
+      const menu = await innertube.getNotifications();
+      for (const n of menu.contents) {
+        const data = (n as any);
+        youtubeNotifications.push({
+          id: `yt_${data.notification_id}`,
+          type: "youtube",
+          title: data.title?.text || "",
+          body: data.short_message?.text || "",
+          sentTime: data.sent_time?.text || "",
+          thumbnail: data.video_thumbnail?.[0]?.url || data.thumbnail?.[0]?.url || null,
+          isRead: false,
+          createdAt: new Date().toISOString(),
+        });
+      }
+    } catch {
+      // YouTube notifications unavailable
+    }
+
+    return NextResponse.json({
+      notifications,
+      youtubeNotifications,
+      total,
+      unreadCount: unreadCount + youtubeNotifications.length,
+    });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
