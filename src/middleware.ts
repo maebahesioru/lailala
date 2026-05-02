@@ -30,10 +30,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const ip =
-    request.ip ||
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    "unknown";
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const now = Math.floor(Date.now() / 1000);
 
   // Cleanup expired entries every 60 seconds
