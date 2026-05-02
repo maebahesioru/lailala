@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MoreHorizontal, ListPlus, ListMinus, Ban, VolumeX, Loader2, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, ListPlus, ListMinus, Ban, VolumeX, Loader2, Pencil, Trash2, MessageCircle } from "lucide-react";
 import { useAuth } from "./auth-provider";
 import { LoginPopup } from "./login-popup";
 import { ConfirmDialog } from "./confirm-dialog";
@@ -169,6 +169,19 @@ export function TweetMoreMenu({
                     >
                       <Trash2 size={16} />
                       <span>削除</span>
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.dispatchEvent(new CustomEvent("lailala:openComposeThread", {
+                          detail: { parentCommentId: commentId, content },
+                        }));
+                        setOpen(false);
+                      }}
+                      className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px]"
+                    >
+                      <MessageCircle size={16} className="text-muted" />
+                      <span>続きを投稿</span>
                     </button>
                     <div className="border-b border-border" />
                   </>

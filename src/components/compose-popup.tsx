@@ -36,7 +36,7 @@ function saveDrafts(list: Draft[]) {
   localStorage.setItem("lailala-drafts", JSON.stringify(list));
 }
 
-export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boolean; onClose: () => void; videoId: string; onPosted?: () => void }) {
+export function ComposePopup({ open, onClose, videoId, initialThreadParentId, initialThreadContent, onPosted }: { open: boolean; onClose: () => void; videoId: string; initialThreadParentId?: string | null; initialThreadContent?: string | null; onPosted?: () => void }) {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
@@ -98,8 +98,13 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
   useEffect(() => {
     if (open && user) {
       loadScheduled();
-      // Load latest own comment for threading
-      if (user.channelId) {
+      if (initialThreadParentId) {
+        setThreadParentId(initialThreadParentId);
+        setLastOwnComment({
+          commentId: initialThreadParentId,
+          content: initialThreadContent || "",
+        });
+      } else if (user.channelId) {
         fetch(`/api/profile/comments?channelId=${encodeURIComponent(user.channelId)}&type=comment&limit=1`)
           .then((r) => r.json())
           .then((data) => {
@@ -113,7 +118,7 @@ export function ComposePopup({ open, onClose, videoId, onPosted }: { open: boole
           .catch(() => {});
       }
     }
-  }, [open, user, videoId]);
+  }, [open, user, videoId, initialThreadParentId, initialThreadContent]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

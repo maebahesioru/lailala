@@ -12,6 +12,7 @@ import { LoginPopup } from "./login-popup";
 import { ShareMenu } from "./share-menu";
 import { TweetMoreMenu } from "./tweet-more-menu";
 import { formatCount } from "./comment-card";
+import { useDataSaver } from "./data-saver-provider";
 
 interface ReplyCardProps {
   reply: YtComment;
@@ -40,6 +41,15 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   const [localLikes, setLocalLikes] = useState(parseLikeCount(reply.likeCount));
   const [showLogin, setShowLogin] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [isOwnComment, setIsOwnComment] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    fetch(`/api/comments/own-check?commentId=${encodeURIComponent(reply.commentId)}`)
+      .then((r) => r.json())
+      .then((data) => setIsOwnComment(data.isOwn))
+      .catch(() => setIsOwnComment(false));
+  }, [user, reply.commentId]);
 
   const { replyTo, displayContent } = parseReplyTo(reply.content);
   const detailTime = formatDetailedTime(reply.publishedTime);
@@ -164,6 +174,8 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                   replyCount={reply.replyCount}
                   publishedTime={reply.publishedTime}
                   authorChannelId={reply.author.channelId}
+                  isOwner={isOwnComment}
+                  onDelete={() => onDelete?.(reply.commentId)}
                 />
               </div>
             </div>

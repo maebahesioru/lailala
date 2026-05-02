@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ThumbsUp, ThumbsDown, MessageCircle, Trash2, Heart, Bookmark, User } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ import { LoginPopup } from "./login-popup";
 import { ShareMenu } from "./share-menu";
 import { TweetMoreMenu } from "./tweet-more-menu";
 import { ConfirmDialog } from "./confirm-dialog";
+import { useDataSaver } from "./data-saver-provider";
 
 interface CommentCardProps {
   thread: CommentThread;
@@ -34,6 +35,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(thread.comment.content);
+  const { enabled: dataSaver } = useDataSaver();
 
   useEffect(() => {
     if (!user) return;
@@ -113,11 +115,12 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
       <article className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text relative">
         <div className="flex gap-3">
           <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0">
-            {thread.comment.author.thumbnail ? (
+            {thread.comment.author.thumbnail && !dataSaver ? (
               <img
                 src={thread.comment.author.thumbnail}
                 alt={thread.comment.author.name}
                 className="w-10 h-10 rounded-full object-cover shrink-0"
+                loading="lazy"
               />
             ) : (
               <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
