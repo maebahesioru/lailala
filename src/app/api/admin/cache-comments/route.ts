@@ -24,11 +24,28 @@ function parsePublishedTime(text: string): Date | null {
 }
 
 export async function POST(req: NextRequest) {
-  const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { videoId, max = 500 } = await req.json();
   if (!videoId) return NextResponse.json({ error: "videoId required" }, { status: 400 });
 
+  const userId = await getSessionUserId();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  return runCache(videoId, max);
+}
+
+// GET for easy browser access (still requires auth)
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const videoId = searchParams.get("videoId") || "niKAylKNIEI";
+  const max = parseInt(searchParams.get("max") || "500", 10);
+
+  const userId = await getSessionUserId();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  return runCache(videoId, max);
+}
+
+async function runCache(videoId: string, max: number) {
   try {
     const innertube = await getInnertube();
     let comments = await innertube.getComments(videoId, "NEWEST_FIRST");

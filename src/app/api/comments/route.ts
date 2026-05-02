@@ -122,7 +122,7 @@ function filterBlockedThreads(threads: any[], blockedIds: Set<string>) {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId");
-  const sortBy = (searchParams.get("sortBy") as "TOP_COMMENTS" | "NEWEST_FIRST") || "TOP_COMMENTS";
+  const sortBy = (searchParams.get("sortBy") as "TOP_COMMENTS" | "NEWEST_FIRST" | "OLDEST_FIRST") || "TOP_COMMENTS";
   const continuationToken = searchParams.get("continuationToken");
 
   if (!videoId) {

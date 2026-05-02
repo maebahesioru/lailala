@@ -22,7 +22,7 @@ interface FollowedList {
 
 export function CommentFeed({ videoId }: { videoId: string }) {
   const [threads, setThreads] = useState<CommentThread[]>([]);
-  const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST">("TOP_COMMENTS");
+  const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST" | "OLDEST_FIRST">("TOP_COMMENTS");
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
