@@ -28,7 +28,7 @@ export function MentionAutocomplete({ textareaRef, text, onSelect }: MentionAuto
 
     const pos = ta.selectionStart;
     const before = text.slice(0, pos);
-    const match = before.match(/@([^\s@]*)$/);
+    const match = before.match(/[＠@]([^\s＠@]*)$/);
 
     if (match) {
       setQuery(match[1]);
@@ -85,7 +85,7 @@ export function MentionAutocomplete({ textareaRef, text, onSelect }: MentionAuto
     const pos = ta.selectionStart;
     const before = text.slice(0, pos);
     const after = text.slice(pos);
-    const newBefore = before.replace(/@[^\s@]*$/, `@${username} `);
+    const newBefore = before.replace(/[＠@][^\s＠@]*$/, `@${username} `);
     onSelect(newBefore + after);
     setShow(false);
     setTimeout(() => {

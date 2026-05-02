@@ -25,7 +25,7 @@ interface ReplyCardProps {
 }
 
 function parseReplyTo(content: string): { replyTo: string | null; displayContent: string } {
-  const match = content.match(/^@([^\s@]+)\s*/);
+  const match = content.match(/^[＠@]([^\s＠@]+)\s*/);
   if (match) {
     return {
       replyTo: match[1],
@@ -176,7 +176,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                     </div>
                     {replyTo && (
                       <div className="text-[13px] text-muted mt-0.5">
-                        返信先: <span className="text-primary">@{replyTo}</span>
+                        返信先: <span className="text-primary">＠{replyTo}</span>
                       </div>
                     )}
                     <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
