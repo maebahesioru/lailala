@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
@@ -37,6 +38,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(thread.comment.content);
   const { enabled: dataSaver } = useDataSaver();
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     if (!user) return;
@@ -79,7 +81,8 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
     if (!user) return;
     try {
       await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${thread.comment.commentId}`, { method: "DELETE" });
-      onDelete?.(thread.comment.commentId);
+      setIsVisible(false);
+      setTimeout(() => onDelete?.(thread.comment.commentId), 300);
     } catch {}
   };
 
@@ -113,154 +116,225 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
 
   return (
     <>
-      <article className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text relative">
-        <div className="flex gap-3">
-          <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0">
-            {thread.comment.author.thumbnail && !dataSaver ? (
-              <img
-                src={thread.comment.author.thumbnail}
-                alt={thread.comment.author.name}
-                className="w-10 h-10 rounded-full object-cover shrink-0"
-                loading="lazy"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
-                <User size={20} className="text-muted" />
-              </div>
-            )}
-          </Link>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="cursor-pointer flex-1 min-w-0" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
-                    {stripHandlePrefix(thread.comment.author.name)}
-                  </Link>
-                  {thread.comment.author.isChannelOwner && (
-                    <span className="text-xs bg-primary text-white px-1.5 rounded-full flex items-center gap-0.5">
-                      <svg viewBox="0 0 24 24" className="w-3 h-3 fill-current"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                      投稿者
-                    </span>
-                  )}
-                  {thread.comment.isHearted && (
-                    <span className="bg-[#f91880] text-white p-1 rounded-full flex items-center justify-center" title="投稿者がハートしました">
-                      <Heart size={14} fill="currentColor" />
-                    </span>
-                  )}
-                  <span className="text-muted text-[15px]">·</span>
-                  <span className="text-muted text-[15px] shrink-0">{localizeTime(thread.comment.publishedTime)}</span>
-                </div>
-                {editing ? (
-                  <div className="mt-2 space-y-2">
-                    <textarea
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                      rows={3}
-                      className="w-full bg-background border border-border rounded-lg p-3 text-[15px] outline-none focus:ring-2 focus:ring-primary resize-none"
-                      autoFocus
-                    />
-                    <div className="flex gap-2 justify-end">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); setEditing(false); setEditText(thread.comment.content); }}
-                        className="px-4 py-1.5 rounded-full border border-border text-sm font-bold hover:bg-white/5"
-                      >
-                        キャンセル
-                      </button>
-                      <button
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          if (!editText.trim()) return;
-                          try {
-                            await fetch("/api/comments/edit", {
-                              method: "PATCH",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({ videoId, commentId: thread.comment.commentId, text: editText.trim() }),
-                            });
-                            thread.comment.content = editText.trim();
-                            setEditing(false);
-                          } catch {}
-                        }}
-                        className="px-4 py-1.5 rounded-full bg-primary text-white text-sm font-bold hover:bg-primary-hover"
-                      >
-                        保存
-                      </button>
-                    </div>
-                  </div>
+      <AnimatePresence>
+        {isVisible && (
+          <motion.article
+            layout
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, x: -100, transition: { duration: 0.25 } }}
+            whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
+            className="px-4 py-3 select-text relative"
+          >
+            <div className="flex gap-3">
+              <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0">
+                {thread.comment.author.thumbnail && !dataSaver ? (
+                  <motion.img
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    src={thread.comment.author.thumbnail}
+                    alt={thread.comment.author.name}
+                    className="w-10 h-10 rounded-full object-cover shrink-0"
+                    loading="lazy"
+                  />
                 ) : (
-                  <>
-                    <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
-                      <MentionText content={stripEditedTag(thread.comment.content)} />
-                    </p>
-                    <LinkCard text={thread.comment.content} />
-                    {showDetailTime && (
-                      <p className="text-[13px] text-muted mt-2">{detailTime}</p>
-                    )}
-                  </>
+                  <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                    <User size={20} className="text-muted" />
+                  </div>
                 )}
-              </div>
-
-              {/* Top-right more menu */}
-              <TweetMoreMenu
-                commentId={thread.comment.commentId}
-                videoId={videoId}
-                authorName={thread.comment.author.name}
-                authorThumb={thread.comment.author.thumbnail}
-                content={thread.comment.content}
-                likeCount={thread.comment.likeCount}
-                replyCount={thread.comment.replyCount}
-                publishedTime={thread.comment.publishedTime}
-                authorChannelId={thread.comment.author.channelId}
-                isOwner={isOwnComment}
-                onEdit={() => setEditing(true)}
-                onDelete={() => setShowDeleteConfirm(true)}
-              />
-            </div>
-
-            <div className="flex items-center justify-between mt-3">
-              <button
-                onClick={(e) => { e.stopPropagation(); handleLike(); }}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}
-                title="高評価"
-              >
-                <ThumbsUp size={18} fill={liked ? "currentColor" : "none"} />
-                <span>{formatCount(localLikes)}</span>
-              </button>
-
-              <button
-                onClick={(e) => { e.stopPropagation(); handleDislike(); }}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${disliked ? "text-primary" : "text-muted hover:text-primary"}`}
-                title="低評価"
-              >
-                <ThumbsDown size={18} fill={disliked ? "currentColor" : "none"} />
-              </button>
-
-              <Link
-                href={`/thread/${thread.comment.commentId}`}
-                className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
-              >
-                <MessageCircle size={18} />
-                <span>{thread.comment.replyCount || 0}</span>
               </Link>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="cursor-pointer flex-1 min-w-0" onClick={() => router.push(`/thread/${thread.comment.commentId}`)}>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
+                        {stripHandlePrefix(thread.comment.author.name)}
+                      </Link>
+                      {thread.comment.author.isChannelOwner && (
+                        <span className="text-xs bg-primary text-white px-1.5 rounded-full flex items-center gap-0.5">
+                          <svg viewBox="0 0 24 24" className="w-3 h-3 fill-current"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                          投稿者
+                        </span>
+                      )}
+                      {thread.comment.isHearted && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                          className="bg-[#f91880] text-white p-1 rounded-full flex items-center justify-center"
+                          title="投稿者がハートしました"
+                        >
+                          <Heart size={14} fill="currentColor" />
+                        </motion.span>
+                      )}
+                      <span className="text-muted text-[15px]">·</span>
+                      <span className="text-muted text-[15px] shrink-0">{localizeTime(thread.comment.publishedTime)}</span>
+                    </div>
+                    {editing ? (
+                      <div className="mt-2 space-y-2">
+                        <textarea
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          rows={3}
+                          className="w-full bg-background border border-border rounded-lg p-3 text-[15px] outline-none focus:ring-2 focus:ring-primary resize-none"
+                          autoFocus
+                        />
+                        <div className="flex gap-2 justify-end">
+                          <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={(e) => { e.stopPropagation(); setEditing(false); setEditText(thread.comment.content); }}
+                            className="px-4 py-1.5 rounded-full border border-border text-sm font-bold hover:bg-white/5"
+                          >
+                            キャンセル
+                          </motion.button>
+                          <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              if (!editText.trim()) return;
+                              try {
+                                await fetch("/api/comments/edit", {
+                                  method: "PATCH",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ videoId, commentId: thread.comment.commentId, text: editText.trim() }),
+                                });
+                                thread.comment.content = editText.trim();
+                                setEditing(false);
+                              } catch {}
+                            }}
+                            className="px-4 py-1.5 rounded-full bg-primary text-white text-sm font-bold hover:bg-primary-hover"
+                          >
+                            保存
+                          </motion.button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
+                          <MentionText content={stripEditedTag(thread.comment.content)} />
+                        </p>
+                        <LinkCard text={thread.comment.content} />
+                        {showDetailTime && (
+                          <p className="text-[13px] text-muted mt-2">{detailTime}</p>
+                        )}
+                      </>
+                    )}
+                  </div>
 
-              <div onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center">
-                <ShareMenu
-                  url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${thread.comment.commentId}`}
-                  text={`${thread.comment.author.name}: ${thread.comment.content}`}
-                  buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full"
-                />
+                  <TweetMoreMenu
+                    commentId={thread.comment.commentId}
+                    videoId={videoId}
+                    authorName={thread.comment.author.name}
+                    authorThumb={thread.comment.author.thumbnail}
+                    content={thread.comment.content}
+                    likeCount={thread.comment.likeCount}
+                    replyCount={thread.comment.replyCount}
+                    publishedTime={thread.comment.publishedTime}
+                    authorChannelId={thread.comment.author.channelId}
+                    isOwner={isOwnComment}
+                    onEdit={() => setEditing(true)}
+                    onDelete={() => setShowDeleteConfirm(true)}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between mt-3">
+                  <motion.button
+                    onClick={(e) => { e.stopPropagation(); handleLike(); }}
+                    whileTap={{ scale: 0.8 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                    className={`relative flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}
+                    title="高評価"
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={liked ? "liked" : "unliked"}
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.5, opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      >
+                        <ThumbsUp size={18} fill={liked ? "currentColor" : "none"} />
+                      </motion.span>
+                    </AnimatePresence>
+                    <span>{formatCount(localLikes)}</span>
+                    <AnimatePresence>
+                      {liked && (
+                        <motion.div
+                          className="absolute inset-0 pointer-events-none flex items-center justify-center"
+                          initial={{ scale: 0.5, opacity: 1 }}
+                          animate={{ scale: 1.8, opacity: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#f91880]/30 blur-md" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+
+                  <motion.button
+                    onClick={(e) => { e.stopPropagation(); handleDislike(); }}
+                    whileTap={{ scale: 0.8 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${disliked ? "text-primary" : "text-muted hover:text-primary"}`}
+                    title="低評価"
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={disliked ? "disliked" : "undisliked"}
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.5, opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      >
+                        <ThumbsDown size={18} fill={disliked ? "currentColor" : "none"} />
+                      </motion.span>
+                    </AnimatePresence>
+                  </motion.button>
+
+                  <motion.div whileTap={{ scale: 0.9 }} className="flex-1">
+                    <Link
+                      href={`/thread/${thread.comment.commentId}`}
+                      className="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
+                    >
+                      <MessageCircle size={18} />
+                      <span>{thread.comment.replyCount || 0}</span>
+                    </Link>
+                  </motion.div>
+
+                  <div onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center">
+                    <ShareMenu
+                      url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${thread.comment.commentId}`}
+                      text={`${thread.comment.author.name}: ${thread.comment.content}`}
+                      buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full"
+                    />
+                  </div>
+
+                  <motion.button
+                    onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
+                    whileTap={{ scale: 0.8 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                    className={`relative flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${bookmarked ? "text-primary" : "text-muted hover:text-primary"}`}
+                    title={bookmarked ? "ブックマーク済み" : "ブックマーク"}
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={bookmarked ? "saved" : "unsaved"}
+                        initial={{ scale: 0.5, opacity: 0, rotate: -30 }}
+                        animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                        exit={{ scale: 0.5, opacity: 0, rotate: 30 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      >
+                        <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
+                      </motion.span>
+                    </AnimatePresence>
+                  </motion.button>
+                </div>
               </div>
-
-              <button
-                onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${bookmarked ? "text-primary" : "text-muted hover:text-primary"}`}
-                title={bookmarked ? "ブックマーク済み" : "ブックマーク"}
-              >
-                <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
-              </button>
             </div>
-          </div>
-        </div>
-      </article>
+          </motion.article>
+        )}
+      </AnimatePresence>
       <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
       <ConfirmDialog
         open={showDeleteConfirm}

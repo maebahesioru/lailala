@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { CommentCard } from "./comment-card";
 import { Composer } from "./composer";
 import { fetchComments } from "@/lib/youtube-client";
@@ -274,22 +275,32 @@ export function CommentFeed({ videoId }: { videoId: string }) {
       </div>
 
       {/* New arrivals badge */}
-      {showNewBadge && !activeListId && (
-        <div className="sticky top-[57px] z-20 flex justify-center -mb-2 pointer-events-none">
-          <button
-            onClick={() => {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-              loadInitial();
-              setShowNewBadge(false);
-              setNewArrivalCount(0);
-            }}
-            className="pointer-events-auto flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-lg hover:bg-primary-hover transition-colors -translate-y-2"
+      <AnimatePresence>
+        {showNewBadge && !activeListId && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            className="sticky top-[57px] z-20 flex justify-center -mb-2 pointer-events-none"
           >
-            <ArrowUp size={14} />
-            新しいコメントが{newArrivalCount}件
-          </button>
-        </div>
-      )}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                loadInitial();
+                setShowNewBadge(false);
+                setNewArrivalCount(0);
+              }}
+              className="pointer-events-auto flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-lg hover:bg-primary-hover transition-colors -translate-y-2"
+            >
+              <ArrowUp size={14} />
+              新しいコメントが{newArrivalCount}件
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {!activeListId && <Composer videoId={videoId} onPosted={() => loadInitial()} />}
 

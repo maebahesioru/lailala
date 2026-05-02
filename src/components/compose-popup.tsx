@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./auth-provider";
 import { Smile, Calendar, User, Clock, X, Loader2 } from "lucide-react";
 import { ConfirmDialog } from "./confirm-dialog";
@@ -236,17 +237,45 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
   if (!open) return null;
   if (!user) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
-        <div className="bg-card border border-border rounded-2xl p-8 w-full max-w-sm mx-4 shadow-2xl text-center" onClick={(e) => e.stopPropagation()}>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className="bg-card border border-border rounded-2xl p-8 w-full max-w-sm mx-4 shadow-2xl text-center"
+          onClick={(e) => e.stopPropagation()}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        >
           <p className="text-muted">コメントするにはログインしてください</p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm pt-20 md:pt-24" onClick={handleClose}>
-      <div className="bg-card border border-border rounded-2xl w-full max-w-xl mx-4 shadow-2xl overflow-visible" onClick={(e) => e.stopPropagation()}>
+    <>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm pt-20 md:pt-24"
+        onClick={handleClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        <motion.div
+          className="bg-card border border-border rounded-2xl w-full max-w-xl mx-4 shadow-2xl overflow-visible"
+          onClick={(e) => e.stopPropagation()}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <button onClick={handleClose} className="p-2 rounded-full hover:bg-white/10 text-muted">
@@ -417,7 +446,8 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
             </div>
           </div>
         </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       <DraftsPopup
         open={showDraftsPopup}
@@ -435,6 +465,6 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
         onConfirm={confirmSaveDraft}
         onCancel={discardDraft}
       />
-    </div>
+    </>
   );
 }
