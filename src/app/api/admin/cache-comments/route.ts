@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSessionUserId } from "@/lib/session";
 import { getInnertube } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 
@@ -23,6 +24,8 @@ function parsePublishedTime(text: string): Date | null {
 }
 
 export async function POST(req: NextRequest) {
+  const userId = await getSessionUserId();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { videoId, max = 500 } = await req.json();
   if (!videoId) return NextResponse.json({ error: "videoId required" }, { status: 400 });
 

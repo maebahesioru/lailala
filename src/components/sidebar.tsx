@@ -212,19 +212,18 @@ export function Sidebar() {
               </motion.button>
             </motion.div>
           )}
+          <motion.div className="pt-2">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => user ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-full font-bold text-lg shadow-lg hover:bg-primary-hover transition-colors"
+            >
+              <PenSquare size={22} />
+              投稿する
+            </motion.button>
+          </motion.div>
         </nav>
-
-        <div className="space-y-3 mt-4">
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => user ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true)}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-full font-bold text-lg shadow-lg hover:bg-primary-hover transition-colors"
-          >
-            <PenSquare size={22} />
-            投稿する
-          </motion.button>
-        </div>
 
         {mounted && user && (
           <div className="mt-4 relative" ref={menuRef}>

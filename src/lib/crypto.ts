@@ -24,12 +24,18 @@ export function encrypt(text: string): string {
 }
 
 export function decrypt(text: string): string {
-  const [ivHex, authTagHex, encryptedHex] = text.split(":");
-  const iv = Buffer.from(ivHex, "hex");
-  const authTag = Buffer.from(authTagHex, "hex");
-  const encrypted = Buffer.from(encryptedHex, "hex");
-  const decipher = crypto.createDecipheriv(ALGO, getKey(), iv);
-  decipher.setAuthTag(authTag);
-  const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
-  return decrypted.toString("utf8");
+  try {
+    const parts = text.split(":");
+    if (parts.length !== 3) throw new Error("Invalid encrypted format");
+    const [ivHex, authTagHex, encryptedHex] = parts;
+    const iv = Buffer.from(ivHex, "hex");
+    const authTag = Buffer.from(authTagHex, "hex");
+    const encrypted = Buffer.from(encryptedHex, "hex");
+    const decipher = crypto.createDecipheriv(ALGO, getKey(), iv);
+    decipher.setAuthTag(authTag);
+    const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+    return decrypted.toString("utf8");
+  } catch (e: any) {
+    throw new Error(`Decryption failed: ${e.message}`);
+  }
 }

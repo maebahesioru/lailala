@@ -16,6 +16,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
   const [userCode, setUserCode] = useState("");
   const [sessionId, setSessionId] = useState("");
   const [error, setError] = useState("");
+  const [accountWarning, setAccountWarning] = useState("");
   const [polling, setPolling] = useState(false);
   const [copied, setCopied] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,7 +52,8 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
         const data = await res.json();
         if (data.status === "complete") {
           setPolling(false);
-          setError(data.accountError ? "アカウント情報取得失敗: " + data.accountError : "");
+          setError("");
+          setAccountWarning(data.accountError ? data.accountError : "");
           setStep("done");
         } else if (data.status === "expired") {
           setPolling(false);
@@ -74,6 +76,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
   const reset = () => {
     setStep("idle");
     setError("");
+    setAccountWarning("");
     setVerificationUrl("");
     setUserCode("");
     setSessionId("");
@@ -188,8 +191,11 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 500, damping: 15 }} className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
                     <Check size={24} className="text-green-500" />
                   </motion.div>
-                  <p className="text-muted text-sm">ログインしました</p>
-                  <motion.button
+                   <p className="text-muted text-sm">ログインしました</p>
+                   {accountWarning && (
+                     <p className="text-yellow-400 text-xs bg-yellow-500/10 p-2 rounded-lg">{accountWarning}</p>
+                   )}
+                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => { onClose(); window.location.reload(); }}
