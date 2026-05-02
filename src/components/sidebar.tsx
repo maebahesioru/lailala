@@ -225,47 +225,66 @@ export function Sidebar() {
           </motion.div>
         </nav>
 
-        {mounted && user && (
+        {mounted && (
           <div className="mt-4 relative" ref={menuRef}>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setShowAccountMenu(!showAccountMenu)}
-              className="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-white/10 transition-colors w-full"
-            >
-              {user.image ? (
-                <img src={user.image} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
-              ) : (
+            {user ? (
+              <>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setShowAccountMenu(!showAccountMenu)}
+                  className="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-white/10 transition-colors w-full"
+                >
+                  {user.image ? (
+                    <img src={user.image} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
+                      <User size={20} className="text-muted" />
+                    </div>
+                  )}
+                  <div className="flex-1 text-left min-w-0">
+                    <p className="font-bold text-sm truncate">{user.name}</p>
+                    <p className="text-muted text-xs truncate">{user.email}</p>
+                  </div>
+                  <MoreHorizontal size={18} className="text-muted" />
+                </motion.button>
+
+                <AnimatePresence>
+                  {showAccountMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 4 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 4 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute bottom-full left-0 w-full mb-2 bg-card border border-border rounded-xl shadow-lg overflow-hidden"
+                    >
+                      <button
+                        onClick={() => { setShowLogoutConfirm(true); setShowAccountMenu(false); }}
+                        className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px] text-red-500"
+                      >
+                        <LogOut size={16} />
+                        <span>ログアウト</span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
+            ) : (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowLogin(true)}
+                className="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-white/10 transition-colors w-full"
+              >
                 <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
                   <User size={20} className="text-muted" />
                 </div>
-              )}
-              <div className="flex-1 text-left min-w-0">
-                <p className="font-bold text-sm truncate">{user.name}</p>
-                <p className="text-muted text-xs truncate">{user.email}</p>
-              </div>
-              <MoreHorizontal size={18} className="text-muted" />
-            </motion.button>
-
-            <AnimatePresence>
-              {showAccountMenu && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: 4 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: 4 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute bottom-full left-0 w-full mb-2 bg-card border border-border rounded-xl shadow-lg overflow-hidden"
-                >
-                  <button
-                    onClick={() => { setShowLogoutConfirm(true); setShowAccountMenu(false); }}
-                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px] text-red-500"
-                  >
-                    <LogOut size={16} />
-                    <span>ログアウト</span>
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                <div className="flex-1 text-left min-w-0">
+                  <p className="font-bold text-sm truncate">ゲスト</p>
+                  <p className="text-muted text-xs truncate">ログインして投稿</p>
+                </div>
+              </motion.button>
+            )}
           </div>
         )}
       </aside>
