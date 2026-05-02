@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Search, List, User, Music } from "lucide-react";
+import { Home, Search, List, User, Music, Bell, Bookmark, Settings } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,11 +8,13 @@ import { useAuth } from "./auth-provider";
 import { useState } from "react";
 import { LoginPopup } from "./login-popup";
 import { useBgm } from "./bgm-provider";
+import { useNotifications } from "./use-notifications";
 
 export function MobileNav() {
   const pathname = usePathname();
   const { user } = useAuth();
   const { enabled: bgmEnabled, mounted: bgmMounted, toggle: toggleBgm } = useBgm();
+  const { unreadCount } = useNotifications();
   const [showLogin, setShowLogin] = useState(false);
 
   const handleProtectedClick = (e: React.MouseEvent) => {
@@ -32,8 +34,11 @@ export function MobileNav() {
   const navItems = [
     { icon: Home, label: "ホーム", href: "/", protected: false, onClick: handleHomeClick },
     { icon: Search, label: "検索", href: "/search", protected: false },
+    { icon: Bell, label: "通知", href: "/notifications", protected: true, badge: unreadCount },
+    { icon: Bookmark, label: "ブックマーク", href: "/bookmarks", protected: true },
     { icon: List, label: "リスト", href: "/lists", protected: true },
     { icon: User, label: "プロフ", href: "/profile", protected: true },
+    { icon: Settings, label: "設定", href: "/settings", protected: false },
   ];
 
   return (
@@ -42,7 +47,7 @@ export function MobileNav() {
         className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-t border-border"
         aria-label="モバイルナビゲーション"
       >
-        <div className="flex items-center justify-around h-14 max-w-lg mx-auto">
+        <div className="flex items-center h-14 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
@@ -50,13 +55,22 @@ export function MobileNav() {
                 key={item.label}
                 href={item.href}
                 onClick={item.onClick ? item.onClick : item.protected ? handleProtectedClick : undefined}
-                className={`relative flex flex-col items-center justify-center gap-0.5 w-14 h-full transition-colors ${
+                className={`relative flex flex-col items-center justify-center gap-0.5 min-w-[3.5rem] h-full transition-colors ${
                   isActive ? "text-primary" : "text-muted"
                 }`}
                 aria-current={isActive ? "page" : undefined}
               >
-                <motion.div whileTap={{ scale: 0.8 }} transition={{ type: "spring", stiffness: 500, damping: 15 }}>
+                <motion.div
+                  whileTap={{ scale: 0.8 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                  className="relative"
+                >
                   <item.icon size={22} strokeWidth={2} />
+                  {item.badge > 0 && (
+                    <span className="absolute -top-1.5 -right-2 bg-primary text-white text-[9px] font-bold rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-0.5">
+                      {item.badge > 99 ? "99+" : item.badge}
+                    </span>
+                  )}
                 </motion.div>
                 <span className="text-[10px] font-medium whitespace-nowrap">{item.label}</span>
                 {isActive && (
@@ -72,14 +86,14 @@ export function MobileNav() {
           <motion.button
             onClick={toggleBgm}
             whileTap={{ scale: 0.8 }}
-            className={`flex flex-col items-center justify-center gap-0.5 w-14 h-full transition-colors ${
+            className={`flex flex-col items-center justify-center gap-0.5 min-w-[3.5rem] h-full transition-colors ${
               bgmMounted && bgmEnabled ? "text-primary" : "text-muted"
             }`}
             aria-label="BGM"
             suppressHydrationWarning
           >
             <Music size={22} strokeWidth={2} />
-            <span className="text-[10px] font-medium whitespace-nowrap">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>
+            <span className="text-[10px] font-medium whitespace-nowrap">BGM</span>
           </motion.button>
         </div>
       </nav>
