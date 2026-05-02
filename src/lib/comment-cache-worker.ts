@@ -4,7 +4,7 @@ let started = false;
 let fullScanDone = false;
 
 const VIDEO_ID = "niKAylKNIEI";
-const INTERVAL_MS = 5 * 60 * 1000; // 5分ごと
+const INTERVAL_MS = 15 * 60 * 1000; // 15分ごと
 const MAX_PER_RUN = 10000;
 
 function parsePublishedTime(text: string): Date | null {
