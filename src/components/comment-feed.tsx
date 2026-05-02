@@ -165,16 +165,28 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     return () => window.removeEventListener("lailala:scrollToTop", handleScrollToTop);
   }, [sortBy, loadInitial, activeListId]);
 
-  // Fix back button bug
+  // Restore scroll position on back button, then refresh data
   useEffect(() => {
     const handlePageShow = (e: PageTransitionEvent) => {
       if (e.persisted) {
-        loadInitial();
+        const saved = sessionStorage.getItem("lailala-scroll");
+        if (saved) {
+          window.scrollTo({ top: parseInt(saved, 10), behavior: "auto" });
+        }
+        setTimeout(() => loadInitial(), 0);
       }
     };
     window.addEventListener("pageshow", handlePageShow);
     return () => window.removeEventListener("pageshow", handlePageShow);
   }, [loadInitial]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      sessionStorage.setItem("lailala-scroll", String(window.scrollY));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Infinite scroll
   useEffect(() => {
