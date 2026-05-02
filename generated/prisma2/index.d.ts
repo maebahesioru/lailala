@@ -2431,6 +2431,12 @@ export namespace Prisma {
     notifyDislikes: boolean | null
     notifyBookmarks: boolean | null
     notifyReplies: boolean | null
+    pushNotifyLikes: boolean | null
+    pushNotifyDislikes: boolean | null
+    pushNotifyBookmarks: boolean | null
+    pushNotifyReplies: boolean | null
+    pushNotifyMentions: boolean | null
+    dataSaver: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2446,6 +2452,12 @@ export namespace Prisma {
     notifyDislikes: boolean | null
     notifyBookmarks: boolean | null
     notifyReplies: boolean | null
+    pushNotifyLikes: boolean | null
+    pushNotifyDislikes: boolean | null
+    pushNotifyBookmarks: boolean | null
+    pushNotifyReplies: boolean | null
+    pushNotifyMentions: boolean | null
+    dataSaver: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2461,6 +2473,12 @@ export namespace Prisma {
     notifyDislikes: number
     notifyBookmarks: number
     notifyReplies: number
+    pushNotifyLikes: number
+    pushNotifyDislikes: number
+    pushNotifyBookmarks: number
+    pushNotifyReplies: number
+    pushNotifyMentions: number
+    dataSaver: number
     _all: number
   }
 
@@ -2478,6 +2496,12 @@ export namespace Prisma {
     notifyDislikes?: true
     notifyBookmarks?: true
     notifyReplies?: true
+    pushNotifyLikes?: true
+    pushNotifyDislikes?: true
+    pushNotifyBookmarks?: true
+    pushNotifyReplies?: true
+    pushNotifyMentions?: true
+    dataSaver?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2493,6 +2517,12 @@ export namespace Prisma {
     notifyDislikes?: true
     notifyBookmarks?: true
     notifyReplies?: true
+    pushNotifyLikes?: true
+    pushNotifyDislikes?: true
+    pushNotifyBookmarks?: true
+    pushNotifyReplies?: true
+    pushNotifyMentions?: true
+    dataSaver?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2508,6 +2538,12 @@ export namespace Prisma {
     notifyDislikes?: true
     notifyBookmarks?: true
     notifyReplies?: true
+    pushNotifyLikes?: true
+    pushNotifyDislikes?: true
+    pushNotifyBookmarks?: true
+    pushNotifyReplies?: true
+    pushNotifyMentions?: true
+    dataSaver?: true
     _all?: true
   }
 
@@ -2596,6 +2632,12 @@ export namespace Prisma {
     notifyDislikes: boolean
     notifyBookmarks: boolean
     notifyReplies: boolean
+    pushNotifyLikes: boolean
+    pushNotifyDislikes: boolean
+    pushNotifyBookmarks: boolean
+    pushNotifyReplies: boolean
+    pushNotifyMentions: boolean
+    dataSaver: boolean
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2628,6 +2670,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: boolean | User$ytCredentialArgs<ExtArgs>
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
     actions?: boolean | User$actionsArgs<ExtArgs>
@@ -2655,6 +2703,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2670,6 +2724,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2685,9 +2745,15 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "channelId" | "showLikesTab" | "showDislikesTab" | "showBookmarksTab" | "notifyLikes" | "notifyDislikes" | "notifyBookmarks" | "notifyReplies", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "channelId" | "showLikesTab" | "showDislikesTab" | "showBookmarksTab" | "notifyLikes" | "notifyDislikes" | "notifyBookmarks" | "notifyReplies" | "pushNotifyLikes" | "pushNotifyDislikes" | "pushNotifyBookmarks" | "pushNotifyReplies" | "pushNotifyMentions" | "dataSaver", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ytCredential?: boolean | User$ytCredentialArgs<ExtArgs>
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
@@ -2733,6 +2799,12 @@ export namespace Prisma {
       notifyDislikes: boolean
       notifyBookmarks: boolean
       notifyReplies: boolean
+      pushNotifyLikes: boolean
+      pushNotifyDislikes: boolean
+      pushNotifyBookmarks: boolean
+      pushNotifyReplies: boolean
+      pushNotifyMentions: boolean
+      dataSaver: boolean
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3179,6 +3251,12 @@ export namespace Prisma {
     readonly notifyDislikes: FieldRef<"User", 'Boolean'>
     readonly notifyBookmarks: FieldRef<"User", 'Boolean'>
     readonly notifyReplies: FieldRef<"User", 'Boolean'>
+    readonly pushNotifyLikes: FieldRef<"User", 'Boolean'>
+    readonly pushNotifyDislikes: FieldRef<"User", 'Boolean'>
+    readonly pushNotifyBookmarks: FieldRef<"User", 'Boolean'>
+    readonly pushNotifyReplies: FieldRef<"User", 'Boolean'>
+    readonly pushNotifyMentions: FieldRef<"User", 'Boolean'>
+    readonly dataSaver: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -20196,7 +20274,13 @@ export namespace Prisma {
     notifyLikes: 'notifyLikes',
     notifyDislikes: 'notifyDislikes',
     notifyBookmarks: 'notifyBookmarks',
-    notifyReplies: 'notifyReplies'
+    notifyReplies: 'notifyReplies',
+    pushNotifyLikes: 'pushNotifyLikes',
+    pushNotifyDislikes: 'pushNotifyDislikes',
+    pushNotifyBookmarks: 'pushNotifyBookmarks',
+    pushNotifyReplies: 'pushNotifyReplies',
+    pushNotifyMentions: 'pushNotifyMentions',
+    dataSaver: 'dataSaver'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -20511,6 +20595,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFilter<"User"> | boolean
     notifyBookmarks?: BoolFilter<"User"> | boolean
     notifyReplies?: BoolFilter<"User"> | boolean
+    pushNotifyLikes?: BoolFilter<"User"> | boolean
+    pushNotifyDislikes?: BoolFilter<"User"> | boolean
+    pushNotifyBookmarks?: BoolFilter<"User"> | boolean
+    pushNotifyReplies?: BoolFilter<"User"> | boolean
+    pushNotifyMentions?: BoolFilter<"User"> | boolean
+    dataSaver?: BoolFilter<"User"> | boolean
     ytCredential?: XOR<YtCredentialNullableScalarRelationFilter, YtCredentialWhereInput> | null
     commentLikes?: CommentLikeListRelationFilter
     actions?: UserActionListRelationFilter
@@ -20537,6 +20627,12 @@ export namespace Prisma {
     notifyDislikes?: SortOrder
     notifyBookmarks?: SortOrder
     notifyReplies?: SortOrder
+    pushNotifyLikes?: SortOrder
+    pushNotifyDislikes?: SortOrder
+    pushNotifyBookmarks?: SortOrder
+    pushNotifyReplies?: SortOrder
+    pushNotifyMentions?: SortOrder
+    dataSaver?: SortOrder
     ytCredential?: YtCredentialOrderByWithRelationInput
     commentLikes?: CommentLikeOrderByRelationAggregateInput
     actions?: UserActionOrderByRelationAggregateInput
@@ -20566,6 +20662,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFilter<"User"> | boolean
     notifyBookmarks?: BoolFilter<"User"> | boolean
     notifyReplies?: BoolFilter<"User"> | boolean
+    pushNotifyLikes?: BoolFilter<"User"> | boolean
+    pushNotifyDislikes?: BoolFilter<"User"> | boolean
+    pushNotifyBookmarks?: BoolFilter<"User"> | boolean
+    pushNotifyReplies?: BoolFilter<"User"> | boolean
+    pushNotifyMentions?: BoolFilter<"User"> | boolean
+    dataSaver?: BoolFilter<"User"> | boolean
     ytCredential?: XOR<YtCredentialNullableScalarRelationFilter, YtCredentialWhereInput> | null
     commentLikes?: CommentLikeListRelationFilter
     actions?: UserActionListRelationFilter
@@ -20592,6 +20694,12 @@ export namespace Prisma {
     notifyDislikes?: SortOrder
     notifyBookmarks?: SortOrder
     notifyReplies?: SortOrder
+    pushNotifyLikes?: SortOrder
+    pushNotifyDislikes?: SortOrder
+    pushNotifyBookmarks?: SortOrder
+    pushNotifyReplies?: SortOrder
+    pushNotifyMentions?: SortOrder
+    dataSaver?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -20613,6 +20721,12 @@ export namespace Prisma {
     notifyDislikes?: BoolWithAggregatesFilter<"User"> | boolean
     notifyBookmarks?: BoolWithAggregatesFilter<"User"> | boolean
     notifyReplies?: BoolWithAggregatesFilter<"User"> | boolean
+    pushNotifyLikes?: BoolWithAggregatesFilter<"User"> | boolean
+    pushNotifyDislikes?: BoolWithAggregatesFilter<"User"> | boolean
+    pushNotifyBookmarks?: BoolWithAggregatesFilter<"User"> | boolean
+    pushNotifyReplies?: BoolWithAggregatesFilter<"User"> | boolean
+    pushNotifyMentions?: BoolWithAggregatesFilter<"User"> | boolean
+    dataSaver?: BoolWithAggregatesFilter<"User"> | boolean
   }
 
   export type YtCredentialWhereInput = {
@@ -21634,6 +21748,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -21660,6 +21780,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -21686,6 +21812,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -21712,6 +21844,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -21738,6 +21876,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
   }
 
   export type UserUpdateManyMutationInput = {
@@ -21753,6 +21897,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -21768,6 +21918,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type YtCredentialCreateInput = {
@@ -22997,6 +23153,12 @@ export namespace Prisma {
     notifyDislikes?: SortOrder
     notifyBookmarks?: SortOrder
     notifyReplies?: SortOrder
+    pushNotifyLikes?: SortOrder
+    pushNotifyDislikes?: SortOrder
+    pushNotifyBookmarks?: SortOrder
+    pushNotifyReplies?: SortOrder
+    pushNotifyMentions?: SortOrder
+    dataSaver?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -23012,6 +23174,12 @@ export namespace Prisma {
     notifyDislikes?: SortOrder
     notifyBookmarks?: SortOrder
     notifyReplies?: SortOrder
+    pushNotifyLikes?: SortOrder
+    pushNotifyDislikes?: SortOrder
+    pushNotifyBookmarks?: SortOrder
+    pushNotifyReplies?: SortOrder
+    pushNotifyMentions?: SortOrder
+    dataSaver?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -23027,6 +23195,12 @@ export namespace Prisma {
     notifyDislikes?: SortOrder
     notifyBookmarks?: SortOrder
     notifyReplies?: SortOrder
+    pushNotifyLikes?: SortOrder
+    pushNotifyDislikes?: SortOrder
+    pushNotifyBookmarks?: SortOrder
+    pushNotifyReplies?: SortOrder
+    pushNotifyMentions?: SortOrder
+    dataSaver?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -25224,6 +25398,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
@@ -25249,6 +25429,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
@@ -25290,6 +25476,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
@@ -25315,6 +25507,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
@@ -25340,6 +25538,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
@@ -25365,6 +25569,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
@@ -25406,6 +25616,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
@@ -25431,6 +25647,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
@@ -25456,6 +25678,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
@@ -25481,6 +25709,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
@@ -25522,6 +25756,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
@@ -25547,6 +25787,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
@@ -25616,6 +25862,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -25641,6 +25893,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -25740,6 +25998,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -25765,6 +26029,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -25899,6 +26169,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -25924,6 +26200,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -25992,6 +26274,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26017,6 +26305,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26075,6 +26369,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26100,6 +26400,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26179,6 +26485,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26204,6 +26516,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26263,6 +26581,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26288,6 +26612,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26329,6 +26659,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26354,6 +26690,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26379,6 +26721,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26404,6 +26752,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26445,6 +26799,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26470,6 +26830,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26495,6 +26861,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26520,6 +26892,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26561,6 +26939,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26586,6 +26970,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26611,6 +27001,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26636,6 +27032,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26677,6 +27079,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26702,6 +27110,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26727,6 +27141,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26752,6 +27172,12 @@ export namespace Prisma {
     notifyDislikes?: boolean
     notifyBookmarks?: boolean
     notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26793,6 +27219,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26818,6 +27250,12 @@ export namespace Prisma {
     notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
     notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
     notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput

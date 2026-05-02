@@ -17,6 +17,12 @@ export async function GET(req: NextRequest) {
         notifyDislikes: true,
         notifyBookmarks: true,
         notifyReplies: true,
+        pushNotifyLikes: true,
+        pushNotifyDislikes: true,
+        pushNotifyBookmarks: true,
+        pushNotifyReplies: true,
+        pushNotifyMentions: true,
+        dataSaver: true,
       },
     });
     return NextResponse.json(user);
@@ -41,6 +47,12 @@ export async function PATCH(req: NextRequest) {
         ...(body.notifyDislikes !== undefined && { notifyDislikes: body.notifyDislikes }),
         ...(body.notifyBookmarks !== undefined && { notifyBookmarks: body.notifyBookmarks }),
         ...(body.notifyReplies !== undefined && { notifyReplies: body.notifyReplies }),
+        ...(body.pushNotifyLikes !== undefined && { pushNotifyLikes: body.pushNotifyLikes }),
+        ...(body.pushNotifyDislikes !== undefined && { pushNotifyDislikes: body.pushNotifyDislikes }),
+        ...(body.pushNotifyBookmarks !== undefined && { pushNotifyBookmarks: body.pushNotifyBookmarks }),
+        ...(body.pushNotifyReplies !== undefined && { pushNotifyReplies: body.pushNotifyReplies }),
+        ...(body.pushNotifyMentions !== undefined && { pushNotifyMentions: body.pushNotifyMentions }),
+        ...(body.dataSaver !== undefined && { dataSaver: body.dataSaver }),
       },
     });
     return NextResponse.json({ success: true });

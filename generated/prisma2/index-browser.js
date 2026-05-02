@@ -133,7 +133,13 @@ exports.Prisma.UserScalarFieldEnum = {
   notifyLikes: 'notifyLikes',
   notifyDislikes: 'notifyDislikes',
   notifyBookmarks: 'notifyBookmarks',
-  notifyReplies: 'notifyReplies'
+  notifyReplies: 'notifyReplies',
+  pushNotifyLikes: 'pushNotifyLikes',
+  pushNotifyDislikes: 'pushNotifyDislikes',
+  pushNotifyBookmarks: 'pushNotifyBookmarks',
+  pushNotifyReplies: 'pushNotifyReplies',
+  pushNotifyMentions: 'pushNotifyMentions',
+  dataSaver: 'dataSaver'
 };
 
 exports.Prisma.YtCredentialScalarFieldEnum = {

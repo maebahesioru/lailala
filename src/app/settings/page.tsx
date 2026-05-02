@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import { useTheme } from "@/components/theme-provider";
-import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight, Monitor, Hash, Bell, BellOff, Eye, EyeOff, Shield } from "lucide-react";
+import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight, Monitor, Hash, Bell, BellOff, Eye, EyeOff, Shield, Wifi, WifiOff } from "lucide-react";
 import { usePush } from "@/components/push-provider";
+import { useDataSaver } from "@/components/data-saver-provider";
 import Link from "next/link";
 
 const MENTION_COLORS = [
@@ -25,12 +26,19 @@ interface PrivacyState {
   notifyDislikes: boolean;
   notifyBookmarks: boolean;
   notifyReplies: boolean;
+  pushNotifyLikes: boolean;
+  pushNotifyDislikes: boolean;
+  pushNotifyBookmarks: boolean;
+  pushNotifyReplies: boolean;
+  pushNotifyMentions: boolean;
+  dataSaver: boolean;
 }
 
 export default function SettingsPage() {
   const { user } = useAuth();
   const { theme, setTheme, useSystem, setUseSystem } = useTheme();
   const { supported, subscribed, subscribe, unsubscribe } = usePush();
+  const { enabled: dataSaverEnabled, setEnabled: setDataSaver } = useDataSaver();
   const [message, setMessage] = useState("");
   const [mentionColor, setMentionColor] = useState("#1d9bf0");
   const [privacy, setPrivacy] = useState<PrivacyState>({
@@ -41,6 +49,12 @@ export default function SettingsPage() {
     notifyDislikes: true,
     notifyBookmarks: true,
     notifyReplies: true,
+    pushNotifyLikes: true,
+    pushNotifyDislikes: true,
+    pushNotifyBookmarks: true,
+    pushNotifyReplies: true,
+    pushNotifyMentions: true,
+    dataSaver: false,
   });
 
   useEffect(() => {
@@ -54,6 +68,7 @@ export default function SettingsPage() {
       .then((data) => {
         if (data && !data.error) {
           setPrivacy((prev) => ({ ...prev, ...data }));
+          if (data.dataSaver !== undefined) setDataSaver(data.dataSaver);
         }
       })
       .catch(() => {});
@@ -62,6 +77,7 @@ export default function SettingsPage() {
   const updatePrivacy = async (key: keyof PrivacyState, value: boolean) => {
     const next = { ...privacy, [key]: value };
     setPrivacy(next);
+    if (key === "dataSaver") setDataSaver(value);
     try {
       await fetch("/api/user/privacy", {
         method: "PATCH",
@@ -184,6 +200,33 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Data Saver */}
+        <div className="bg-card rounded-2xl border border-border p-4">
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            {dataSaverEnabled ? <WifiOff size={20} className="text-muted" /> : <Wifi size={20} className="text-muted" />}
+            データセーバー
+          </h2>
+          <button
+            onClick={() => updatePrivacy("dataSaver", !privacy.dataSaver)}
+            className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-colors ${
+              privacy.dataSaver
+                ? "border-primary bg-primary/10"
+                : "border-border hover:border-primary/50"
+            }`}
+          >
+            {privacy.dataSaver ? <WifiOff size={20} className="text-primary" /> : <Wifi size={20} className="text-muted" />}
+            <span className="flex-1 text-left text-sm font-medium">
+              データセーバーモード
+            </span>
+            {privacy.dataSaver && <Check size={16} className="text-primary" />}
+          </button>
+          <p className="text-xs text-muted mt-2">
+            {privacy.dataSaver
+              ? "画像の自動読み込みを抑制し、ポーリング間隔を延長し、アニメーションを無効にします"
+              : "モバイルデータ使用量を削減します"}
+          </p>
+        </div>
+
         {/* Account Info */}
         <div className="bg-card rounded-2xl border border-border p-4">
           <h2 className="text-lg font-bold mb-4">アカウント</h2>
@@ -236,7 +279,7 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <h3 className="text-sm font-bold text-muted mb-2">通知を受け取る</h3>
+              <h3 className="text-sm font-bold text-muted mb-2">アプリ内通知を受け取る</h3>
               <div className="space-y-2">
                 {[
                   { key: "notifyLikes" as const, label: "高評価された時" },
@@ -262,7 +305,7 @@ export default function SettingsPage() {
           )}
         </div>
 
-        {/* Push Notification */}
+        {/* Push Notification Per-Type */}
         <div className="bg-card rounded-2xl border border-border p-4">
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
             <Bell size={20} className="text-muted" />
@@ -271,7 +314,7 @@ export default function SettingsPage() {
           {!supported ? (
             <p className="text-sm text-muted">このブラウザはプッシュ通知に対応していません</p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               <button
                 onClick={() => (subscribed ? unsubscribe() : subscribe())}
                 className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-colors ${
@@ -286,11 +329,31 @@ export default function SettingsPage() {
                 </span>
                 {subscribed && <Check size={16} className="text-primary" />}
               </button>
-              <p className="text-xs text-muted">
-                {subscribed
-                  ? "いいね・返信・ブックマークなどの通知を受け取っています"
-                  : "通知をオンにすると、リアルタイムで通知を受け取れます"}
-              </p>
+
+              {subscribed && (
+                <div>
+                  <h3 className="text-sm font-bold text-muted mb-2">プッシュ通知の種類</h3>
+                  <div className="space-y-2">
+                    {[
+                      { key: "pushNotifyLikes" as const, label: "高評価" },
+                      { key: "pushNotifyDislikes" as const, label: "低評価" },
+                      { key: "pushNotifyBookmarks" as const, label: "ブックマーク" },
+                      { key: "pushNotifyReplies" as const, label: "返信" },
+                      { key: "pushNotifyMentions" as const, label: "メンション" },
+                    ].map((item) => (
+                      <button
+                        key={item.key}
+                        onClick={() => updatePrivacy(item.key, !privacy[item.key])}
+                        className="w-full flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/50 transition-colors"
+                      >
+                        {privacy[item.key] ? <Bell size={18} className="text-primary" /> : <BellOff size={18} className="text-muted" />}
+                        <span className="flex-1 text-left text-sm">{item.label}</span>
+                        {privacy[item.key] && <Check size={16} className="text-primary" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -2,6 +2,11 @@
 
 import { useEffect, useState, useCallback } from "react";
 
+function isDataSaver(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem("lailala-data-saver") === "true";
+}
+
 export function useNotifications() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -18,7 +23,8 @@ export function useNotifications() {
 
   useEffect(() => {
     fetchCount();
-    const interval = setInterval(fetchCount, 30000); // 30秒ごとに更新
+    const intervalMs = isDataSaver() ? 300000 : 30000; // 5分 / 30秒
+    const interval = setInterval(fetchCount, intervalMs);
     return () => clearInterval(interval);
   }, [fetchCount]);
 

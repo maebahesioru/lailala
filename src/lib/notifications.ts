@@ -31,11 +31,15 @@ export async function createNotification(params: CreateNotificationParams) {
   // Find user by channelId
   const user = await prisma.user.findFirst({
     where: { channelId: params.recipientChannelId },
-    select: { id: true, name: true, notifyLikes: true, notifyDislikes: true, notifyBookmarks: true, notifyReplies: true },
+    select: {
+      id: true, name: true,
+      notifyLikes: true, notifyDislikes: true, notifyBookmarks: true, notifyReplies: true,
+      pushNotifyLikes: true, pushNotifyDislikes: true, pushNotifyBookmarks: true, pushNotifyReplies: true, pushNotifyMentions: true,
+    },
   });
   if (!user) return null;
 
-  // Check per-type notification privacy settings
+  // Check per-type notification privacy settings (in-app)
   if (params.type === "like" && !user.notifyLikes) return null;
   if (params.type === "dislike" && !user.notifyDislikes) return null;
   if (params.type === "bookmark" && !user.notifyBookmarks) return null;
@@ -68,17 +72,27 @@ export async function createNotification(params: CreateNotificationParams) {
     },
   });
 
-  // Send push notification
-  const pushBody = params.content
-    ? `${params.actorName}さんが${TYPE_LABELS[params.type]}しました\n${params.content.slice(0, 100)}`
-    : `${params.actorName}さんが${TYPE_LABELS[params.type]}しました`;
+  // Check per-type push notification settings
+  const shouldPush =
+    (params.type === "like" && user.pushNotifyLikes) ||
+    (params.type === "dislike" && user.pushNotifyDislikes) ||
+    (params.type === "bookmark" && user.pushNotifyBookmarks) ||
+    (params.type === "reply" && user.pushNotifyReplies) ||
+    (params.type === "mention" && user.pushNotifyMentions) ||
+    params.type === "youtube";
 
-  await sendPushNotification(user.id, {
-    title: `Lailala - ${TYPE_LABELS[params.type]}`,
-    body: pushBody,
-    icon: params.actorThumb || "/icon-192x192.png",
-    url: params.commentId ? `/thread/${params.commentId}` : `/`,
-  }).catch(() => {});
+  if (shouldPush) {
+    const pushBody = params.content
+      ? `${params.actorName}さんが${TYPE_LABELS[params.type]}しました\n${params.content.slice(0, 100)}`
+      : `${params.actorName}さんが${TYPE_LABELS[params.type]}しました`;
+
+    await sendPushNotification(user.id, {
+      title: `Lailala - ${TYPE_LABELS[params.type]}`,
+      body: pushBody,
+      icon: params.actorThumb || "/icon-192x192.png",
+      url: params.commentId ? `/thread/${params.commentId}` : `/`,
+    }).catch(() => {});
+  }
 
   return notification;
 }

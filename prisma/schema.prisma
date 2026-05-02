@@ -33,6 +33,14 @@ model User {
   notifyDislikes   Boolean @default(true) @map("notify_dislikes")
   notifyBookmarks  Boolean @default(true) @map("notify_bookmarks")
   notifyReplies    Boolean @default(true) @map("notify_replies")
+  // Push notification per-type
+  pushNotifyLikes     Boolean @default(true) @map("push_notify_likes")
+  pushNotifyDislikes  Boolean @default(true) @map("push_notify_dislikes")
+  pushNotifyBookmarks Boolean @default(true) @map("push_notify_bookmarks")
+  pushNotifyReplies   Boolean @default(true) @map("push_notify_replies")
+  pushNotifyMentions  Boolean @default(true) @map("push_notify_mentions")
+  // Data saver
+  dataSaver Boolean @default(false) @map("data_saver")
 
   @@map("users")
 }

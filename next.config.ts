@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   outputFileTracingExcludes: {
     "*": [
       "./generated/prisma2/**/*",
+      "./.git/**/*",
+      "./node_modules/.cache/**/*",
     ],
   },
 };
