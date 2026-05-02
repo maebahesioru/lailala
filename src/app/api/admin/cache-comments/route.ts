@@ -22,59 +22,27 @@ function parsePublishedTime(text: string): Date | null {
   return d;
 }
 
-export async function POST(req: NextRequest) {
-  const { videoId, max = 500 } = await req.json();
-  if (!videoId) return NextResponse.json({ error: "videoId required" }, { status: 400 });
-  return runCache(videoId, max);
-}
-
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId") || "niKAylKNIEI";
   const max = parseInt(searchParams.get("max") || "500", 10);
-  return runCache(videoId, max);
-}
 
-async function runCache(videoId: string, max: number) {
   try {
     const innertube = await getInnertube();
     let comments = await innertube.getComments(videoId, "NEWEST_FIRST");
     let count = 0;
 
-    const saveComment = async (c: any, isReply = false, parentCommentId?: string) => {
-      if (count >= max) return;
+    const saveComment = async (c: any) => {
       if (!c || !c.comment_id) return;
-
       const publishedText = c.published_time?.text || String(c.published_time || "");
       const publishedAt = parsePublishedTime(publishedText) || new Date();
-
       const likeCount = parseInt((c.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
-      const replyCount = isReply ? 0 : parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+      const replyCount = parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
 
       await prisma.commentCache.upsert({
         where: { commentId: c.comment_id },
-        update: {
-          content: c.content?.text || "",
-          likeCount,
-          replyCount,
-          authorName: c.author?.name?.text || "Unknown",
-          authorChannelId: c.author?.id || null,
-          authorThumb: c.author?.thumbnails?.[0]?.url,
-          publishedAt,
-          parentCommentId: parentCommentId || null,
-        },
-        create: {
-          commentId: c.comment_id,
-          videoId,
-          content: c.content?.text || "",
-          likeCount,
-          replyCount,
-          authorName: c.author?.name?.text || "Unknown",
-          authorChannelId: c.author?.id || null,
-          authorThumb: c.author?.thumbnails?.[0]?.url,
-          publishedAt,
-          parentCommentId: parentCommentId || null,
-        },
+        update: { content: c.content?.text || "", likeCount, replyCount, authorName: c.author?.name?.text || "Unknown", authorChannelId: c.author?.id || null, authorThumb: c.author?.thumbnails?.[0]?.url, publishedAt },
+        create: { commentId: c.comment_id, videoId, content: c.content?.text || "", likeCount, replyCount, authorName: c.author?.name?.text || "Unknown", authorChannelId: c.author?.id || null, authorThumb: c.author?.thumbnails?.[0]?.url, publishedAt },
       });
       count++;
     };
@@ -84,14 +52,9 @@ async function runCache(videoId: string, max: number) {
         if (count >= max) return;
         const c = thread.comment;
         if (!c) continue;
-
-        await saveComment(c, false);
-
-        // Cache replies too
-        if (thread.replies && Array.isArray(thread.replies)) {
-          for (const reply of thread.replies) {
-            await saveComment(reply, true, c.comment_id);
-          }
+        await saveComment(c);
+        if (thread.replies) {
+          for (const reply of thread.replies) await saveComment(reply);
         }
       }
     };
@@ -103,8 +66,17 @@ async function runCache(videoId: string, max: number) {
       await saveBatch(comments.contents);
     }
 
-    return NextResponse.json({ success: true, cached: count });
+    const total = await prisma.commentCache.count({ where: { videoId } });
+    const nextToken = (comments as any).continuation_token || null;
+
+    return NextResponse.json({ success: true, cached: count, total, nextToken });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed" }, { status: 500 });
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
+}
+
+export async function POST(req: NextRequest) {
+  const { videoId, max = 500 } = await req.json();
+  if (!videoId) return NextResponse.json({ error: "videoId required" }, { status: 400 });
+  return GET(new NextRequest(`http://localhost/api/admin/cache-comments?videoId=${videoId}&max=${max}`));
 }
