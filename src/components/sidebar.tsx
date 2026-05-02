@@ -200,6 +200,18 @@ export function Sidebar() {
               <span className="font-medium">設定</span>
             </Link>
           </motion.div>
+          {bgmMounted && (
+            <motion.div whileHover={{ x: 4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={toggleBgm}
+                className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground w-full"
+              >
+                <Music size={26} className={bgmEnabled ? "text-primary" : "text-muted"} aria-hidden="true" />
+                <span className="font-medium">{bgmEnabled ? "BGM ON" : "BGM OFF"}</span>
+              </motion.button>
+            </motion.div>
+          )}
         </nav>
 
         <div className="space-y-3 mt-4">
@@ -212,18 +224,6 @@ export function Sidebar() {
             <PenSquare size={22} />
             投稿する
           </motion.button>
-
-          {bgmMounted && (
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={toggleBgm}
-              className="w-full flex items-center justify-center gap-2 py-2 border border-border rounded-full font-medium text-sm hover:bg-white/5 transition-colors"
-            >
-              <Music size={16} className={bgmEnabled ? "text-primary" : "text-muted"} />
-              {bgmEnabled ? "BGM ON" : "BGM OFF"}
-            </motion.button>
-          )}
         </div>
 
         {mounted && user && (
