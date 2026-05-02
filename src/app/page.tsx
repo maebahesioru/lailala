@@ -16,11 +16,11 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "ライララ(仮)",
-    url: "https://lailala.vercel.app",
+    url: "https://lailala.hikamer.f5.si",
     description: "YouTubeコメントをX/Twitter風に",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://lailala.vercel.app/search?q={search_term_string}",
+      target: "https://lailala.hikamer.f5.si/search?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };

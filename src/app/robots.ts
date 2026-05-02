@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/admin/"],
     },
-    sitemap: "https://lailala.vercel.app/sitemap.xml",
+    sitemap: "https://lailala.hikamer.f5.si/sitemap.xml",
   };
 }
