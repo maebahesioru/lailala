@@ -135,32 +135,37 @@ export default async function ThreadPage({ params }: PageProps) {
   const parsedReplies = filteredReplies.map(parseReply);
   const replyTree = buildReplyTree(parsedReplies);
 
+  const parseRoot = (c: any) => ({
+    commentId: c.comment_id,
+    author: {
+      name: typeof c.author?.name === "string" ? c.author.name : (c.author?.name?.text || "Unknown"),
+      channelId: c.author?.id,
+      thumbnail: c.author?.thumbnails?.[0]?.url,
+      isChannelOwner: c.author_is_channel_owner || false,
+      isMember: c.is_member || false,
+    },
+    content: c.content?.text || "",
+    publishedTime: c.published_time || "",
+    likeCount: c.like_count || "0",
+    replyCount: c.reply_count || "0",
+    isLiked: c.is_liked || false,
+    isDisliked: c.is_disliked || false,
+    isPinned: c.is_pinned || false,
+    isHearted: c.is_hearted || false,
+  });
+
   let parent: any;
+  let highlightedReply: any = null;
   let displayReplies = replyTree;
 
   if (isReplyThread && targetReply) {
-    parent = parseReply(targetReply);
+    // When opening a reply directly, show the root comment as parent
+    // and highlight the target reply below it
+    parent = parseRoot(thread.comment);
+    highlightedReply = parseReply(targetReply);
     displayReplies = replyTree;
   } else {
-    const c = thread.comment as any;
-    parent = {
-      commentId: c.comment_id,
-      author: {
-        name: typeof c.author?.name === "string" ? c.author.name : (c.author?.name?.text || "Unknown"),
-        channelId: c.author?.id,
-        thumbnail: c.author?.thumbnails?.[0]?.url,
-        isChannelOwner: c.author_is_channel_owner || false,
-        isMember: c.is_member || false,
-      },
-      content: c.content?.text || "",
-      publishedTime: c.published_time || "",
-      likeCount: c.like_count || "0",
-      replyCount: c.reply_count || "0",
-      isLiked: c.is_liked || false,
-      isDisliked: c.is_disliked || false,
-      isPinned: c.is_pinned || false,
-      isHearted: c.is_hearted || false,
-    };
+    parent = parseRoot(thread.comment);
   }
 
   let userVote: string | undefined;
@@ -175,6 +180,7 @@ export default async function ThreadPage({ params }: PageProps) {
     <MainLayout>
       <ThreadView
         parent={parent}
+        highlightedReply={highlightedReply}
         initialReplies={displayReplies}
         replyError={replyError}
         initialContinuationToken={nextToken}

@@ -11,6 +11,7 @@ import { ReplyNode } from "@/lib/reply-tree";
 
 interface ThreadViewProps {
   parent: YtComment;
+  highlightedReply?: YtComment | null;
   initialReplies: ReplyNode[];
   replyError: string | null;
   initialContinuationToken: string | null;
@@ -69,6 +70,7 @@ function NestedReply({
 
 export function ThreadView({
   parent,
+  highlightedReply,
   initialReplies,
   replyError,
   initialContinuationToken,
@@ -141,6 +143,22 @@ export function ThreadView({
           showDetailTime
         />
       </div>
+
+      {highlightedReply && (
+        <>
+          {/* Reply lineage indicator */}
+          <div className="px-4 py-2 flex items-center gap-2 text-[13px] text-muted border-b border-[#2f3336]/50">
+            <CornerDownRight size={14} />
+            <span>
+              <span className="font-medium text-foreground">{highlightedReply.author.name}</span>
+              さんへの返信
+            </span>
+          </div>
+          <div className="border-b border-[#2f3336] bg-primary/[0.02]">
+            <ReplyCard reply={highlightedReply as any} parentCommentId={commentId} />
+          </div>
+        </>
+      )}
 
       <Composer videoId={videoId} onPosted={handleReload} />
 
