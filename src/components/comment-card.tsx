@@ -207,17 +207,24 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         </div>
                       </div>
                     ) : (
-                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed" onClick={() => {
-                        const sel = window.getSelection();
-                        if (sel && sel.toString().length > 0) return;
-                        router.push(`/thread/${thread.comment.commentId}`);
-                      }}>
-                        <MentionText content={stripEditedTag(thread.comment.content)} />
-                      </p>
+                      <Link
+                        href={`/thread/${thread.comment.commentId}`}
+                        onClick={(e) => {
+                          const sel = window.getSelection();
+                          if (sel && sel.toString().length > 0) {
+                            e.preventDefault();
+                          }
+                        }}
+                        className="block"
+                      >
+                        <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
+                          <MentionText content={stripEditedTag(thread.comment.content)} />
+                        </p>
+                      </Link>
                     )}
-                    <div onClick={() => router.push(`/thread/${thread.comment.commentId}`)} className="cursor-pointer">
+                    <Link href={`/thread/${thread.comment.commentId}`} className="block">
                       <LinkCard text={thread.comment.content} />
-                    </div>
+                    </Link>
                     {showDetailTime && (
                       <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                     )}
