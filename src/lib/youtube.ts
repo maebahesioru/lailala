@@ -10,22 +10,14 @@ export async function getInnertube() {
 }
 
 export async function getInnertubeWithAuth(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { id: true, selectedAccountId: true },
-  });
-
-  const selectedAccountId = user?.selectedAccountId;
-
-  // Try matching by selectedAccountId first, then any credential
+  // Simply find any credential for this user
   const cred = await prisma.ytCredential.findFirst({
-    where: selectedAccountId
-      ? { userId, accountChannelId: selectedAccountId }
-      : { userId },
+    where: { userId },
     orderBy: { updatedAt: "desc" },
   });
 
   if (!cred) {
+    console.error(`[YouTube] No credential found for user ${userId}`);
     const error = new Error("YOUTUBE_AUTH_REQUIRED");
     (error as any).code = "YOUTUBE_AUTH_REQUIRED";
     throw error;
