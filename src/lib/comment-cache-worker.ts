@@ -9,19 +9,20 @@ const MAX_PER_RUN = 10000;
 function parsePublishedTime(text: string): Date | null {
   if (!text || text.trim() === "") return null;
   const now = new Date();
-  const match = text.match(/(\d+)\s*(year|month|week|day|hour|minute|second)s?\s*ago/);
+  // Support both English ("2 hours ago") and Japanese ("2時間前")
+  const match = text.match(/(\d+)\s*(年|ヶ月|週間|日|時間|分|秒|year|month|week|day|hour|minute|second)s?\s*(前|ago)?/);
   if (!match) return now;
   const num = parseInt(match[1], 10);
   const unit = match[2];
   const d = new Date(now);
   switch (unit) {
-    case "year": d.setFullYear(d.getFullYear() - num); break;
-    case "month": d.setMonth(d.getMonth() - num); break;
-    case "week": d.setDate(d.getDate() - num * 7); break;
-    case "day": d.setDate(d.getDate() - num); break;
-    case "hour": d.setHours(d.getHours() - num); break;
-    case "minute": d.setMinutes(d.getMinutes() - num); break;
-    case "second": d.setSeconds(d.getSeconds() - num); break;
+    case "year": case "年": d.setFullYear(d.getFullYear() - num); break;
+    case "month": case "ヶ月": d.setMonth(d.getMonth() - num); break;
+    case "week": case "週間": d.setDate(d.getDate() - num * 7); break;
+    case "day": case "日": d.setDate(d.getDate() - num); break;
+    case "hour": case "時間": d.setHours(d.getHours() - num); break;
+    case "minute": case "分": d.setMinutes(d.getMinutes() - num); break;
+    case "second": case "秒": d.setSeconds(d.getSeconds() - num); break;
   }
   return d;
 }
@@ -57,6 +58,7 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
           authorChannelId: c.author?.id || null,
           authorThumb,
           publishedAt,
+          parentCommentId: null,
         });
         count++;
 
@@ -79,6 +81,7 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
               authorChannelId: reply.author?.id || null,
               authorThumb: rAuthorThumb,
               publishedAt: rPublishedAt,
+              parentCommentId: c.comment_id,
             });
             count++;
           }
@@ -90,7 +93,7 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
         for (const op of operations) {
           await prisma.commentCache.upsert({
             where: { commentId: op.commentId },
-            update: { content: op.content, likeCount: op.likeCount, replyCount: op.replyCount, authorName: op.authorName, authorChannelId: op.authorChannelId, authorThumb: op.authorThumb, publishedAt: op.publishedAt },
+            update: { content: op.content, likeCount: op.likeCount, replyCount: op.replyCount, authorName: op.authorName, authorChannelId: op.authorChannelId, authorThumb: op.authorThumb, publishedAt: op.publishedAt, parentCommentId: op.parentCommentId },
             create: op,
           });
         }

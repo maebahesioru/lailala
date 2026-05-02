@@ -6,36 +6,11 @@ export async function GET(req: NextRequest) {
   const channelId = searchParams.get("channelId");
   if (!channelId) return NextResponse.json({ error: "channelId required" }, { status: 400 });
 
-  // Get user by channelId
-  const user = await prisma.user.findFirst({
-    where: { channelId },
-    select: { id: true },
-  });
-  if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
-
-  const oneYearAgo = new Date();
-  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
-  // Count actions per day
-  const actions = await prisma.userAction.groupBy({
-    by: ["createdAt"],
-    where: {
-      userId: user.id,
-      createdAt: { gte: oneYearAgo },
-    },
-    _count: { id: true },
-  });
-
-  // Format as YYYY-MM-DD -> count
   const map = new Map<string, number>();
-  for (const a of actions) {
-    const key = a.createdAt.toISOString().split("T")[0];
-    map.set(key, (map.get(key) || 0) + a._count.id);
-  }
 
-  // Also count cached comments by this author
+  // Also count cached comments by this author (all time, no date filter)
   const comments = await prisma.commentCache.findMany({
-    where: { authorChannelId: channelId, publishedAt: { gte: oneYearAgo } },
+    where: { authorChannelId: channelId },
     select: { publishedAt: true },
   });
   for (const c of comments) {
