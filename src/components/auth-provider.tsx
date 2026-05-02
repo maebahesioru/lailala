@@ -26,7 +26,7 @@ interface AuthContextType {
   switchAccount: (channelId: string) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({ user: null, loading: true, refresh: async () => {} });
+const AuthContext = createContext<AuthContextType>({ user: null, loading: true, refresh: async () => {}, switchAccount: async () => {} });
 
 function getCachedUser(): User | null {
   try {

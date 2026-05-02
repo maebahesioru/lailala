@@ -14,7 +14,8 @@ model User {
   email                String?               @unique
   image                String?
   channelId            String?               @map("channel_id")
-  ytCredential         YtCredential?
+  selectedAccountId    String?               @map("selected_account_id")
+  ytCredentials        YtCredential[]
   commentLikes         CommentLike[]
   actions              UserAction[]
   lists                List[]
@@ -48,15 +49,20 @@ model User {
 
 // YouTube認証情報 (OAuth credentials)
 model YtCredential {
-  id         String   @id @default(cuid())
-  userId     String   @unique @map("user_id")
+  id               String   @id @default(cuid())
+  userId           String   @map("user_id")
   // 暗号化されたCookieまたはOAuth credentials JSON
-  credential String   @db.Text
+  credential       String   @db.Text
   // 'cookie' | 'oauth'
-  type       String
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type             String
+  // YouTubeチャンネル名（アカウント切り替え表示用）
+  accountName      String?  @map("account_name")
+  accountThumb     String?  @map("account_thumb")
+  accountChannelId String?  @map("account_channel_id")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, accountChannelId])
   @@map("yt_credentials")
 }
 
