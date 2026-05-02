@@ -110,11 +110,9 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
               <h3 className="text-lg font-bold">
                 {step === "done" ? "ログイン完了！" : "YouTubeでログイン"}
               </h3>
-              {(step === "idle" || step === "done") && (
-                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={onClose} className="p-1 rounded-full hover:bg-white/10 text-muted">
-                  <X size={20} />
-                </motion.button>
-              )}
+              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={onClose} className="p-1 rounded-full hover:bg-white/10 text-muted">
+                <X size={20} />
+              </motion.button>
             </div>
 
             {error && (
