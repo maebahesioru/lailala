@@ -2,10 +2,10 @@
 set -e
 
 echo "Generating Prisma Client..."
-npx prisma generate
+pnpm prisma generate
 
 echo "Deploying Prisma migrations..."
-npx prisma migrate deploy
+pnpm prisma migrate deploy
 
 echo "Starting Next.js..."
 exec "$@"
