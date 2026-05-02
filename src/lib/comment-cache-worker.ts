@@ -1,11 +1,29 @@
 import { prisma } from "./prisma";
 
+const STATE_COMMENT_ID = "___worker_state___";
+
 let started = false;
 let fullScanDone = false;
 
 const VIDEO_ID = "niKAylKNIEI";
-const INTERVAL_MS = 15 * 60 * 1000; // 15分ごと
+const INTERVAL_MS = 15 * 60 * 1000;
 const MAX_PER_RUN = 10000;
+
+async function getSavedToken(videoId: string): Promise<string | null> {
+  const state = await prisma.commentCache.findUnique({
+    where: { commentId: `${STATE_COMMENT_ID}_${videoId}` },
+    select: { content: true },
+  });
+  return state?.content || null;
+}
+
+async function saveState(videoId: string, token: string | null, complete: boolean) {
+  await prisma.commentCache.upsert({
+    where: { commentId: `${STATE_COMMENT_ID}_${videoId}` },
+    update: { content: token || "", likeCount: complete ? 1 : 0 },
+    create: { commentId: `${STATE_COMMENT_ID}_${videoId}`, videoId, content: token || "", likeCount: complete ? 1 : 0, replyCount: 0, authorName: "_worker", publishedAt: new Date() },
+  });
+}
 
 function parsePublishedTime(text: string): Date | null {
   if (!text || text.trim() === "") return null;
@@ -27,11 +45,26 @@ function parsePublishedTime(text: string): Date | null {
   return d;
 }
 
-async function cacheVideoComments(videoId: string, maxItems?: number) {
+async function cacheVideoComments(videoId: string, maxItems?: number, continuationToken?: string) {
   try {
     const { getInnertube } = await import("./youtube");
     const innertube = await getInnertube();
-    let comments = await innertube.getComments(videoId, "NEWEST_FIRST");
+    let comments;
+
+    if (continuationToken) {
+      const { YTNodes } = await import("youtubei.js");
+      const cmd = new YTNodes.NavigationEndpoint({
+        continuationCommand: { request: "CONTINUATION_REQUEST_TYPE_WATCH_NEXT", token: continuationToken },
+      });
+      const response = await cmd.call(innertube.actions, { parse: true });
+      if (!response.on_response_received_endpoints_memo) {
+        console.error(`[CommentCacheWorker] Invalid continuation token, restarting from newest`);
+        return cacheVideoComments(videoId, maxItems);
+      }
+      comments = { contents: response.on_response_received_endpoints_memo.getType((await import("youtubei.js")).YTNodes.CommentThread) || [], has_continuation: false, continuation_token: null } as any;
+    } else {
+      comments = await innertube.getComments(videoId, "NEWEST_FIRST");
+    }
     let count = 0;
 
     const saveComment = async (c: any, isReply = false, parentCommentId?: string) => {
@@ -96,25 +129,49 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
     }
 
     console.log(`[CommentCacheWorker] Cached ${count} comments for ${videoId}${maxItems ? ` (limit=${maxItems})` : ""}`);
-    return count;
+    const nextToken = (comments as any).continuation_token || null;
+    return { count, nextToken };
   } catch (e: any) {
     console.error(`[CommentCacheWorker] Failed to cache ${videoId}:`, e.message);
-    return 0;
+    return { count: 0, nextToken: null };
   }
 }
 
 async function run() {
-  await cacheVideoComments(VIDEO_ID, MAX_PER_RUN);
+  const token = await getSavedToken(VIDEO_ID);
+  if (token) {
+    console.log(`[CommentCacheWorker] Resuming from continuation token`);
+  }
+  const { count, nextToken } = await cacheVideoComments(VIDEO_ID, MAX_PER_RUN, token || undefined);
+  if (nextToken) {
+    await saveState(VIDEO_ID, nextToken, false);
+  } else {
+    // No more continuation - we've looped through all comments. Restart from newest next time.
+    await saveState(VIDEO_ID, null, true);
+    fullScanDone = true;
+  }
+  console.log(`[CommentCacheWorker] Cached ${count}, token saved: ${!!nextToken}`);
 }
 
 async function runFullScan() {
   if (fullScanDone) return;
-  console.log(`[CommentCacheWorker] Starting full scan for ${VIDEO_ID} (max ${MAX_PER_RUN * 5})...`);
-  const count = await cacheVideoComments(VIDEO_ID, MAX_PER_RUN * 5);
-  if (count < MAX_PER_RUN * 5) {
+  const isComplete = await getSavedToken(VIDEO_ID).then(async (t) => {
+    if (!t) return false;
+    const state = await prisma.commentCache.findUnique({ where: { commentId: `${STATE_COMMENT_ID}_${VIDEO_ID}` } });
+    return state?.likeCount === 1;
+  });
+  if (isComplete) { fullScanDone = true; return; }
+
+  const token = await getSavedToken(VIDEO_ID);
+  console.log(`[CommentCacheWorker] Full scan batch (max ${MAX_PER_RUN * 5})${token ? " resuming" : ""}`);
+  const { count, nextToken } = await cacheVideoComments(VIDEO_ID, MAX_PER_RUN * 5, token || undefined);
+  if (nextToken) {
+    await saveState(VIDEO_ID, nextToken, false);
+  } else {
+    await saveState(VIDEO_ID, null, true);
     fullScanDone = true;
   }
-  console.log(`[CommentCacheWorker] Full scan batch: ${count} comments`);
+  console.log(`[CommentCacheWorker] Full scan batch: ${count} comments, done: ${fullScanDone}`);
 }
 
 export function startCommentCacheWorker() {
