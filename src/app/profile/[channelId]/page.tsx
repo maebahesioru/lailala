@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
-import { ArrowLeft, Loader2, User, ThumbsUp, MessageCircle, Bell, BellOff } from "lucide-react";
+import { ArrowLeft, User, ThumbsUp, MessageCircle, Bell, BellOff, Heart, ThumbsDown, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { ProfileMoreMenu } from "@/components/profile-more-menu";
 import { useAuth } from "@/components/auth-provider";
@@ -19,6 +19,14 @@ interface ProfileComment {
   replyCount: number;
   publishedAt: string;
 }
+
+interface PrivacySettings {
+  showLikesTab: boolean;
+  showDislikesTab: boolean;
+  showBookmarksTab: boolean;
+}
+
+type TabType = "comments" | "replies" | "likes" | "dislikes" | "bookmarks";
 
 function formatRelativeTime(dateStr: string): string {
   const date = new Date(dateStr);
@@ -51,13 +59,33 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
   const [totalPages, setTotalPages] = useState(1);
   const [authorName, setAuthorName] = useState<string>("");
   const [authorThumb, setAuthorThumb] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"comments" | "replies">("comments");
+  const [activeTab, setActiveTab] = useState<TabType>("comments");
   const [notifPref, setNotifPref] = useState<string>("all");
   const [notifLoading, setNotifLoading] = useState(false);
+  const [privacy, setPrivacy] = useState<PrivacySettings>({
+    showLikesTab: true,
+    showDislikesTab: true,
+    showBookmarksTab: true,
+  });
+  const isOwner = currentUser?.channelId === channelId;
+
+  const fetchPrivacy = async () => {
+    try {
+      const res = await fetch(`/api/profile/privacy?channelId=${encodeURIComponent(channelId)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setPrivacy(data);
+      }
+    } catch {}
+  };
+
+  useEffect(() => {
+    fetchPrivacy();
+  }, [channelId]);
 
   useEffect(() => {
     setLoading(true);
-    const type = activeTab === "comments" ? "comment" : "reply";
+    const type = activeTab === "comments" ? "comment" : activeTab === "replies" ? "reply" : activeTab;
     fetch(`/api/profile/comments?channelId=${encodeURIComponent(channelId)}&page=${page}&type=${type}`)
       .then((r) => r.json())
       .then((data) => {
@@ -66,11 +94,10 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
         } else {
           setComments(data.comments);
           setTotalPages(data.totalPages);
-          if (data.comments.length > 0) {
+          if (data.comments.length > 0 && activeTab !== "likes" && activeTab !== "dislikes" && activeTab !== "bookmarks") {
             setAuthorName(safeName(data.comments[0].authorName, data.comments[0].authorChannelId));
             setAuthorThumb(data.comments[0].authorThumb);
-          } else {
-            // Keep previous name if we already have it, otherwise derive from channelId
+          } else if (!authorName) {
             setAuthorName((prev) => prev || safeName(null, channelId));
           }
         }
@@ -81,17 +108,17 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
 
   // Load notification preference
   useEffect(() => {
-    if (!currentUser || currentUser.channelId === channelId) return;
+    if (!currentUser || isOwner) return;
     fetch(`/api/notifications/settings?channelId=${encodeURIComponent(channelId)}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.preference) setNotifPref(data.preference);
       })
       .catch(() => {});
-  }, [currentUser, channelId]);
+  }, [currentUser, channelId, isOwner]);
 
   const toggleNotification = async () => {
-    if (!currentUser || currentUser.channelId === channelId) return;
+    if (!currentUser || isOwner) return;
     setNotifLoading(true);
     const next = notifPref === "none" ? "all" : "none";
     try {
@@ -107,12 +134,20 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
     setNotifLoading(false);
   };
 
-  const handleTabChange = (tab: "comments" | "replies") => {
+  const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
     setPage(1);
   };
 
   const displayName = authorName || safeName(null, channelId);
+
+  const tabs: { id: TabType; label: string; icon: React.ElementType; show: boolean }[] = [
+    { id: "comments", label: "投稿", icon: MessageCircle, show: true },
+    { id: "replies", label: "返信", icon: MessageCircle, show: true },
+    { id: "likes", label: "高評価", icon: Heart, show: privacy.showLikesTab || isOwner },
+    { id: "dislikes", label: "低評価", icon: ThumbsDown, show: privacy.showDislikesTab || isOwner },
+    { id: "bookmarks", label: "ブックマーク", icon: Bookmark, show: privacy.showBookmarksTab || isOwner },
+  ];
 
   return (
     <MainLayout>
@@ -124,7 +159,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
         </Link>
         <div className="flex-1 min-w-0">
           <h1 className="text-lg font-bold truncate">{displayName}</h1>
-          <p className="text-[13px] text-[#71767b]">{comments.length} 件のコメント</p>
+          <p className="text-[13px] text-[#71767b]">{comments.length} 件</p>
         </div>
         <ProfileMoreMenu channelId={channelId} channelName={displayName} />
       </div>
@@ -142,7 +177,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
           <div className="flex-1">
             <h2 className="text-xl font-bold">{displayName}</h2>
           </div>
-          {currentUser && currentUser.channelId !== channelId && (
+          {!isOwner && currentUser && (
             <button
               onClick={toggleNotification}
               disabled={notifLoading}
@@ -161,25 +196,24 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#2f3336]">
-        <button
-          onClick={() => handleTabChange("comments")}
-          className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${activeTab === "comments" ? "text-foreground" : "text-muted"}`}
-        >
-          投稿
-          {activeTab === "comments" && (
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
-          )}
-        </button>
-        <button
-          onClick={() => handleTabChange("replies")}
-          className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${activeTab === "replies" ? "text-foreground" : "text-muted"}`}
-        >
-          返信
-          {activeTab === "replies" && (
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
-          )}
-        </button>
+      <div className="flex border-b border-[#2f3336] overflow-x-auto">
+        {tabs.filter((t) => t.show).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => handleTabChange(tab.id)}
+            className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap px-3 ${
+              activeTab === tab.id ? "text-foreground" : "text-muted"
+            }`}
+          >
+            <span className="flex items-center justify-center gap-1.5">
+              <tab.icon size={16} />
+              {tab.label}
+            </span>
+            {activeTab === tab.id && (
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-primary rounded-full" />
+            )}
+          </button>
+        ))}
       </div>
 
       {/* Comments */}
@@ -202,11 +236,9 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
         ) : comments.length === 0 ? (
           <div className="p-12 text-center text-[#71767b]">
             <User size={32} className="mx-auto mb-3 opacity-50" />
-            <p>{activeTab === "comments" ? "投稿" : "返信"}が見つかりませんでした</p>
-            <p className="text-[13px] mt-2">
-              {activeTab === "replies"
-                ? "このユーザーの返信はまだキャッシュされていません。"
-                : "このユーザーのコメントはまだキャッシュされていません。"}
+            <p>
+              {activeTab === "likes" ? "高評価" : activeTab === "dislikes" ? "低評価" : activeTab === "bookmarks" ? "ブックマーク" : activeTab === "replies" ? "返信" : "投稿"}
+              が見つかりませんでした
             </p>
           </div>
         ) : (

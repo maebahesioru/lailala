@@ -2424,6 +2424,13 @@ export namespace Prisma {
     email: string | null
     image: string | null
     channelId: string | null
+    showLikesTab: boolean | null
+    showDislikesTab: boolean | null
+    showBookmarksTab: boolean | null
+    notifyLikes: boolean | null
+    notifyDislikes: boolean | null
+    notifyBookmarks: boolean | null
+    notifyReplies: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2432,6 +2439,13 @@ export namespace Prisma {
     email: string | null
     image: string | null
     channelId: string | null
+    showLikesTab: boolean | null
+    showDislikesTab: boolean | null
+    showBookmarksTab: boolean | null
+    notifyLikes: boolean | null
+    notifyDislikes: boolean | null
+    notifyBookmarks: boolean | null
+    notifyReplies: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2440,6 +2454,13 @@ export namespace Prisma {
     email: number
     image: number
     channelId: number
+    showLikesTab: number
+    showDislikesTab: number
+    showBookmarksTab: number
+    notifyLikes: number
+    notifyDislikes: number
+    notifyBookmarks: number
+    notifyReplies: number
     _all: number
   }
 
@@ -2450,6 +2471,13 @@ export namespace Prisma {
     email?: true
     image?: true
     channelId?: true
+    showLikesTab?: true
+    showDislikesTab?: true
+    showBookmarksTab?: true
+    notifyLikes?: true
+    notifyDislikes?: true
+    notifyBookmarks?: true
+    notifyReplies?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2458,6 +2486,13 @@ export namespace Prisma {
     email?: true
     image?: true
     channelId?: true
+    showLikesTab?: true
+    showDislikesTab?: true
+    showBookmarksTab?: true
+    notifyLikes?: true
+    notifyDislikes?: true
+    notifyBookmarks?: true
+    notifyReplies?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2466,6 +2501,13 @@ export namespace Prisma {
     email?: true
     image?: true
     channelId?: true
+    showLikesTab?: true
+    showDislikesTab?: true
+    showBookmarksTab?: true
+    notifyLikes?: true
+    notifyDislikes?: true
+    notifyBookmarks?: true
+    notifyReplies?: true
     _all?: true
   }
 
@@ -2547,6 +2589,13 @@ export namespace Prisma {
     email: string | null
     image: string | null
     channelId: string | null
+    showLikesTab: boolean
+    showDislikesTab: boolean
+    showBookmarksTab: boolean
+    notifyLikes: boolean
+    notifyDislikes: boolean
+    notifyBookmarks: boolean
+    notifyReplies: boolean
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2572,6 +2621,13 @@ export namespace Prisma {
     email?: boolean
     image?: boolean
     channelId?: boolean
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: boolean | User$ytCredentialArgs<ExtArgs>
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
     actions?: boolean | User$actionsArgs<ExtArgs>
@@ -2592,6 +2648,13 @@ export namespace Prisma {
     email?: boolean
     image?: boolean
     channelId?: boolean
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2600,6 +2663,13 @@ export namespace Prisma {
     email?: boolean
     image?: boolean
     channelId?: boolean
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2608,9 +2678,16 @@ export namespace Prisma {
     email?: boolean
     image?: boolean
     channelId?: boolean
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "channelId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "channelId" | "showLikesTab" | "showDislikesTab" | "showBookmarksTab" | "notifyLikes" | "notifyDislikes" | "notifyBookmarks" | "notifyReplies", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ytCredential?: boolean | User$ytCredentialArgs<ExtArgs>
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
@@ -2649,6 +2726,13 @@ export namespace Prisma {
       email: string | null
       image: string | null
       channelId: string | null
+      showLikesTab: boolean
+      showDislikesTab: boolean
+      showBookmarksTab: boolean
+      notifyLikes: boolean
+      notifyDislikes: boolean
+      notifyBookmarks: boolean
+      notifyReplies: boolean
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3088,6 +3172,13 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly image: FieldRef<"User", 'String'>
     readonly channelId: FieldRef<"User", 'String'>
+    readonly showLikesTab: FieldRef<"User", 'Boolean'>
+    readonly showDislikesTab: FieldRef<"User", 'Boolean'>
+    readonly showBookmarksTab: FieldRef<"User", 'Boolean'>
+    readonly notifyLikes: FieldRef<"User", 'Boolean'>
+    readonly notifyDislikes: FieldRef<"User", 'Boolean'>
+    readonly notifyBookmarks: FieldRef<"User", 'Boolean'>
+    readonly notifyReplies: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -20098,7 +20189,14 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     image: 'image',
-    channelId: 'channelId'
+    channelId: 'channelId',
+    showLikesTab: 'showLikesTab',
+    showDislikesTab: 'showDislikesTab',
+    showBookmarksTab: 'showBookmarksTab',
+    notifyLikes: 'notifyLikes',
+    notifyDislikes: 'notifyDislikes',
+    notifyBookmarks: 'notifyBookmarks',
+    notifyReplies: 'notifyReplies'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -20346,6 +20444,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -20370,13 +20475,6 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -20406,6 +20504,13 @@ export namespace Prisma {
     email?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     channelId?: StringNullableFilter<"User"> | string | null
+    showLikesTab?: BoolFilter<"User"> | boolean
+    showDislikesTab?: BoolFilter<"User"> | boolean
+    showBookmarksTab?: BoolFilter<"User"> | boolean
+    notifyLikes?: BoolFilter<"User"> | boolean
+    notifyDislikes?: BoolFilter<"User"> | boolean
+    notifyBookmarks?: BoolFilter<"User"> | boolean
+    notifyReplies?: BoolFilter<"User"> | boolean
     ytCredential?: XOR<YtCredentialNullableScalarRelationFilter, YtCredentialWhereInput> | null
     commentLikes?: CommentLikeListRelationFilter
     actions?: UserActionListRelationFilter
@@ -20425,6 +20530,13 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     channelId?: SortOrderInput | SortOrder
+    showLikesTab?: SortOrder
+    showDislikesTab?: SortOrder
+    showBookmarksTab?: SortOrder
+    notifyLikes?: SortOrder
+    notifyDislikes?: SortOrder
+    notifyBookmarks?: SortOrder
+    notifyReplies?: SortOrder
     ytCredential?: YtCredentialOrderByWithRelationInput
     commentLikes?: CommentLikeOrderByRelationAggregateInput
     actions?: UserActionOrderByRelationAggregateInput
@@ -20447,6 +20559,13 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     channelId?: StringNullableFilter<"User"> | string | null
+    showLikesTab?: BoolFilter<"User"> | boolean
+    showDislikesTab?: BoolFilter<"User"> | boolean
+    showBookmarksTab?: BoolFilter<"User"> | boolean
+    notifyLikes?: BoolFilter<"User"> | boolean
+    notifyDislikes?: BoolFilter<"User"> | boolean
+    notifyBookmarks?: BoolFilter<"User"> | boolean
+    notifyReplies?: BoolFilter<"User"> | boolean
     ytCredential?: XOR<YtCredentialNullableScalarRelationFilter, YtCredentialWhereInput> | null
     commentLikes?: CommentLikeListRelationFilter
     actions?: UserActionListRelationFilter
@@ -20466,6 +20585,13 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     channelId?: SortOrderInput | SortOrder
+    showLikesTab?: SortOrder
+    showDislikesTab?: SortOrder
+    showBookmarksTab?: SortOrder
+    notifyLikes?: SortOrder
+    notifyDislikes?: SortOrder
+    notifyBookmarks?: SortOrder
+    notifyReplies?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -20480,6 +20606,13 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     channelId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    showLikesTab?: BoolWithAggregatesFilter<"User"> | boolean
+    showDislikesTab?: BoolWithAggregatesFilter<"User"> | boolean
+    showBookmarksTab?: BoolWithAggregatesFilter<"User"> | boolean
+    notifyLikes?: BoolWithAggregatesFilter<"User"> | boolean
+    notifyDislikes?: BoolWithAggregatesFilter<"User"> | boolean
+    notifyBookmarks?: BoolWithAggregatesFilter<"User"> | boolean
+    notifyReplies?: BoolWithAggregatesFilter<"User"> | boolean
   }
 
   export type YtCredentialWhereInput = {
@@ -21494,6 +21627,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -21513,6 +21653,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -21532,6 +21679,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -21551,6 +21705,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -21570,6 +21731,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
   }
 
   export type UserUpdateManyMutationInput = {
@@ -21578,6 +21746,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -21586,6 +21761,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type YtCredentialCreateInput = {
@@ -22687,6 +22869,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type YtCredentialNullableScalarRelationFilter = {
     is?: YtCredentialWhereInput | null
     isNot?: YtCredentialWhereInput | null
@@ -22803,6 +22990,13 @@ export namespace Prisma {
     email?: SortOrder
     image?: SortOrder
     channelId?: SortOrder
+    showLikesTab?: SortOrder
+    showDislikesTab?: SortOrder
+    showBookmarksTab?: SortOrder
+    notifyLikes?: SortOrder
+    notifyDislikes?: SortOrder
+    notifyBookmarks?: SortOrder
+    notifyReplies?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -22811,6 +23005,13 @@ export namespace Prisma {
     email?: SortOrder
     image?: SortOrder
     channelId?: SortOrder
+    showLikesTab?: SortOrder
+    showDislikesTab?: SortOrder
+    showBookmarksTab?: SortOrder
+    notifyLikes?: SortOrder
+    notifyDislikes?: SortOrder
+    notifyBookmarks?: SortOrder
+    notifyReplies?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -22819,6 +23020,13 @@ export namespace Prisma {
     email?: SortOrder
     image?: SortOrder
     channelId?: SortOrder
+    showLikesTab?: SortOrder
+    showDislikesTab?: SortOrder
+    showBookmarksTab?: SortOrder
+    notifyLikes?: SortOrder
+    notifyDislikes?: SortOrder
+    notifyBookmarks?: SortOrder
+    notifyReplies?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -22855,6 +23063,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -23110,11 +23326,6 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type ListItemListRelationFilter = {
     every?: ListItemWhereInput
     some?: ListItemWhereInput
@@ -23153,14 +23364,6 @@ export namespace Prisma {
     isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ListScalarRelationFilter = {
@@ -23626,6 +23829,10 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type YtCredentialUpdateOneWithoutUserNestedInput = {
     create?: XOR<YtCredentialCreateWithoutUserInput, YtCredentialUncheckedCreateWithoutUserInput>
     connectOrCreate?: YtCredentialCreateOrConnectWithoutUserInput
@@ -24030,10 +24237,6 @@ export namespace Prisma {
     connect?: ListFollowWhereUniqueInput | ListFollowWhereUniqueInput[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type UserUpdateOneRequiredWithoutListsNestedInput = {
     create?: XOR<UserCreateWithoutListsInput, UserUncheckedCreateWithoutListsInput>
     connectOrCreate?: UserCreateOrConnectWithoutListsInput
@@ -24294,6 +24497,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -24350,6 +24558,14 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -24400,19 +24616,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type YtCredentialCreateWithoutUserInput = {
@@ -25014,6 +25217,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
@@ -25032,6 +25242,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
@@ -25066,6 +25283,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
@@ -25084,6 +25308,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
@@ -25102,6 +25333,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
@@ -25120,6 +25358,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
@@ -25154,6 +25399,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
@@ -25172,6 +25424,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
@@ -25190,6 +25449,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     lists?: ListCreateNestedManyWithoutUserInput
@@ -25208,6 +25474,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     lists?: ListUncheckedCreateNestedManyWithoutUserInput
@@ -25242,6 +25515,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     lists?: ListUpdateManyWithoutUserNestedInput
@@ -25260,6 +25540,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     lists?: ListUncheckedUpdateManyWithoutUserNestedInput
@@ -25322,6 +25609,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -25340,6 +25634,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -25432,6 +25733,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -25450,6 +25758,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -25577,6 +25892,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -25595,6 +25917,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -25656,6 +25985,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -25674,6 +26010,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -25725,6 +26068,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -25743,6 +26093,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -25815,6 +26172,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -25833,6 +26197,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -25885,6 +26256,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -25903,6 +26281,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -25937,6 +26322,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -25955,6 +26347,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -25973,6 +26372,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -25991,6 +26397,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26025,6 +26438,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26043,6 +26463,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26061,6 +26488,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26079,6 +26513,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26113,6 +26554,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26131,6 +26579,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26149,6 +26604,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26167,6 +26629,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26201,6 +26670,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26219,6 +26695,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
@@ -26237,6 +26720,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
     actions?: UserActionCreateNestedManyWithoutUserInput
@@ -26255,6 +26745,13 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
     ytCredential?: YtCredentialUncheckedCreateNestedOneWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
     actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
@@ -26289,6 +26786,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
     actions?: UserActionUpdateManyWithoutUserNestedInput
@@ -26307,6 +26811,13 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
     ytCredential?: YtCredentialUncheckedUpdateOneWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
     actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput

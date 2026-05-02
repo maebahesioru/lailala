@@ -6,7 +6,6 @@ let fullScanDone = false;
 const VIDEO_ID = "niKAylKNIEI";
 const INTERVAL_MS = 5 * 60 * 1000; // 5分ごと
 const MAX_PER_RUN = 10000;
-const FULL_SCAN_MAX = 500000; // 起動時の全件収集上限
 
 function parsePublishedTime(text: string): Date | null {
   if (!text || text.trim() === "") return null;
@@ -28,7 +27,7 @@ function parsePublishedTime(text: string): Date | null {
   return d;
 }
 
-async function cacheVideoComments(videoId: string, maxItems: number) {
+async function cacheVideoComments(videoId: string, maxItems?: number) {
   try {
     const { getInnertube } = await import("./youtube");
     const innertube = await getInnertube();
@@ -36,7 +35,7 @@ async function cacheVideoComments(videoId: string, maxItems: number) {
     let count = 0;
 
     const saveComment = async (c: any, isReply = false, parentCommentId?: string) => {
-      if (count >= maxItems) return;
+      if (maxItems && count >= maxItems) return;
       if (!c || !c.comment_id) return;
 
       const publishedText = c.published_time?.text || String(c.published_time || "");
@@ -78,7 +77,7 @@ async function cacheVideoComments(videoId: string, maxItems: number) {
 
     const saveBatch = async (batch: any[]) => {
       for (const thread of batch) {
-        if (count >= maxItems) return;
+        if (maxItems && count >= maxItems) return;
         const c = thread.comment;
         if (!c) continue;
         await saveComment(c, false);
@@ -91,12 +90,12 @@ async function cacheVideoComments(videoId: string, maxItems: number) {
     };
 
     await saveBatch(comments.contents);
-    while (comments.has_continuation && count < maxItems) {
+    while (comments.has_continuation && (!maxItems || count < maxItems)) {
       comments = await comments.getContinuation();
       await saveBatch(comments.contents);
     }
 
-    console.log(`[CommentCacheWorker] Cached ${count} comments for ${videoId} (limit=${maxItems})`);
+    console.log(`[CommentCacheWorker] Cached ${count} comments for ${videoId}${maxItems ? ` (limit=${maxItems})` : ""}`);
     return count;
   } catch (e: any) {
     console.error(`[CommentCacheWorker] Failed to cache ${videoId}:`, e.message);
@@ -111,7 +110,7 @@ async function run() {
 async function runFullScan() {
   if (fullScanDone) return;
   console.log(`[CommentCacheWorker] Starting full scan for ${VIDEO_ID}...`);
-  const count = await cacheVideoComments(VIDEO_ID, FULL_SCAN_MAX);
+  const count = await cacheVideoComments(VIDEO_ID);
   fullScanDone = true;
   console.log(`[CommentCacheWorker] Full scan completed: ${count} comments`);
 }

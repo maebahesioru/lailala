@@ -25,6 +25,14 @@ model User {
   notifications Notification[]
   notificationSettings NotificationSetting[]
   pushSubscriptions PushSubscription[]
+  // Privacy settings
+  showLikesTab     Boolean @default(true) @map("show_likes_tab")
+  showDislikesTab  Boolean @default(true) @map("show_dislikes_tab")
+  showBookmarksTab Boolean @default(true) @map("show_bookmarks_tab")
+  notifyLikes      Boolean @default(true) @map("notify_likes")
+  notifyDislikes   Boolean @default(true) @map("notify_dislikes")
+  notifyBookmarks  Boolean @default(true) @map("notify_bookmarks")
+  notifyReplies    Boolean @default(true) @map("notify_replies")
 
   @@map("users")
 }

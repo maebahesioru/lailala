@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import { useTheme } from "@/components/theme-provider";
-import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight, Monitor, Hash, Bell, BellOff } from "lucide-react";
+import { Sun, Moon, Palette, Check, Ban, VolumeX, ChevronRight, Monitor, Hash, Bell, BellOff, Eye, EyeOff, Shield } from "lucide-react";
 import { usePush } from "@/components/push-provider";
 import Link from "next/link";
 
@@ -17,17 +17,61 @@ const MENTION_COLORS = [
   { id: "green", label: "黄緑", value: "#00ba7c" },
 ];
 
+interface PrivacyState {
+  showLikesTab: boolean;
+  showDislikesTab: boolean;
+  showBookmarksTab: boolean;
+  notifyLikes: boolean;
+  notifyDislikes: boolean;
+  notifyBookmarks: boolean;
+  notifyReplies: boolean;
+}
+
 export default function SettingsPage() {
   const { user } = useAuth();
   const { theme, setTheme, useSystem, setUseSystem } = useTheme();
   const { supported, subscribed, subscribe, unsubscribe } = usePush();
   const [message, setMessage] = useState("");
   const [mentionColor, setMentionColor] = useState("#1d9bf0");
+  const [privacy, setPrivacy] = useState<PrivacyState>({
+    showLikesTab: true,
+    showDislikesTab: true,
+    showBookmarksTab: true,
+    notifyLikes: true,
+    notifyDislikes: true,
+    notifyBookmarks: true,
+    notifyReplies: true,
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem("lailala-mention-color");
     if (saved) setMentionColor(saved);
   }, []);
+
+  useEffect(() => {
+    fetch("/api/user/privacy")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && !data.error) {
+          setPrivacy((prev) => ({ ...prev, ...data }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const updatePrivacy = async (key: keyof PrivacyState, value: boolean) => {
+    const next = { ...privacy, [key]: value };
+    setPrivacy(next);
+    try {
+      await fetch("/api/user/privacy", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [key]: value }),
+      });
+      setMessage("設定を更新しました");
+      setTimeout(() => setMessage(""), 2000);
+    } catch {}
+  };
 
   const themes = [
     { id: "light" as const, label: "ライト", icon: Sun },
@@ -159,6 +203,62 @@ export default function SettingsPage() {
             </div>
           ) : (
             <p className="text-muted text-sm">ログインしていません</p>
+          )}
+        </div>
+
+        {/* Privacy Settings */}
+        <div className="bg-card rounded-2xl border border-border p-4">
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <Shield size={20} className="text-muted" />
+            プライバシー
+          </h2>
+
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-sm font-bold text-muted mb-2">プロフィール表示</h3>
+              <div className="space-y-2">
+                {[
+                  { key: "showLikesTab" as const, label: "高評価タブを公開" },
+                  { key: "showDislikesTab" as const, label: "低評価タブを公開" },
+                  { key: "showBookmarksTab" as const, label: "ブックマークタブを公開" },
+                ].map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => updatePrivacy(item.key, !privacy[item.key])}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/50 transition-colors"
+                  >
+                    {privacy[item.key] ? <Eye size={18} className="text-primary" /> : <EyeOff size={18} className="text-muted" />}
+                    <span className="flex-1 text-left text-sm">{item.label}</span>
+                    {privacy[item.key] && <Check size={16} className="text-primary" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-bold text-muted mb-2">通知を受け取る</h3>
+              <div className="space-y-2">
+                {[
+                  { key: "notifyLikes" as const, label: "高評価された時" },
+                  { key: "notifyDislikes" as const, label: "低評価された時" },
+                  { key: "notifyBookmarks" as const, label: "ブックマークされた時" },
+                  { key: "notifyReplies" as const, label: "返信された時" },
+                ].map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => updatePrivacy(item.key, !privacy[item.key])}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/50 transition-colors"
+                  >
+                    {privacy[item.key] ? <Bell size={18} className="text-primary" /> : <BellOff size={18} className="text-muted" />}
+                    <span className="flex-1 text-left text-sm">{item.label}</span>
+                    {privacy[item.key] && <Check size={16} className="text-primary" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          {message && (
+            <p className="text-sm mt-3 text-primary">{message}</p>
           )}
         </div>
 

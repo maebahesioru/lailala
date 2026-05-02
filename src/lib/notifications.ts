@@ -25,17 +25,23 @@ const TYPE_LABELS: Record<NotificationType, string> = {
 
 /**
  * Create a notification for a user.
- * Respects user's notification settings.
+ * Respects user's notification settings and privacy preferences.
  */
 export async function createNotification(params: CreateNotificationParams) {
   // Find user by channelId
   const user = await prisma.user.findFirst({
     where: { channelId: params.recipientChannelId },
-    select: { id: true, name: true },
+    select: { id: true, name: true, notifyLikes: true, notifyDislikes: true, notifyBookmarks: true, notifyReplies: true },
   });
   if (!user) return null;
 
-  // Check notification settings
+  // Check per-type notification privacy settings
+  if (params.type === "like" && !user.notifyLikes) return null;
+  if (params.type === "dislike" && !user.notifyDislikes) return null;
+  if (params.type === "bookmark" && !user.notifyBookmarks) return null;
+  if (params.type === "reply" && !user.notifyReplies) return null;
+
+  // Check notification settings (channel-specific)
   const setting = await prisma.notificationSetting.findUnique({
     where: {
       userId_channelId: {

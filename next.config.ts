@@ -7,7 +7,9 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   outputFileTracingExcludes: {
-    "*": ["./generated/prisma2/**/*"],
+    "*": [
+      "./generated/prisma2/**/*",
+    ],
   },
 };
 
