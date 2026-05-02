@@ -97,16 +97,24 @@ export async function GET(req: NextRequest) {
       const sections = page?.contents?.array?.();
       if (sections) {
         for (const section of sections) {
+          // Try footers first (AccountChannel has UC ID)
+          const footers = section?.footers;
+          if (footers) {
+            for (const footer of footers) {
+              if (footer?.title?.text) name = footer.title.text;
+              const cid = footer?.endpoint?.payload?.browseEndpoint?.browseId;
+              if (cid && cid.startsWith("UC")) channelId = cid;
+            }
+          }
+          // Also try contents (AccountItemSection → AccountItem)
           const itemSections = section?.contents;
           if (!itemSections) continue;
           for (const itemSection of itemSections) {
-            // AccountItemSection → contents → AccountItem[]
             const items = itemSection?.contents;
             if (!items) continue;
             for (const item of items) {
-              if (item?.account_name?.text) name = item.account_name.text;
+              if (item?.account_name?.text && name === "YouTube User") name = item.account_name.text;
               if (item?.account_photo?.[0]?.url) thumbnail = item.account_photo[0].url;
-              if (item?.channel_handle?.text) channelId = item.channel_handle.text;
             }
           }
         }
