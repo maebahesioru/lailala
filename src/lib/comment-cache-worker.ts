@@ -109,10 +109,12 @@ async function run() {
 
 async function runFullScan() {
   if (fullScanDone) return;
-  console.log(`[CommentCacheWorker] Starting full scan for ${VIDEO_ID}...`);
-  const count = await cacheVideoComments(VIDEO_ID);
-  fullScanDone = true;
-  console.log(`[CommentCacheWorker] Full scan completed: ${count} comments`);
+  console.log(`[CommentCacheWorker] Starting full scan for ${VIDEO_ID} (max ${MAX_PER_RUN * 5})...`);
+  const count = await cacheVideoComments(VIDEO_ID, MAX_PER_RUN * 5);
+  if (count < MAX_PER_RUN * 5) {
+    fullScanDone = true;
+  }
+  console.log(`[CommentCacheWorker] Full scan batch: ${count} comments`);
 }
 
 export function startCommentCacheWorker() {
