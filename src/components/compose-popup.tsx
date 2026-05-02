@@ -145,9 +145,6 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
       if (scheduleRef.current && !scheduleRef.current.contains(e.target as Node)) {
         setShowSchedule(false);
       }
-      if (timestampRef.current && !timestampRef.current.contains(e.target as Node)) {
-        setShowTimestamp(false);
-      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
