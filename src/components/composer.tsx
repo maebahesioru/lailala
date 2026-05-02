@@ -37,7 +37,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
       const res = await fetch(`/api/scheduled-posts?videoId=${videoId}`);
       const data = await res.json();
       if (data.posts) setScheduledList(data.posts);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   useEffect(() => {
@@ -70,15 +70,21 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     if (!text.trim() || !user) return;
     setPosting(true);
     try {
-      await fetch("/api/comments", {
+      const res = await fetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoId, text: text.trim() }),
       });
-      setText("");
-      onPosted?.();
-    } catch {
-      // ignore
+      if (res.ok) {
+        setText("");
+        onPosted?.();
+      } else {
+        const data = await res.json();
+        alert(data.error || "投稿に失敗しました");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("投稿に失敗しました");
     } finally {
       setPosting(false);
     }
@@ -86,6 +92,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
 
   const handleSchedule = async () => {
     if (!text.trim() || !scheduleDate || !scheduleTime) return;
+    // Intentionally uses local time for scheduling (browser local timezone)
     const scheduledAt = new Date(`${scheduleDate}T${scheduleTime}`).toISOString();
     try {
       const res = await fetch("/api/scheduled-posts", {
@@ -103,7 +110,8 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
         const data = await res.json();
         alert(data.error || "予約に失敗しました");
       }
-    } catch {
+    } catch (e) {
+      console.error(e);
       alert("予約に失敗しました");
     }
   };
@@ -112,7 +120,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     try {
       await fetch(`/api/scheduled-posts?id=${id}`, { method: "DELETE" });
       loadScheduled();
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   if (!mounted || !user) {
@@ -127,7 +135,7 @@ export function Composer({ videoId, onPosted }: { videoId: string; onPosted?: ()
     <div className="px-4 py-3 border-b border-[#2f3336]">
       <div className="flex gap-3">
         {user.image ? (
-          <img src={user.image} alt={user.name || "User"} className="w-10 h-10 rounded-full object-cover shrink-0" />
+          <img src={user.image} alt={user.name || "User"} width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
         ) : (
           <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
             <User size={20} className="text-muted" />

@@ -69,7 +69,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
       setLiked(!liked);
       setLocalLikes((prev) => (liked ? prev - 1 : prev + 1));
       if (disliked) setDisliked(false);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleDislike = async () => {
@@ -83,7 +83,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
       });
       setDisliked(!disliked);
       if (liked) { setLiked(false); setLocalLikes((prev) => prev - 1); }
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleBookmark = async () => {
@@ -109,7 +109,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
         });
         setBookmarked(true);
       }
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleDelete = () => {

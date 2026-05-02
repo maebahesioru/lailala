@@ -10,10 +10,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-  ],
+  themeColor: "#000000",
   colorScheme: "dark light",
 };
 
@@ -49,7 +46,7 @@ export const metadata: Metadata = {
       "YouTubeのコメントをX/Twitter風のタイムラインで閲覧・投稿・返信。人気順・新着順の切り替え、ブックマーク、リスト機能、トレンド分析も搭載。",
     images: [
       {
-        url: "https://lailala.vercel.app/og-image.png",
+        url: "https://lailala.vercel.app/og-image.svg",
         width: 1200,
         height: 630,
         alt: "ライララ(仮) - YouTubeコメントをX/Twitter風に",
@@ -61,7 +58,7 @@ export const metadata: Metadata = {
     title: "ライララ(仮) - YouTubeコメントをX/Twitter風に",
     description:
       "YouTubeのコメントをX/Twitter風のタイムラインで閲覧・投稿・返信。人気順・新着順の切り替え、ブックマーク、リスト機能、トレンド分析も搭載。",
-    images: ["https://lailala.vercel.app/og-image.png"],
+    images: ["https://lailala.vercel.app/og-image.svg"],
     creator: "@lailala_app",
   },
   icons: {
@@ -73,13 +70,9 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "ライララ(仮)",
-    startupImage: "/favicon.svg",
   },
   alternates: {
     canonical: "https://lailala.vercel.app",
-  },
-  verification: {
-    google: "verification_token",
   },
   formatDetection: {
     telephone: false,

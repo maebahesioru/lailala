@@ -154,22 +154,22 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
     <MainLayout>
     <div className="min-h-screen">
       {/* Header */}
-      <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-[#2f3336] px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 py-3 flex items-center gap-3">
         <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1 min-w-0">
           <h1 className="text-lg font-bold truncate">{displayName}</h1>
-          <p className="text-[13px] text-[#71767b]">{comments.length} 件</p>
+          <p className="text-[13px] text-muted">{comments.length} 件</p>
         </div>
         <ProfileMoreMenu channelId={channelId} channelName={displayName} />
       </div>
 
       {/* Author info */}
-      <div className="px-4 py-6 border-b border-[#2f3336]">
+      <div className="px-4 py-6 border-b border-border">
         <div className="flex items-center gap-4">
           {authorThumb ? (
-            <img src={authorThumb} alt={displayName} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
+            <img src={authorThumb} alt={displayName} width={80} height={80} className="w-20 h-20 rounded-full object-cover border border-border" />
           ) : (
             <div className="w-20 h-20 rounded-full bg-border flex items-center justify-center">
               <User size={32} className="text-muted" />
@@ -197,12 +197,12 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
       </div>
 
       {/* Heatmap */}
-      <div className="px-4 py-4 border-b border-[#2f3336]">
+      <div className="px-4 py-4 border-b border-border">
         <ContributionHeatmap channelId={channelId} />
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#2f3336] overflow-x-auto">
+      <div className="flex border-b border-border overflow-x-auto">
         {tabs.filter((t) => t.show).map((tab) => (
           <button
             key={tab.id}
@@ -223,16 +223,16 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
       </div>
 
       {/* Comments */}
-      <div className="divide-y divide-[#2f3336]">
+      <div className="divide-y divide-border">
         {loading ? (
           Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="p-4 space-y-3 animate-pulse">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#2f3336]" />
-                <div className="h-4 w-24 bg-[#2f3336] rounded" />
+                <div className="w-10 h-10 rounded-full bg-border" />
+                <div className="h-4 w-24 bg-border rounded" />
               </div>
-              <div className="h-4 w-full bg-[#2f3336] rounded" />
-              <div className="h-4 w-2/3 bg-[#2f3336] rounded" />
+              <div className="h-4 w-full bg-border rounded" />
+              <div className="h-4 w-2/3 bg-border rounded" />
             </div>
           ))
         ) : error ? (
@@ -240,7 +240,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
             <p>{error}</p>
           </div>
         ) : comments.length === 0 ? (
-          <div className="p-12 text-center text-[#71767b]">
+          <div className="p-12 text-center text-muted">
             <User size={32} className="mx-auto mb-3 opacity-50" />
             <p>
               {activeTab === "likes" ? "高評価" : activeTab === "dislikes" ? "低評価" : activeTab === "bookmarks" ? "ブックマーク" : activeTab === "replies" ? "返信" : "投稿"}
@@ -257,7 +257,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
               <div className="flex gap-3">
                 <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
                   {c.authorThumb ? (
-                    <img src={c.authorThumb} alt={safeName(c.authorName, c.authorChannelId)} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                    <img src={c.authorThumb} alt={safeName(c.authorName, c.authorChannelId)} width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
                       <User size={20} className="text-muted" />
@@ -295,17 +295,17 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1 || loading}
-            className="px-4 py-2 rounded-full bg-[#1d9bf0] text-white text-[13px] font-medium hover:bg-[#1a8cd8] disabled:opacity-50 transition-colors"
+            className="px-4 py-2 rounded-full bg-primary text-white text-[13px] font-medium hover:bg-primary-hover disabled:opacity-50 transition-colors"
           >
             前へ
           </button>
-          <span className="text-[13px] text-[#71767b]">
+          <span className="text-[13px] text-muted">
             {page} / {totalPages}
           </span>
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages || loading}
-            className="px-4 py-2 rounded-full bg-[#1d9bf0] text-white text-[13px] font-medium hover:bg-[#1a8cd8] disabled:opacity-50 transition-colors"
+            className="px-4 py-2 rounded-full bg-primary text-white text-[13px] font-medium hover:bg-primary-hover disabled:opacity-50 transition-colors"
           >
             次へ
           </button>

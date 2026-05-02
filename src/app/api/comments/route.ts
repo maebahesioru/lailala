@@ -212,9 +212,9 @@ export async function GET(req: NextRequest) {
               publishedAt: new Date(),
             },
           });
-        } catch {}
+        } catch (e) { console.error(e); }
       }
-    }).catch(() => {});
+    }).catch((e) => { console.error(e); });
 
     return NextResponse.json({
       threads,

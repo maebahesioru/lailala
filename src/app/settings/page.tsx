@@ -274,7 +274,7 @@ export default function SettingsPage() {
           {user ? (
             <div className="flex items-center gap-3">
               {user.image ? (
-                <img src={user.image} alt="" className="w-12 h-12 rounded-full" />
+                <img src={user.image} alt="" width={48} height={48} className="w-12 h-12 rounded-full" />
               ) : (
                 <div className="w-12 h-12 rounded-full bg-border flex items-center justify-center">
                   <span className="text-muted text-lg">{user.name?.[0]}</span>

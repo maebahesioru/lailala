@@ -1,4 +1,5 @@
 const store = new Map<string, { count: number; reset: number }>();
+let lastCleanup = 0;
 
 export async function rateLimit(
   key: string,
@@ -6,6 +7,15 @@ export async function rateLimit(
   windowSeconds: number
 ): Promise<{ success: boolean; remaining: number; reset: number }> {
   const now = Math.floor(Date.now() / 1000);
+
+  // Clean up expired entries every 5 minutes (on-demand, avoids setInterval leak)
+  if (now - lastCleanup > 300) {
+    lastCleanup = now;
+    for (const [k, entry] of store) {
+      if (entry.reset < now) store.delete(k);
+    }
+  }
+
   const windowStart = Math.floor(now / windowSeconds) * windowSeconds;
   const reset = windowStart + windowSeconds;
 
@@ -22,11 +32,3 @@ export async function rateLimit(
     reset,
   };
 }
-
-// Clean up expired entries every 5 minutes
-setInterval(() => {
-  const now = Math.floor(Date.now() / 1000);
-  for (const [key, entry] of store) {
-    if (entry.reset < now) store.delete(key);
-  }
-}, 300000);

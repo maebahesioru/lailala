@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { rateLimit } from "@/lib/rate-limit";
 import { createNotification } from "@/lib/notifications";
 
 export async function GET(req: NextRequest) {
@@ -27,6 +28,11 @@ export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const limit = await rateLimit(`bookmark:${userId}`, 10, 60);
+  if (!limit.success) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
   try {
@@ -93,6 +99,11 @@ export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const limit = await rateLimit(`bookmark-delete:${userId}`, 10, 60);
+  if (!limit.success) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
   const { searchParams } = new URL(req.url);

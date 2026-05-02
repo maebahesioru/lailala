@@ -5,8 +5,7 @@
 - React 19 + TypeScript
 - Tailwind CSS v4
 - Prisma 6 + PostgreSQL
-- Redis (ioredis)
-- Auth.js v5 (next-auth@beta)
+- Custom YouTube OAuth session system (TV/Web OAuth flow)
 - youtubei.js (InnerTube API)
 
 ## Project Structure
@@ -18,10 +17,9 @@
 
 ## Important Notes
 - Prisma 7 caused compatibility issues with Turbopack; downgraded to Prisma 6
-- Auth.js v5 beta uses `proxy.ts` instead of `middleware.ts` for Next.js 16
 - youtubei.js browser import: `from "youtubei.js/web"`
-- YouTube write operations require auth (cookie or OAuth TV flow)
-- `ENCRYPTION_KEY` must be exactly 32 characters for AES-256-GCM
+- YouTube write operations require auth (cookie or OAuth TV/Web flow)
+- `ENCRYPTION_KEY` must be exactly 32 bytes for AES-256-GCM
 
 ## Build & Dev
 ```bash

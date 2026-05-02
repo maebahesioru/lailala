@@ -277,7 +277,7 @@ export default function BookmarksPage() {
                     {selectedBookmarkIds.has(b.commentId) ? <CheckSquare size={20} /> : <Square size={20} />}
                   </button>
                   {b.authorThumb ? (
-                    <img src={b.authorThumb} alt={b.authorName} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                    <img src={b.authorThumb} alt={b.authorName} width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
                       <User size={20} className="text-muted" />

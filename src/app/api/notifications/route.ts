@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { rateLimit } from "@/lib/rate-limit";
 import { markNotificationsAsRead } from "@/lib/notifications";
 
 // GET: fetch notifications
@@ -48,6 +49,11 @@ export async function PATCH(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const limit = await rateLimit(`notification-patch:${userId}`, 10, 60);
+  if (!limit.success) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   try {
     const body = await req.json();
     const { notificationIds, all } = body;
@@ -69,6 +75,11 @@ export async function PATCH(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const limit = await rateLimit(`notification-delete:${userId}`, 10, 60);
+  if (!limit.success) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
 
   try {
     const body = await req.json();

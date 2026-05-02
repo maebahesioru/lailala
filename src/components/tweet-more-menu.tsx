@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MoreHorizontal, ListPlus, ListMinus, Ban, VolumeX, Loader2, Pencil, Trash2, MessageCircle } from "lucide-react";
+import { MoreHorizontal, ListPlus, Ban, VolumeX, Loader2, Pencil, Trash2, MessageCircle } from "lucide-react";
 import { useAuth } from "./auth-provider";
 import { LoginPopup } from "./login-popup";
 import { ConfirmDialog } from "./confirm-dialog";

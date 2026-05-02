@@ -60,7 +60,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
       setLiked(!liked);
       setLocalLikes((prev) => (liked ? prev - 1 : prev + 1));
       if (disliked) setDisliked(false);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleDislike = async () => {
@@ -74,7 +74,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
       });
       setDisliked(!disliked);
       if (liked) { setLiked(false); setLocalLikes((prev) => prev - 1); }
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleDelete = async () => {
@@ -83,7 +83,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
       await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${thread.comment.commentId}`, { method: "DELETE" });
       setIsVisible(false);
       setTimeout(() => onDelete?.(thread.comment.commentId), 300);
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const handleBookmark = async () => {
@@ -109,7 +109,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
         });
         setBookmarked(true);
       }
-    } catch {}
+    } catch (e) { console.error(e); }
   };
 
   const detailTime = formatDetailedTime(thread.comment.publishedTime);
@@ -200,7 +200,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, s
                                 });
                                 thread.comment.content = editText.trim();
                                 setEditing(false);
-                              } catch {}
+                              } catch (e) { console.error(e); }
                             }}
                             className="px-4 py-1.5 rounded-full bg-primary text-white text-sm font-bold hover:bg-primary-hover"
                           >

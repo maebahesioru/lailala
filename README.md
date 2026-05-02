@@ -20,10 +20,9 @@ YouTube動画のコメント欄をX/Twitter風のUIで閲覧・操作できるWe
 ## 技術スタック
 
 - Next.js 16 / React 19 / TypeScript
-- Tailwind CSS
-- Prisma / PostgreSQL
-- Redis
-- Auth.js v5 (Google OAuth)
+- Tailwind CSS v4
+- Prisma 6 / PostgreSQL
+- Custom YouTube OAuth session system (TV/Web OAuth flow via youtubei.js)
 - youtubei.js (InnerTube API)
 
 ## セットアップ
@@ -50,7 +49,7 @@ docker-compose up --build
 1. リポジトリを連携
 2. ビルド設定で `Dockerfile` を選択
 3. 環境変数を設定
-4. PostgreSQLとRedisサービスを追加
+4. PostgreSQLサービスを追加
 
 ## ライセンス
 

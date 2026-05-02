@@ -42,17 +42,17 @@ export default function MyProfilePage() {
   return (
     <MainLayout>
     <div className="min-h-screen">
-      <div className="sticky top-0 bg-black/80 backdrop-blur-md z-10 border-b border-[#2f3336] px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 py-3 flex items-center gap-3">
         <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft size={20} />
         </Link>
         <h1 className="text-lg font-bold">マイプロフィール</h1>
       </div>
 
-      <div className="px-4 py-6 border-b border-[#2f3336]">
+      <div className="px-4 py-6 border-b border-border">
         <div className="flex items-center gap-4">
           {user?.image ? (
-            <img src={user.image} alt={user.name || ""} className="w-20 h-20 rounded-full object-cover border border-[#2f3336]" />
+            <img src={user.image} alt={user.name || ""} width={80} height={80} className="w-20 h-20 rounded-full object-cover border border-border" />
           ) : (
             <div className="w-20 h-20 rounded-full bg-border flex items-center justify-center">
               <User size={32} className="text-muted" />
@@ -66,7 +66,7 @@ export default function MyProfilePage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#2f3336]">
+      <div className="flex border-b border-border">
         <button
           onClick={() => setActiveTab("comments")}
           className={`flex-1 py-4 text-center font-medium hover:bg-white/5 transition-colors relative ${activeTab === "comments" ? "text-foreground" : "text-muted"}`}
@@ -87,12 +87,12 @@ export default function MyProfilePage() {
         </button>
       </div>
 
-      <div className="divide-y divide-[#2f3336]">
+      <div className="divide-y divide-border">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="p-4 space-y-3 animate-pulse">
-              <div className="h-4 w-full bg-[#2f3336] rounded" />
-              <div className="h-4 w-2/3 bg-[#2f3336] rounded" />
+              <div className="h-4 w-full bg-border rounded" />
+              <div className="h-4 w-2/3 bg-border rounded" />
             </div>
           ))
         ) : filtered.length === 0 ? (
@@ -110,7 +110,7 @@ export default function MyProfilePage() {
               <div className="flex gap-3">
                 <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
                   {user?.image ? (
-                    <img src={user.image} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" />
+                    <img src={user.image} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
                       <User size={20} className="text-muted" />

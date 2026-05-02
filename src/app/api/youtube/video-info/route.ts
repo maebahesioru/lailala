@@ -22,8 +22,8 @@ export async function GET(req: NextRequest) {
       if (rydRes.ok) {
         rydData = await rydRes.json();
       }
-    } catch {
-      // RYD API エラーは無視
+    } catch (e) {
+      console.error(e);
     }
 
     // RYD rating は 0-5 のスコア。分かりやすく 0-100% の「高評価率」に変換

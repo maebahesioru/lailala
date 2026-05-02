@@ -47,8 +47,8 @@ export async function GET(req: NextRequest) {
               }
             }
           }
-        } catch {
-          // ignore polling errors
+        } catch (e) {
+          console.error(e);
         }
       }, 20000);
 
