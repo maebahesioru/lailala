@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/auth-provider";
 import { MainLayout } from "@/components/main-layout";
 import { useTheme } from "@/components/theme-provider";
@@ -40,6 +41,7 @@ export default function SettingsPage() {
   const { supported, subscribed, subscribe, unsubscribe } = usePush();
   const { enabled: dataSaverEnabled, setEnabled: setDataSaver } = useDataSaver();
   const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
   const [mentionColor, setMentionColor] = useState("#1d9bf0");
   const [mutedWords, setMutedWords] = useState<{ id: string; word: string; mode: string }[]>([]);
   const [newWord, setNewWord] = useState("");
@@ -108,6 +110,12 @@ export default function SettingsPage() {
     } catch {}
   };
 
+  const showToast = (msg: string) => {
+    setMessage(msg);
+    setShowMessage(true);
+    setTimeout(() => setShowMessage(false), 2000);
+  };
+
   const updatePrivacy = async (key: keyof PrivacyState, value: boolean) => {
     const next = { ...privacy, [key]: value };
     setPrivacy(next);
@@ -118,8 +126,7 @@ export default function SettingsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [key]: value }),
       });
-      setMessage("設定を更新しました");
-      setTimeout(() => setMessage(""), 2000);
+      showToast("設定を更新しました");
     } catch {}
   };
 
@@ -131,16 +138,14 @@ export default function SettingsPage() {
 
   const handleThemeChange = (t: typeof theme) => {
     setTheme(t);
-    setMessage("テーマを変更しました");
-    setTimeout(() => setMessage(""), 2000);
+    showToast("テーマを変更しました");
   };
 
   const handleMentionColor = (color: string) => {
     setMentionColor(color);
     localStorage.setItem("lailala-mention-color", color);
     document.documentElement.style.setProperty("--mention", color);
-    setMessage("メンション色を変更しました");
-    setTimeout(() => setMessage(""), 2000);
+    showToast("メンション色を変更しました");
   };
 
   return (
@@ -193,9 +198,11 @@ export default function SettingsPage() {
               </button>
             ))}
           </div>
-          {message && (
-            <p className="text-sm mt-3 text-primary">{message}</p>
-          )}
+          <AnimatePresence>
+            {showMessage && (
+              <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }} className="text-sm mt-3 text-primary">{message}</motion.p>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Mention / Hashtag Color */}
@@ -335,7 +342,11 @@ export default function SettingsPage() {
             </div>
           </div>
           {message && (
-            <p className="text-sm mt-3 text-primary">{message}</p>
+            <AnimatePresence>
+              {showMessage && (
+                <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }} className="text-sm mt-3 text-primary">{message}</motion.p>
+              )}
+            </AnimatePresence>
           )}
         </div>
 

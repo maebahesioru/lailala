@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { CommentCard } from "./comment-card";
 import { ReplyCard } from "./reply-card";
 import { Composer } from "./composer";
@@ -36,35 +37,54 @@ function NestedReply({
   const indentClass = depth >= 3 ? "ml-0" : depth === 2 ? "ml-6" : depth === 1 ? "ml-6" : "";
 
   return (
-    <div className={indentClass}>
+    <motion.div
+      className={indentClass}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       <ReplyCard reply={node} parentCommentId={commentId} />
       {hasChildren && (
         <div className="relative">
           {depth < 3 && (
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               onClick={() => setExpanded(!expanded)}
               className="absolute left-3 top-0 text-[#71767b] hover:text-[#1d9bf0] p-1"
               title={expanded ? "折りたたむ" : "展開する"}
             >
-              <CornerDownRight size={14} className={`transition-transform ${expanded ? "rotate-0" : "-rotate-90"}`} />
-            </button>
+              <motion.div
+                animate={{ rotate: expanded ? 0 : -90 }}
+                transition={{ duration: 0.2 }}
+              >
+                <CornerDownRight size={14} />
+              </motion.div>
+            </motion.button>
           )}
-          {expanded && (
-            <div className={depth < 3 ? "border-l-2 border-[#2f3336] ml-6 mt-1" : ""}>
-              {node.children.map((child) => (
-                <NestedReply
-                  key={child.commentId}
-                  node={child}
-                  depth={depth + 1}
-                  videoId={videoId}
-                  commentId={commentId}
-                />
-              ))}
-            </div>
-          )}
+          <AnimatePresence>
+            {expanded && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className={depth < 3 ? "border-l-2 border-[#2f3336] ml-6 mt-1 overflow-hidden" : ""}
+              >
+                {node.children.map((child) => (
+                  <NestedReply
+                    key={child.commentId}
+                    node={child}
+                    depth={depth + 1}
+                    videoId={videoId}
+                    commentId={commentId}
+                  />
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -128,9 +148,11 @@ export function ThreadView({
   return (
     <>
       <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 py-3 flex items-center gap-3">
-        <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
-          <ArrowLeft size={20} />
-        </Link>
+        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+          <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors inline-block">
+            <ArrowLeft size={20} />
+          </Link>
+        </motion.div>
         <h1 className="text-lg font-bold">スレッド</h1>
       </div>
 
@@ -144,52 +166,77 @@ export function ThreadView({
         />
       </div>
 
-      {highlightedReply && (
-        <>
-          {/* Reply lineage indicator */}
-          <div className="px-4 py-2 flex items-center gap-2 text-[13px] text-muted border-b border-[#2f3336]/50">
-            <CornerDownRight size={14} />
-            <span>
-              <span className="font-medium text-foreground">{highlightedReply.author.name}</span>
-              さんへの返信
-            </span>
-          </div>
-          <div className="border-b border-[#2f3336] bg-primary/[0.02]">
-            <ReplyCard reply={highlightedReply as any} parentCommentId={commentId} />
-          </div>
-        </>
-      )}
+      <AnimatePresence>
+        {highlightedReply && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            {/* Reply lineage indicator */}
+            <div className="px-4 py-2 flex items-center gap-2 text-[13px] text-muted border-b border-[#2f3336]/50">
+              <CornerDownRight size={14} />
+              <span>
+                <span className="font-medium text-foreground">{highlightedReply.author.name}</span>
+                さんへの返信
+              </span>
+            </div>
+            <div className="border-b border-[#2f3336] bg-primary/[0.02]">
+              <ReplyCard reply={highlightedReply as any} parentCommentId={commentId} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Composer videoId={videoId} onPosted={handleReload} />
 
       <div className="divide-y divide-[#2f3336] border-b border-[#2f3336]">
-        {replies.map((reply) => (
-          <NestedReply
-            key={reply.commentId}
-            node={reply}
-            depth={0}
-            videoId={videoId}
-            commentId={commentId}
-          />
-        ))}
+        <AnimatePresence>
+          {replies.map((reply) => (
+            <motion.div
+              key={reply.commentId}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <NestedReply
+                node={reply}
+                depth={0}
+                videoId={videoId}
+                commentId={commentId}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
         {replies.length === 0 && replyError && (
-          <div className="p-12 text-center text-red-400 space-y-3">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="p-12 text-center text-red-400 space-y-3"
+          >
             <MessageCircle size={32} className="mx-auto opacity-50" />
             <p>返信の読み込みに失敗しました</p>
             <p className="text-[13px] text-[#71767b]">{replyError}</p>
-          </div>
+          </motion.div>
         )}
         {replies.length === 0 && !replyError && (
-          <div className="p-12 text-center text-[#71767b] space-y-3">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="p-12 text-center text-[#71767b] space-y-3"
+          >
             <MessageCircle size={32} className="mx-auto opacity-50" />
             <p>まだ返信がありません</p>
-          </div>
+          </motion.div>
         )}
       </div>
 
       {continuationToken && (
         <div className="p-6 text-center border-t border-[#2f3336]">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={loadMore}
             disabled={loadingMore}
             className="inline-flex items-center gap-2 text-[13px] text-[#1d9bf0] hover:bg-[#1d9bf0]/10 px-4 py-2 rounded-full transition-colors disabled:opacity-50"
@@ -202,7 +249,7 @@ export function ThreadView({
             ) : (
               <>もっと読み込む</>
             )}
-          </button>
+          </motion.button>
         </div>
       )}
     </>

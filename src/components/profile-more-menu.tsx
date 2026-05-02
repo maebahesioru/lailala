@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { MoreHorizontal, Ban, VolumeX, ListPlus, ListMinus, Loader2 } from "lucide-react";
 import { useAuth } from "./auth-provider";
 import { LoginPopup } from "./login-popup";
@@ -95,47 +96,80 @@ export function ProfileMoreMenu({ channelId, channelName }: ProfileMoreMenuProps
   return (
     <>
       <div className="relative" ref={ref}>
-        <button onClick={handleOpen} className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted">
+        <motion.button
+          onClick={handleOpen}
+          whileTap={{ scale: 0.85 }}
+          className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
+        >
           <MoreHorizontal size={20} />
-        </button>
-        {open && (
-          <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden w-56 z-20">
-            {!showListMenu ? (
-              <>
-                <button onClick={(e) => { e.stopPropagation(); setShowListMenu(true); }} className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px]">
-                  <ListPlus size={16} className="text-muted" />
-                  <span>リストに追加</span>
-                </button>
-                <button onClick={(e) => { e.stopPropagation(); setShowBlockConfirm(true); }} className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px] text-red-500">
-                  <Ban size={16} />
-                  <span>ブロック</span>
-                </button>
-                <button onClick={(e) => { e.stopPropagation(); setShowMuteConfirm(true); }} className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px]">
-                  <VolumeX size={16} className="text-muted" />
-                  <span>ミュート</span>
-                </button>
-              </>
-            ) : (
-              <div className="max-h-64 overflow-y-auto">
-                <button onClick={(e) => { e.stopPropagation(); setShowListMenu(false); }} className="flex items-center gap-3 w-full px-4 py-2 hover:bg-white/5 text-left text-[13px] text-muted border-b border-border">
-                  ← 戻る
-                </button>
-                {loadingLists ? (
-                  <div className="flex justify-center py-4"><Loader2 size={16} className="animate-spin text-muted" /></div>
-                ) : lists.length === 0 ? (
-                  <div className="px-4 py-3 text-[13px] text-muted">リストがありません</div>
-                ) : (
-                  lists.map((list) => (
-                    <button key={list.id} onClick={(e) => { e.stopPropagation(); addToList(list.id); }} className="flex items-center gap-3 w-full px-4 py-2 hover:bg-white/5 text-left text-[14px]">
-                      <ListPlus size={14} className="text-muted" />
-                      <span className="truncate">{list.name} に追加</span>
-                    </button>
-                  ))
-                )}
-              </div>
-            )}
-          </div>
-        )}
+        </motion.button>
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -4 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden w-56 z-20"
+            >
+              {!showListMenu ? (
+                <>
+                  <motion.button
+                    whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+                    onClick={(e) => { e.stopPropagation(); setShowListMenu(true); }}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-left text-[14px]"
+                  >
+                    <ListPlus size={16} className="text-muted" />
+                    <span>リストに追加</span>
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+                    onClick={(e) => { e.stopPropagation(); setShowBlockConfirm(true); }}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-left text-[14px] text-red-500"
+                  >
+                    <Ban size={16} />
+                    <span>ブロック</span>
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+                    onClick={(e) => { e.stopPropagation(); setShowMuteConfirm(true); }}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-left text-[14px]"
+                  >
+                    <VolumeX size={16} className="text-muted" />
+                    <span>ミュート</span>
+                  </motion.button>
+                </>
+              ) : (
+                <div className="max-h-64 overflow-y-auto">
+                  <motion.button
+                    whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+                    onClick={(e) => { e.stopPropagation(); setShowListMenu(false); }}
+                    className="flex items-center gap-3 w-full px-4 py-2 text-left text-[13px] text-muted border-b border-border"
+                  >
+                    ← 戻る
+                  </motion.button>
+                  {loadingLists ? (
+                    <div className="flex justify-center py-4"><Loader2 size={16} className="animate-spin text-muted" /></div>
+                  ) : lists.length === 0 ? (
+                    <div className="px-4 py-3 text-[13px] text-muted">リストがありません</div>
+                  ) : (
+                    lists.map((list) => (
+                      <motion.button
+                        key={list.id}
+                        whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+                        onClick={(e) => { e.stopPropagation(); addToList(list.id); }}
+                        className="flex items-center gap-3 w-full px-4 py-2 text-left text-[14px]"
+                      >
+                        <ListPlus size={14} className="text-muted" />
+                        <span className="truncate">{list.name} に追加</span>
+                      </motion.button>
+                    ))
+                  )}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       <LoginPopup open={showLogin} onClose={() => setShowLogin(false)} />
       <ConfirmDialog open={showBlockConfirm} title="ブロックしますか？" message={`${channelName} をブロックします。`} confirmLabel="ブロック" confirmVariant="danger" onConfirm={handleBlock} onCancel={() => setShowBlockConfirm(false)} />

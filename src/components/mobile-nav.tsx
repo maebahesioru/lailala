@@ -1,6 +1,7 @@
 "use client";
 
 import { Home, Search, Flame, List, User, Music } from "lucide-react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "./auth-provider";
@@ -50,18 +51,28 @@ export function MobileNav() {
                 key={item.label}
                 href={item.href}
                 onClick={item.onClick ? item.onClick : item.protected ? handleProtectedClick : undefined}
-                className={`flex flex-col items-center justify-center gap-0.5 w-14 h-full transition-colors ${
+                className={`relative flex flex-col items-center justify-center gap-0.5 w-14 h-full transition-colors ${
                   isActive ? "text-primary" : "text-muted"
                 }`}
                 aria-current={isActive ? "page" : undefined}
               >
-                <item.icon size={22} strokeWidth={2} />
+                <motion.div whileTap={{ scale: 0.8 }} transition={{ type: "spring", stiffness: 500, damping: 15 }}>
+                  <item.icon size={22} strokeWidth={2} />
+                </motion.div>
                 <span className="text-[10px] font-medium">{item.label}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="mobileNavIndicator"
+                    className="absolute -top-px left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full"
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  />
+                )}
               </Link>
             );
           })}
-          <button
+          <motion.button
             onClick={toggleBgm}
+            whileTap={{ scale: 0.8 }}
             className={`flex flex-col items-center justify-center gap-0.5 w-14 h-full transition-colors ${
               bgmMounted && bgmEnabled ? "text-primary" : "text-muted"
             }`}
@@ -70,7 +81,7 @@ export function MobileNav() {
           >
             <Music size={22} strokeWidth={2} />
             <span className="text-[10px] font-medium">BGM {bgmMounted && bgmEnabled ? "ON" : "OFF"}</span>
-          </button>
+          </motion.button>
         </div>
       </nav>
       {/* Safe area padding for bottom nav */}
