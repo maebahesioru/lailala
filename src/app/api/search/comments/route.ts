@@ -107,14 +107,16 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    // Sort order
+    // Sort order based on tab type
     let orderBy: any = {};
-    if (sort === "likes") {
+    if (type === "latest") {
+      orderBy = { publishedAt: "desc" };
+    } else if (type === "accounts") {
       orderBy = { likeCount: "desc" };
     } else if (sort === "newest") {
       orderBy = { publishedAt: "desc" };
-    } else if (type === "latest") {
-      orderBy = { publishedAt: "desc" };
+    } else if (sort === "likes") {
+      orderBy = { likeCount: "desc" };
     } else {
       // top / relevance: prioritize like count
       orderBy = { likeCount: "desc" };
