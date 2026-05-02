@@ -127,6 +127,7 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   image: 'image',
   channelId: 'channelId',
+  selectedAccountId: 'selectedAccountId',
   showLikesTab: 'showLikesTab',
   showDislikesTab: 'showDislikesTab',
   showBookmarksTab: 'showBookmarksTab',
@@ -147,6 +148,9 @@ exports.Prisma.YtCredentialScalarFieldEnum = {
   userId: 'userId',
   credential: 'credential',
   type: 'type',
+  accountName: 'accountName',
+  accountThumb: 'accountThumb',
+  accountChannelId: 'accountChannelId',
   updatedAt: 'updatedAt'
 };
 

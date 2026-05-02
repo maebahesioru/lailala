@@ -2,18 +2,28 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 
+interface Account {
+  id: string;
+  name: string;
+  image: string | null;
+  channelId: string | null;
+}
+
 interface User {
   id: string;
   name?: string | null;
   email?: string | null;
   image?: string | null;
   channelId?: string | null;
+  selectedAccountId?: string | null;
+  accounts?: Account[];
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   refresh: () => Promise<void>;
+  switchAccount: (channelId: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({ user: null, loading: true, refresh: async () => {} });
@@ -68,12 +78,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const switchAccount = useCallback(async (channelId: string) => {
+    try {
+      const res = await fetch("/api/auth/switch-account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ channelId }),
+      });
+      if (res.ok) {
+        await refresh();
+      }
+    } catch (e) { console.error(e); }
+  }, [refresh]);
+
   useEffect(() => {
     refresh();
   }, [refresh]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, refresh }}>
+    <AuthContext.Provider value={{ user, loading, refresh, switchAccount }}>
       {children}
     </AuthContext.Provider>
   );

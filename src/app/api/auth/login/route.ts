@@ -130,11 +130,32 @@ export async function GET(req: NextRequest) {
       create: { name, email, image: thumbnail },
     });
 
+    // Upsert credential by [userId, accountChannelId]
     await prisma.ytCredential.upsert({
-      where: { userId: user.id },
-      update: { credential: encryptedCred, type: "oauth" },
-      create: { userId: user.id, credential: encryptedCred, type: "oauth" },
+      where: {
+        userId_accountChannelId: {
+          userId: user.id,
+          accountChannelId: channelId,
+        },
+      },
+      update: { credential: encryptedCred, type: "oauth", accountName: name, accountThumb: thumbnail },
+      create: {
+        userId: user.id,
+        credential: encryptedCred,
+        type: "oauth",
+        accountName: name,
+        accountThumb: thumbnail,
+        accountChannelId: channelId,
+      },
     });
+
+    // If no selected account, set this as default
+    if (!user.selectedAccountId) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { selectedAccountId: channelId },
+      });
+    }
 
     // Delete only after all DB work succeeds
     oauthStates.delete(sessionId);

@@ -60,7 +60,7 @@ function LogoutConfirmDialog({ open, onClose, onConfirm }: { open: boolean; onCl
 }
 
 export function Sidebar() {
-  const { user } = useAuth();
+  const { user, switchAccount } = useAuth();
   const { enabled: bgmEnabled, mounted: bgmMounted, toggle: toggleBgm } = useBgm();
   const { unreadCount } = useNotifications();
   const [showLogin, setShowLogin] = useState(false);
@@ -258,6 +258,45 @@ export function Sidebar() {
                       transition={{ duration: 0.15 }}
                       className="absolute bottom-full left-0 w-full mb-2 bg-card border border-border rounded-xl shadow-lg overflow-hidden"
                     >
+                      {user.accounts && user.accounts.length > 1 && (
+                        <>
+                          <p className="px-4 pt-3 pb-1 text-[11px] font-bold text-muted uppercase tracking-wider">アカウント切替</p>
+                          {user.accounts.map((account) => (
+                            <button
+                              key={account.channelId}
+                              onClick={() => {
+                                if (account.channelId !== user.selectedAccountId) {
+                                  switchAccount(account.channelId || "");
+                                }
+                                setShowAccountMenu(false);
+                              }}
+                              className={`flex items-center gap-3 w-full px-4 py-2.5 hover:bg-white/5 text-left text-[13px] ${
+                                account.channelId === user.selectedAccountId ? "text-primary font-bold" : "text-foreground"
+                              }`}
+                            >
+                              {account.image ? (
+                                <img src={account.image} alt="" className="w-6 h-6 rounded-full object-cover" />
+                              ) : (
+                                <div className="w-6 h-6 rounded-full bg-border flex items-center justify-center">
+                                  <User size={14} className="text-muted" />
+                                </div>
+                              )}
+                              <span className="truncate">{account.name}</span>
+                              {account.channelId === user.selectedAccountId && (
+                                <span className="ml-auto text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">使用中</span>
+                              )}
+                            </button>
+                          ))}
+                          <div className="border-t border-border my-1" />
+                        </>
+                      )}
+                      <button
+                        onClick={() => { setShowLogin(true); setShowAccountMenu(false); }}
+                        className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px] text-primary"
+                      >
+                        <User size={16} />
+                        <span>別アカウントを追加</span>
+                      </button>
                       <button
                         onClick={() => { setShowLogoutConfirm(true); setShowAccountMenu(false); }}
                         className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 text-left text-[14px] text-red-500"

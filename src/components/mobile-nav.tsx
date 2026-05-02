@@ -12,7 +12,7 @@ import { useNotifications } from "./use-notifications";
 
 export function MobileNav() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, switchAccount } = useAuth();
   const { enabled: bgmEnabled, mounted: bgmMounted, toggle: toggleBgm } = useBgm();
   const { unreadCount } = useNotifications();
   const [showLogin, setShowLogin] = useState(false);
@@ -157,28 +157,66 @@ export function MobileNav() {
             </nav>
 
             {/* Account */}
-            <div className="p-4 border-t border-border">
+            <div className="p-4 border-t border-border space-y-3">
               {user ? (
-                <div className="flex items-center gap-3">
-                  {user.image ? (
-                    <img src={user.image} alt="" className="w-10 h-10 rounded-full object-cover" />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
-                      <User size={20} className="text-muted" />
+                <>
+                  {user.accounts && user.accounts.length > 1 && (
+                    <div className="space-y-1">
+                      <p className="text-[11px] font-bold text-muted uppercase tracking-wider px-1">アカウント切替</p>
+                      {user.accounts.map((account) => (
+                        <button
+                          key={account.channelId}
+                          onClick={() => {
+                            if (account.channelId !== user.selectedAccountId) {
+                              switchAccount(account.channelId || "");
+                            }
+                            setOpen(false);
+                          }}
+                          className={`flex items-center gap-3 w-full px-3 py-2 rounded-full transition-colors ${
+                            account.channelId === user.selectedAccountId ? "bg-primary/10 text-primary font-bold" : "hover:bg-white/5 text-foreground"
+                          }`}
+                        >
+                          {account.image ? (
+                            <img src={account.image} alt="" className="w-6 h-6 rounded-full object-cover" />
+                          ) : (
+                            <div className="w-6 h-6 rounded-full bg-border flex items-center justify-center">
+                              <User size={14} className="text-muted" />
+                            </div>
+                          )}
+                          <span className="text-[13px] truncate flex-1 text-left">{account.name}</span>
+                          {account.channelId === user.selectedAccountId && <span className="text-[10px] text-primary">使用中</span>}
+                        </button>
+                      ))}
                     </div>
                   )}
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm truncate">{user.name}</p>
-                    <p className="text-muted text-xs truncate">{user.email}</p>
-                  </div>
                   <button
-                    onClick={() => { setOpen(false); window.location.href = "/api/auth/signout"; }}
-                    className="p-2 rounded-full hover:bg-white/10 text-muted"
-                    title="ログアウト"
+                    onClick={() => { setOpen(false); setShowLogin(true); }}
+                    className="flex items-center gap-3 w-full px-3 py-2 rounded-full hover:bg-white/5 text-primary text-[13px]"
                   >
-                    <LogOut size={18} />
+                    <User size={18} />
+                    別アカウントを追加
                   </button>
-                </div>
+                  <div className="flex items-center gap-3">
+                    {user.image ? (
+                      <img src={user.image} alt="" className="w-10 h-10 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
+                        <User size={20} className="text-muted" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-sm truncate">{user.name}</p>
+                      <p className="text-muted text-xs truncate">{user.email}</p>
+                    </div>
+                    <button
+                      onClick={() => { setOpen(false); window.location.href = "/api/auth/signout"; }}
+                      className="p-2 rounded-full hover:bg-white/10 text-muted"
+                      title="ログアウト"
+                    >
+                      <LogOut size={18} />
+                    </button>
+                  </div>
+                </>
               ) : (
                 <button
                   onClick={() => { setOpen(false); setShowLogin(true); }}

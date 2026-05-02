@@ -14,11 +14,22 @@ export async function getInnertube() {
 
 /**
  * 書き込み操作用: 認証が必要。
- * 指定ユーザーのCredentialのみ使用。Cookie または OAuth トークン。
+ * 指定ユーザーの選択中アカウントのCredentialを使用。Cookie または OAuth トークン。
  */
-export async function getInnertubeWithAuth(credentialId: string) {
-  const cred = await prisma.ytCredential.findUnique({
-    where: { userId: credentialId },
+export async function getInnertubeWithAuth(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { selectedAccountId: true },
+  });
+
+  if (!user?.selectedAccountId) {
+    const error = new Error("YOUTUBE_AUTH_REQUIRED");
+    (error as any).code = "YOUTUBE_AUTH_REQUIRED";
+    throw error;
+  }
+
+  const cred = await prisma.ytCredential.findFirst({
+    where: { userId, accountChannelId: user.selectedAccountId },
   });
 
   if (!cred) {
