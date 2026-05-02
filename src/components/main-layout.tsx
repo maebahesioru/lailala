@@ -1,6 +1,7 @@
 import { Sidebar } from "./sidebar";
 import { WidgetsPanel } from "./widgets-panel";
 import { MobileNav } from "./mobile-nav";
+import { DonationPopup } from "./donation-popup";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,6 +14,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         <WidgetsPanel />
       </div>
       <MobileNav />
+      <DonationPopup />
     </div>
   );
 }
