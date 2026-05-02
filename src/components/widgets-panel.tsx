@@ -111,7 +111,7 @@ export function WidgetsPanel() {
   };
 
   return (
-    <aside className="w-[440px] hidden lg:block px-8 py-4 space-y-4 self-start sticky top-0">
+    <aside className="w-[440px] hidden lg:block px-8 py-4 space-y-4 sticky top-0 h-screen overflow-y-auto">
       <div className="relative">
         <form onSubmit={handleSearch} className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={18} />
