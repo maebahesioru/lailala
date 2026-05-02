@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUserId } from "@/lib/session";
 import { getInnertube } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 
@@ -26,22 +25,13 @@ function parsePublishedTime(text: string): Date | null {
 export async function POST(req: NextRequest) {
   const { videoId, max = 500 } = await req.json();
   if (!videoId) return NextResponse.json({ error: "videoId required" }, { status: 400 });
-
-  const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   return runCache(videoId, max);
 }
 
-// GET for easy browser access (still requires auth)
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId") || "niKAylKNIEI";
   const max = parseInt(searchParams.get("max") || "500", 10);
-
-  const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   return runCache(videoId, max);
 }
 
