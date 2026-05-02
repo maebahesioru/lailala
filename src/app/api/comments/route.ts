@@ -122,7 +122,7 @@ function filterBlockedThreads(threads: any[], blockedIds: Set<string>) {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId");
-  const sortBy = (searchParams.get("sortBy") as "TOP_COMMENTS" | "NEWEST_FIRST" | "OLDEST_FIRST") || "TOP_COMMENTS";
+  const sortBy = (searchParams.get("sortBy") as "TOP_COMMENTS" | "NEWEST_FIRST") || "TOP_COMMENTS";
   const continuationToken = searchParams.get("continuationToken");
 
   if (!videoId) {
@@ -166,7 +166,7 @@ export async function GET(req: NextRequest) {
         hasContinuation = !!nextToken;
       }
     } else {
-      const comments = await innertube.getComments(videoId, sortBy as any);
+      const comments = await innertube.getComments(videoId, sortBy);
 
       threads = comments.contents
         .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)

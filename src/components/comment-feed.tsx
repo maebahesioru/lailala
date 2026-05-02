@@ -21,11 +21,9 @@ interface FollowedList {
   name: string;
 }
 
-export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId: string; defaultSort?: "TOP_COMMENTS" | "NEWEST_FIRST" | "OLDEST_FIRST" }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [threads, setThreads] = useState<CommentThread[]>([]);
-  const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST" | "OLDEST_FIRST">(defaultSort);
+export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId: string; defaultSort?: "TOP_COMMENTS" | "NEWEST_FIRST" }) {
+
+  const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST">(defaultSort);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,7 +85,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
         setThreads(mapped);
         fetchVoteData(mapped);
       } else {
-        const data = await fetchComments(videoId, sortBy as any);
+        const data = await fetchComments(videoId, sortBy);
         setThreads(data.threads);
         setHasMore(data.hasContinuation);
         setNextToken(data.continuationToken);
@@ -226,7 +224,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     if (activeListId) return; // Only for main timeline
     const interval = setInterval(async () => {
       try {
-        const data = await fetchComments(videoId, sortBy as any);
+        const data = await fetchComments(videoId, sortBy);
         const currentTopIds = new Set(threads.map((t) => t.comment.commentId));
         const newComments = data.threads.filter((t) => !currentTopIds.has(t.comment.commentId));
         if (newComments.length > 0) {
