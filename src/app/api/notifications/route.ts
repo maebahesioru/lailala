@@ -3,7 +3,6 @@ import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { markNotificationsAsRead } from "@/lib/notifications";
-import { getInnertubeWithAuth } from "@/lib/youtube";
 
 // GET: fetch notifications (app + YouTube)
 export async function GET(req: NextRequest) {
@@ -27,35 +26,9 @@ export async function GET(req: NextRequest) {
       prisma.notification.count({ where: { userId, isRead: false } }),
     ]);
 
-    // Also fetch YouTube native notifications (filtered by video)
-    let youtubeNotifications: any[] = [];
-    const TARGET_VIDEO = "niKAylKNIEI";
-    try {
-      const innertube = await getInnertubeWithAuth(userId);
-      const menu = await innertube.getNotifications();
-      console.log(`[Notifications] YouTube: ${menu.contents?.length || 0} items`);
-      for (const n of menu.contents) {
-        const data = (n as any);
-        // Filter: only show notifications for our target video
-        const ep = data.endpoint?.payload;
-        const videoId = ep?.watchEndpoint?.videoId || ep?.reelWatchEndpoint?.videoId || null;
-        if (videoId && videoId !== TARGET_VIDEO) continue;
-
-        youtubeNotifications.push({
-          id: `yt_${data.notification_id}`,
-          type: "youtube",
-          title: data.short_message?.text || data.title?.text || "",
-          body: "",
-          sentTime: data.sent_time?.text || "",
-          thumbnail: data.video_thumbnails?.[0]?.url || data.thumbnails?.[0]?.url || null,
-          videoId,
-          isRead: data.read || false,
-          createdAt: new Date().toISOString(),
-        });
-      }
-    } catch (e: any) {
-      console.error(`[Notifications] YouTube fetch failed: ${e.message}`);
-    }
+    // YouTube notifications require WEB client, TV OAuth can't access them.
+    // Instead, app notifications + CommentCache-based profile sync covers the gap.
+    const youtubeNotifications: any[] = [];
 
     return NextResponse.json({
       notifications,
