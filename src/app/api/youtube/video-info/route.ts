@@ -68,6 +68,7 @@ export async function GET(req: NextRequest) {
       viewCount: info.basic_info.view_count,
       likeCount: info.basic_info.like_count,
       dislikeCount: rydData.dislikes ?? null,
+      commentCount: (info.basic_info as any).comment_count ?? null,
       likeRatio,
       duration: info.basic_info.duration,
       daysSinceUpload,

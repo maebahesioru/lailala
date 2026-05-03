@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MoreHorizontal, ListPlus, Ban, VolumeX, Loader2, Pencil, Trash2, MessageCircle } from "lucide-react";
+import { MoreHorizontal, ListPlus, Ban, VolumeX, Loader2, Pencil, Trash2, MessageCircle, Link2, Check } from "lucide-react";
 import { useAuth } from "./auth-provider";
 import { LoginPopup } from "./login-popup";
 import { ConfirmDialog } from "./confirm-dialog";
@@ -46,6 +46,7 @@ export function TweetMoreMenu({
   const [loadingLists, setLoadingLists] = useState(false);
   const [showBlockConfirm, setShowBlockConfirm] = useState(false);
   const [showMuteConfirm, setShowMuteConfirm] = useState(false);
+  const [copiedYtUrl, setCopiedYtUrl] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -130,14 +131,20 @@ export function TweetMoreMenu({
 
   const handleOpen = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!user) {
-      setShowLogin(true);
-      return;
-    }
     setOpen(!open);
     if (!open) {
       loadLists();
     }
+  };
+
+  const handleCopyYtUrl = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${videoId}&lc=${commentId}`);
+      setCopiedYtUrl(true);
+      setTimeout(() => setCopiedYtUrl(false), 2000);
+      setOpen(false);
+    } catch (e) { console.error(e); }
   };
 
   return (
@@ -198,6 +205,14 @@ export function TweetMoreMenu({
                       <div className="border-b border-border" />
                     </>
                   )}
+                  <motion.button
+                    whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+                    onClick={handleCopyYtUrl}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-left text-[14px]"
+                  >
+                    {copiedYtUrl ? <Check size={16} className="text-green-500" /> : <Link2 size={16} className="text-muted" />}
+                    <span>{copiedYtUrl ? "コピーしました" : "YouTubeコメントURLをコピー"}</span>
+                  </motion.button>
                   <motion.button
                     whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
                     onClick={(e) => { e.stopPropagation(); setShowListMenu(true); }}

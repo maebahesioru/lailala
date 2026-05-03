@@ -5,12 +5,26 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
 import { CommentCard } from "@/components/comment-card";
 import { CommentThread } from "@/types/youtube";
-import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp, User, List, SlidersHorizontal, X, Heart, Clock } from "lucide-react";
+import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp, User, List, SlidersHorizontal, X, Heart, Clock, Eye, ThumbsUp, ThumbsDown, MessageSquare, Calendar, Users } from "lucide-react";
 import Link from "next/link";
 
 interface TrendWord {
   word: string;
   count: number;
+}
+
+interface VideoInfo {
+  title: string;
+  author: string;
+  thumbnail: string;
+  viewCount: number;
+  likeCount: number;
+  dislikeCount: number | null;
+  commentCount: string | null;
+  likeRatio: number | null;
+  duration: number;
+  daysSinceUpload: number | null;
+  subscriberCount: number | null;
 }
 
 interface AccountResult {
@@ -45,6 +59,7 @@ function SearchContent() {
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [trendWords, setTrendWords] = useState<TrendWord[]>([]);
+  const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const [listening, setListening] = useState(false);
   const [activeTab, setActiveTab] = useState<SearchTab>("top");
   const [showFilters, setShowFilters] = useState(false);
@@ -57,12 +72,21 @@ function SearchContent() {
 
   useEffect(() => {
     if (!initialQuery && !userFilter) {
-      fetch("/api/trending/words")
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.words) setTrendWords(data.words);
-        })
-        .catch(() => null);
+      Promise.allSettled([
+        fetch("/api/trending/words").then((r) => r.json()),
+        fetch("/api/youtube/video-info?videoId=niKAylKNIEI").then((r) => r.json()),
+        fetch("/api/comments?videoId=niKAylKNIEI&sortBy=NEWEST_FIRST").then((r) => r.json()),
+      ]).then(([trendRes, infoRes, commentsRes]) => {
+        const trendData = trendRes.status === "fulfilled" ? trendRes.value : {};
+        const infoData = infoRes.status === "fulfilled" ? infoRes.value : {};
+        const commentsData = commentsRes.status === "fulfilled" ? commentsRes.value : {};
+        if (trendData.words) setTrendWords(trendData.words);
+        const info = {
+          ...infoData,
+          commentCount: commentsData.videoInfo?.commentCount ?? infoData.commentCount ?? null,
+        };
+        setVideoInfo(info);
+      });
       return;
     }
     performSearch(initialQuery, activeTab);
@@ -181,6 +205,32 @@ function SearchContent() {
   ];
 
   const minLikeOptions = [0, 10, 50, 100, 500];
+
+  const formatCount = (n: number | null | undefined) => {
+    if (n == null) return "-";
+    return n.toLocaleString("ja-JP");
+  };
+
+  function parseYoutubeCount(str: string | null | undefined): string {
+    if (!str) return "-";
+    const trimmed = str.trim().replace(/,/g, "");
+    const match = trimmed.match(/^(\d+(?:\.\d+)?)\s*([KM億万]?)$/i);
+    if (!match) return trimmed;
+    const num = parseFloat(match[1]);
+    const unit = match[2].toUpperCase();
+    if (unit === "K") return Math.round(num * 1000).toLocaleString("ja-JP");
+    if (unit === "M") return Math.round(num * 1000000).toLocaleString("ja-JP");
+    if (unit === "億") return Math.round(num * 100000000).toLocaleString("ja-JP");
+    if (unit === "万") return Math.round(num * 10000).toLocaleString("ja-JP");
+    return Math.round(num).toLocaleString("ja-JP");
+  }
+
+  const formatDuration = (sec: number) => {
+    if (!sec) return "-";
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
 
   const renderResults = () => {
     if (loading) {
@@ -475,7 +525,79 @@ function SearchContent() {
         </div>
 
         {!query && !userFilter && !loading && (
-          <div className="p-4">
+          <div className="p-4 space-y-4">
+            {/* Video Info - mobile visible (hidden on lg since widgets-panel shows it) */}
+            {videoInfo && (
+              <div className="bg-card rounded-2xl border border-border overflow-hidden lg:hidden">
+                <img src={videoInfo.thumbnail} alt={videoInfo.title} width={320} height={180} className="w-full aspect-video object-cover" />
+                <div className="p-4">
+                  <h3 className="font-bold text-[15px] leading-snug mb-1 line-clamp-2">{videoInfo.title}</h3>
+                  <p className="text-muted text-[13px] mb-3">{videoInfo.author}</p>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-[13px]">
+                      <Eye size={14} className="text-muted" />
+                      <span className="text-muted">再生回数</span>
+                      <span className="ml-auto font-medium">{formatCount(videoInfo.viewCount)}</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[13px]">
+                      <ThumbsUp size={14} className="text-[#f91880]" />
+                      <span className="text-muted">高評価</span>
+                      <span className="ml-auto font-medium text-[#f91880]">{formatCount(videoInfo.likeCount)}</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[13px]">
+                      <ThumbsDown size={14} className="text-primary" />
+                      <span className="text-muted">低評価</span>
+                      <span className="ml-auto font-medium text-primary">
+                        {videoInfo.dislikeCount != null ? formatCount(videoInfo.dislikeCount) : "取得不可"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[13px]">
+                      <MessageSquare size={14} className="text-muted" />
+                      <span className="text-muted">コメント数</span>
+                      <span className="ml-auto font-medium">
+                        {videoInfo.commentCount ? parseYoutubeCount(videoInfo.commentCount) : "-"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[13px]">
+                      <Clock size={14} className="text-muted" />
+                      <span className="text-muted">再生時間</span>
+                      <span className="ml-auto font-medium">{formatDuration(videoInfo.duration)}</span>
+                    </div>
+
+                    {videoInfo.daysSinceUpload != null && (
+                      <div className="flex items-center gap-2 text-[13px]">
+                        <Calendar size={14} className="text-muted" />
+                        <span className="text-muted">投稿経過日数</span>
+                        <span className="ml-auto font-medium">{videoInfo.daysSinceUpload.toFixed(1)}日</span>
+                      </div>
+                    )}
+
+                    {videoInfo.subscriberCount != null && (
+                      <div className="flex items-center gap-2 text-[13px]">
+                        <Users size={14} className="text-muted" />
+                        <span className="text-muted">チャンネル登録者数</span>
+                        <span className="ml-auto font-medium">{videoInfo.subscriberCount.toLocaleString("ja-JP")}</span>
+                      </div>
+                    )}
+
+                    {videoInfo.likeRatio != null && (
+                      <div className="pt-2 border-t border-border">
+                        <div className="flex items-center justify-between text-[13px]">
+                          <span className="text-muted">高評価率</span>
+                          <span className="font-medium text-primary">{videoInfo.likeRatio}%</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="bg-card rounded-2xl border border-border overflow-hidden">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
                 <TrendingUp size={18} className="text-[#f91880]" />

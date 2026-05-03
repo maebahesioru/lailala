@@ -197,8 +197,22 @@ export async function GET(req: NextRequest) {
       hasContinuation = comments.has_continuation;
       nextToken = (comments as any).continuation_token || null;
 
-      // Extract comment count from header
-      commentCount = (comments as any).header?.comments_count?.text || (comments as any).header?.comments_count?.toString?.() || null;
+      // Extract comment count from header - try multiple sources for the most accurate number
+      const headerCount = (comments as any).header?.comments_count;
+      if (headerCount) {
+        // Try to get full text from runs first (may contain exact number)
+        const runsText = headerCount.runs?.map((r: any) => r.text).join("");
+        commentCount = runsText || headerCount.text || headerCount.toString?.() || null;
+      }
+      // If still null, try basic_info fallback
+      if (!commentCount) {
+        try {
+          const info = await innertube.getInfo(videoId);
+          commentCount = (info.basic_info as any).comment_count?.toString?.() || null;
+        } catch {
+          // ignore fallback error
+        }
+      }
     }
 
     threads = filterBlockedThreads(threads, blockedIds);

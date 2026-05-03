@@ -310,6 +310,9 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                       url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${thread.comment.commentId}`}
                       text={`${thread.comment.author.name}: ${thread.comment.content}`}
                       buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full"
+                      extraLinks={[
+                        { label: "YouTubeコメントURLをコピー", url: `https://www.youtube.com/watch?v=${videoId}&lc=${thread.comment.commentId}` },
+                      ]}
                     />
                   </div>
 
