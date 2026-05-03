@@ -45,16 +45,27 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    function parseSubscriberCount(text: string | undefined): number | null {
+      if (!text || text === "N/A") return null;
+      const match = String(text).match(/([\d,\.]+)/);
+      if (!match) return null;
+      const num = parseFloat(match[1].replace(/,/g, ""));
+      const upper = text.toUpperCase();
+      let unit = 1;
+      if (text.includes("億")) unit = 100000000;
+      else if (text.includes("万")) unit = 10000;
+      else if (text.includes("千")) unit = 1000;
+      else if (upper.includes("M")) unit = 1000000;
+      else if (upper.includes("K")) unit = 1000;
+      return Math.round(num * unit);
+    }
+
     // Get channel subscriber count from video secondary info (VideoOwner)
     let subscriberCount: number | null = null;
     const subsText = info.secondary_info?.owner?.subscriber_count?.toString();
-    if (subsText && subsText !== "N/A") {
-      const match = String(subsText).match(/([\d,\.]+)/);
-      if (match) {
-        const num = parseFloat(match[1].replace(/,/g, ""));
-        const unit = String(subsText).includes("万") ? 10000 : String(subsText).includes("億") ? 100000000 : 1;
-        subscriberCount = Math.round(num * unit);
-      }
+    console.log("[video-info] subscriber_count text:", subsText);
+    if (subsText) {
+      subscriberCount = parseSubscriberCount(subsText);
     }
 
     // Fallback: try fetching from channel page directly
@@ -65,13 +76,9 @@ export async function GET(req: NextRequest) {
           const channel = await innertube.getChannel(channelId);
           const header = (channel as any).header;
           const channelSubsText = header?.subscribers?.toString?.() || header?.subscriber_count?.toString?.();
-          if (channelSubsText && channelSubsText !== "N/A") {
-            const match = String(channelSubsText).match(/([\d,\.]+)/);
-            if (match) {
-              const num = parseFloat(match[1].replace(/,/g, ""));
-              const unit = String(channelSubsText).includes("万") ? 10000 : String(channelSubsText).includes("億") ? 100000000 : 1;
-              subscriberCount = Math.round(num * unit);
-            }
+          console.log("[video-info] channel fallback subscriber_count text:", channelSubsText);
+          if (channelSubsText) {
+            subscriberCount = parseSubscriberCount(channelSubsText);
           }
         }
       } catch (e) {
