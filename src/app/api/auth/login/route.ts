@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Innertube, UniversalCache } from "youtubei.js";
 import { prisma } from "@/lib/prisma";
 import { encrypt } from "@/lib/crypto";
-import { createSession } from "@/lib/session";
+import { createSession, getSessionUserId } from "@/lib/session";
 
 const oauthStates = new Map<string, Promise<string>>();
 
@@ -130,13 +130,31 @@ export async function GET(req: NextRequest) {
       accountError = accountError || "channel handle not found in account items";
     }
 
-    const email = `yt:${channelId}`;
+    // Check if user is already logged in (adding another account)
+    const existingUserId = await getSessionUserId();
+    let user;
 
-    const user = await prisma.user.upsert({
-      where: { email },
-      update: { name, image: thumbnail, channelId },
-      create: { name, email, image: thumbnail, channelId },
-    });
+    if (existingUserId) {
+      // Adding a new account to existing user
+      user = await prisma.user.findUnique({ where: { id: existingUserId } });
+      if (!user) {
+        // Fallback: session invalid, create new user
+        const email = `yt:${channelId}`;
+        user = await prisma.user.upsert({
+          where: { email },
+          update: { name, image: thumbnail, channelId },
+          create: { name, email, image: thumbnail, channelId },
+        });
+      }
+    } else {
+      // New login: find or create user by email
+      const email = `yt:${channelId}`;
+      user = await prisma.user.upsert({
+        where: { email },
+        update: { name, image: thumbnail, channelId },
+        create: { name, email, image: thumbnail, channelId },
+      });
+    }
 
     // Upsert credential by [userId, accountChannelId]
     await prisma.ytCredential.upsert({
