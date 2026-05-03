@@ -28,9 +28,12 @@ export function MobileNav() {
   };
 
   const handleHomeClick = (e: React.MouseEvent) => {
-    if (pathname === "/") {
-      e.preventDefault();
-      window.dispatchEvent(new CustomEvent("lailala:scrollToTop"));
+    e.preventDefault();
+    const target = pathname === "/latest/" ? "/latest/" : "/popular/";
+    if (pathname === target) {
+      window.location.reload();
+    } else {
+      window.location.href = target;
     }
   };
 
@@ -105,7 +108,7 @@ export function MobileNav() {
             className="md:hidden fixed top-0 left-0 bottom-0 z-[70] w-[280px] bg-background border-r border-border flex flex-col"
           >
             <div className="flex items-center justify-between p-4">
-              <Link href="/" onClick={() => setOpen(false)} className="text-xl font-bold">
+              <Link href="/" onClick={(e) => { handleHomeClick(e); setOpen(false); }} className="text-xl font-bold">
                 ライララ(仮)
               </Link>
               <motion.button whileTap={{ scale: 0.9 }} onClick={() => setOpen(false)} className="p-2 rounded-full hover:bg-white/10">

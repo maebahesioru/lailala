@@ -92,10 +92,12 @@ export function Sidebar() {
   };
 
   const handleHomeClick = (e: React.MouseEvent) => {
-    if (pathname === "/") {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      window.dispatchEvent(new CustomEvent("lailala:scrollToTop"));
+    e.preventDefault();
+    const target = pathname === "/latest/" ? "/latest/" : "/popular/";
+    if (pathname === target) {
+      window.location.reload();
+    } else {
+      window.location.href = target;
     }
   };
 
@@ -113,7 +115,7 @@ export function Sidebar() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Link href="/" className="text-2xl font-bold text-foreground tracking-tight" aria-label="ライララ(仮) ホーム">
+          <Link href="/" onClick={handleHomeClick} className="text-2xl font-bold text-foreground tracking-tight" aria-label="ライララ(仮) ホーム">
             ライララ(仮)
           </Link>
         </motion.div>
