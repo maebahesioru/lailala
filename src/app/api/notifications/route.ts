@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
     try {
       const innertube = await getInnertubeWithAuth(userId);
       const menu = await innertube.getNotifications();
+      console.log(`[Notifications] YouTube: ${menu.contents?.length || 0} items`);
       for (const n of menu.contents) {
         const data = (n as any);
         // Filter: only show notifications for our target video
@@ -52,8 +53,8 @@ export async function GET(req: NextRequest) {
           createdAt: new Date().toISOString(),
         });
       }
-    } catch {
-      // YouTube notifications unavailable
+    } catch (e: any) {
+      console.error(`[Notifications] YouTube fetch failed: ${e.message}`);
     }
 
     return NextResponse.json({
