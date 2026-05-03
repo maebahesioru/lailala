@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, ThumbsUp, ThumbsDown, Eye, Clock, MessageSquare, TrendingUp, Mic, MicOff, X } from "lucide-react";
+import { Search, ThumbsUp, ThumbsDown, Eye, Clock, MessageSquare, TrendingUp, Mic, MicOff, X, Calendar, Users } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -16,6 +16,8 @@ interface VideoInfo {
   commentCount: string | null;
   likeRatio: number | null;
   duration: number;
+  daysSinceUpload: number | null;
+  subscriberCount: number | null;
 }
 
 interface TrendWord {
@@ -175,7 +177,9 @@ export function WidgetsPanel() {
               <div className="flex items-center gap-2 text-[13px]">
                 <MessageSquare size={14} className="text-muted" />
                 <span className="text-muted">コメント数</span>
-                <span className="ml-auto font-medium">{videoInfo.commentCount ?? "-"}</span>
+                <span className="ml-auto font-medium">
+                  {videoInfo.commentCount ? parseInt(videoInfo.commentCount.replace(/[^0-9]/g, ""), 10).toLocaleString("ja-JP") : "-"}
+                </span>
               </div>
 
               <div className="flex items-center gap-2 text-[13px]">
@@ -183,6 +187,22 @@ export function WidgetsPanel() {
                 <span className="text-muted">再生時間</span>
                 <span className="ml-auto font-medium">{formatDuration(videoInfo.duration)}</span>
               </div>
+
+              {videoInfo.daysSinceUpload != null && (
+                <div className="flex items-center gap-2 text-[13px]">
+                  <Calendar size={14} className="text-muted" />
+                  <span className="text-muted">投稿経過日数</span>
+                  <span className="ml-auto font-medium">{videoInfo.daysSinceUpload.toFixed(1)}日</span>
+                </div>
+              )}
+
+              {videoInfo.subscriberCount != null && (
+                <div className="flex items-center gap-2 text-[13px]">
+                  <Users size={14} className="text-muted" />
+                  <span className="text-muted">チャンネル登録者数</span>
+                  <span className="ml-auto font-medium">{videoInfo.subscriberCount.toLocaleString("ja-JP")}</span>
+                </div>
+              )}
 
               {videoInfo.likeRatio != null && (
                 <div className="pt-2 border-t border-border">
