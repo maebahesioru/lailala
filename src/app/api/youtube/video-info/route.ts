@@ -48,12 +48,34 @@ export async function GET(req: NextRequest) {
     // Get channel subscriber count from video secondary info (VideoOwner)
     let subscriberCount: number | null = null;
     const subsText = info.secondary_info?.owner?.subscriber_count?.toString();
-    if (subsText) {
+    if (subsText && subsText !== "N/A") {
       const match = String(subsText).match(/([\d,\.]+)/);
       if (match) {
         const num = parseFloat(match[1].replace(/,/g, ""));
         const unit = String(subsText).includes("万") ? 10000 : String(subsText).includes("億") ? 100000000 : 1;
         subscriberCount = Math.round(num * unit);
+      }
+    }
+
+    // Fallback: try fetching from channel page directly
+    if (subscriberCount == null) {
+      try {
+        const channelId = info.basic_info.channel_id;
+        if (channelId) {
+          const channel = await innertube.getChannel(channelId);
+          const header = (channel as any).header;
+          const channelSubsText = header?.subscribers?.toString?.() || header?.subscriber_count?.toString?.();
+          if (channelSubsText && channelSubsText !== "N/A") {
+            const match = String(channelSubsText).match(/([\d,\.]+)/);
+            if (match) {
+              const num = parseFloat(match[1].replace(/,/g, ""));
+              const unit = String(channelSubsText).includes("万") ? 10000 : String(channelSubsText).includes("億") ? 100000000 : 1;
+              subscriberCount = Math.round(num * unit);
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Failed to get subscriber count from channel:", e);
       }
     }
 
