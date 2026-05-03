@@ -9,6 +9,7 @@ import { ArrowLeft, Loader2, MessageCircle, CornerDownRight } from "lucide-react
 import Link from "next/link";
 import { YtComment } from "@/types/youtube";
 import { ReplyNode } from "@/lib/reply-tree";
+import { ShareMenu } from "./share-menu";
 
 interface ThreadViewProps {
   parent: YtComment;
@@ -101,6 +102,11 @@ export function ThreadView({
   const [replies, setReplies] = useState(initialReplies);
   const [continuationToken, setContinuationToken] = useState(initialContinuationToken);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [origin, setOrigin] = useState("");
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   const handleReload = () => {
     window.location.reload();
@@ -153,7 +159,15 @@ export function ThreadView({
             <ArrowLeft size={20} />
           </Link>
         </motion.div>
-        <h1 className="text-lg font-bold">スレッド</h1>
+        <h1 className="text-lg font-bold flex-1">スレッド</h1>
+        <ShareMenu
+          url={`${origin}/thread/${commentId}`}
+          text={`${parent.author.name}: ${parent.content}`}
+          extraLinks={[
+            { label: "YouTubeコメントURLをコピー", url: `https://www.youtube.com/watch?v=${videoId}&lc=${commentId}` },
+          ]}
+          buttonClass="p-2 rounded-full hover:bg-white/10 text-muted hover:text-primary transition-colors"
+        />
       </div>
 
       <div className="border-b border-border">

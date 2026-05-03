@@ -8,11 +8,13 @@ interface ShareMenuProps {
   url: string;
   text: string;
   buttonClass?: string;
+  extraLinks?: { label: string; url: string }[];
 }
 
-export function ShareMenu({ url, text, buttonClass }: ShareMenuProps) {
+export function ShareMenu({ url, text, buttonClass, extraLinks }: ShareMenuProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedLabel, setCopiedLabel] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,12 +27,13 @@ export function ShareMenu({ url, text, buttonClass }: ShareMenuProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleCopy = async (e: React.MouseEvent) => {
+  const handleCopy = async (e: React.MouseEvent, copyUrl: string, label: string) => {
     e.stopPropagation();
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(copyUrl);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setCopiedLabel(label);
+      setTimeout(() => { setCopied(false); setCopiedLabel(""); }, 2000);
       setOpen(false);
     } catch (e) { console.error(e); }
   };
@@ -76,12 +79,23 @@ export function ShareMenu({ url, text, buttonClass }: ShareMenuProps) {
           >
             <motion.button
               whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
-              onClick={handleCopy}
+              onClick={(e) => handleCopy(e, url, "リンク")}
               className="flex items-center gap-3 w-full px-4 py-3 text-left text-[15px]"
             >
               <Link2 size={18} className="text-muted" />
-              <span>{copied ? "コピーしました" : "リンクをコピー"}</span>
+              <span>{copied && copiedLabel === "リンク" ? "コピーしました" : "リンクをコピー"}</span>
             </motion.button>
+            {extraLinks?.map((link) => (
+              <motion.button
+                key={link.url}
+                whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+                onClick={(e) => handleCopy(e, link.url, link.label)}
+                className="flex items-center gap-3 w-full px-4 py-3 text-left text-[15px]"
+              >
+                <Link2 size={18} className="text-muted" />
+                <span>{copied && copiedLabel === link.label ? "コピーしました" : link.label}</span>
+              </motion.button>
+            ))}
             <motion.button
               whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
               onClick={handleNativeShare}
