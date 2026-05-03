@@ -211,11 +211,23 @@ function SearchContent() {
     return n.toLocaleString("ja-JP");
   };
 
+  function formatSubscriberCount(n: number | null | undefined): string {
+    if (n == null) return "-";
+    if (n >= 100000000) return (n / 100000000).toFixed(1) + "億";
+    if (n >= 10000) return (n / 10000).toFixed(1) + "万";
+    return n.toLocaleString("ja-JP");
+  }
+
   function parseYoutubeCount(str: string | null | undefined): string {
     if (!str) return "-";
     const trimmed = str.trim().replace(/,/g, "");
     const match = trimmed.match(/^(\d+(?:\.\d+)?)\s*([KM億万]?)$/i);
-    if (!match) return trimmed;
+    if (!match) {
+      // If it's a plain number, format it nicely
+      const num = parseInt(trimmed, 10);
+      if (!isNaN(num)) return num.toLocaleString("ja-JP");
+      return trimmed;
+    }
     const num = parseFloat(match[1]);
     const unit = match[2].toUpperCase();
     if (unit === "K") return Math.round(num * 1000).toLocaleString("ja-JP");
@@ -581,7 +593,7 @@ function SearchContent() {
                       <div className="flex items-center gap-2 text-[13px]">
                         <Users size={14} className="text-muted" />
                         <span className="text-muted">チャンネル登録者数</span>
-                        <span className="ml-auto font-medium">{videoInfo.subscriberCount.toLocaleString("ja-JP")}</span>
+                        <span className="ml-auto font-medium">{formatSubscriberCount(videoInfo.subscriberCount)}</span>
                       </div>
                     )}
 

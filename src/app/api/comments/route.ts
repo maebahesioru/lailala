@@ -6,6 +6,24 @@ import { rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
 import { YTNodes } from "youtubei.js";
 
+async function fetchAccurateCommentCount(videoId: string): Promise<string | null> {
+  const apiKey = process.env.YOUTUBE_DATA_API_KEY;
+  if (!apiKey) return null;
+  try {
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`,
+      { next: { revalidate: 60 } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const commentCount = data.items?.[0]?.statistics?.commentCount;
+    return commentCount ? String(parseInt(commentCount, 10)) : null;
+  } catch (e) {
+    console.error("YouTube Data API error:", e);
+    return null;
+  }
+}
+
 const postSchema = z.object({
   videoId: z.string(),
   text: z.string().min(1).max(5000),
@@ -197,20 +215,27 @@ export async function GET(req: NextRequest) {
       hasContinuation = comments.has_continuation;
       nextToken = (comments as any).continuation_token || null;
 
-      // Extract comment count from header - try multiple sources for the most accurate number
-      const headerCount = (comments as any).header?.comments_count;
-      if (headerCount) {
-        // Try to get full text from runs first (may contain exact number)
-        const runsText = headerCount.runs?.map((r: any) => r.text).join("");
-        commentCount = runsText || headerCount.text || headerCount.toString?.() || null;
-      }
-      // If still null, try basic_info fallback
+      // Try YouTube Data API v3 for accurate comment count first
+      commentCount = await fetchAccurateCommentCount(videoId);
+
       if (!commentCount) {
-        try {
-          const info = await innertube.getInfo(videoId);
-          commentCount = (info.basic_info as any).comment_count?.toString?.() || null;
-        } catch {
-          // ignore fallback error
+        // Extract comment count from header - try multiple sources for the most accurate number
+        const headerCount = (comments as any).header?.comments_count;
+        if (headerCount) {
+          // Try to get full text from runs first (may contain exact number)
+          const runsText = headerCount.runs?.map((r: any) => r.text).join("");
+          commentCount = runsText || headerCount.text || headerCount.toString?.() || null;
+        }
+        // If still null, try basic_info fallback
+        if (!commentCount) {
+          try {
+            const info = await innertube.getInfo(videoId);
+            commentCount = info.comments_entry_point_header?.comment_count?.toString?.()
+              || (info.basic_info as any).comment_count?.toString?.()
+              || null;
+          } catch {
+            // ignore fallback error
+          }
         }
       }
     }
