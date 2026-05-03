@@ -56,8 +56,12 @@ export default function NotificationsPage() {
       if (!res.ok) throw new Error("Failed");
       const data = await res.json();
       const items = data.notifications || [];
-      setNotifications((prev) => (reset ? items : [...prev, ...items]));
-      setYoutubeNotifications(data.youtubeNotifications || []);
+      const ytItems = (data.youtubeNotifications || []).map((n: any) => ({
+        ...n,
+        id: n.id || `yt_${n.commentId}_${Date.now()}`,
+        createdAt: n.createdAt || new Date().toISOString(),
+      }));
+      setNotifications((prev) => (reset ? [...ytItems, ...items] : [...prev, ...ytItems, ...items]));
       setHasMore(items.length === 50);
       if (reset) setOffset(50);
       else setOffset((o) => o + 50);
@@ -131,34 +135,6 @@ export default function NotificationsPage() {
 
       <div className="divide-y divide-border">
         <AnimatePresence mode="popLayout">
-          {/* YouTube native notifications */}
-          {youtubeNotifications.map((n: any) => (
-            <motion.div
-              key={n.id}
-              layout
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, x: -100, transition: { duration: 0.2 } }}
-              className="px-4 py-3 flex gap-3 bg-youtube/5"
-            >
-              <div className="shrink-0 pt-1 text-primary">
-                <MessageCircle size={18} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  {n.thumbnail ? (
-                    <img src={n.thumbnail} alt="" className="w-8 h-8 rounded object-cover" />
-                  ) : null}
-                  <span className="font-bold text-[15px]">YouTube</span>
-                  <span className="text-muted text-[15px]">{TYPE_LABELS.youtube}</span>
-                  <span className="text-muted text-sm ml-auto shrink-0">{n.sentTime}</span>
-                </div>
-                <p className="text-[15px]">{n.title}</p>
-                {n.body && <p className="text-[13px] text-muted mt-0.5">{n.body}</p>}
-              </div>
-            </motion.div>
-          ))}
-          {/* App notifications */}
           {notifications.map((n) => (
             <motion.div
               key={n.id}
