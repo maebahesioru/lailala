@@ -99,10 +99,7 @@ export function WidgetsPanel() {
 
   const formatCount = (n: number | null | undefined) => {
     if (n == null) return "-";
-    if (n >= 100000000) return (n / 100000000).toFixed(1) + "億";
-    if (n >= 10000) return (n / 10000).toFixed(1) + "万";
-    if (n >= 1000) return (n / 1000).toFixed(1) + "千";
-    return String(n);
+    return n.toLocaleString("ja-JP");
   };
 
   const formatDuration = (sec: number) => {
