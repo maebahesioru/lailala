@@ -10,23 +10,19 @@ import { buildReplyTree } from "@/lib/reply-tree";
 export async function generateMetadata({ params }: { params: Promise<{ commentId: string }> }): Promise<Metadata> {
   const segments = await params;
   const commentId = segments.commentId;
-  const videoId = "niKAylKNIEI";
 
-  try {
-    const innertube = await getInnertube();
-    const comments = await innertube.getComments(videoId, "TOP_COMMENTS", commentId);
-    const thread = comments.contents.find((t: any) => t.comment?.comment_id === commentId);
-    if (thread) {
-      const content = thread.comment?.content?.text || "";
-      const author = typeof thread.comment?.author?.name === "string"
-        ? thread.comment.author.name
-        : (thread.comment?.author?.name as any)?.text || "Unknown";
-      return {
-        title: `${author}さんのコメント`,
-        description: content.slice(0, 120),
-      };
-    }
-  } catch {}
+  // Fast path: try cache first
+  const cached = await prisma.commentCache.findUnique({
+    where: { commentId },
+    select: { authorName: true, content: true },
+  });
+
+  if (cached) {
+    return {
+      title: `${cached.authorName}さんのコメント`,
+      description: cached.content.slice(0, 120),
+    };
+  }
 
   return {
     title: "スレッド",
@@ -64,34 +60,86 @@ export default async function ThreadPage({ params }: PageProps) {
 
   const userId = await getSessionUserId();
   const innertube = await getInnertube();
-  const info = await innertube.getInfo(videoId);
-  const channelId = info.basic_info.channel_id;
 
-  let thread: any = null;
-  let targetReply: any = null;
+  // Fast path: check cache first for root comment
+  const cached = await prisma.commentCache.findUnique({
+    where: { commentId },
+  });
+
+  let parent: any = null;
   let isReplyThread = false;
   let loadedReplies: any[] = [];
   let nextToken: string | null = null;
   let replyError: string | null = null;
+  let targetReply: any = null;
 
-  try {
-    const comments = await innertube.getComments(videoId, "TOP_COMMENTS", commentId);
-    thread = comments.contents.find((t: any) => t.comment?.comment_id === commentId);
-  } catch {}
+  if (cached) {
+    // Cached comment found - build response from cache
+    parent = {
+      commentId: cached.commentId,
+      author: {
+        name: cached.authorName,
+        channelId: cached.authorChannelId,
+        thumbnail: cached.authorThumb,
+        isChannelOwner: false,
+        isMember: false,
+      },
+      content: cached.content,
+      publishedTime: "",
+      likeCount: String(cached.likeCount),
+      replyCount: String(cached.replyCount),
+      isLiked: false,
+      isDisliked: false,
+      isPinned: false,
+      isHearted: false,
+    };
 
-  if (!thread) {
+    // Try to get replies from cache
+    const cachedReplies = await prisma.commentCache.findMany({
+      where: { parentCommentId: commentId },
+    });
+
+    if (cachedReplies.length > 0) {
+      loadedReplies = cachedReplies.map((r) => ({
+        comment_id: r.commentId,
+        author: { name: r.authorName, id: r.authorChannelId, thumbnails: r.authorThumb ? [{ url: r.authorThumb }] : [] },
+        content: { text: r.content },
+        published_time: "",
+        like_count: String(r.likeCount),
+        reply_count: "0",
+        is_liked: false,
+        is_disliked: false,
+        is_pinned: false,
+        is_hearted: false,
+        author_is_channel_owner: false,
+        is_member: false,
+      }));
+    }
+  }
+
+  // If no cache, fall back to YouTube API
+  if (!parent) {
+    try {
+      const comments = await innertube.getComments(videoId, "TOP_COMMENTS", commentId);
+      const thread = comments.contents.find((t: any) => t.comment?.comment_id === commentId);
+      if (thread) {
+        parent = parseRoot(thread.comment);
+      }
+    } catch {}
+  }
+
+  // If still not found, try fetching all comments and scanning replies
+  if (!parent) {
     try {
       const allComments = await innertube.getComments(videoId, "TOP_COMMENTS");
       for (const t of allComments.contents) {
         if (!t.has_replies) continue;
         try {
           t.setActions(innertube.actions);
-          (t as any).__videoId = videoId;
-          (t as any).__videoChannelId = channelId;
           const withReplies = await t.getReplies();
           const found = withReplies.replies?.find((r: any) => r.comment_id === commentId);
           if (found) {
-            thread = t;
+            parent = parseRoot(t.comment);
             targetReply = found;
             loadedReplies = withReplies.replies || [];
             nextToken = (withReplies as any).continuation_token || null;
@@ -103,39 +151,63 @@ export default async function ThreadPage({ params }: PageProps) {
     } catch {}
   }
 
-  if (!thread) notFound();
+  if (!parent) notFound();
 
-  if (!isReplyThread) {
+  // If root comment found but no replies loaded yet, fetch them
+  if (!isReplyThread && loadedReplies.length === 0) {
     try {
-      thread.setActions(innertube.actions);
-      (thread as any).__videoId = videoId;
-      (thread as any).__videoChannelId = channelId;
-      const withReplies = await thread.getReplies();
-      loadedReplies = withReplies.replies || [];
-      nextToken = (withReplies as any).continuation_token || null;
-    } catch (e: any) {
-      try {
-        const allComments = await innertube.getComments(videoId, "TOP_COMMENTS");
-        const foundThread = allComments.contents.find(
-          (t: any) => t.comment?.comment_id === commentId
-        );
-        if (foundThread?.replies) {
-          loadedReplies = foundThread.replies;
-        }
-      } catch (e2: any) {
-        replyError = e2.message || e.message || "Failed to load replies";
+      const comments = await innertube.getComments(videoId, "TOP_COMMENTS", commentId);
+      const thread = comments.contents.find((t: any) => t.comment?.comment_id === commentId);
+      if (thread?.has_replies) {
+        thread.setActions(innertube.actions);
+        const withReplies = await thread.getReplies();
+        loadedReplies = withReplies.replies || [];
+        nextToken = (withReplies as any).continuation_token || null;
       }
+    } catch (e: any) {
+      replyError = e.message || "返信の読み込みに失敗しました";
     }
   }
 
-  // Deduplicate: remove targetReply from replies list since it's shown as parent
   const filteredReplies = isReplyThread && targetReply
     ? loadedReplies.filter((r: any) => r.comment_id !== commentId)
     : loadedReplies;
+
   const parsedReplies = filteredReplies.map(parseReply);
   const replyTree = buildReplyTree(parsedReplies);
 
-  const parseRoot = (c: any) => ({
+  let highlightedReply: any = null;
+
+  if (isReplyThread && targetReply) {
+    highlightedReply = parseReply(targetReply);
+  }
+
+  let userVote: string | undefined;
+  if (userId) {
+    const like = await prisma.commentLike.findUnique({
+      where: { commentId_userId: { commentId, userId } },
+    });
+    userVote = like?.type;
+  }
+
+  return (
+    <MainLayout>
+      <ThreadView
+        parent={parent}
+        highlightedReply={highlightedReply}
+        initialReplies={replyTree}
+        replyError={replyError}
+        initialContinuationToken={nextToken}
+        videoId={videoId}
+        commentId={commentId}
+        userVote={userVote}
+      />
+    </MainLayout>
+  );
+}
+
+function parseRoot(c: any) {
+  return {
     commentId: c.comment_id,
     author: {
       name: typeof c.author?.name === "string" ? c.author.name : (c.author?.name?.text || "Unknown"),
@@ -152,42 +224,5 @@ export default async function ThreadPage({ params }: PageProps) {
     isDisliked: c.is_disliked || false,
     isPinned: c.is_pinned || false,
     isHearted: c.is_hearted || false,
-  });
-
-  let parent: any;
-  let highlightedReply: any = null;
-  let displayReplies = replyTree;
-
-  if (isReplyThread && targetReply) {
-    // When opening a reply directly, show the root comment as parent
-    // and highlight the target reply below it
-    parent = parseRoot(thread.comment);
-    highlightedReply = parseReply(targetReply);
-    displayReplies = replyTree;
-  } else {
-    parent = parseRoot(thread.comment);
-  }
-
-  let userVote: string | undefined;
-  if (userId) {
-    const like = await prisma.commentLike.findUnique({
-      where: { commentId_userId: { commentId, userId } },
-    });
-    userVote = like?.type;
-  }
-
-  return (
-    <MainLayout>
-      <ThreadView
-        parent={parent}
-        highlightedReply={highlightedReply}
-        initialReplies={displayReplies}
-        replyError={replyError}
-        initialContinuationToken={nextToken}
-        videoId={videoId}
-        commentId={commentId}
-        userVote={userVote}
-      />
-    </MainLayout>
-  );
+  };
 }

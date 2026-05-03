@@ -120,7 +120,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
             className="px-4 py-3 select-text relative"
           >
             <div className="flex gap-3">
-              <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0">
+              <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0" onClick={(e) => e.stopPropagation()}>
                 {thread.comment.author.thumbnail && !dataSaver ? (
                   <motion.img
                     whileHover={{ scale: 1.08 }}
@@ -129,9 +129,10 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                     alt={thread.comment.author.name}
                     className="w-10 h-10 rounded-full object-cover shrink-0"
                     loading="lazy"
+                    onClick={(e) => e.stopPropagation()}
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0" onClick={(e) => e.stopPropagation()}>
                     <User size={20} className="text-muted" />
                   </div>
                 )}
