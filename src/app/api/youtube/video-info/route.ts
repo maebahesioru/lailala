@@ -1,38 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getInnertube } from "@/lib/youtube";
-
-interface YoutubeDataApiResponse {
-  items?: Array<{
-    statistics?: {
-      commentCount?: string;
-      viewCount?: string;
-      likeCount?: string;
-    };
-  }>;
-}
-
-async function fetchAccurateStats(videoId: string) {
-  const apiKey = process.env.YOUTUBE_DATA_API_KEY;
-  if (!apiKey) return null;
-  try {
-    const res = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`,
-      { next: { revalidate: 60 } }
-    );
-    if (!res.ok) return null;
-    const data: YoutubeDataApiResponse = await res.json();
-    const stats = data.items?.[0]?.statistics;
-    if (!stats) return null;
-    return {
-      commentCount: stats.commentCount ? parseInt(stats.commentCount, 10) : null,
-      viewCount: stats.viewCount ? parseInt(stats.viewCount, 10) : null,
-      likeCount: stats.likeCount ? parseInt(stats.likeCount, 10) : null,
-    };
-  } catch (e) {
-    console.error("YouTube Data API error:", e);
-    return null;
-  }
-}
+import { YTNodes } from "youtubei.js";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -45,9 +13,6 @@ export async function GET(req: NextRequest) {
   try {
     const innertube = await getInnertube();
     const info = await innertube.getInfo(videoId);
-
-    // Fetch accurate stats from YouTube Data API v3 (if key is available)
-    const accurateStats = await fetchAccurateStats(videoId);
 
     // RYD APIで低評価を取得
     let rydData: { dislikes?: number; rating?: number } = {};
@@ -67,23 +32,27 @@ export async function GET(req: NextRequest) {
       ? Math.round((rydData.rating / 5) * 100)
       : null;
 
-    // Calculate days since upload
+    // Calculate days since upload from PlayerMicroformat
     let daysSinceUpload: number | null = null;
-    const publishedDate = info.basic_info.publish_date || info.basic_info.date;
-    if (publishedDate) {
-      const upload = new Date(publishedDate);
-      const now = new Date();
-      daysSinceUpload = (now.getTime() - upload.getTime()) / (1000 * 60 * 60 * 24);
+    const playerResponse = info.page[0];
+    const microformat = playerResponse.microformat;
+    if (microformat?.is(YTNodes.PlayerMicroformat)) {
+      const publishedDate = microformat.publish_date || microformat.upload_date;
+      if (publishedDate) {
+        const upload = new Date(publishedDate);
+        const now = new Date();
+        daysSinceUpload = (now.getTime() - upload.getTime()) / (1000 * 60 * 60 * 24);
+      }
     }
 
-    // Try to get channel subscriber count
+    // Try to get channel subscriber count from channel header
     let subscriberCount: number | null = null;
     try {
       const channelId = info.basic_info.channel_id;
       if (channelId) {
         const channel = await innertube.getChannel(channelId);
-        const metadata = (channel as any).metadata;
-        const subsText = metadata?.subscriber_count?.text || metadata?.subscriber_count;
+        const header = (channel as any).header;
+        const subsText = header?.subscribers?.toString?.() || header?.subscriber_count?.toString?.();
         if (subsText) {
           const match = String(subsText).match(/([\d,\.]+)/);
           if (match) {
@@ -97,11 +66,9 @@ export async function GET(req: NextRequest) {
       console.error("Failed to get subscriber count:", e);
     }
 
-    // Get comment count from multiple sources
+    // Get comment count from InnerTube sources
     let commentCount: string | null = null;
-    if (accurateStats?.commentCount != null) {
-      commentCount = accurateStats.commentCount.toString();
-    } else if (info.comments_entry_point_header?.comment_count) {
+    if (info.comments_entry_point_header?.comment_count) {
       commentCount = info.comments_entry_point_header.comment_count.toString();
     } else {
       commentCount = (info.basic_info as any).comment_count ?? null;
@@ -111,8 +78,8 @@ export async function GET(req: NextRequest) {
       title: info.basic_info.title,
       author: info.basic_info.author,
       thumbnail: info.basic_info.thumbnail?.[0]?.url,
-      viewCount: accurateStats?.viewCount ?? info.basic_info.view_count,
-      likeCount: accurateStats?.likeCount ?? info.basic_info.like_count,
+      viewCount: info.basic_info.view_count,
+      likeCount: info.basic_info.like_count,
       dislikeCount: rydData.dislikes ?? null,
       commentCount,
       likeRatio,
