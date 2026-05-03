@@ -41,7 +41,8 @@ export function WidgetsPanel() {
   const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
-    if (cachedVideoInfo && Date.now() - cachedAt < CACHE_TTL) return;
+    const hasMissingStats = cachedVideoInfo && (cachedVideoInfo.subscriberCount == null || cachedVideoInfo.daysSinceUpload == null);
+    if (cachedVideoInfo && Date.now() - cachedAt < CACHE_TTL && !hasMissingStats) return;
     Promise.allSettled([
       fetch("/api/youtube/video-info?videoId=niKAylKNIEI").then((r) => r.json()),
       fetch("/api/comments?videoId=niKAylKNIEI&sortBy=NEWEST_FIRST").then((r) => r.json()),
