@@ -1,13 +1,12 @@
-allowBuilds:
-  youtubei.js: true
-  sharp: true
-  '@prisma/client': true
-  '@prisma/engines': true
-  prisma: true
-  unrs-resolver: true
+packages: []
 
-ignoredBuiltDependencies:
-  - unrs-resolver
+onlyBuiltDependencies:
+  - youtubei.js
+  - sharp
+  - '@prisma/client'
+  - '@prisma/engines'
+  - prisma
+  - esbuild
 
 overrides:
   postcss: ">=8.5.10"

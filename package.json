@@ -27,6 +27,7 @@
     "youtubei.js": "github:maebahesioru/YouTube.js#fix-comment-replies-fallback",
     "zod": "^4.4.1"
   },
+  "packageManager": "pnpm@9.15.0",
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -38,6 +39,5 @@
     "prisma": "^6.6.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-
+  }
 }
