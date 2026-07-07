@@ -39,12 +39,5 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "pnpm": {
-    "overrides": {
-      "postcss": ">=8.5.10"
-    },
-    "onlyBuiltDependencies": [
-      "youtubei.js"
-    ]
-  }
+
 }
