@@ -25,8 +25,15 @@ const parseReply = (r: any) => ({
 function extractContinuationToken(memo: any): string | null {
   const cont = memo?.getType(YTNodes.ContinuationItem)?.[0];
   if (!cont) return null;
-  const payload = (cont as any).endpoint?.payload;
-  return payload?.continuationCommand?.token || payload?.token || null;
+  // 返信の続きは「もっと見る」ボタンの endpoint に載ることが多く、
+  // continuationEndpoint 側は payload が空のことがある。両方見る。
+  const endpoints = [(cont as any).endpoint, (cont as any).button?.endpoint];
+  for (const ep of endpoints) {
+    const payload = ep?.payload;
+    const token = payload?.continuationCommand?.token || payload?.token;
+    if (typeof token === "string" && token.length > 0) return token;
+  }
+  return null;
 }
 
 export async function GET(req: NextRequest) {

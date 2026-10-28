@@ -43,7 +43,7 @@ importers:
         version: 3.6.7
       youtubei.js:
         specifier: github:maebahesioru/YouTube.js#fix-missing-comment-avatar
-        version: https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/395e2f3b7fe04e74c7c5af4e34fdda7c6d30e1cd
+        version: https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/65e91abdb51317a4134a40e13feb39f160719692
       zod:
         specifier: ^4.4.1
         version: 4.4.3
@@ -2215,8 +2215,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  youtubei.js@https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/395e2f3b7fe04e74c7c5af4e34fdda7c6d30e1cd:
-    resolution: {tarball: https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/395e2f3b7fe04e74c7c5af4e34fdda7c6d30e1cd}
+  youtubei.js@https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/65e91abdb51317a4134a40e13feb39f160719692:
+    resolution: {tarball: https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/65e91abdb51317a4134a40e13feb39f160719692}
     version: 17.0.1
 
   zlibjs@0.3.1:
@@ -4619,7 +4619,7 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  youtubei.js@https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/395e2f3b7fe04e74c7c5af4e34fdda7c6d30e1cd:
+  youtubei.js@https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/65e91abdb51317a4134a40e13feb39f160719692:
     dependencies:
       '@bufbuild/protobuf': 2.12.1
       meriyah: 6.1.4
