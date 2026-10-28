@@ -136,7 +136,7 @@ export default async function ThreadPage({ params }: PageProps) {
         if (!t.has_replies) continue;
         try {
           t.setActions(innertube.actions);
-          const withReplies = await t.getReplies();
+          const withReplies = await t.getReplies(videoId);
           const found = withReplies.replies?.find((r: any) => r.comment_id === commentId);
           if (found) {
             parent = parseRoot(t.comment);
@@ -160,7 +160,7 @@ export default async function ThreadPage({ params }: PageProps) {
       const thread = comments.contents.find((t: any) => t.comment?.comment_id === commentId);
       if (thread?.has_replies) {
         thread.setActions(innertube.actions);
-        const withReplies = await thread.getReplies();
+        const withReplies = await thread.getReplies(videoId);
         loadedReplies = withReplies.replies || [];
         nextToken = (withReplies as any).continuation_token || null;
       }
