@@ -75,7 +75,10 @@ export async function GET(req: NextRequest) {
       thread.setActions(innertube.actions);
       (thread as any).__videoId = videoId;
       (thread as any).__videoChannelId = channelId;
-      const withReplies = await thread.getReplies();
+      // fork 側は getReplies(videoId?) の引数を正式な受け口にしている。
+      // 本番ビルド(Turbopack)では外から注入した __videoId が読めず
+      // 「videoId is required」で落ちるため、引数で明示的に渡す。
+      const withReplies = await thread.getReplies(videoId);
       replies = withReplies.replies?.map(parseReply) || [];
       nextToken = (withReplies as any).continuation_token || null;
     } catch (e: any) {
