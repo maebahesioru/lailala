@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { GlobalShortcuts } from "@/components/global-shortcuts";
+import { SITE_URL } from "@/lib/site-url";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,14 +40,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ja_JP",
-    url: "https://lailala.hikamer.f5.si",
+    url: SITE_URL,
     siteName: "ライララ(仮)",
     title: "ライララ(仮) - YouTubeコメントをX/Twitter風に",
     description:
       "YouTubeのコメントをX/Twitter風のタイムラインで閲覧・投稿・返信。人気順・新着順の切り替え、ブックマーク、リスト機能、トレンド分析も搭載。",
     images: [
       {
-        url: "https://lailala.hikamer.f5.si/og-image.svg",
+        url: `${SITE_URL}/og-image.png`,
         width: 1200,
         height: 630,
         alt: "ライララ(仮) - YouTubeコメントをX/Twitter風に",
@@ -58,7 +59,7 @@ export const metadata: Metadata = {
     title: "ライララ(仮) - YouTubeコメントをX/Twitter風に",
     description:
       "YouTubeのコメントをX/Twitter風のタイムラインで閲覧・投稿・返信。人気順・新着順の切り替え、ブックマーク、リスト機能、トレンド分析も搭載。",
-    images: ["https://lailala.hikamer.f5.si/og-image.svg"],
+    images: [`${SITE_URL}/og-image.png`],
     creator: "@lailala_app",
   },
   icons: {
@@ -72,7 +73,7 @@ export const metadata: Metadata = {
     title: "ライララ(仮)",
   },
   alternates: {
-    canonical: "https://lailala.hikamer.f5.si",
+    canonical: SITE_URL,
   },
   formatDetection: {
     telephone: false,

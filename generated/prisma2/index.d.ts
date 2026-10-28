@@ -18332,8 +18332,18 @@ export namespace Prisma {
 
   export type AggregateScheduledPost = {
     _count: ScheduledPostCountAggregateOutputType | null
+    _avg: ScheduledPostAvgAggregateOutputType | null
+    _sum: ScheduledPostSumAggregateOutputType | null
     _min: ScheduledPostMinAggregateOutputType | null
     _max: ScheduledPostMaxAggregateOutputType | null
+  }
+
+  export type ScheduledPostAvgAggregateOutputType = {
+    attempts: number | null
+  }
+
+  export type ScheduledPostSumAggregateOutputType = {
+    attempts: number | null
   }
 
   export type ScheduledPostMinAggregateOutputType = {
@@ -18343,6 +18353,8 @@ export namespace Prisma {
     text: string | null
     scheduledAt: Date | null
     posted: boolean | null
+    attempts: number | null
+    lastAttemptAt: Date | null
     createdAt: Date | null
   }
 
@@ -18353,6 +18365,8 @@ export namespace Prisma {
     text: string | null
     scheduledAt: Date | null
     posted: boolean | null
+    attempts: number | null
+    lastAttemptAt: Date | null
     createdAt: Date | null
   }
 
@@ -18363,10 +18377,20 @@ export namespace Prisma {
     text: number
     scheduledAt: number
     posted: number
+    attempts: number
+    lastAttemptAt: number
     createdAt: number
     _all: number
   }
 
+
+  export type ScheduledPostAvgAggregateInputType = {
+    attempts?: true
+  }
+
+  export type ScheduledPostSumAggregateInputType = {
+    attempts?: true
+  }
 
   export type ScheduledPostMinAggregateInputType = {
     id?: true
@@ -18375,6 +18399,8 @@ export namespace Prisma {
     text?: true
     scheduledAt?: true
     posted?: true
+    attempts?: true
+    lastAttemptAt?: true
     createdAt?: true
   }
 
@@ -18385,6 +18411,8 @@ export namespace Prisma {
     text?: true
     scheduledAt?: true
     posted?: true
+    attempts?: true
+    lastAttemptAt?: true
     createdAt?: true
   }
 
@@ -18395,6 +18423,8 @@ export namespace Prisma {
     text?: true
     scheduledAt?: true
     posted?: true
+    attempts?: true
+    lastAttemptAt?: true
     createdAt?: true
     _all?: true
   }
@@ -18437,6 +18467,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ScheduledPostAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ScheduledPostSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ScheduledPostMinAggregateInputType
@@ -18467,6 +18509,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ScheduledPostCountAggregateInputType | true
+    _avg?: ScheduledPostAvgAggregateInputType
+    _sum?: ScheduledPostSumAggregateInputType
     _min?: ScheduledPostMinAggregateInputType
     _max?: ScheduledPostMaxAggregateInputType
   }
@@ -18478,8 +18522,12 @@ export namespace Prisma {
     text: string
     scheduledAt: Date
     posted: boolean
+    attempts: number
+    lastAttemptAt: Date | null
     createdAt: Date
     _count: ScheduledPostCountAggregateOutputType | null
+    _avg: ScheduledPostAvgAggregateOutputType | null
+    _sum: ScheduledPostSumAggregateOutputType | null
     _min: ScheduledPostMinAggregateOutputType | null
     _max: ScheduledPostMaxAggregateOutputType | null
   }
@@ -18505,6 +18553,8 @@ export namespace Prisma {
     text?: boolean
     scheduledAt?: boolean
     posted?: boolean
+    attempts?: boolean
+    lastAttemptAt?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["scheduledPost"]>
 
@@ -18515,6 +18565,8 @@ export namespace Prisma {
     text?: boolean
     scheduledAt?: boolean
     posted?: boolean
+    attempts?: boolean
+    lastAttemptAt?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["scheduledPost"]>
 
@@ -18525,6 +18577,8 @@ export namespace Prisma {
     text?: boolean
     scheduledAt?: boolean
     posted?: boolean
+    attempts?: boolean
+    lastAttemptAt?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["scheduledPost"]>
 
@@ -18535,10 +18589,12 @@ export namespace Prisma {
     text?: boolean
     scheduledAt?: boolean
     posted?: boolean
+    attempts?: boolean
+    lastAttemptAt?: boolean
     createdAt?: boolean
   }
 
-  export type ScheduledPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "videoId" | "text" | "scheduledAt" | "posted" | "createdAt", ExtArgs["result"]["scheduledPost"]>
+  export type ScheduledPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "videoId" | "text" | "scheduledAt" | "posted" | "attempts" | "lastAttemptAt" | "createdAt", ExtArgs["result"]["scheduledPost"]>
 
   export type $ScheduledPostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ScheduledPost"
@@ -18550,6 +18606,8 @@ export namespace Prisma {
       text: string
       scheduledAt: Date
       posted: boolean
+      attempts: number
+      lastAttemptAt: Date | null
       createdAt: Date
     }, ExtArgs["result"]["scheduledPost"]>
     composites: {}
@@ -18980,6 +19038,8 @@ export namespace Prisma {
     readonly text: FieldRef<"ScheduledPost", 'String'>
     readonly scheduledAt: FieldRef<"ScheduledPost", 'DateTime'>
     readonly posted: FieldRef<"ScheduledPost", 'Boolean'>
+    readonly attempts: FieldRef<"ScheduledPost", 'Int'>
+    readonly lastAttemptAt: FieldRef<"ScheduledPost", 'DateTime'>
     readonly createdAt: FieldRef<"ScheduledPost", 'DateTime'>
   }
     
@@ -22843,6 +22903,8 @@ export namespace Prisma {
     text: 'text',
     scheduledAt: 'scheduledAt',
     posted: 'posted',
+    attempts: 'attempts',
+    lastAttemptAt: 'lastAttemptAt',
     createdAt: 'createdAt'
   };
 
@@ -24029,6 +24091,8 @@ export namespace Prisma {
     text?: StringFilter<"ScheduledPost"> | string
     scheduledAt?: DateTimeFilter<"ScheduledPost"> | Date | string
     posted?: BoolFilter<"ScheduledPost"> | boolean
+    attempts?: IntFilter<"ScheduledPost"> | number
+    lastAttemptAt?: DateTimeNullableFilter<"ScheduledPost"> | Date | string | null
     createdAt?: DateTimeFilter<"ScheduledPost"> | Date | string
   }
 
@@ -24039,6 +24103,8 @@ export namespace Prisma {
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
+    attempts?: SortOrder
+    lastAttemptAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
   }
 
@@ -24052,6 +24118,8 @@ export namespace Prisma {
     text?: StringFilter<"ScheduledPost"> | string
     scheduledAt?: DateTimeFilter<"ScheduledPost"> | Date | string
     posted?: BoolFilter<"ScheduledPost"> | boolean
+    attempts?: IntFilter<"ScheduledPost"> | number
+    lastAttemptAt?: DateTimeNullableFilter<"ScheduledPost"> | Date | string | null
     createdAt?: DateTimeFilter<"ScheduledPost"> | Date | string
   }, "id">
 
@@ -24062,10 +24130,14 @@ export namespace Prisma {
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
+    attempts?: SortOrder
+    lastAttemptAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: ScheduledPostCountOrderByAggregateInput
+    _avg?: ScheduledPostAvgOrderByAggregateInput
     _max?: ScheduledPostMaxOrderByAggregateInput
     _min?: ScheduledPostMinOrderByAggregateInput
+    _sum?: ScheduledPostSumOrderByAggregateInput
   }
 
   export type ScheduledPostScalarWhereWithAggregatesInput = {
@@ -24078,6 +24150,8 @@ export namespace Prisma {
     text?: StringWithAggregatesFilter<"ScheduledPost"> | string
     scheduledAt?: DateTimeWithAggregatesFilter<"ScheduledPost"> | Date | string
     posted?: BoolWithAggregatesFilter<"ScheduledPost"> | boolean
+    attempts?: IntWithAggregatesFilter<"ScheduledPost"> | number
+    lastAttemptAt?: DateTimeNullableWithAggregatesFilter<"ScheduledPost"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ScheduledPost"> | Date | string
   }
 
@@ -25428,6 +25502,8 @@ export namespace Prisma {
     text: string
     scheduledAt: Date | string
     posted?: boolean
+    attempts?: number
+    lastAttemptAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -25438,6 +25514,8 @@ export namespace Prisma {
     text: string
     scheduledAt: Date | string
     posted?: boolean
+    attempts?: number
+    lastAttemptAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -25448,6 +25526,8 @@ export namespace Prisma {
     text?: StringFieldUpdateOperationsInput | string
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posted?: BoolFieldUpdateOperationsInput | boolean
+    attempts?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -25458,6 +25538,8 @@ export namespace Prisma {
     text?: StringFieldUpdateOperationsInput | string
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posted?: BoolFieldUpdateOperationsInput | boolean
+    attempts?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -25468,6 +25550,8 @@ export namespace Prisma {
     text: string
     scheduledAt: Date | string
     posted?: boolean
+    attempts?: number
+    lastAttemptAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -25478,6 +25562,8 @@ export namespace Prisma {
     text?: StringFieldUpdateOperationsInput | string
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posted?: BoolFieldUpdateOperationsInput | boolean
+    attempts?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -25488,6 +25574,8 @@ export namespace Prisma {
     text?: StringFieldUpdateOperationsInput | string
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posted?: BoolFieldUpdateOperationsInput | boolean
+    attempts?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26518,6 +26606,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type ScheduledPostCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -26525,7 +26624,13 @@ export namespace Prisma {
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
+    attempts?: SortOrder
+    lastAttemptAt?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type ScheduledPostAvgOrderByAggregateInput = {
+    attempts?: SortOrder
   }
 
   export type ScheduledPostMaxOrderByAggregateInput = {
@@ -26535,6 +26640,8 @@ export namespace Prisma {
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
+    attempts?: SortOrder
+    lastAttemptAt?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -26545,7 +26652,27 @@ export namespace Prisma {
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
+    attempts?: SortOrder
+    lastAttemptAt?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type ScheduledPostSumOrderByAggregateInput = {
+    attempts?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NotificationCountOrderByAggregateInput = {
@@ -27478,6 +27605,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMutedWordsInput, UserUpdateWithoutMutedWordsInput>, UserUncheckedUpdateWithoutMutedWordsInput>
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type UserCreateNestedOneWithoutNotificationsInput = {
     create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
@@ -27667,6 +27798,31 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type YtCredentialCreateWithoutUserInput = {

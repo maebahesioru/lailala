@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { MainLayout } from "@/components/main-layout";
 import { CommentFeed } from "@/components/comment-feed";
+import { SITE_URL } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "ホーム",
@@ -16,11 +17,11 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "ライララ(仮)",
-    url: "https://lailala.hikamer.f5.si",
+    url: SITE_URL,
     description: "YouTubeコメントをX/Twitter風に",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://lailala.hikamer.f5.si/search?q={search_term_string}",
+      target: `${SITE_URL}/search?q={search_term_string}`,
       "query-input": "required name=search_term_string",
     },
   };

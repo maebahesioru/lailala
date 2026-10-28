@@ -283,6 +283,8 @@ exports.Prisma.ScheduledPostScalarFieldEnum = {
   text: 'text',
   scheduledAt: 'scheduledAt',
   posted: 'posted',
+  attempts: 'attempts',
+  lastAttemptAt: 'lastAttemptAt',
   createdAt: 'createdAt'
 };
 

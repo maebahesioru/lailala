@@ -42,3 +42,7 @@ next-env.d.ts
 
 /src/generated/prisma
 /generated/prisma
+
+# prisma engine binaries (generated locally)
+generated/prisma2/*.so.node
+/generated/prisma2/*.so.node

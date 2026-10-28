@@ -24,7 +24,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "web-push": "^3.6.7",
-    "youtubei.js": "github:maebahesioru/YouTube.js#fix-comment-replies-fallback",
+    "youtubei.js": "github:maebahesioru/YouTube.js#fix-missing-comment-avatar",
     "zod": "^4.4.1"
   },
   "packageManager": "pnpm@9.15.0",
