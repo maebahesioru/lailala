@@ -6,6 +6,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
 import { YT, YTNodes } from "youtubei.js";
 import { unwrapReplies } from "@/lib/youtube-comment-shape";
+import { parseCount } from "@/lib/parse-count";
 
 const postSchema = z.object({
   videoId: z.string(),
@@ -143,7 +144,16 @@ function filterBlockedThreads(threads: any[], blockedIds: Set<string>) {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId");
-  const sortBy = (searchParams.get("sortBy") as "TOP_COMMENTS" | "NEWEST_FIRST") || "TOP_COMMENTS";
+  // 並び順は列挙値のみ受け付ける。以前は未知の値をそのまま youtubei.js へ
+  // 渡しており、"invalid int32: undefined" という 500 がそのまま画面に出ていた。
+  const sortByRaw = searchParams.get("sortBy");
+  if (sortByRaw && sortByRaw !== "TOP_COMMENTS" && sortByRaw !== "NEWEST_FIRST") {
+    return NextResponse.json(
+      { error: "sortBy には TOP_COMMENTS か NEWEST_FIRST を指定してください。" },
+      { status: 400 }
+    );
+  }
+  const sortBy = (sortByRaw as "TOP_COMMENTS" | "NEWEST_FIRST") || "TOP_COMMENTS";
   const continuationToken = searchParams.get("continuationToken");
   // 1年フィルタは既定でオフ。以前は既定で掛けていたため、上位100件のうち
   // 65% が理由も表示されずに消えていた。filter=year を明示した時だけ絞る。
@@ -254,8 +264,8 @@ export async function GET(req: NextRequest) {
             where: { commentId: c.commentId },
             update: {
               content: c.content || "",
-              likeCount: parseInt(String(c.likeCount).replace(/[^0-9]/g, ""), 10) || 0,
-              replyCount: parseInt(String(c.replyCount).replace(/[^0-9]/g, ""), 10) || 0,
+              likeCount: parseCount(c.likeCount),
+              replyCount: parseCount(c.replyCount),
               authorName: c.author?.name || "Unknown",
               authorChannelId: c.author?.channelId || null,
               authorThumb: c.author?.thumbnail || null,
@@ -265,8 +275,8 @@ export async function GET(req: NextRequest) {
               commentId: c.commentId,
               videoId,
               content: c.content || "",
-              likeCount: parseInt(String(c.likeCount).replace(/[^0-9]/g, ""), 10) || 0,
-              replyCount: parseInt(String(c.replyCount).replace(/[^0-9]/g, ""), 10) || 0,
+              likeCount: parseCount(c.likeCount),
+              replyCount: parseCount(c.replyCount),
               authorName: c.author?.name || "Unknown",
               authorChannelId: c.author?.channelId || null,
               authorThumb: c.author?.thumbnail || null,
@@ -301,6 +311,12 @@ export async function GET(req: NextRequest) {
         { status: 400 }
       );
     }
-    return NextResponse.json({ error: raw || "Failed to fetch comments" }, { status: 500 });
+    // 上流の生メッセージをそのまま返すと "invalid int32: undefined" のような
+    // 内部文言が画面に出るため、ログに残してから定型文に置き換える。
+    console.error("[comments] fetch failed:", e);
+    return NextResponse.json(
+      { error: "コメントの取得に失敗しました。時間をおいて再試行してください。" },
+      { status: 502 }
+    );
   }
 }

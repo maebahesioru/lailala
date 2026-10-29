@@ -3,6 +3,7 @@ import { getInnertube } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-auth";
 import { unwrapReplies } from "@/lib/youtube-comment-shape";
+import { parseCount } from "@/lib/parse-count";
 
 function parsePublishedTime(text: string): Date | null {
   if (!text) return null;
@@ -42,8 +43,8 @@ export async function GET(req: NextRequest) {
       if (!c || !c.comment_id) return;
       const publishedText = c.published_time?.text || String(c.published_time || "");
       const publishedAt = parsePublishedTime(publishedText) || new Date();
-      const likeCount = parseInt((c.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
-      const replyCount = parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+      const likeCount = parseCount(c.like_count);
+      const replyCount = parseCount(c.reply_count);
 
       await prisma.commentCache.upsert({
         where: { commentId: c.comment_id },

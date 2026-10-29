@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import { unwrapReplies } from "@/lib/youtube-comment-shape";
+import { parseCount } from "@/lib/parse-count";
 
 let started = false;
 
@@ -44,8 +45,8 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
 
         const publishedText = c.published_time?.text || String(c.published_time || "");
         const publishedAt = parsePublishedTime(publishedText) || new Date();
-        const likeCount = parseInt((c.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
-        const replyCount = parseInt((c.reply_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+        const likeCount = parseCount(c.like_count);
+        const replyCount = parseCount(c.reply_count);
         const authorName = typeof c.author?.name === "string" ? c.author.name : (c.author?.name?.text || "Unknown");
         const authorThumb = c.author?.thumbnails?.[0]?.url || c.author?.thumbnail?.url || null;
 
@@ -68,7 +69,7 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
             if (!reply?.comment_id) continue;
             const rPublishedText = reply.published_time?.text || String(reply.published_time || "");
             const rPublishedAt = parsePublishedTime(rPublishedText) || new Date();
-            const rLikeCount = parseInt((reply.like_count || "0").replace(/[^0-9]/g, ""), 10) || 0;
+            const rLikeCount = parseCount(reply.like_count);
             const rAuthorName = typeof reply.author?.name === "string" ? reply.author.name : (reply.author?.name?.text || "Unknown");
             const rAuthorThumb = reply.author?.thumbnails?.[0]?.url || reply.author?.thumbnail?.url || null;
 
