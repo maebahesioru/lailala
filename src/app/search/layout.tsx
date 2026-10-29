@@ -8,5 +8,11 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function SearchLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      {/* Suspense の内側だと初期HTMLに出ないので、シェル側に読み上げ用の h1 を置く */}
+      <h1 className="sr-only">検索</h1>
+      {children}
+    </>
+  );
 }
