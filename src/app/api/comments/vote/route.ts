@@ -57,19 +57,24 @@ export async function POST(req: NextRequest) {
         create: { commentId, videoId, userId, type: action },
       });
 
-      // Send notification to comment author
+      // Send notification to comment author.
+      // 付け外しのたびに通知していたため「いいね→解除→いいね」で 3 件増えていた。
+      // ①取り消し（unlike / undislike）は通知しない
+      // ②同じ人が同じコメントへ 24 時間以内に既に通知を作っていたら作らない
       const authorChannelId = targetComment.author?.id;
+      const notifyType = action === "like" || action === "dislike" ? action : null;
       const me = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, channelId: true, image: true } });
-      if (authorChannelId && me?.channelId && authorChannelId !== me.channelId) {
+      if (notifyType && authorChannelId && me?.channelId && authorChannelId !== me.channelId) {
         await createNotification({
           recipientChannelId: authorChannelId,
-          type: action,
+          type: notifyType,
           actorName: me.name || "Unknown",
           actorChannelId: me.channelId,
           actorThumb: me.image || undefined,
           commentId,
           videoId,
           content: targetComment.content?.text || "",
+          dedupeWindowMs: 24 * 60 * 60 * 1000,
         });
       }
     } else {

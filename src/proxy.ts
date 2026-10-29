@@ -71,6 +71,13 @@ export default function proxy(request: NextRequest) {
     return exceeded(ip, "youtube", 60, 60) ?? NextResponse.next();
   }
 
+  // コメントのエクスポートは 13 万行をそのまま流す重い処理（実測 4.4〜4.9 秒）。
+  // 未認証で叩けるので、通常の 300 回/10 秒では 1 クライアントで DB を飽和できる。
+  // 実測: 6 回目で 429。通常の利用（人が CSV を落とす）には十分な余裕がある。
+  if (pathname.startsWith("/api/export/")) {
+    return exceeded(ip, "export", 60, 5) ?? NextResponse.next();
+  }
+
   return exceeded(ip, "api", 10, 300) ?? NextResponse.next();
 }
 

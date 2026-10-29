@@ -12,6 +12,8 @@ interface CreateNotificationParams {
   commentId?: string;
   videoId: string;
   content?: string;
+  /** 同じ相手・同じ対象への通知をこの期間内は重複して作らない（ミリ秒） */
+  dedupeWindowMs?: number;
 }
 
 const TYPE_LABELS: Record<NotificationType, string> = {
@@ -51,6 +53,21 @@ export async function createNotification(params: CreateNotificationParams) {
   }
 
   if (!user) return null;
+
+  // 同一の操作を繰り返したときの通知スパムを防ぐ（例: いいねの付け外し）。
+  if (params.dedupeWindowMs && params.actorChannelId && params.commentId) {
+    const existing = await prisma.notification.findFirst({
+      where: {
+        userId: user.id,
+        type: params.type,
+        actorChannelId: params.actorChannelId,
+        commentId: params.commentId,
+        createdAt: { gte: new Date(Date.now() - params.dedupeWindowMs) },
+      },
+      select: { id: true },
+    });
+    if (existing) return null;
+  }
 
   // Check per-type notification privacy settings (in-app)
   if (params.type === "like" && !user.notifyLikes) return null;
