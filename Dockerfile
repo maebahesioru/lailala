@@ -6,6 +6,9 @@ RUN apk add --no-cache libc6-compat git
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml* ./
+# pnpm.patchedDependencies が patches/ を参照するので、install より先にコピーする
+# （無いと ENOENT でビルドが落ちる）
+COPY patches ./patches
 RUN npm install -g pnpm && pnpm install --no-frozen-lockfile
 
 # Rebuild the source code only when needed

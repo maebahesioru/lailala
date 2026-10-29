@@ -24,7 +24,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "web-push": "^3.6.7",
-    "youtubei.js": "github:maebahesioru/YouTube.js#fix-missing-comment-avatar",
+    "youtubei.js": "18.3.0",
     "zod": "^4.4.1"
   },
   "packageManager": "pnpm@9.15.0",
@@ -39,5 +39,10 @@
     "prisma": "^6.6.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "youtubei.js@18.3.0": "patches/youtubei.js@18.3.0.patch"
+    }
   }
 }

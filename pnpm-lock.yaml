@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  youtubei.js@18.3.0:
+    hash: vdszi4nnhs3t3z7c7oqsk4dvra
+    path: patches/youtubei.js@18.3.0.patch
+
 importers:
 
   .:
@@ -42,8 +47,8 @@ importers:
         specifier: ^3.6.7
         version: 3.6.7
       youtubei.js:
-        specifier: github:maebahesioru/YouTube.js#fix-missing-comment-avatar
-        version: https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/65e91abdb51317a4134a40e13feb39f160719692
+        specifier: 18.3.0
+        version: 18.3.0(patch_hash=vdszi4nnhs3t3z7c7oqsk4dvra)
       zod:
         specifier: ^4.4.1
         version: 4.4.3
@@ -1263,6 +1268,9 @@ packages:
       picomatch:
         optional: true
 
+  fflate@0.8.3:
+    resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
+
   file-entry-cache@8.0.0:
     resolution: {integrity: sha512-XXTUwCvisa5oacNGRP9SfNtYBNAMi+RPwBFmblZEF7N7swHYQS6/Zfk7SRwx4D5j3CH211YNRco1DEMNVfZCnQ==}
     engines: {node: '>=16.0.0'}
@@ -1712,9 +1720,9 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  meriyah@6.1.4:
-    resolution: {integrity: sha512-Sz8FzjzI0kN13GK/6MVEsVzMZEPvOhnmmI1lU5+/1cGOiK3QUahntrNNtdVeihrO7t9JpoH75iMNXg6R6uWflQ==}
-    engines: {node: '>=18.0.0'}
+  meriyah@7.4.1:
+    resolution: {integrity: sha512-3fIW/dyrrS7xbcxs/EHstPTZX9l/NVLDrXB1b+nNKoS98MpBonPH4kZ9MXUxH1QTlY34jp7ir7eMts1FDC9weA==}
+    engines: {node: '>=20.0.0'}
 
   micromatch@4.0.8:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
@@ -2215,9 +2223,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  youtubei.js@https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/65e91abdb51317a4134a40e13feb39f160719692:
-    resolution: {tarball: https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/65e91abdb51317a4134a40e13feb39f160719692}
-    version: 17.0.1
+  youtubei.js@18.3.0:
+    resolution: {integrity: sha512-6Cwn/U8a+OjpZp5XgqOjwy7Lk0RrGavm3I5zO7qZWO+fes20vhWMZnlUs0h/97SwjS0AsxAZrZ5bJ85XBJVWTw==}
 
   zlibjs@0.3.1:
     resolution: {integrity: sha512-+J9RrgTKOmlxFSDHo0pI1xM6BLVUv+o0ZT9ANtCxGkjIVCCUdx9alUF8Gm+dGLKbkkkidWIHFDZHDMpfITt4+w==}
@@ -3545,6 +3552,8 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.5
 
+  fflate@0.8.3: {}
+
   file-entry-cache@8.0.0:
     dependencies:
       flat-cache: 4.0.1
@@ -3981,7 +3990,7 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  meriyah@6.1.4: {}
+  meriyah@7.4.1: {}
 
   micromatch@4.0.8:
     dependencies:
@@ -4619,10 +4628,11 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  youtubei.js@https://codeload.github.com/maebahesioru/YouTube.js/tar.gz/65e91abdb51317a4134a40e13feb39f160719692:
+  youtubei.js@18.3.0(patch_hash=vdszi4nnhs3t3z7c7oqsk4dvra):
     dependencies:
       '@bufbuild/protobuf': 2.12.1
-      meriyah: 6.1.4
+      fflate: 0.8.3
+      meriyah: 7.4.1
 
   zlibjs@0.3.1: {}
 

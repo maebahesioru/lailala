@@ -4,7 +4,7 @@ import { getInnertube, getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
-import { YTNodes } from "youtubei.js";
+import { YT, YTNodes } from "youtubei.js";
 
 const postSchema = z.object({
   videoId: z.string(),
@@ -172,19 +172,28 @@ export async function GET(req: NextRequest) {
 
       const response = await cmd.call(innertube.actions, { parse: true });
 
-      if (!response.on_response_received_endpoints_memo) {
+      if (!response?.on_response_received_endpoints?.length) {
         return NextResponse.json({ error: "Unexpected response" }, { status: 500 });
       }
 
-      const commentThreads = response.on_response_received_endpoints_memo.getType(YTNodes.CommentThread);
-      threads = commentThreads.map(parseCommentThread).filter(Boolean).filter((t: any) => !isOlderThanOneYear(t.comment.publishedTime));
+      // 18.x の Comments は「ヘッダ + 本文」の2要素を前提に組み立てられている。
+      // 続きのレスポンスは本文1要素だけなので同じ形に詰め替えて渡す。
+      // こうすると本文側の ContinuationItem（＝一覧の次ページ）を
+      // 各スレッド内の返信トークンと取り違えずに済む。
+      const page = new YT.Comments(
+        innertube.actions,
+        { on_response_received_endpoints: [undefined, response.on_response_received_endpoints[0]] },
+        true
+      );
 
-      const cont = response.on_response_received_endpoints_memo.getType(YTNodes.ContinuationItem)?.[0];
-      if (cont) {
-        const payload = (cont as any).endpoint?.payload;
-        nextToken = payload?.continuationCommand?.token || payload?.token || null;
-        hasContinuation = !!nextToken;
-      }
+      threads = page.contents
+        .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)
+        .map(parseCommentThread)
+        .filter(Boolean)
+        .filter((t: any) => !isOlderThanOneYear(t.comment.publishedTime));
+
+      nextToken = page.continuation_token;
+      hasContinuation = page.has_continuation && !!nextToken;
     } else {
       const comments = await innertube.getComments(videoId, sortBy);
 
@@ -194,8 +203,8 @@ export async function GET(req: NextRequest) {
         .filter(Boolean)
         .filter((t: any) => !isOlderThanOneYear(t.comment.publishedTime));
 
-      hasContinuation = comments.has_continuation;
-      nextToken = (comments as any).continuation_token || null;
+      nextToken = comments.continuation_token;
+      hasContinuation = comments.has_continuation && !!nextToken;
 
       // Extract comment count from header - try multiple sources for the most accurate number
       const headerCount = (comments as any).header?.comments_count;

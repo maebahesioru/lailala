@@ -1,0 +1,83 @@
+diff --git a/dist/src/parser/classes/comments/CommentThread.d.ts b/dist/src/parser/classes/comments/CommentThread.d.ts
+index 5b3e5a21d44537eea8b041841677f354fce3ac7d..5d4a920577b2428c1949fcdc1065d956d0edbc31 100644
+--- a/dist/src/parser/classes/comments/CommentThread.d.ts
++++ b/dist/src/parser/classes/comments/CommentThread.d.ts
+@@ -19,6 +19,8 @@ export default class CommentThread extends YTNode {
+      * Indicates whether this comment thread has more replies that can be fetched.
+      */
+     get has_continuation(): boolean;
++    /** [lailala patch] Raw continuation token for the next page, if any. */
++    get continuation_token(): string | null;
+     /**
+      * Indicates whether this comment thread has prepopulated reply data. If false, you will need to call {@link CommentThread.getReplies} to fetch the initial batch of replies.
+      */
+diff --git a/dist/src/parser/classes/comments/CommentThread.js b/dist/src/parser/classes/comments/CommentThread.js
+index 112c10a6f5ed548f13cce61ae7685155d03d7434..9587acb99843ac405e2660d545bcc046cc3d5fc5 100644
+--- a/dist/src/parser/classes/comments/CommentThread.js
++++ b/dist/src/parser/classes/comments/CommentThread.js
+@@ -33,6 +33,24 @@ export default class CommentThread extends YTNode {
+             throw new InnertubeError('Cannot determine if there is a continuation because this comment thread\'s replies have not been loaded');
+         return !!this.#continuation;
+     }
++
++    /**
++     * [lailala patch] Raw continuation token for the next page, if any.
++     * Upstream only exposes getContinuation(), which holds the state inside the
++     * instance; a stateless HTTP API needs the raw token to page on its own.
++     */
++    get continuation_token() {
++        const item = this.#continuation;
++        if (!item)
++            return null;
++        for (const endpoint of [item.endpoint, item.button?.endpoint]) {
++            const payload = endpoint?.payload;
++            const token = payload?.continuationCommand?.token ?? payload?.token;
++            if (typeof token === 'string' && token.length > 0)
++                return token;
++        }
++        return null;
++    }
+     /**
+      * Indicates whether this comment thread has prepopulated reply data. If false, you will need to call {@link CommentThread.getReplies} to fetch the initial batch of replies.
+      */
+diff --git a/dist/src/parser/youtube/Comments.d.ts b/dist/src/parser/youtube/Comments.d.ts
+index b98bd01fd7e67df2a8f45504220730b6160cdc08..ba80c76461efa2d92bea91a4e8f638f466087145 100644
+--- a/dist/src/parser/youtube/Comments.d.ts
++++ b/dist/src/parser/youtube/Comments.d.ts
+@@ -23,5 +23,7 @@ export default class Comments {
+      */
+     getContinuation(): Promise<Comments>;
+     get has_continuation(): boolean;
++    /** [lailala patch] Raw continuation token for the next page, if any. */
++    get continuation_token(): string | null;
+     get page(): INextResponse;
+ }
+diff --git a/dist/src/parser/youtube/Comments.js b/dist/src/parser/youtube/Comments.js
+index bb8bb11c940a94de5a48206b9d0b8b7350b2d22e..71a4d5c3ba5709d2aa856180cef6aec94ef52c7a 100644
+--- a/dist/src/parser/youtube/Comments.js
++++ b/dist/src/parser/youtube/Comments.js
+@@ -86,6 +86,24 @@ export default class Comments {
+     get has_continuation() {
+         return !!this.#continuation;
+     }
++
++    /**
++     * [lailala patch] Raw continuation token for the next page, if any.
++     * Upstream only exposes getContinuation(), which holds the state inside the
++     * instance; a stateless HTTP API needs the raw token to page on its own.
++     */
++    get continuation_token() {
++        const item = this.#continuation;
++        if (!item)
++            return null;
++        for (const endpoint of [item.endpoint, item.button?.endpoint]) {
++            const payload = endpoint?.payload;
++            const token = payload?.continuationCommand?.token ?? payload?.token;
++            if (typeof token === 'string' && token.length > 0)
++                return token;
++        }
++        return null;
++    }
+     get page() {
+         return this.#page;
+     }

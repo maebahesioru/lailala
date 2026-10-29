@@ -36,12 +36,13 @@ export async function GET(req: NextRequest) {
             }
             if (thread.replies) {
               for (const reply of thread.replies) {
-                if (reply && watched.has(reply.comment_id)) {
+                const replyComment = reply.comment;
+                if (replyComment && watched.has(replyComment.comment_id)) {
                   send({
                     type: "update",
-                    commentId: reply.comment_id,
-                    likeCount: reply.like_count || "0",
-                    content: reply.content?.text || null,
+                    commentId: replyComment.comment_id,
+                    likeCount: replyComment.like_count || "0",
+                    content: replyComment.content?.text || null,
                   });
                 }
               }

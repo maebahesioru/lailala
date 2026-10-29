@@ -34,7 +34,8 @@ export async function POST(req: NextRequest) {
       if (thread.comment?.comment_id === commentId) { targetComment = thread.comment; break; }
       if (thread.replies) {
         for (const reply of thread.replies) {
-          if (reply.comment_id === commentId) { targetComment = reply; break; }
+          // 18.x では返信も CommentThread なので、実体は .comment 側。
+          if (reply.comment?.comment_id === commentId) { targetComment = reply.comment; break; }
         }
       }
       if (targetComment) break;

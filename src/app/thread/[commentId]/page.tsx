@@ -136,13 +136,13 @@ export default async function ThreadPage({ params }: PageProps) {
         if (!t.has_replies) continue;
         try {
           t.setActions(innertube.actions);
-          const withReplies = await t.getReplies(videoId);
+          const withReplies = await t.getReplies();
           const found = withReplies.replies?.find((r: any) => r.comment_id === commentId);
           if (found) {
             parent = parseRoot(t.comment);
             targetReply = found;
             loadedReplies = withReplies.replies || [];
-            nextToken = (withReplies as any).continuation_token || null;
+            nextToken = withReplies.continuation_token;
             isReplyThread = true;
             break;
           }
@@ -160,9 +160,9 @@ export default async function ThreadPage({ params }: PageProps) {
       const thread = comments.contents.find((t: any) => t.comment?.comment_id === commentId);
       if (thread?.has_replies) {
         thread.setActions(innertube.actions);
-        const withReplies = await thread.getReplies(videoId);
+        const withReplies = await thread.getReplies();
         loadedReplies = withReplies.replies || [];
-        nextToken = (withReplies as any).continuation_token || null;
+        nextToken = withReplies.continuation_token;
       }
     } catch (e: any) {
       replyError = e.message || "返信の読み込みに失敗しました";

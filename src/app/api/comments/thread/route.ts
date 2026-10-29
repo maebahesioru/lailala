@@ -84,23 +84,18 @@ export async function GET(req: NextRequest) {
     }
     if (!thread) return NextResponse.json({ error: "Comment not found" }, { status: 404 });
 
-    const info = await innertube.getInfo(videoId);
-    const channelId = info.basic_info.channel_id;
-
     let replies: any[] = [];
     let replyError: string | null = null;
     let nextToken: string | null = null;
 
     try {
       thread.setActions(innertube.actions);
-      (thread as any).__videoId = videoId;
-      (thread as any).__videoChannelId = channelId;
-      // fork 側は getReplies(videoId?) の引数を正式な受け口にしている。
-      // 本番ビルド(Turbopack)では外から注入した __videoId が読めず
-      // 「videoId is required」で落ちるため、引数で明示的に渡す。
-      const withReplies = await thread.getReplies(videoId);
+      // 18.x では getReplies() が引数なしで「もっと見る」ボタン側の
+      // endpoint を内部で解決する（旧フォークで必要だった videoId の
+      // 注入は上流で修正済み）。
+      const withReplies = await thread.getReplies();
       replies = withReplies.replies?.map(parseReply) || [];
-      nextToken = (withReplies as any).continuation_token || null;
+      nextToken = withReplies.continuation_token;
     } catch (e: any) {
       replyError = e.message || "Failed to load replies";
     }
