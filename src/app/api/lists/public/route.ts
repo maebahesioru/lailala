@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { escapeLike } from "@/lib/like-escape";
+import { internalError } from "@/lib/api-error";
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
@@ -39,7 +40,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       lists: lists.map((l) => ({ ...l, isFollowing: followSet.has(l.id) })),
     });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e) {
+    // 内部エラー（Prisma のクエリ全文など）をそのまま返さない
+    return internalError("api/lists/public", e);
   }
 }

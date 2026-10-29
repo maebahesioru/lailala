@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     const info = await innertube.getInfo(videoId);
 
     // RYD APIで低評価を取得
-    let rydData: { dislikes?: number; rating?: number } = {};
+    let rydData: { likes?: number; dislikes?: number; rating?: number } = {};
     try {
       const rydRes = await fetch(`https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`, {
         next: { revalidate: 60 },
@@ -27,10 +27,19 @@ export async function GET(req: NextRequest) {
       console.error(e);
     }
 
-    // RYD rating は 0-5 のスコア。分かりやすく 0-100% の「高評価率」に変換
-    const likeRatio = rydData.rating != null
-      ? Math.round((rydData.rating / 5) * 100)
-      : null;
+    // 「高評価率」は likes / (likes + dislikes) で出す。RYD の rating は 0-5 の
+    // 推定スコアで、同じレスポンスの likes/dislikes から計算した比率とズレる
+    // （実測: rating 5→4.8945 = 97.89% だが 621500/(621500+16837) は 97.36%）。
+    // 画面には高評価/低評価の実数も並べて出しているので、数字と食い違って
+    // 見えないよう実数から算出し、無いときだけ rating にフォールバックする。
+    const rydLikes = typeof rydData.likes === "number" ? rydData.likes : null;
+    const rydDislikes = typeof rydData.dislikes === "number" ? rydData.dislikes : null;
+    const likeRatio =
+      rydLikes != null && rydDislikes != null && rydLikes + rydDislikes > 0
+        ? Math.round((rydLikes / (rydLikes + rydDislikes)) * 100)
+        : rydData.rating != null
+          ? Math.round((rydData.rating / 5) * 100)
+          : null;
 
     // Calculate days since upload from PlayerMicroformat
     let daysSinceUpload: number | null = null;
