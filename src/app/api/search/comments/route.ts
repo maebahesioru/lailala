@@ -3,6 +3,7 @@ import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { intParam } from "@/lib/query-params";
 import { internalError } from "@/lib/api-error";
+import { escapeLike } from "@/lib/like-escape";
 
 function getRelativeTimeString(date: Date): string {
   const now = new Date();
@@ -64,7 +65,7 @@ export async function GET(req: NextRequest) {
     if (type === "accounts") {
       const comments = await prisma.commentCache.findMany({
         where: {
-          authorName: { contains: q, mode: "insensitive" },
+          authorName: { contains: escapeLike(q), mode: "insensitive" },
           ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
         },
         select: { authorChannelId: true, authorName: true, authorThumb: true },
@@ -102,13 +103,13 @@ export async function GET(req: NextRequest) {
     };
 
     if (userFilter.trim()) {
-      where.authorName = { contains: userFilter, mode: "insensitive" };
+      where.authorName = { contains: escapeLike(userFilter), mode: "insensitive" };
     }
 
     if (q.trim()) {
       where.OR = [
-        { content: { contains: q, mode: "insensitive" } },
-        { authorName: { contains: q, mode: "insensitive" } },
+        { content: { contains: escapeLike(q), mode: "insensitive" } },
+        { authorName: { contains: escapeLike(q), mode: "insensitive" } },
       ];
     }
 

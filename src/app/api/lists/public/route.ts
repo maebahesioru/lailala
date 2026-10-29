@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { escapeLike } from "@/lib/like-escape";
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
@@ -13,7 +14,7 @@ export async function GET(req: NextRequest) {
         isPublic: true,
         ...(q
           ? {
-              name: { contains: q, mode: "insensitive" },
+              name: { contains: escapeLike(q), mode: "insensitive" },
             }
           : {}),
       },

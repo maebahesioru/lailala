@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
+import { escapeLike } from "@/lib/like-escape";
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
@@ -19,8 +20,8 @@ export async function GET(req: NextRequest) {
             where: search
               ? {
                   OR: [
-                    { content: { contains: search, mode: "insensitive" } },
-                    { authorName: { contains: search, mode: "insensitive" } },
+                    { content: { contains: escapeLike(search), mode: "insensitive" } },
+                    { authorName: { contains: escapeLike(search), mode: "insensitive" } },
                   ],
                 }
               : undefined,

@@ -50,6 +50,28 @@ function toRow(c: {
     .join(",");
 }
 
+
+function toJsonRow(c: {
+  commentId: string;
+  videoId: string;
+  authorName: string;
+  authorChannelId: string | null;
+  content: string;
+  likeCount: number;
+  replyCount: number;
+  publishedAt: Date;
+}) {
+  return {
+    commentId: c.commentId,
+    videoId: c.videoId,
+    authorName: c.authorName,
+    authorChannelId: c.authorChannelId || null,
+    content: c.content,
+    likeCount: c.likeCount,
+    replyCount: c.replyCount,
+    publishedAt: c.publishedAt.toISOString(),
+  };
+}
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId");
@@ -59,17 +81,28 @@ export async function GET(req: NextRequest) {
     MAX_ROWS
   );
 
+  // 以前は format を一切見ておらず、format=json でも CSV を返していた。
+  const rawFormat = (searchParams.get("format") || "csv").toLowerCase();
+  if (rawFormat !== "csv" && rawFormat !== "json") {
+    return NextResponse.json(
+      { error: "format には csv か json を指定してください。" },
+      { status: 400 }
+    );
+  }
+  const asJson = rawFormat === "json";
+
   const encoder = new TextEncoder();
   let lastId: string | null = null;
   let sent = 0;
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
-      // Excel が UTF-8 と判別できるよう BOM を付ける
       const push = (line: string) => controller.enqueue(encoder.encode(line));
       try {
-        push(`\uFEFF${HEADERS.join(",")}\n`);
+        // CSV は Excel が UTF-8 と判別できるよう BOM を付ける
+        push(asJson ? "[" : `\uFEFF${HEADERS.join(",")}\n`);
 
+        let first = true;
         while (sent < limit) {
           const batch = await prisma.commentCache.findMany({
             where: videoId ? { videoId } : undefined,
@@ -81,7 +114,14 @@ export async function GET(req: NextRequest) {
           if (batch.length === 0) break;
 
           let chunk = "";
-          for (const c of batch) chunk += `${toRow(c)}\n`;
+          for (const c of batch) {
+            if (asJson) {
+              chunk += `${first ? "" : ",\n"}${JSON.stringify(toJsonRow(c))}`;
+              first = false;
+            } else {
+              chunk += `${toRow(c)}\n`;
+            }
+          }
           push(chunk);
 
           sent += batch.length;
@@ -89,6 +129,7 @@ export async function GET(req: NextRequest) {
           if (batch.length < BATCH_SIZE) break;
         }
 
+        if (asJson) push("]");
         controller.close();
       } catch (e: any) {
         console.error("[export/comments] failed:", e?.message || e);
@@ -99,8 +140,10 @@ export async function GET(req: NextRequest) {
 
   return new NextResponse(stream, {
     headers: {
-      "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": 'attachment; filename="lailala_comments.csv"',
+      "Content-Type": asJson
+        ? "application/json; charset=utf-8"
+        : "text/csv; charset=utf-8",
+      "Content-Disposition": `attachment; filename="lailala_comments.${asJson ? "json" : "csv"}"`,
       "Cache-Control": "no-store",
     },
   });
