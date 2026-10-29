@@ -102,6 +102,25 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} min-h-screen antialiased`}>
+        <script
+          type="application/ld+json"
+          // WebSite + SearchAction。`/` は `/popular/` へリダイレクトするため、
+          // 構造化データはページ単体ではなく layout 側で全ページに出す。
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "ライララ(仮)",
+              url: SITE_URL,
+              description: "YouTubeコメントをX/Twitter風に",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${SITE_URL}/search/?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
         <Providers>
           <div className="min-h-screen flex flex-col">
             {children}

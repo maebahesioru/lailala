@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { MainLayout } from "@/components/main-layout";
+import { pageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "プライバシーポリシー",
-  description: "ライララ(仮)のプライバシーポリシー",
-};
+  path: "/privacy/",
+});
 
 export default function PrivacyPage() {
   return (
