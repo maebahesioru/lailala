@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { unwrapReplies } from "@/lib/youtube-comment-shape";
 
 let started = false;
 
@@ -63,7 +64,7 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
         count++;
 
         if (thread.replies) {
-          for (const reply of thread.replies) {
+          for (const reply of unwrapReplies(thread.replies)) {
             if (!reply?.comment_id) continue;
             const rPublishedText = reply.published_time?.text || String(reply.published_time || "");
             const rPublishedAt = parsePublishedTime(rPublishedText) || new Date();

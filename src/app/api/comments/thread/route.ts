@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { getInnertube } from "@/lib/youtube";
 import { YTNodes } from "youtubei.js";
+import { unwrapReplies } from "@/lib/youtube-comment-shape";
 
 const parseReply = (r: any) => ({
   commentId: r.comment_id,
@@ -94,7 +95,7 @@ export async function GET(req: NextRequest) {
       // endpoint を内部で解決する（旧フォークで必要だった videoId の
       // 注入は上流で修正済み）。
       const withReplies = await thread.getReplies();
-      replies = withReplies.replies?.map(parseReply) || [];
+      replies = unwrapReplies(withReplies.replies).map(parseReply);
       nextToken = withReplies.continuation_token;
     } catch (e: any) {
       replyError = e.message || "Failed to load replies";

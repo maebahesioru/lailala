@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { MainLayout } from "@/components/main-layout";
 import { ThreadView } from "@/components/thread-view";
 import { buildReplyTree } from "@/lib/reply-tree";
+import { unwrapReplies } from "@/lib/youtube-comment-shape";
 
 export async function generateMetadata({ params }: { params: Promise<{ commentId: string }> }): Promise<Metadata> {
   const segments = await params;
@@ -137,11 +138,11 @@ export default async function ThreadPage({ params }: PageProps) {
         try {
           t.setActions(innertube.actions);
           const withReplies = await t.getReplies();
-          const found = withReplies.replies?.find((r: any) => r.comment_id === commentId);
+          const found = unwrapReplies(withReplies.replies).find((r: any) => r.comment_id === commentId);
           if (found) {
             parent = parseRoot(t.comment);
             targetReply = found;
-            loadedReplies = withReplies.replies || [];
+            loadedReplies = unwrapReplies(withReplies.replies);
             nextToken = withReplies.continuation_token;
             isReplyThread = true;
             break;
@@ -161,7 +162,7 @@ export default async function ThreadPage({ params }: PageProps) {
       if (thread?.has_replies) {
         thread.setActions(innertube.actions);
         const withReplies = await thread.getReplies();
-        loadedReplies = withReplies.replies || [];
+        loadedReplies = unwrapReplies(withReplies.replies);
         nextToken = withReplies.continuation_token;
       }
     } catch (e: any) {

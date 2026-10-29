@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { getInnertube } from "@/lib/youtube";
+import { unwrapComment } from "@/lib/youtube-comment-shape";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +37,7 @@ export async function GET(req: NextRequest) {
             }
             if (thread.replies) {
               for (const reply of thread.replies) {
-                const replyComment = reply.comment;
+                const replyComment = unwrapComment(reply);
                 if (replyComment && watched.has(replyComment.comment_id)) {
                   send({
                     type: "update",

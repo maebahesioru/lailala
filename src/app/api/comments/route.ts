@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
 import { YT, YTNodes } from "youtubei.js";
+import { unwrapReplies } from "@/lib/youtube-comment-shape";
 
 const postSchema = z.object({
   videoId: z.string(),
@@ -58,7 +59,7 @@ function parseCommentThread(thread: any) {
       isPinned: c.is_pinned || false,
       isHearted: c.is_hearted || false,
     },
-    replies: thread.replies?.map((r: any) => ({
+    replies: unwrapReplies(thread.replies).map((r: any) => ({
       commentId: r.comment_id,
       author: {
         name: typeof r.author?.name === "string" ? r.author.name : (r.author?.name?.text || "Unknown"),

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { getInnertubeWithAuth } from "@/lib/youtube";
 import { rateLimit } from "@/lib/rate-limit";
+import { unwrapComment } from "@/lib/youtube-comment-shape";
 
 export async function PATCH(req: NextRequest) {
   const userId = await getSessionUserId();
@@ -26,7 +27,8 @@ export async function PATCH(req: NextRequest) {
       if (thread.replies) {
         for (const reply of thread.replies) {
           // 18.x では返信も CommentThread なので、実体は .comment 側。
-          if (reply.comment?.comment_id === commentId) { targetComment = reply.comment; break; }
+          const replyComment = unwrapComment(reply);
+          if (replyComment?.comment_id === commentId) { targetComment = replyComment; break; }
         }
       }
       if (targetComment) break;

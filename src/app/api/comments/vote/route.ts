@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { createNotification } from "@/lib/notifications";
 import { z } from "zod";
+import { unwrapComment } from "@/lib/youtube-comment-shape";
 
 const schema = z.object({
   videoId: z.string(),
@@ -35,7 +36,8 @@ export async function POST(req: NextRequest) {
       if (thread.replies) {
         for (const reply of thread.replies) {
           // 18.x では返信も CommentThread なので、実体は .comment 側。
-          if (reply.comment?.comment_id === commentId) { targetComment = reply.comment; break; }
+          const replyComment = unwrapComment(reply);
+          if (replyComment?.comment_id === commentId) { targetComment = replyComment; break; }
         }
       }
       if (targetComment) break;
