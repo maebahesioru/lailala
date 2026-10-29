@@ -305,7 +305,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                       window.dispatchEvent(new CustomEvent("lailala:openReply", { detail: { videoId, parentCommentId: thread.comment.commentId, authorName: thread.comment.author.name } }));
                     }}
                     className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
-                    aria-label={`返信 ${thread.comment.replyCount || 0}件`}
+                    aria-label="返信する"
                     title="返信する"
                   >
                     <MessageCircle size={18} />

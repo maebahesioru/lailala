@@ -268,7 +268,11 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                   <motion.div whileTap={{ scale: 0.9 }} className="flex-1">
                     <Link
                       href={threadLink}
-                      aria-label={`返信スレッドを開く（返信 ${reply.replyCount || 0}件）`}
+                      aria-label={
+                        reply.replyCount && reply.replyCount !== "0" && reply.replyCount !== "-"
+                          ? `返信スレッドを開く（返信 ${reply.replyCount}件）`
+                          : "返信スレッドを開く"
+                      }
                       className="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
                     >
                       <MessageCircle size={18} />
