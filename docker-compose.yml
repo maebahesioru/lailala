@@ -1,3 +1,4 @@
+# deploy-cache-bust: 2026-10-29 (Coolify の compose 読み取りキャッシュ回避)
 version: "3.8"
 
 services:
