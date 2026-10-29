@@ -606,9 +606,23 @@ function ListsPageInner() {
   );
 }
 
+function ListsSkeleton() {
+  return (
+    <div className="mx-auto max-w-2xl px-4 py-6">
+      <h1 className="sr-only">リスト</h1>
+      <div className="h-8 w-32 rounded bg-border/60 animate-pulse" />
+      <div className="mt-6 space-y-3">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="h-16 rounded-xl bg-border/40 animate-pulse" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ListsPage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ListsSkeleton />}>
       <ListsPageInner />
     </Suspense>
   );
