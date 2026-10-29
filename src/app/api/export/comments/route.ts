@@ -19,11 +19,20 @@ const HEADERS = [
   "publishedAt",
 ];
 
+// Excel / LibreOffice / Google スプレッドシートは先頭が = + - @ のセルを
+// 数式として評価する。コメント本文は第三者が書けるので、CSV に素で出すと
+// 開いた人の環境で数式が走る（CSV インジェクション）。
+// 先頭にアポストロフィを足して「文字列」として固定する。
+function neutraliseFormula(val: string): string {
+  return /^[=+\-@\t\r]/.test(val) ? `'${val}` : val;
+}
+
 function escapeCsv(val: string): string {
-  if (/[",\n\r]/.test(val)) {
-    return `"${val.replace(/"/g, '""')}"`;
+  const safe = neutraliseFormula(val);
+  if (/[",\n\r]/.test(safe)) {
+    return `"${safe.replace(/"/g, '""')}"`;
   }
-  return val;
+  return safe;
 }
 
 function toRow(c: {

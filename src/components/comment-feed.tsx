@@ -275,8 +275,11 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   useEffect(() => {
     if (activeListId) return; // Only for main timeline
     const interval = setInterval(async () => {
+      // 非表示タブでは叩かない（バックグラウンドのタブ数だけ上流を叩くのを防ぐ）
+      if (typeof document !== "undefined" && document.visibilityState !== "visible") return;
       try {
-        const data = await fetchComments(videoId, sortBy);
+        // poll=1 でサーバー側の 60 秒共有キャッシュを通す
+        const data = await fetchComments(videoId, sortBy, undefined, { poll: true });
         const currentTopIds = new Set(threads.map((t) => t.comment.commentId));
         const newComments = data.threads.filter((t) => !currentTopIds.has(t.comment.commentId));
         if (newComments.length > 0) {

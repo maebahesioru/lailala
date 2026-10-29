@@ -7,6 +7,7 @@ import { z } from "zod";
 import { YT, YTNodes } from "youtubei.js";
 import { unwrapReplies } from "@/lib/youtube-comment-shape";
 import { parseCount } from "@/lib/parse-count";
+import { getFeedPoll } from "@/lib/feed-poll-cache";
 
 const postSchema = z.object({
   videoId: z.string(),
@@ -174,6 +175,7 @@ export async function GET(req: NextRequest) {
     let nextToken: string | null = null;
 
     let commentCount: string | null = null;
+    let servedFromPollCache = false;
 
     if (continuationToken) {
       // Use NavigationEndpoint to fetch next batch via continuation token
@@ -220,41 +222,61 @@ export async function GET(req: NextRequest) {
       nextToken = page.continuation_token;
       hasContinuation = page.has_continuation && !!nextToken;
     } else {
-      const comments = await innertube.getComments(videoId, sortBy);
+      // 初回ページの取得。新着チェックのポーリングからは 60 秒共有キャッシュ越しに呼ばれる。
+      const loadFirstPage = async () => {
+        const comments = await innertube.getComments(videoId, sortBy);
 
-      threads = comments.contents
-        .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)
-        .map(parseCommentThread)
-        .filter(Boolean)
-        .filter((t: any) => !filterYear || !isOlderThanOneYear(t.comment.publishedTime));
+        const pageThreads = comments.contents
+          .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)
+          .map(parseCommentThread)
+          .filter(Boolean)
+          .filter((t: any) => !filterYear || !isOlderThanOneYear(t.comment.publishedTime));
 
-      nextToken = comments.continuation_token;
-      hasContinuation = comments.has_continuation && !!nextToken;
+        const token = comments.continuation_token;
+        const hasMore = comments.has_continuation && !!token;
+        let count: string | null = null;
 
-      // Extract comment count from header - try multiple sources for the most accurate number
-      const headerCount = (comments as any).header?.comments_count;
-      if (headerCount) {
-        // Try to get full text from runs first (may contain exact number)
-        const runsText = headerCount.runs?.map((r: any) => r.text).join("");
-        commentCount = runsText || headerCount.text || headerCount.toString?.() || null;
-      }
-      // If still null, try video info fallback
-      if (!commentCount) {
-        try {
-          const info = await innertube.getInfo(videoId);
-          commentCount = info.comments_entry_point_header?.comment_count?.toString?.()
-            || (info.basic_info as any).comment_count?.toString?.()
-            || null;
-        } catch {
-          // ignore fallback error
+        // Extract comment count from header - try multiple sources for the most accurate number
+        const headerCount = (comments as any).header?.comments_count;
+        if (headerCount) {
+          // Try to get full text from runs first (may contain exact number)
+          const runsText = headerCount.runs?.map((r: any) => r.text).join("");
+          count = runsText || headerCount.text || headerCount.toString?.() || null;
         }
-      }
+        // If still null, try video info fallback
+        if (!count) {
+          try {
+            const info = await innertube.getInfo(videoId);
+            count = info.comments_entry_point_header?.comment_count?.toString?.()
+              || (info.basic_info as any).comment_count?.toString?.()
+              || null;
+          } catch {
+            // ignore fallback error
+          }
+        }
+
+        return { threads: pageThreads, nextToken: token, hasContinuation: hasMore, commentCount: count };
+      };
+
+      // 新着チェック（poll=1）だけは 60 秒の共有キャッシュを通す。
+      // キャッシュが無いと、開いているタブ数だけ YouTube 取得が毎分走っていた。
+      const isPoll = searchParams.get("poll") === "1";
+      const firstPage = isPoll
+        ? (await getFeedPoll(`comments:${videoId}:${sortBy}:${filterYear ? "y" : "a"}`, loadFirstPage)).value
+        : await loadFirstPage();
+
+      threads = firstPage.threads;
+      nextToken = firstPage.nextToken;
+      hasContinuation = firstPage.hasContinuation;
+      commentCount = firstPage.commentCount;
+      servedFromPollCache = isPoll;
     }
 
     threads = filterBlockedThreads(threads, blockedIds);
 
     // Fire-and-forget: cache fetched comments to DB
-    Promise.resolve().then(async () => {
+    // （ポーリングのキャッシュヒット時は同じ行を書き直すだけなので省く）
+    if (!servedFromPollCache) Promise.resolve().then(async () => {
       for (const t of threads) {
         const c = t.comment;
         if (!c?.commentId) continue;
