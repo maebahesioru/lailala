@@ -11,7 +11,7 @@ import { saveCommentRows, toCommentRow } from "./comment-store";
  * - 途中で落ちても、次回起動時に token から再開する
  */
 
-const PAGE_DELAY_MS = 600;
+const PAGE_DELAY_MS = 400;
 const LOG_EVERY_PAGES = 25;
 const RETRY_DELAY_MS = 30_000;
 const MAX_ERRORS_BEFORE_BACKOFF = 3;
@@ -58,11 +58,22 @@ async function fetchPage(innertube: any, videoId: string, sortBy: string, token:
   return { contents: (page.contents as any[]) || [], nextToken: page.continuation_token as string | null };
 }
 
-async function runSlice(videoId: string, sortBy: string): Promise<{ added: number; done: boolean }> {
+function pageSignature(contents: any[]): string {
+  const ids = contents
+    .map((t) => (t?.comment ?? t)?.comment_id)
+    .filter((id: any) => typeof id === "string");
+  if (ids.length === 0) return "";
+  return `${ids[0]}..${ids[ids.length - 1]}`;
+}
+
+async function runSlice(
+  videoId: string,
+  sortBy: string
+): Promise<{ added: number; done: boolean; signature: string }> {
   const { getInnertube } = await import("./youtube");
   const innertube = await getInnertube();
   const state = await loadState(videoId, sortBy);
-  if (state.done) return { added: 0, done: true };
+  if (state.done) return { added: 0, done: true, signature: "" };
 
   const { contents, nextToken } = await fetchPage(innertube, videoId, sortBy, state.token);
 
@@ -91,7 +102,7 @@ async function runSlice(videoId: string, sortBy: string): Promise<{ added: numbe
     },
   });
 
-  return { added: saved, done };
+  return { added: saved, done, signature: pageSignature(contents) };
 }
 
 export async function startCommentSyncWorker() {
@@ -111,9 +122,22 @@ export async function startCommentSyncWorker() {
 
     for (const videoId of videoIds) {
       console.log(`[CommentSync] started for ${videoId} (sort=${sortBy})`);
+      let lastSignature = "";
+      let repeats = 0;
       for (;;) {
         try {
-          const { added, done } = await runSlice(videoId, sortBy);
+          const { added, done, signature } = await runSlice(videoId, sortBy);
+
+          // 同じページが返り続けている＝トークンが進んでいない（無限ループ）検知
+          if (signature && signature === lastSignature) {
+            repeats += 1;
+            if (repeats >= 3) {
+              throw new Error(`continuation token is not advancing (page=${signature})`);
+            }
+          } else {
+            repeats = 0;
+            lastSignature = signature;
+          }
           const state = await prisma.commentSyncState.findUnique({
             where: { videoId_sortBy: { videoId, sortBy } },
           });
@@ -123,7 +147,7 @@ export async function startCommentSyncWorker() {
           if (shouldLog) {
             const dbTotal = pages % 100 === 0 || done ? await prisma.commentCache.count() : null;
             console.log(
-              `[CommentSync] ${videoId} pages=${pages} fetched=${state?.comments ?? 0} added=${added}` +
+              `[CommentSync] ${videoId} pages=${pages} fetched=${state?.comments ?? 0} added=${added} page=${signature}` +
                 (dbTotal === null ? "" : ` db_total=${dbTotal}`) +
                 (done ? " DONE" : "")
             );
