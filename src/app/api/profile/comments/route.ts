@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { intParam } from "@/lib/query-params";
 import { internalError } from "@/lib/api-error";
+import { parseCount } from "@/lib/parse-count";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -81,8 +82,8 @@ export async function GET(req: NextRequest) {
         authorChannelId: null,
         authorThumb: b.authorThumb,
         content: b.content,
-        likeCount: parseInt(b.likeCount, 10) || 0,
-        replyCount: parseInt(b.replyCount, 10) || 0,
+        likeCount: parseCount(b.likeCount),
+        replyCount: parseCount(b.replyCount),
         publishedAt: b.createdAt,
       }));
 
