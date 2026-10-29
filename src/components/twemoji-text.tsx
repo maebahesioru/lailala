@@ -2,10 +2,13 @@ import { ReactNode } from "react";
 
 const TWEMOJI_BASE = "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg";
 
+// Twemoji のファイル名は実体選択子(U+FE0F/U+FE0E)を含まない。
+// 例: ❤️ = 2764-fe0f.svg は 404 で、正解は 2764.svg（#️⃣ も 23-20e3.svg）。
 function getCodePoint(emoji: string): string {
   return Array.from(emoji)
-    .map((char) => char.codePointAt(0)?.toString(16))
-    .filter(Boolean)
+    .map((char) => char.codePointAt(0))
+    .filter((code): code is number => typeof code === "number" && code !== 0xfe0f && code !== 0xfe0e)
+    .map((code) => code.toString(16))
     .join("-");
 }
 
@@ -47,7 +50,14 @@ export function TwemojiText({ content, className = "" }: { content: string; clas
         className={`inline-block align-text-bottom ${className}`}
         style={{ width: "1.3em", height: "1.3em" }}
         draggable={false}
-        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+        onError={(e) => {
+          // 画像が取れないときに display:none で消すと、絵文字が本文から
+          // 丸ごと欠落する（読めなくなる）。元の文字へ差し戻す。
+          const img = e.currentTarget;
+          const fallback = document.createElement("span");
+          fallback.textContent = fullEmoji;
+          img.replaceWith(fallback);
+        }}
       />
     );
     lastIndex = endIndex;
