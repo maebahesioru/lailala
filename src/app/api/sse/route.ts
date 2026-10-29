@@ -7,18 +7,47 @@ export const dynamic = "force-dynamic";
 // 未認証の公開エンドポイントなので、1 クライアントが大量に張って
 // YouTube へのリクエストを増やすのを防ぐための安全弁。
 const MAX_CONNECTIONS = 200;
+
+// 1 IP あたりの上限。全体上限だけだと、1 クライアントが 200 本張るだけで
+// 他の利用者全員が 429 になり、ライブ更新が止まってしまう。
+const MAX_CONNECTIONS_PER_IP = 6;
+
 let activeConnections = 0;
+const ipConnections = new Map<string, number>();
+
+function releaseIp(ip: string) {
+  const next = (ipConnections.get(ip) ?? 1) - 1;
+  if (next <= 0) {
+    ipConnections.delete(ip);
+  } else {
+    ipConnections.set(ip, next);
+  }
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId");
   const commentIds = searchParams.getAll("commentId");
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
 
   if (!videoId || commentIds.length === 0) {
     return new Response(JSON.stringify({ error: "videoId と commentId が必要です" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     });
+  }
+
+  if ((ipConnections.get(ip) ?? 0) >= MAX_CONNECTIONS_PER_IP) {
+    return new Response(
+      JSON.stringify({
+        error: "同じ接続元からの更新購読が多すぎます。他のタブを閉じてから再試行してください",
+      }),
+      {
+        status: 429,
+        headers: { "Content-Type": "application/json", "Retry-After": "30" },
+      }
+    );
   }
 
   if (activeConnections >= MAX_CONNECTIONS) {
@@ -29,6 +58,7 @@ export async function GET(req: NextRequest) {
   }
 
   activeConnections++;
+  ipConnections.set(ip, (ipConnections.get(ip) ?? 0) + 1);
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -69,6 +99,7 @@ export async function GET(req: NextRequest) {
         if (closed) return;
         closed = true;
         activeConnections = Math.max(0, activeConnections - 1);
+        releaseIp(ip);
         clearInterval(interval);
         clearInterval(keepAlive);
         try {
