@@ -54,9 +54,22 @@ export async function GET(req: NextRequest) {
       const cmd = new YTNodes.NavigationEndpoint({
         continuationCommand: { request: "CONTINUATION_REQUEST_TYPE_WATCH_NEXT", token: continuationToken },
       });
-      const response = await cmd.call(innertube.actions, { parse: true });
-      if (!response.on_response_received_endpoints_memo) {
-        return NextResponse.json({ error: "Unexpected response" }, { status: 500 });
+      let response: any;
+      try {
+        response = await cmd.call(innertube.actions, { parse: true });
+      } catch {
+        return NextResponse.json(
+          { error: "続きの返信を読み込めませんでした。ページを再読み込みしてください。" },
+          { status: 400 }
+        );
+      }
+      if (!response?.on_response_received_endpoints_memo) {
+        // 期限切れ・不正なトークン。500 ではなく 400 にして
+        // クライアント側が「最初から読み直す」判断をできるようにする。
+        return NextResponse.json(
+          { error: "続きの返信を読み込めませんでした。ページを再読み込みしてください。" },
+          { status: 400 }
+        );
       }
       const moreReplies = response.on_response_received_endpoints_memo.getType(YTNodes.CommentView).map(parseReply) || [];
       const nextToken = extractContinuationToken(response.on_response_received_endpoints_memo);
@@ -114,6 +127,13 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ parent, replies, replyError, continuationToken: nextToken });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed" }, { status: 500 });
+    const raw = e?.message || "";
+    if (/unavailable|did not have any content|private|removed/i.test(raw)) {
+      return NextResponse.json(
+        { error: "このコメントは取得できませんでした（非公開・削除の可能性があります）" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json({ error: raw || "Failed" }, { status: 500 });
   }
 }

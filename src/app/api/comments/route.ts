@@ -262,6 +262,21 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to fetch comments" }, { status: 500 });
+    // 上流(youtubei)の生メッセージをそのまま出すと
+    // "Comments page did not have any content." 等が UI に漏れるため言い換える。
+    const raw = e?.message || "";
+    if (/unavailable|did not have any content|private|removed/i.test(raw)) {
+      return NextResponse.json(
+        { error: "この動画のコメントは取得できませんでした（非公開・削除・コメント無効の可能性があります）" },
+        { status: 404 }
+      );
+    }
+    if (/Unexpected response/i.test(raw)) {
+      return NextResponse.json(
+        { error: "続きを読み込めませんでした。ページを再読み込みしてください。" },
+        { status: 400 }
+      );
+    }
+    return NextResponse.json({ error: raw || "Failed to fetch comments" }, { status: 500 });
   }
 }

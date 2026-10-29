@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getInnertube } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/admin-auth";
 
 function parsePublishedTime(text: string): Date | null {
   if (!text) return null;
@@ -23,6 +24,10 @@ function parsePublishedTime(text: string): Date | null {
 }
 
 export async function GET(req: NextRequest) {
+  // 未ログインの第三者に YouTube 取得＋DB 書き込みを起動されないよう認可する
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId") || "niKAylKNIEI";
   const max = parseInt(searchParams.get("max") || "500", 10);
