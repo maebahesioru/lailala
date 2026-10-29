@@ -1,12 +1,10 @@
-export const runtime = "nodejs";
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const ipStore = new Map<string, { count: number; reset: number }>();
 let lastCleanup = 0;
 
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   // Skip non-API requests entirely
   if (!request.nextUrl.pathname.startsWith("/api/")) {
     return NextResponse.next();
