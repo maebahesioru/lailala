@@ -100,24 +100,69 @@ function extractMeta(html: string, property: string): string | null {
   return null;
 }
 
+/** og:title を持たない普通のページ向けに <title> 要素を読む */
+function extractTitleTag(html: string): string | null {
+  const m = /<title[^>]*>([\s\S]{0,300}?)<\/title>/i.exec(html);
+  if (!m) return null;
+  const text = m[1].replace(/\s+/g, " ").trim();
+  return text.length > 0 ? text : null;
+}
+
+class BlockedUrlError extends Error {}
+
+const MAX_REDIRECTS = 3;
+
 async function fetchOgp(url: string) {
-  try {
-    const res = await fetch(url, {
-      headers: { "User-Agent": USER_AGENT },
-      signal: AbortSignal.timeout(5000),
-      redirect: "follow",
-    });
+  let current = url;
+
+  // リダイレクトは自前で追う。fetch の redirect: "follow" に任せると
+  // 2ホップ目以降が assertPublicUrl を通らず、外部ドメインが内部宛へ 302 を
+  // 返すだけで SSRF を迂回できてしまうため、各ホップで必ず再検証する。
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+    try {
+      await assertPublicUrl(current);
+    } catch (e: any) {
+      throw new BlockedUrlError(e?.message || "このURLは取得できません");
+    }
+
+    let res: Response;
+    try {
+      res = await fetch(current, {
+        headers: { "User-Agent": USER_AGENT },
+        signal: AbortSignal.timeout(5000),
+        redirect: "manual",
+      });
+    } catch {
+      return null;
+    }
+
+    if (res.status >= 300 && res.status < 400) {
+      const location = res.headers.get("location");
+      if (!location) return null;
+      try {
+        current = new URL(location, current).toString();
+      } catch {
+        return null;
+      }
+      continue;
+    }
+
     if (!res.ok) return null;
-    const html = await readLimited(res);
-    return {
-      title: extractMeta(html, "og:title") || extractMeta(html, "title") || null,
-      description: extractMeta(html, "og:description") || extractMeta(html, "description") || null,
-      image: extractMeta(html, "og:image") || null,
-      siteName: extractMeta(html, "og:site_name") || null,
-    };
-  } catch {
-    return null;
+
+    try {
+      const html = await readLimited(res);
+      return {
+        title: extractMeta(html, "og:title") || extractTitleTag(html) || extractMeta(html, "title") || null,
+        description: extractMeta(html, "og:description") || extractMeta(html, "description") || null,
+        image: extractMeta(html, "og:image") || null,
+        siteName: extractMeta(html, "og:site_name") || null,
+      };
+    } catch {
+      return null;
+    }
   }
+
+  return null;
 }
 
 export async function GET(req: NextRequest) {
@@ -133,7 +178,9 @@ export async function GET(req: NextRequest) {
 
   // Check cache
   const cached = await prisma.ogpCache.findUnique({ where: { url } });
-  if (cached && Date.now() - cached.updatedAt.getTime() < 7 * 24 * 60 * 60 * 1000) {
+  const cachedIsEmpty =
+    !cached || (!cached.title && !cached.description && !cached.image && !cached.siteName);
+  if (cached && !cachedIsEmpty && Date.now() - cached.updatedAt.getTime() < 7 * 24 * 60 * 60 * 1000) {
     return NextResponse.json({
       url: cached.url,
       title: cached.title,
@@ -143,9 +190,23 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const ogp = await fetchOgp(url);
+  let ogp: Awaited<ReturnType<typeof fetchOgp>>;
+  try {
+    ogp = await fetchOgp(url);
+  } catch (e: any) {
+    if (e instanceof BlockedUrlError) {
+      return NextResponse.json({ error: e.message }, { status: 400 });
+    }
+    throw e;
+  }
   if (!ogp) {
     return NextResponse.json({ error: "Failed to fetch" }, { status: 502 });
+  }
+
+  // 何も取れなかった結果を7日キャッシュすると、あとで直しても null が居座る
+  const isEmpty = !ogp.title && !ogp.description && !ogp.image && !ogp.siteName;
+  if (isEmpty) {
+    return NextResponse.json({ url, ...ogp });
   }
 
   const saved = await prisma.ogpCache.upsert({
