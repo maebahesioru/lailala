@@ -141,6 +141,8 @@ export async function GET(req: NextRequest) {
     });
   }
   const offset = requestedOffset;
+  // 「全N件中の先頭5,000件」を出せるように、明示された時だけ総数を数える。
+  const withTotal = searchParams.get("withTotal") === "1";
 
   try {
     const userId = await getSessionUserId();
@@ -240,6 +242,12 @@ export async function GET(req: NextRequest) {
       orderBy = { likeCount: "desc" };
     }
 
+    const total = withTotal
+      ? await retryOnceAfterPlanWarmup(() =>
+          withSearchTimeout<number>((tx) => tx.commentCache.count({ where }))
+        )
+      : undefined;
+
     const comments = await retryOnceAfterPlanWarmup(() =>
       withSearchTimeout<CommentRow[]>((tx) =>
         tx.commentCache.findMany({
@@ -281,6 +289,7 @@ export async function GET(req: NextRequest) {
       threads,
       hasMore: comments.length === limit,
       offset,
+      ...(total !== undefined ? { total } : {}),
       ...(symbolStripped ? { note: "記号は検索語から取り除いて検索しました。" } : {}),
     });
   } catch (e) {

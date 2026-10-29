@@ -61,6 +61,8 @@ function SearchContent() {
   const [searched, setSearched] = useState(false);
   // 50件で頭打ちになっていたので「もっと見る」で継ぎ足せるようにする
   const [hasMore, setHasMore] = useState(false);
+  // 検索APIが返す「一致した総数」（withTotal=1 のときだけ）
+  const [total, setTotal] = useState<number | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [trendWords, setTrendWords] = useState<TrendWord[]>([]);
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
@@ -128,6 +130,8 @@ function SearchContent() {
         if (minLikes > 0) params.set("minLikes", String(minLikes));
         if (sortBy !== "relevance") params.set("sort", sortBy);
         if (userFilter.trim()) params.set("user", userFilter.trim());
+        // 一致件数の総数を出して「何件中の何件を見ているか」を明示する
+        params.set("withTotal", "1");
 
         const r = await fetch(`/api/search/comments/?${params.toString()}`);
         const data = await r.json();
@@ -141,6 +145,7 @@ function SearchContent() {
         }));
         setResults(mapped);
         setHasMore(!!data.hasMore);
+        setTotal(typeof data.total === "number" ? data.total : null);
       } else if (tab === "accounts") {
         // 期間・最低いいねはアカウントタブでも有効にする（以前は画面に出ているのに無視されていた）
         const accParams = new URLSearchParams({ q, type: "accounts" });
@@ -306,6 +311,12 @@ function SearchContent() {
       }
       return (
         <div className="divide-y divide-border flex-1">
+          <div className="px-4 py-2 text-sm text-muted border-b border-border">
+            {total !== null
+              ? `全 ${total.toLocaleString("ja-JP")} 件中 ${results.length.toLocaleString("ja-JP")} 件を表示`
+              : `${results.length.toLocaleString("ja-JP")} 件を表示`}
+            {total !== null && total > 5000 ? "（結果は先頭から5,000件までさかのぼれます）" : ""}
+          </div>
           {results.map(({ thread, videoId }) => (
             <CommentCard key={thread.comment.commentId} thread={thread} videoId={videoId} voteCounts={{ likes: 0, dislikes: 0 }} />
           ))}

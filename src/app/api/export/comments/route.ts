@@ -6,7 +6,9 @@ import { prisma } from "@/lib/prisma";
 // 公開URL経由では Cloudflare 側がタイムアウトしていた。
 // id カーソルで分割取得し、逐次ストリーミングで書き出す。
 const BATCH_SIZE = 2_000;
-const MAX_ROWS = 100_000;
+// DB は 13.6 万行あるため、100,000 行で黙って切ると「全件」が嘘になる。
+// 上限は残しつつ、実データが収まる 500,000 行まで許可する。
+const MAX_ROWS = 500_000;
 
 const HEADERS = [
   "commentId",
