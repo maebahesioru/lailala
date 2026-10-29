@@ -161,7 +161,7 @@ export function ThreadView({
         </motion.div>
         <h1 className="text-lg font-bold flex-1">スレッド</h1>
         <ShareMenu
-          url={`${origin}/thread/${commentId}`}
+          url={`${origin}/thread/${commentId}/`}
           text={`${parent.author.name}: ${parent.content}`}
           extraLinks={[
             { label: "YouTubeコメントURLをコピー", url: `https://www.youtube.com/watch?v=${videoId}&lc=${commentId}` },

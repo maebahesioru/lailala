@@ -115,7 +115,7 @@ export default async function EmbedPage({ params }: EmbedPageProps) {
               </span>
             </div>
             <Link
-              href={`/thread/${encodeURIComponent(commentId)}`}
+              href={`/thread/${encodeURIComponent(commentId)}/`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[13px] font-bold text-primary hover:underline"

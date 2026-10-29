@@ -68,7 +68,7 @@ export function WidgetsPanel() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      router.push(`/search/?q=${encodeURIComponent(query.trim())}`);
     }
   };
 
@@ -87,7 +87,7 @@ export function WidgetsPanel() {
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
       setQuery(transcript);
-      router.push(`/search?q=${encodeURIComponent(transcript)}`);
+      router.push(`/search/?q=${encodeURIComponent(transcript)}`);
     };
     recognition.onerror = () => setListening(false);
     recognitionRef.current = recognition;
@@ -168,7 +168,7 @@ export function WidgetsPanel() {
           <SearchSuggestions
             inputRef={inputRef}
             query={query}
-            onSelect={(q) => { setQuery(q); setShowSuggestions(false); router.push(`/search?q=${encodeURIComponent(q)}`); }}
+            onSelect={(q) => { setQuery(q); setShowSuggestions(false); router.push(`/search/?q=${encodeURIComponent(q)}`); }}
             trendWords={trendWords.map((t) => t.word)}
           />
         )}

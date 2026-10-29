@@ -266,7 +266,7 @@ export default function BookmarksPage() {
               className={`px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer ${selectedBookmarkIds.has(b.commentId) ? "bg-primary/5" : ""}`}
               onClick={() => {
                 if (isBulkMode) toggleSelect(b.commentId);
-                else router.push(`/thread/${b.commentId}`);
+                else router.push(`/thread/${b.commentId}/`);
               }}
             >
               <div className="flex gap-3">
@@ -303,7 +303,7 @@ export default function BookmarksPage() {
                     <button onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5">
                       <ThumbsDown size={18} />
                     </button>
-                    <Link href={`/thread/${b.commentId}`} onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5">
+                    <Link href={`/thread/${b.commentId}/`} onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5">
                       <MessageCircle size={18} />
                       <span>{b.replyCount || 0}</span>
                     </Link>

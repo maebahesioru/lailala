@@ -119,7 +119,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
     setTimeout(() => onDelete?.(reply.commentId), 300);
   };
 
-  const threadLink = `/thread/${reply.commentId}`;
+  const threadLink = `/thread/${reply.commentId}/`;
 
   return (
     <>
@@ -132,7 +132,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
             exit={{ opacity: 0, x: -100, transition: { duration: 0.25 } }}
             whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
             className="px-4 py-3 select-text relative"
-            onMouseEnter={() => router.prefetch(`/thread/${reply.commentId}`)}
+            onMouseEnter={() => router.prefetch(`/thread/${reply.commentId}/`)}
           >
             <div className="flex gap-3">
               <Link href={`/profile/${encodeURIComponent(reply.author.channelId || "")}`} className="shrink-0">

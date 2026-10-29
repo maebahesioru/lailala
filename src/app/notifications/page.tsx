@@ -169,7 +169,7 @@ export default function NotificationsPage() {
                 </div>
                 {n.content && (
                   <Link
-                    href={n.commentId ? `/thread/${n.commentId}` : `/`}
+                    href={n.commentId ? `/thread/${n.commentId}/` : `/`}
                     className="block text-[15px] text-muted mt-1 line-clamp-2 hover:underline"
                   >
                     {n.content}

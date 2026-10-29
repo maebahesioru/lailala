@@ -121,7 +121,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
             exit={{ opacity: 0, x: -100, transition: { duration: 0.25 } }}
             whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
             className="px-4 py-3 select-text relative"
-            onMouseEnter={() => router.prefetch(`/thread/${thread.comment.commentId}`)}
+            onMouseEnter={() => router.prefetch(`/thread/${thread.comment.commentId}/`)}
           >
             <div className="flex gap-3">
               <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0" onClick={(e) => e.stopPropagation()}>
@@ -213,12 +213,12 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                       <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed" onClick={() => {
                         const sel = window.getSelection();
                         if (sel && sel.toString().length > 0) return;
-                        router.push(`/thread/${thread.comment.commentId}`);
+                        router.push(`/thread/${thread.comment.commentId}/`);
                       }}>
                         <MentionText content={stripEditedTag(thread.comment.content)} videoId={videoId} />
                       </p>
                     )}
-                    <Link href={`/thread/${thread.comment.commentId}`} className="block">
+                    <Link href={`/thread/${thread.comment.commentId}/`} className="block">
                       <LinkCard text={thread.comment.content} />
                     </Link>
                     {showDetailTime && (

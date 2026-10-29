@@ -160,7 +160,7 @@ function ListsPageInner() {
 
   const openList = async (list: UserList) => {
     await openListById(list.id);
-    router.push(`/lists?id=${list.id}`);
+    router.push(`/lists/?id=${list.id}`);
   };
 
   const removeItem = async (listId: string, commentId: string) => {
