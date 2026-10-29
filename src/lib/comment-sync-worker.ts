@@ -11,7 +11,8 @@ import { saveCommentRows, toCommentRow } from "./comment-store";
  * - 途中で落ちても、次回起動時に token から再開する
  */
 
-const PAGE_DELAY_MS = 1_200;
+const PAGE_DELAY_MS = 600;
+const LOG_EVERY_PAGES = 25;
 const RETRY_DELAY_MS = 30_000;
 const MAX_ERRORS_BEFORE_BACKOFF = 3;
 
@@ -116,16 +117,17 @@ export async function startCommentSyncWorker() {
           const state = await prisma.commentSyncState.findUnique({
             where: { videoId_sortBy: { videoId, sortBy } },
           });
-          // count() は 170万行では重いので 25 ページに 1 回だけ測る
-          const dbTotal =
-            done || (state?.pages ?? 0) % 25 === 1
-              ? await prisma.commentCache.count()
-              : null;
-          console.log(
-            `[CommentSync] ${videoId} pages=${state?.pages ?? 0} fetched=${state?.comments ?? 0} added=${added}` +
-              (dbTotal === null ? "" : ` db_total=${dbTotal}`) +
-              (done ? " DONE" : "")
-          );
+          // 毎ページの count() は 170万行では重いので 100 ページに 1 回だけ測る
+          const pages = state?.pages ?? 0;
+          const shouldLog = done || pages % LOG_EVERY_PAGES === 0;
+          if (shouldLog) {
+            const dbTotal = pages % 100 === 0 || done ? await prisma.commentCache.count() : null;
+            console.log(
+              `[CommentSync] ${videoId} pages=${pages} fetched=${state?.comments ?? 0} added=${added}` +
+                (dbTotal === null ? "" : ` db_total=${dbTotal}`) +
+                (done ? " DONE" : "")
+            );
+          }
           errors = 0;
           if (done) {
             console.log(`[CommentSync] ${videoId} reached the end of YouTube's comments.`);
