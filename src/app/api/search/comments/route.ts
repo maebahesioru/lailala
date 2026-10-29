@@ -242,11 +242,19 @@ export async function GET(req: NextRequest) {
       orderBy = { likeCount: "desc" };
     }
 
-    const total = withTotal
-      ? await retryOnceAfterPlanWarmup(() =>
+    // 総数は「あれば嬉しい」情報なので、数え上げがタイムアウトしても
+    // 検索そのものは成功させる（以前は count の失敗で 503 になっていた）。
+    let total: number | undefined;
+    if (withTotal) {
+      try {
+        total = await retryOnceAfterPlanWarmup(() =>
           withSearchTimeout<number>((tx) => tx.commentCache.count({ where }))
-        )
-      : undefined;
+        );
+      } catch (e) {
+        if (!isStatementTimeout(e)) throw e;
+        total = undefined;
+      }
+    }
 
     const comments = await retryOnceAfterPlanWarmup(() =>
       withSearchTimeout<CommentRow[]>((tx) =>

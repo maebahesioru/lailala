@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 const BATCH_SIZE = 2_000;
 // DB は 13.6 万行あるため、100,000 行で黙って切ると「全件」が嘘になる。
 // 上限は残しつつ、実データが収まる 500,000 行まで許可する。
-const MAX_ROWS = 500_000;
+const MAX_ROWS = 5_000_000;
 
 const HEADERS = [
   "commentId",
@@ -112,6 +112,17 @@ export async function GET(req: NextRequest) {
   }
   const asJson = rawFormat === "json";
 
+  // 「全何件あるのか」をヘッダで返す（以前は 100,000 行で黙って切っていたため
+  // 出力が全件なのか判別できなかった）。数え上げに失敗しても出力は続ける。
+  let dbTotal: number | null = null;
+  try {
+    dbTotal = await prisma.commentCache.count(
+      videoId ? { where: { videoId } } : undefined
+    );
+  } catch (e: any) {
+    console.error("[export/comments] count failed:", e?.message || e);
+  }
+
   const encoder = new TextEncoder();
   let lastId: string | null = null;
   let sent = 0;
@@ -166,6 +177,13 @@ export async function GET(req: NextRequest) {
         : "text/csv; charset=utf-8",
       "Content-Disposition": `attachment; filename="lailala_comments.${asJson ? "json" : "csv"}"`,
       "Cache-Control": "no-store",
+      ...(dbTotal === null
+        ? {}
+        : {
+            "x-total-rows": String(dbTotal),
+            "x-limit": String(limit),
+            "x-truncated": String(dbTotal > limit),
+          }),
     },
   });
 }
