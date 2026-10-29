@@ -63,7 +63,11 @@ function pageSignature(contents: any[]): string {
     .map((t) => (t?.comment ?? t)?.comment_id)
     .filter((id: any) => typeof id === "string");
   if (ids.length === 0) return "";
-  return `${ids[0]}..${ids[ids.length - 1]}`;
+  // どの年代まで掘り進んだか分かるように、先頭コメントの投稿時期も添える
+  const oldest = String((contents[0]?.comment ?? contents[0])?.publishedTime ?? "")
+    .replace(/\s+/g, " ")
+    .slice(0, 24);
+  return `${ids[0]}..${ids[ids.length - 1]}${oldest ? ` [${oldest}]` : ""}`;
 }
 
 async function runSlice(
