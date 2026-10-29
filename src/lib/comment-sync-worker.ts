@@ -11,7 +11,7 @@ import { saveCommentRows, toCommentRow } from "./comment-store";
  * - 途中で落ちても、次回起動時に token から再開する
  */
 
-const PAGE_DELAY_MS = 400;
+const PAGE_DELAY_MS = 250;
 const LOG_EVERY_PAGES = 25;
 const RETRY_DELAY_MS = 30_000;
 const MAX_ERRORS_BEFORE_BACKOFF = 3;
@@ -64,7 +64,8 @@ function pageSignature(contents: any[]): string {
     .filter((id: any) => typeof id === "string");
   if (ids.length === 0) return "";
   // どの年代まで掘り進んだか分かるように、先頭コメントの投稿時期も添える
-  const oldest = String((contents[0]?.comment ?? contents[0])?.publishedTime ?? "")
+  const head: any = contents[0]?.comment ?? contents[0];
+  const oldest = String(head?.published_time?.text ?? head?.published_time ?? head?.publishedTime ?? "")
     .replace(/\s+/g, " ")
     .slice(0, 24);
   return `${ids[0]}..${ids[ids.length - 1]}${oldest ? ` [${oldest}]` : ""}`;
