@@ -62,3 +62,9 @@ docker-compose up --build
 ## セキュリティ
 
 脆弱性の報告は [GitHub Security Advisories](https://github.com/maebahesioru/lailala/security/advisories/new) からお願いします。
+
+## デプロイ時の注意（Coolify）
+
+`git_commit_sha` が空の状態で API から再デプロイすると、compose ファイルの読み取りに失敗して
+`Failed to read the Docker Compose file from the repository.` で即失敗することがあります（2026-10-29 実測）。
+その場合はアプリの `git_commit_sha` をデプロイしたいコミットへ設定してから再デプロイしてください。
