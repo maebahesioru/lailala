@@ -80,7 +80,7 @@ const MAX_OFFSET = 5000;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const q = searchParams.get("q") || "";
+  let q = searchParams.get("q") || "";
   const type = searchParams.get("type") || "top";
   const limit = intParam(searchParams, "limit", 50, 1, 200);
   const requestedOffset = intParam(searchParams, "offset", 0, 0, 1_000_000);
@@ -102,14 +102,21 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
-  // 3 文字未満かつ記号を含む検索語は、trigram 索引が効かず全件走査になる
-  // （実測: "a*" 6.0 秒 / "a@" 4.5 秒でいずれも 503）。原理的に速くできないため
-  // 「時間がかかりすぎました(503)」ではなく、意味の通る 400 で返す。
+  // 記号を含む「実質 2 文字以下」の検索語は pg_trgm の trigram が取れず、
+  // 全件走査になって 3 秒の statement_timeout に当たる（実測: "a*" 6.0 秒、
+  // "ab*" 6.0 秒、いずれも 503）。記号だけでは索引が使えないため、
+  // 記号を落とした文字列で検索する（落としたことは note で伝える）。
+  let symbolStripped = false;
   {
-    const trimmedQuery = q.trim();
-    if (trimmedQuery.length > 0 && trimmedQuery.length < 3 && /[^\p{L}\p{N}\s]/u.test(trimmedQuery)) {
+    const rawQuery = q.trim();
+    const wordChars = rawQuery.replace(/[^\p{L}\p{N}]/gu, "");
+    const hasSymbol = /[^\p{L}\p{N}\s]/u.test(rawQuery);
+    if (hasSymbol && wordChars.length > 0 && wordChars.length < 3) {
+      q = wordChars;
+      symbolStripped = true;
+    } else if (hasSymbol && wordChars.length === 0) {
       return NextResponse.json(
-        { error: "記号を含む 2 文字以下の検索語は検索できません。3 文字以上で指定してください。" },
+        { error: "記号だけでは検索できません。文字を含めて指定してください。" },
         { status: 400 }
       );
     }
@@ -194,7 +201,10 @@ export async function GET(req: NextRequest) {
         .sort((a, b) => b.count - a.count)
         .slice(0, 20);
 
-      return NextResponse.json({ accounts });
+      return NextResponse.json({
+        accounts,
+        ...(symbolStripped ? { note: "記号は検索語から取り除いて検索しました。" } : {}),
+      });
     }
 
     // Build where clause for comments
@@ -267,7 +277,12 @@ export async function GET(req: NextRequest) {
 
     // 50件で打ち切られていたので、続きがあるかを返して
     // UI 側が「もっと見る」を出せるようにする。
-    return NextResponse.json({ threads, hasMore: comments.length === limit, offset });
+    return NextResponse.json({
+      threads,
+      hasMore: comments.length === limit,
+      offset,
+      ...(symbolStripped ? { note: "記号は検索語から取り除いて検索しました。" } : {}),
+    });
   } catch (e) {
     if (isStatementTimeout(e)) {
       return NextResponse.json(
