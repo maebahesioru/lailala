@@ -125,7 +125,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
             onMouseEnter={() => router.prefetch(threadPath(thread.comment.commentId))}
           >
             <div className="flex gap-3">
-              <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0" onClick={(e) => e.stopPropagation()}>
+              <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0" aria-label={`${thread.comment.author.name} のプロフィール`} onClick={(e) => e.stopPropagation()}>
                 {thread.comment.author.thumbnail && !dataSaver && !avatarError ? (
                   <motion.img
                     whileHover={{ scale: 1.08 }}
@@ -305,6 +305,8 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                       window.dispatchEvent(new CustomEvent("lailala:openReply", { detail: { videoId, parentCommentId: thread.comment.commentId, authorName: thread.comment.author.name } }));
                     }}
                     className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
+                    aria-label={`返信 ${thread.comment.replyCount || 0}件`}
+                    title="返信する"
                   >
                     <MessageCircle size={18} />
                     <span>{thread.comment.replyCount || 0}</span>

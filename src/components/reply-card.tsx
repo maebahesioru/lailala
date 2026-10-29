@@ -136,7 +136,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
             onMouseEnter={() => router.prefetch(threadPath(reply.commentId))}
           >
             <div className="flex gap-3">
-              <Link href={`/profile/${encodeURIComponent(reply.author.channelId || "")}`} className="shrink-0">
+              <Link href={`/profile/${encodeURIComponent(reply.author.channelId || "")}`} aria-label={`${reply.author.name} のプロフィール`} className="shrink-0">
                 {reply.author.thumbnail && !avatarError ? (
                   <motion.img
                     whileHover={{ scale: 1.08 }}
@@ -156,7 +156,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                 <div className="flex items-start justify-between gap-2">
                   <div className="cursor-pointer flex-1 min-w-0" onClick={() => router.push(threadLink)}>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Link href={`/profile/${encodeURIComponent(reply.author.channelId || "")}`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
+                      <Link href={`/profile/${encodeURIComponent(reply.author.channelId || "")}`} aria-label={`${reply.author.name} のプロフィール`} className="font-bold text-[15px] truncate hover:underline" onClick={(e) => e.stopPropagation()}>
                         {stripHandlePrefix(reply.author.name)}
                       </Link>
                       {reply.author.isChannelOwner && (
