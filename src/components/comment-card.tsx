@@ -39,6 +39,9 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(thread.comment.content);
   const { enabled: dataSaver } = useDataSaver();
+  // チャンネル画像が 404 のとき（削除済みチャンネル等）は壊れ画像ではなく
+  // プレースホルダへ差し替える
+  const [avatarError, setAvatarError] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
   const handleLike = async () => {
@@ -122,7 +125,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
           >
             <div className="flex gap-3">
               <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0" onClick={(e) => e.stopPropagation()}>
-                {thread.comment.author.thumbnail && !dataSaver ? (
+                {thread.comment.author.thumbnail && !dataSaver && !avatarError ? (
                   <motion.img
                     whileHover={{ scale: 1.08 }}
                     transition={{ type: "spring", stiffness: 300, damping: 15 }}
@@ -130,6 +133,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                     alt={thread.comment.author.name}
                     className="w-10 h-10 rounded-full object-cover shrink-0"
                     loading="lazy"
+                    onError={() => setAvatarError(true)}
                     onClick={(e) => e.stopPropagation()}
                   />
                 ) : (

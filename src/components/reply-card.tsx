@@ -44,6 +44,8 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
   const [showLogin, setShowLogin] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [isOwnComment, setIsOwnComment] = useState(false);
+  // チャンネル画像が 404 のときは壊れ画像ではなくプレースホルダへ差し替える
+  const [avatarError, setAvatarError] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -134,13 +136,14 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
           >
             <div className="flex gap-3">
               <Link href={`/profile/${encodeURIComponent(reply.author.channelId || "")}`} className="shrink-0">
-                {reply.author.thumbnail ? (
+                {reply.author.thumbnail && !avatarError ? (
                   <motion.img
                     whileHover={{ scale: 1.08 }}
                     transition={{ type: "spring", stiffness: 300, damping: 15 }}
                     src={reply.author.thumbnail}
                     alt={reply.author.name}
                     className="w-10 h-10 rounded-full object-cover"
+                    onError={() => setAvatarError(true)}
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
