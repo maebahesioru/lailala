@@ -7,6 +7,7 @@ import { MainLayout } from "@/components/main-layout";
 import { ThreadView } from "@/components/thread-view";
 import { buildReplyTree } from "@/lib/reply-tree";
 import { unwrapReplies } from "@/lib/youtube-comment-shape";
+import { pageMetadata } from "@/lib/page-metadata";
 
 export async function generateMetadata({ params }: { params: Promise<{ commentId: string }> }): Promise<Metadata> {
   const segments = await params;
@@ -18,17 +19,23 @@ export async function generateMetadata({ params }: { params: Promise<{ commentId
     select: { authorName: true, content: true },
   });
 
+  const path = `/thread/${encodeURIComponent(commentId)}/`;
+
   if (cached) {
-    return {
+    return pageMetadata({
       title: `${cached.authorName}さんのコメント`,
-      description: cached.content.slice(0, 120),
-    };
+      description: cached.content.replace(/\s+/g, " ").slice(0, 120),
+      path,
+      type: "article",
+    });
   }
 
-  return {
-    title: "スレッド",
-    description: "コメントスレッド",
-  };
+  return pageMetadata({
+    title: "コメント",
+    description: "YouTubeのコメントとその返信をX/Twitter風に表示。",
+    path,
+    type: "article",
+  });
 }
 
 const parseReply = (r: any) => ({

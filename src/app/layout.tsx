@@ -38,9 +38,10 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
+    // url はページごとに pageMetadata() で指定する（ここに書くと全ページが
+    // トップページを指してしまい、サブページが重複コンテンツ扱いになる）
     type: "website",
     locale: "ja_JP",
-    url: SITE_URL,
     siteName: "ライララ(仮)",
     title: "ライララ(仮) - YouTubeコメントをX/Twitter風に",
     description:
@@ -72,9 +73,7 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "ライララ(仮)",
   },
-  alternates: {
-    canonical: SITE_URL,
-  },
+  // alternates.canonical はページごとに pageMetadata() で指定する
   formatDetection: {
     telephone: false,
   },
