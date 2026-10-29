@@ -212,7 +212,7 @@ export function MobileNav() {
                       <p className="text-muted text-xs truncate">{user.email}</p>
                     </div>
                     <button
-                      onClick={() => { setOpen(false); window.location.href = "/api/auth/signout"; }}
+                      onClick={() => { setOpen(false); window.location.href = "/api/auth/signout/"; }}
                       className="p-2 rounded-full hover:bg-white/10 text-muted"
                       title="ログアウト"
                     >

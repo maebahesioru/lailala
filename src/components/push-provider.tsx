@@ -54,7 +54,7 @@ export function PushProvider({ children }: { children: ReactNode }) {
         applicationServerKey: urlBase64ToUint8Array(publicKey) as BufferSource,
       });
 
-      await fetch("/api/notifications/push", {
+      await fetch("/api/notifications/push/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -75,7 +75,7 @@ export function PushProvider({ children }: { children: ReactNode }) {
     const sub = await swRegistration.pushManager.getSubscription();
     if (sub) {
       await sub.unsubscribe();
-      await fetch("/api/notifications/push", {
+      await fetch("/api/notifications/push/", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ endpoint: sub.endpoint }),

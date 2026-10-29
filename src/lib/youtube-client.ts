@@ -5,7 +5,7 @@ export async function fetchComments(
   sortBy: "TOP_COMMENTS" | "NEWEST_FIRST" = "TOP_COMMENTS",
   continuationToken?: string
 ): Promise<{ threads: CommentThread[]; hasContinuation: boolean; continuationToken: string | null }> {
-  let url = `/api/comments?videoId=${encodeURIComponent(videoId)}&sortBy=${sortBy}`;
+  let url = `/api/comments/?videoId=${encodeURIComponent(videoId)}&sortBy=${sortBy}`;
   if (continuationToken) {
     url += `&continuationToken=${encodeURIComponent(continuationToken)}`;
   }

@@ -17,7 +17,7 @@ export default function BlockedPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/blocked")
+    fetch("/api/blocked/")
       .then((r) => r.json())
       .then((data) => {
         if (data.blocked) setBlocked(data.blocked);
@@ -28,7 +28,7 @@ export default function BlockedPage() {
 
   const unblock = async (channelId: string) => {
     try {
-      await fetch(`/api/blocked?channelId=${channelId}`, { method: "DELETE" });
+      await fetch(`/api/blocked/?channelId=${channelId}`, { method: "DELETE" });
       setBlocked((prev) => prev.filter((b) => b.channelId !== channelId));
     } catch {}
   };

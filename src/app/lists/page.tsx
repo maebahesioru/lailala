@@ -84,10 +84,10 @@ function ListsPageInner() {
     setLoading(true);
     try {
       const [mine, pub, follows, me] = await Promise.all([
-        fetch("/api/lists").then((r) => r.ok ? r.json() : { lists: [] }),
-        fetch("/api/lists/public").then((r) => r.ok ? r.json() : { lists: [] }),
-        fetch("/api/lists/follow").then((r) => r.ok ? r.json() : { follows: [] }),
-        fetch("/api/lists/containing-me").then((r) => r.ok ? r.json() : { lists: [] }),
+        fetch("/api/lists/").then((r) => r.ok ? r.json() : { lists: [] }),
+        fetch("/api/lists/public/").then((r) => r.ok ? r.json() : { lists: [] }),
+        fetch("/api/lists/follow/").then((r) => r.ok ? r.json() : { follows: [] }),
+        fetch("/api/lists/containing-me/").then((r) => r.ok ? r.json() : { lists: [] }),
       ]);
       setLists(mine.lists || []);
       setPublicLists(pub.lists || []);
@@ -99,7 +99,7 @@ function ListsPageInner() {
 
   const openListById = async (id: string) => {
     try {
-      const res = await fetch(`/api/lists?listId=${id}`);
+      const res = await fetch(`/api/lists/?listId=${id}`);
       const data = await res.json();
       if (data.list) {
         setSelectedList(data.list);
@@ -113,7 +113,7 @@ function ListsPageInner() {
   const createList = async () => {
     if (!newListName.trim()) return;
     try {
-      const res = await fetch("/api/lists", {
+      const res = await fetch("/api/lists/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newListName.trim(), description: newListDesc.trim() || undefined, isPublic: newListPublic }),
@@ -132,7 +132,7 @@ function ListsPageInner() {
   const saveEdit = async () => {
     if (!selectedList || !editName.trim()) return;
     try {
-      await fetch("/api/lists", {
+      await fetch("/api/lists/", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ listId: selectedList.id, name: editName.trim(), description: editDesc.trim() || undefined, isPublic: editPublic }),
@@ -150,7 +150,7 @@ function ListsPageInner() {
   const confirmDeleteList = async () => {
     if (!deleteTargetId) return;
     try {
-      await fetch(`/api/lists?listId=${deleteTargetId}`, { method: "DELETE" });
+      await fetch(`/api/lists/?listId=${deleteTargetId}`, { method: "DELETE" });
       setLists((prev) => prev.filter((l) => l.id !== deleteTargetId));
       if (selectedList?.id === deleteTargetId) setSelectedList(null);
     } catch {}
@@ -165,7 +165,7 @@ function ListsPageInner() {
 
   const removeItem = async (listId: string, commentId: string) => {
     try {
-      await fetch(`/api/lists?listId=${listId}&commentId=${commentId}`, { method: "DELETE" });
+      await fetch(`/api/lists/?listId=${listId}&commentId=${commentId}`, { method: "DELETE" });
       setSelectedList((prev) =>
         prev
           ? { ...prev, items: prev.items?.filter((i) => i.commentId !== commentId) || [] }
@@ -205,9 +205,9 @@ function ListsPageInner() {
   const toggleFollow = async (listId: string, currentlyFollowing: boolean) => {
     try {
       if (currentlyFollowing) {
-        await fetch(`/api/lists/follow?listId=${listId}`, { method: "DELETE" });
+        await fetch(`/api/lists/follow/?listId=${listId}`, { method: "DELETE" });
       } else {
-        await fetch("/api/lists/follow", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ listId }) });
+        await fetch("/api/lists/follow/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ listId }) });
       }
       setFollowedLists((prev) =>
         currentlyFollowing

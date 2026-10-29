@@ -64,7 +64,7 @@ export function TweetMoreMenu({
     if (!user) return;
     setLoadingLists(true);
     try {
-      const res = await fetch("/api/lists");
+      const res = await fetch("/api/lists/");
       const data = await res.json();
       setLists(data.lists || []);
     } catch (e) { console.error(e); }
@@ -73,7 +73,7 @@ export function TweetMoreMenu({
 
   const addToList = async (listId: string) => {
     try {
-      await fetch("/api/lists", {
+      await fetch("/api/lists/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -96,7 +96,7 @@ export function TweetMoreMenu({
 
   const removeFromList = async (listId: string) => {
     try {
-      await fetch(`/api/lists?listId=${listId}&commentId=${commentId}`, { method: "DELETE" });
+      await fetch(`/api/lists/?listId=${listId}&commentId=${commentId}`, { method: "DELETE" });
       setShowListMenu(false);
       setOpen(false);
       onListChange?.();
@@ -106,7 +106,7 @@ export function TweetMoreMenu({
   const handleBlock = async () => {
     if (!user) return;
     try {
-      await fetch("/api/blocked", {
+      await fetch("/api/blocked/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ channelId: authorChannelId, channelName: authorName }),
@@ -119,7 +119,7 @@ export function TweetMoreMenu({
   const handleMute = async () => {
     if (!user) return;
     try {
-      await fetch("/api/muted", {
+      await fetch("/api/muted/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ channelId: authorChannelId, channelName: authorName }),

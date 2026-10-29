@@ -61,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch("/api/auth/me");
+      const res = await fetch("/api/auth/me/");
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const switchAccount = useCallback(async (channelId: string) => {
     try {
-      const res = await fetch("/api/auth/switch-account", {
+      const res = await fetch("/api/auth/switch-account/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ channelId }),

@@ -116,7 +116,7 @@ export function ThreadView({
     if (!continuationToken) return;
     setLoadingMore(true);
     try {
-      const url = `/api/comments/thread?videoId=${videoId}&commentId=${commentId}&continuationToken=${encodeURIComponent(continuationToken!)}`;
+      const url = `/api/comments/thread/?videoId=${videoId}&commentId=${commentId}&continuationToken=${encodeURIComponent(continuationToken!)}`;
       const res = await fetch(url);
       const data = await res.json();
       if (data.replies) {

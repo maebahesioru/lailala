@@ -59,8 +59,8 @@ export default function BookmarksPage() {
     setLoading(true);
     try {
       const [bmData, folderData] = await Promise.all([
-        fetch(selectedFolder ? `/api/bookmarks?folderId=${selectedFolder}` : "/api/bookmarks").then((r) => r.ok ? r.json() : { bookmarks: [] }),
-        fetch("/api/bookmarks/folders").then((r) => r.ok ? r.json() : { folders: [] }),
+        fetch(selectedFolder ? `/api/bookmarks/?folderId=${selectedFolder}` : "/api/bookmarks/").then((r) => r.ok ? r.json() : { bookmarks: [] }),
+        fetch("/api/bookmarks/folders/").then((r) => r.ok ? r.json() : { folders: [] }),
       ]);
       setBookmarks(bmData.bookmarks || []);
       setFolders(folderData.folders || []);
@@ -71,7 +71,7 @@ export default function BookmarksPage() {
   const createFolder = async () => {
     if (!newFolderName.trim()) return;
     try {
-      const res = await fetch("/api/bookmarks/folders", {
+      const res = await fetch("/api/bookmarks/folders/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newFolderName.trim() }),
@@ -92,7 +92,7 @@ export default function BookmarksPage() {
   const confirmDeleteFolder = async () => {
     if (!folderDeleteTarget) return;
     try {
-      await fetch(`/api/bookmarks/folders?folderId=${folderDeleteTarget}`, { method: "DELETE" });
+      await fetch(`/api/bookmarks/folders/?folderId=${folderDeleteTarget}`, { method: "DELETE" });
       setFolders((prev) => prev.filter((f) => f.id !== folderDeleteTarget));
       if (selectedFolder === folderDeleteTarget) setSelectedFolder(null);
     } catch {}
@@ -101,7 +101,7 @@ export default function BookmarksPage() {
 
   const moveBookmark = async (commentId: string, folderId: string | null) => {
     try {
-      await fetch("/api/bookmarks", {
+      await fetch("/api/bookmarks/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ commentId, folderId }),
@@ -139,7 +139,7 @@ export default function BookmarksPage() {
 
   const removeBookmark = async (commentId: string) => {
     try {
-      await fetch(`/api/bookmarks?commentId=${commentId}`, { method: "DELETE" });
+      await fetch(`/api/bookmarks/?commentId=${commentId}`, { method: "DELETE" });
       setBookmarks((prev) => prev.filter((b) => b.commentId !== commentId));
       setSelectedBookmarkIds((prev) => {
         const next = new Set(prev);

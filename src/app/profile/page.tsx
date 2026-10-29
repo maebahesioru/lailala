@@ -24,8 +24,8 @@ export default function MyProfilePage() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/auth/me").then((r) => (r.ok ? r.json() : null)),
-      fetch("/api/profile/actions").then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/auth/me/").then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/profile/actions/").then((r) => (r.ok ? r.json() : null)),
     ])
       .then(([userData, actionsData]) => {
         if (userData?.user) setUser(userData.user);

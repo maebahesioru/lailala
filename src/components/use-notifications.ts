@@ -13,7 +13,7 @@ export function useNotifications() {
 
   const fetchCount = useCallback(async () => {
     try {
-      const res = await fetch("/api/notifications?limit=0", { cache: "no-store" });
+      const res = await fetch("/api/notifications/?limit=0", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setUnreadCount(data.unreadCount || 0);

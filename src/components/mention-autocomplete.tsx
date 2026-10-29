@@ -42,7 +42,7 @@ export function MentionAutocomplete({ textareaRef, text, onSelect }: MentionAuto
   useEffect(() => {
     if (!show || query === undefined) return;
     const timer = setTimeout(() => {
-      fetch(`/api/mentions/users?q=${encodeURIComponent(query)}`)
+      fetch(`/api/mentions/users/?q=${encodeURIComponent(query)}`)
         .then((r) => r.json())
         .then((data) => {
           if (data.users) setUsers(data.users);

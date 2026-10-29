@@ -12,7 +12,7 @@ export function useMutedWords() {
   const [words, setWords] = useState<MutedWord[]>([]);
 
   useEffect(() => {
-    fetch("/api/muted-words")
+    fetch("/api/muted-words/")
       .then((r) => r.json())
       .then((data) => {
         if (data.words) setWords(data.words);

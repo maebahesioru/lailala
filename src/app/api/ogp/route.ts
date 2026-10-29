@@ -29,7 +29,7 @@ function isPrivateIp(ip: string): boolean {
  * 内部ネットワーク宛の URL を弾く。
  *
  * 以前は任意 URL をそのまま fetch していたため、外部の誰でも
- * `/api/ogp?url=http://192.168.1.73:8000/` のようにして LAN 内の
+ * `/api/ogp/?url=http://192.168.1.73:8000/` のようにして LAN 内の
  * 管理画面（Coolify）へ到達でき、タイトル等のメタデータを取得できてしまっていた（SSRF）。
  */
 async function assertPublicUrl(raw: string): Promise<URL> {

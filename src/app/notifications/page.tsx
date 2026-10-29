@@ -52,7 +52,7 @@ export default function NotificationsPage() {
     const newOffset = reset ? 0 : offset;
     setLoading(true);
     try {
-      const res = await fetch(`/api/notifications?type=${tab}&limit=50&offset=${newOffset}`, { cache: "no-store" });
+      const res = await fetch(`/api/notifications/?type=${tab}&limit=50&offset=${newOffset}`, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed");
       const data = await res.json();
       const items = data.notifications || [];
@@ -77,12 +77,12 @@ export default function NotificationsPage() {
   }, [tab]);
 
   useEffect(() => {
-    fetch("/api/notifications", { method: "PATCH", body: JSON.stringify({ all: true }) })
+    fetch("/api/notifications/", { method: "PATCH", body: JSON.stringify({ all: true }) })
       .then(() => refresh());
   }, [refresh]);
 
   const handleDelete = async (id: string) => {
-    await fetch("/api/notifications", {
+    await fetch("/api/notifications/", {
       method: "DELETE",
       body: JSON.stringify({ notificationIds: [id] }),
     });
@@ -91,7 +91,7 @@ export default function NotificationsPage() {
 
   const handleDeleteAll = async () => {
     if (!confirm("すべての通知を削除しますか？")) return;
-    await fetch("/api/notifications", { method: "DELETE", body: JSON.stringify({ all: true }) });
+    await fetch("/api/notifications/", { method: "DELETE", body: JSON.stringify({ all: true }) });
     setNotifications([]);
   };
 

@@ -25,7 +25,7 @@ export function LinkCard({ text }: { text: string }) {
   useEffect(() => {
     if (!url) return;
     setLoading(true);
-    fetch(`/api/ogp?url=${encodeURIComponent(url)}`)
+    fetch(`/api/ogp/?url=${encodeURIComponent(url)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (data && data.title) setOgp(data);

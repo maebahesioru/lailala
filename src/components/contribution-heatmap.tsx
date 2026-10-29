@@ -43,7 +43,7 @@ export function ContributionHeatmap({ channelId, authorName }: { channelId: stri
   const weeks = getYearGrid();
 
   useEffect(() => {
-    const url = new URL(`/api/profile/heatmap`, window.location.origin);
+    const url = new URL(`/api/profile/heatmap/`, window.location.origin);
     url.searchParams.set("channelId", channelId);
     if (authorName) url.searchParams.set("authorName", authorName);
     fetch(url.toString())

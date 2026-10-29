@@ -336,7 +336,7 @@ export function Sidebar() {
         onClose={() => setShowLogoutConfirm(false)}
         onConfirm={() => {
           setShowLogoutConfirm(false);
-          window.location.href = "/api/auth/signout";
+          window.location.href = "/api/auth/signout/";
         }}
       />
     </>

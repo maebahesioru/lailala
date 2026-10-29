@@ -73,9 +73,9 @@ function SearchContent() {
   useEffect(() => {
     if (!initialQuery && !userFilter) {
       Promise.allSettled([
-        fetch("/api/trending/words").then((r) => r.json()),
-        fetch("/api/youtube/video-info?videoId=niKAylKNIEI").then((r) => r.json()),
-        fetch("/api/comments?videoId=niKAylKNIEI&sortBy=NEWEST_FIRST").then((r) => r.json()),
+        fetch("/api/trending/words/").then((r) => r.json()),
+        fetch("/api/youtube/video-info/?videoId=niKAylKNIEI").then((r) => r.json()),
+        fetch("/api/comments/?videoId=niKAylKNIEI&sortBy=NEWEST_FIRST").then((r) => r.json()),
       ]).then(([trendRes, infoRes, commentsRes]) => {
         const trendData = trendRes.status === "fulfilled" ? trendRes.value : {};
         const infoData = infoRes.status === "fulfilled" ? infoRes.value : {};
@@ -125,7 +125,7 @@ function SearchContent() {
         if (sortBy !== "relevance") params.set("sort", sortBy);
         if (userFilter.trim()) params.set("user", userFilter.trim());
 
-        const r = await fetch(`/api/search/comments?${params.toString()}`);
+        const r = await fetch(`/api/search/comments/?${params.toString()}`);
         const data = await r.json();
         const mapped = (data.threads || []).map((t: any) => ({
           thread: {
@@ -137,11 +137,11 @@ function SearchContent() {
         }));
         setResults(mapped);
       } else if (tab === "accounts") {
-        const r = await fetch(`/api/search/comments?q=${encodeURIComponent(q)}&type=accounts`);
+        const r = await fetch(`/api/search/comments/?q=${encodeURIComponent(q)}&type=accounts`);
         const data = await r.json();
         setAccounts(data.accounts || []);
       } else if (tab === "lists") {
-        const r = await fetch(`/api/lists/public?q=${encodeURIComponent(q)}`);
+        const r = await fetch(`/api/lists/public/?q=${encodeURIComponent(q)}`);
         const data = await r.json();
         setListResults(data.lists || []);
       }

@@ -34,7 +34,7 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
 
   const loadScheduled = async () => {
     try {
-      const res = await fetch(`/api/scheduled-posts?videoId=${videoId}`);
+      const res = await fetch(`/api/scheduled-posts/?videoId=${videoId}`);
       const data = await res.json();
       if (data.posts) setScheduledList(data.posts);
     } catch (e) { console.error(e); }
@@ -62,7 +62,7 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
     if (!text.trim() || !user) return;
     setPosting(true);
     try {
-      const url = parentCommentId ? "/api/comments/reply" : "/api/comments";
+      const url = parentCommentId ? "/api/comments/reply/" : "/api/comments/";
       const body = parentCommentId
         ? JSON.stringify({ videoId, parentCommentId, text: text.trim() })
         : JSON.stringify({ videoId, text: text.trim() });
@@ -91,7 +91,7 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
     // Intentionally uses local time for scheduling (browser local timezone)
     const scheduledAt = new Date(`${scheduleDate}T${scheduleTime}`).toISOString();
     try {
-      const res = await fetch("/api/scheduled-posts", {
+      const res = await fetch("/api/scheduled-posts/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoId, text: text.trim(), scheduledAt }),
@@ -114,7 +114,7 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
 
   const cancelSchedule = async (id: string) => {
     try {
-      await fetch(`/api/scheduled-posts?id=${id}`, { method: "DELETE" });
+      await fetch(`/api/scheduled-posts/?id=${id}`, { method: "DELETE" });
       loadScheduled();
     } catch (e) { console.error(e); }
   };

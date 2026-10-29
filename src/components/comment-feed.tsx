@@ -60,7 +60,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
       setActiveListId(savedList);
       sessionStorage.removeItem("lailala-list");
     }
-    fetch("/api/lists/follow")
+    fetch("/api/lists/follow/")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (data?.follows) {
@@ -77,7 +77,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     setNextToken(null);
     try {
       if (activeListId) {
-        const res = await fetch(`/api/lists?listId=${activeListId}`);
+        const res = await fetch(`/api/lists/?listId=${activeListId}`);
         const data = await res.json();
         const mapped = (data.list?.items || []).map((item: any) => ({
           comment: {
@@ -154,8 +154,8 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     if (commentIds.length === 0) return;
     try {
       const [countsRes, userRes] = await Promise.all([
-        fetch(`/api/comments/vote-counts?${commentIds.map((id) => `commentId=${id}`).join("&")}`),
-        fetch(`/api/comments/vote-state?${commentIds.map((id) => `commentId=${id}`).join("&")}`),
+        fetch(`/api/comments/vote-counts/?${commentIds.map((id) => `commentId=${id}`).join("&")}`),
+        fetch(`/api/comments/vote-state/?${commentIds.map((id) => `commentId=${id}`).join("&")}`),
       ]);
       if (countsRes.ok) {
         const counts = await countsRes.json();
@@ -246,7 +246,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     const commentIds = threads.slice(0, 50).flatMap((t) => [t.comment.commentId]);
     if (commentIds.length === 0) return;
     const query = commentIds.map((id) => `commentId=${encodeURIComponent(id)}`).join("&");
-    const eventSource = new EventSource(`/api/sse?videoId=${videoId}&${query}`);
+    const eventSource = new EventSource(`/api/sse/?videoId=${videoId}&${query}`);
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);

@@ -48,7 +48,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
 
   useEffect(() => {
     if (!user) return;
-    fetch(`/api/comments/own-check?commentId=${encodeURIComponent(reply.commentId)}`)
+    fetch(`/api/comments/own-check/?commentId=${encodeURIComponent(reply.commentId)}`)
       .then((r) => r.json())
       .then((data) => setIsOwnComment(data.isOwn))
       .catch(() => setIsOwnComment(false));
@@ -61,7 +61,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
     if (!user) { setShowLogin(true); return; }
     try {
       const action = liked ? "unlike" : "like";
-      await fetch("/api/comments/vote", {
+      await fetch("/api/comments/vote/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoId, commentId: reply.commentId, action }),
@@ -76,7 +76,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
     if (!user) { setShowLogin(true); return; }
     try {
       const action = disliked ? "undislike" : "dislike";
-      await fetch("/api/comments/vote", {
+      await fetch("/api/comments/vote/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoId, commentId: reply.commentId, action }),
@@ -90,10 +90,10 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
     if (!user) { setShowLogin(true); return; }
     try {
       if (bookmarked) {
-        await fetch(`/api/bookmarks?commentId=${reply.commentId}`, { method: "DELETE" });
+        await fetch(`/api/bookmarks/?commentId=${reply.commentId}`, { method: "DELETE" });
         setBookmarked(false);
       } else {
-        await fetch("/api/bookmarks", {
+        await fetch("/api/bookmarks/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

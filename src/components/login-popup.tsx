@@ -25,7 +25,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
     setStep("starting");
     setError("");
     try {
-      const res = await fetch("/api/auth/login", { method: "POST" });
+      const res = await fetch("/api/auth/login/", { method: "POST" });
       const data = await res.json();
       if (data.error) {
         setError(data.error);
@@ -48,7 +48,7 @@ export function LoginPopup({ open, onClose }: LoginPopupProps) {
 
     const poll = async () => {
       try {
-        const res = await fetch(`/api/auth/login?sessionId=${sessionId}`);
+        const res = await fetch(`/api/auth/login/?sessionId=${sessionId}`);
         const data = await res.json();
         if (data.status === "complete") {
           setPolling(false);

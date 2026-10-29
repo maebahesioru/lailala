@@ -68,7 +68,7 @@ export default function SettingsPage() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/user/privacy")
+    fetch("/api/user/privacy/")
       .then((r) => r.json())
       .then((data) => {
         if (data && !data.error) {
@@ -82,7 +82,7 @@ export default function SettingsPage() {
 
   const loadMutedWords = async () => {
     try {
-      const res = await fetch("/api/muted-words");
+      const res = await fetch("/api/muted-words/");
       const data = await res.json();
       if (data.words) setMutedWords(data.words);
     } catch {}
@@ -91,7 +91,7 @@ export default function SettingsPage() {
   const addMutedWord = async () => {
     if (!newWord.trim()) return;
     try {
-      const res = await fetch("/api/muted-words", {
+      const res = await fetch("/api/muted-words/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ word: newWord.trim(), mode: newWordMode }),
@@ -105,7 +105,7 @@ export default function SettingsPage() {
 
   const removeMutedWord = async (id: string) => {
     try {
-      await fetch(`/api/muted-words?id=${id}`, { method: "DELETE" });
+      await fetch(`/api/muted-words/?id=${id}`, { method: "DELETE" });
       loadMutedWords();
     } catch {}
   };
@@ -121,7 +121,7 @@ export default function SettingsPage() {
     setPrivacy(next);
     if (key === "dataSaver") setDataSaver(value);
     try {
-      await fetch("/api/user/privacy", {
+      await fetch("/api/user/privacy/", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [key]: value }),

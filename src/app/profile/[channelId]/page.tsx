@@ -73,7 +73,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
 
   const fetchPrivacy = async () => {
     try {
-      const res = await fetch(`/api/profile/privacy?channelId=${encodeURIComponent(channelId)}`);
+      const res = await fetch(`/api/profile/privacy/?channelId=${encodeURIComponent(channelId)}`);
       if (res.ok) {
         const data = await res.json();
         setPrivacy(data);
@@ -88,7 +88,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
   useEffect(() => {
     setLoading(true);
     const type = activeTab === "comments" ? "comment" : activeTab === "replies" ? "reply" : activeTab;
-    fetch(`/api/profile/comments?channelId=${encodeURIComponent(channelId)}&page=${page}&type=${type}`)
+    fetch(`/api/profile/comments/?channelId=${encodeURIComponent(channelId)}&page=${page}&type=${type}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.error) {
@@ -111,7 +111,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
   // Load notification preference
   useEffect(() => {
     if (!currentUser || isOwner) return;
-    fetch(`/api/notifications/settings?channelId=${encodeURIComponent(channelId)}`)
+    fetch(`/api/notifications/settings/?channelId=${encodeURIComponent(channelId)}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.preference) setNotifPref(data.preference);
@@ -124,7 +124,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
     setNotifLoading(true);
     const next = notifPref === "none" ? "all" : "none";
     try {
-      const res = await fetch("/api/notifications/settings", {
+      const res = await fetch("/api/notifications/settings/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ channelId, preference: next }),

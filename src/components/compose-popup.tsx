@@ -102,7 +102,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
 
     const loadScheduled = async () => {
     try {
-      const res = await fetch(`/api/scheduled-posts?videoId=${videoId}`);
+      const res = await fetch(`/api/scheduled-posts/?videoId=${videoId}`);
       const data = await res.json();
       if (data.posts) setScheduledList(data.posts);
     } catch (e) { console.error(e); }
@@ -122,7 +122,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
           content: initialThreadContent || "",
         });
       } else if (user.channelId) {
-        fetch(`/api/profile/comments?channelId=${encodeURIComponent(user.channelId)}&type=comment&limit=1`)
+        fetch(`/api/profile/comments/?channelId=${encodeURIComponent(user.channelId)}&type=comment&limit=1`)
           .then((r) => r.json())
           .then((data) => {
             if (data.comments?.length > 0) {
@@ -155,14 +155,14 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
     setPosting(true);
     try {
       if (replyParentId) {
-        await fetch("/api/comments/reply", {
+        await fetch("/api/comments/reply/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ videoId, parentCommentId: replyParentId, text: text.trim() }),
         });
       } else {
         const postText = threadParentId ? `${text.trim()}\n(続き)` : text.trim();
-        await fetch("/api/comments", {
+        await fetch("/api/comments/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ videoId, text: postText }),
@@ -191,7 +191,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
     if (!text.trim() || !scheduleDate || !scheduleTime) return;
     const scheduledAt = new Date(`${scheduleDate}T${scheduleTime}`).toISOString();
     try {
-      const res = await fetch("/api/scheduled-posts", {
+      const res = await fetch("/api/scheduled-posts/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoId, text: text.trim(), scheduledAt }),
@@ -214,7 +214,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
 
   const cancelSchedule = async (id: string) => {
     try {
-      await fetch(`/api/scheduled-posts?id=${id}`, { method: "DELETE" });
+      await fetch(`/api/scheduled-posts/?id=${id}`, { method: "DELETE" });
       loadScheduled();
     } catch (e) { console.error(e); }
   };

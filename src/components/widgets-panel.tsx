@@ -44,9 +44,9 @@ export function WidgetsPanel() {
     const hasMissingStats = cachedVideoInfo && (cachedVideoInfo.subscriberCount == null || cachedVideoInfo.daysSinceUpload == null);
     if (cachedVideoInfo && Date.now() - cachedAt < CACHE_TTL && !hasMissingStats) return;
     Promise.allSettled([
-      fetch("/api/youtube/video-info?videoId=niKAylKNIEI").then((r) => r.json()),
-      fetch("/api/comments?videoId=niKAylKNIEI&sortBy=NEWEST_FIRST").then((r) => r.json()),
-      fetch("/api/trending/words").then((r) => r.json()),
+      fetch("/api/youtube/video-info/?videoId=niKAylKNIEI").then((r) => r.json()),
+      fetch("/api/comments/?videoId=niKAylKNIEI&sortBy=NEWEST_FIRST").then((r) => r.json()),
+      fetch("/api/trending/words/").then((r) => r.json()),
     ])
       .then(([infoRes, commentsRes, trendRes]) => {
         const infoData = infoRes.status === "fulfilled" ? infoRes.value : {};
@@ -280,7 +280,7 @@ export function WidgetsPanel() {
         <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
         <Link href="/cookies" className="hover:underline">Cookieポリシー</Link>
         <Link href="/security" className="hover:underline">セキュリティ</Link>
-        <a href="/api/export/comments" className="hover:underline">データエクスポート</a>
+        <a href="/api/export/comments/" className="hover:underline">データエクスポート</a>
         <span>&copy; 2025 ライララ(仮)</span>
       </div>
 

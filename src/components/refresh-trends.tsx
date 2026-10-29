@@ -9,7 +9,7 @@ export function RefreshTrends() {
   const handleRefresh = async () => {
     setLoading(true);
     try {
-      await fetch("/api/admin/cache-comments", {
+      await fetch("/api/admin/cache-comments/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoId: "niKAylKNIEI", max: 200 }),

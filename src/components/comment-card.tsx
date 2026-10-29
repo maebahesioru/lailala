@@ -45,7 +45,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
     if (!user) { setShowLogin(true); return; }
     try {
       const action = liked ? "unlike" : "like";
-      await fetch("/api/comments/vote", {
+      await fetch("/api/comments/vote/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoId, commentId: thread.comment.commentId, action }),
@@ -60,7 +60,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
     if (!user) { setShowLogin(true); return; }
     try {
       const action = disliked ? "undislike" : "dislike";
-      await fetch("/api/comments/vote", {
+      await fetch("/api/comments/vote/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoId, commentId: thread.comment.commentId, action }),
@@ -73,7 +73,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
   const handleDelete = async () => {
     if (!user) return;
     try {
-      await fetch(`/api/comments/delete?videoId=${videoId}&commentId=${thread.comment.commentId}`, { method: "DELETE" });
+      await fetch(`/api/comments/delete/?videoId=${videoId}&commentId=${thread.comment.commentId}`, { method: "DELETE" });
       setIsVisible(false);
       setTimeout(() => onDelete?.(thread.comment.commentId), 300);
     } catch (e) { console.error(e); }
@@ -83,10 +83,10 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
     if (!user) { setShowLogin(true); return; }
     try {
       if (bookmarked) {
-        await fetch(`/api/bookmarks?commentId=${thread.comment.commentId}`, { method: "DELETE" });
+        await fetch(`/api/bookmarks/?commentId=${thread.comment.commentId}`, { method: "DELETE" });
         setBookmarked(false);
       } else {
-        await fetch("/api/bookmarks", {
+        await fetch("/api/bookmarks/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -190,7 +190,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                             onClick={async (e) => {
                               e.stopPropagation();
                               try {
-                                await fetch("/api/comments/edit", {
+                                await fetch("/api/comments/edit/", {
                                   method: "PATCH",
                                   headers: { "Content-Type": "application/json" },
                                   body: JSON.stringify({ videoId, commentId: thread.comment.commentId, text: editText }),

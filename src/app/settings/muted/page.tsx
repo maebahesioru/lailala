@@ -17,7 +17,7 @@ export default function MutedPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/muted")
+    fetch("/api/muted/")
       .then((r) => r.json())
       .then((data) => {
         if (data.muted) setMuted(data.muted);
@@ -28,7 +28,7 @@ export default function MutedPage() {
 
   const unmute = async (channelId: string) => {
     try {
-      await fetch(`/api/muted?channelId=${channelId}`, { method: "DELETE" });
+      await fetch(`/api/muted/?channelId=${channelId}`, { method: "DELETE" });
       setMuted((prev) => prev.filter((m) => m.channelId !== channelId));
     } catch {}
   };
