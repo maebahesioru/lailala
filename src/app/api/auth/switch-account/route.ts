@@ -29,6 +29,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed" }, { status: 500 });
+    console.error("[api/auth/switch-account]", e);
+    return NextResponse.json(
+      { error: "アカウントの切り替えに失敗しました。時間をおいて再試行してください。" },
+      { status: 500 }
+    );
   }
 }

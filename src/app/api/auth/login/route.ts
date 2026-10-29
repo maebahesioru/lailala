@@ -3,10 +3,39 @@ import { Innertube, UniversalCache } from "youtubei.js";
 import { prisma } from "@/lib/prisma";
 import { encrypt } from "@/lib/crypto";
 import { createSession, getSessionUserId } from "@/lib/session";
+import { rateLimit } from "@/lib/rate-limit";
 
 const oauthStates = new Map<string, Promise<string>>();
 
-export async function POST(_req: NextRequest) {
+// 未認証で叩ける認証開始エンドポイントなので、YouTube への問い合わせと
+// メモリ上の待機フローが無制限に増えないよう上限を置く。
+const MAX_PENDING_FLOWS = 50;
+const LOGIN_WINDOW_SECONDS = 600;
+const LOGIN_MAX_REQUESTS = 5;
+
+export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+
+  const limit = await rateLimit(
+    `auth-login:${ip}`,
+    LOGIN_MAX_REQUESTS,
+    LOGIN_WINDOW_SECONDS
+  );
+  if (!limit.success) {
+    const retryAfter = Math.max(1, limit.reset - Math.floor(Date.now() / 1000));
+    return NextResponse.json(
+      { error: "認証の開始が多すぎます。しばらく待ってから再試行してください。" },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } }
+    );
+  }
+
+  if (oauthStates.size >= MAX_PENDING_FLOWS) {
+    return NextResponse.json(
+      { error: "認証の待機数が上限に達しています。数分おいてから再試行してください。" },
+      { status: 429, headers: { "Retry-After": "60" } }
+    );
+  }
+
   try {
     const innertube = await Innertube.create({ cache: new UniversalCache(false) });
     const sessionId = crypto.randomUUID();
@@ -64,7 +93,11 @@ export async function POST(_req: NextRequest) {
       userCode,
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to start OAuth" }, { status: 500 });
+    console.error("[api/auth/login POST]", e);
+    return NextResponse.json(
+      { error: "認証を開始できませんでした。時間をおいて再試行してください。" },
+      { status: 500 }
+    );
   }
 }
 
@@ -193,8 +226,12 @@ export async function GET(req: NextRequest) {
       thumbnail,
     });
   } catch (e: any) {
-    if (e.message === "TIMEOUT") return NextResponse.json({ status: "pending" });
+    if (e?.message === "TIMEOUT") return NextResponse.json({ status: "pending" });
     oauthStates.delete(sessionId);
-    return NextResponse.json({ status: "error", message: e.message || "認証に失敗しました" }, { status: 500 });
+    console.error("[api/auth/login GET]", e);
+    return NextResponse.json(
+      { status: "error", message: "認証に失敗しました。もう一度お試しください。" },
+      { status: 500 }
+    );
   }
 }
