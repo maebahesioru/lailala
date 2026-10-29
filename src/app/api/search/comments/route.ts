@@ -50,6 +50,25 @@ function isStatementTimeout(error: unknown): boolean {
   return message.includes("statement timeout") || message.includes("57014");
 }
 
+// Postgres は同じプリペアドステートメントの初回実行でプランを立てるため、
+// デプロイ直後の「最初の検索」だけが極端に遅い（実測 2.1〜2.9 秒、2 回目以降は
+// 0.03 秒）。3 秒の statement_timeout とぶつかると、ありふれた日本語の語でも
+// 503「検索に時間がかかりすぎました」になってしまっていた（実測で再現）。
+// プロセス起動後 1 回だけ、タイムアウトした検索をそのまま引き直す
+// ＝プランが温まった状態で再実行される。悪性クエリの増幅を避けるため
+// 再試行はプロセスごとに 1 度だけに限定する。
+let planRetryUsed = false;
+
+async function retryOnceAfterPlanWarmup<T>(run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (e) {
+    if (!isStatementTimeout(e) || planRetryUsed) throw e;
+    planRetryUsed = true;
+    return run();
+  }
+}
+
 const MAX_QUERY_LENGTH = 100;
 
 export async function GET(req: NextRequest) {
@@ -112,7 +131,7 @@ export async function GET(req: NextRequest) {
     if (type === "accounts") {
       // 高度な検索の「期間」「最低いいね」はアカウントタブでも表示されているのに
       // これまで完全に無視されていた（画面では絞り込み済みに見える）。
-      const comments = await withSearchTimeout<AccountRow[]>((tx) => tx.commentCache.findMany({
+      const comments = await retryOnceAfterPlanWarmup(() => withSearchTimeout<AccountRow[]>((tx) => tx.commentCache.findMany({
         where: {
           authorName: { contains: escapeLike(q), mode: "insensitive" },
           ...(minLikes > 0 ? { likeCount: { gte: minLikes } } : {}),
@@ -122,7 +141,7 @@ export async function GET(req: NextRequest) {
         select: { authorChannelId: true, authorName: true, authorThumb: true },
         orderBy: { publishedAt: "desc" },
         take: 500,
-      }));
+      })));
 
       const grouped = new Map<string, AccountResult>();
       for (const c of comments) {
@@ -179,13 +198,15 @@ export async function GET(req: NextRequest) {
       orderBy = { likeCount: "desc" };
     }
 
-    const comments = await withSearchTimeout<CommentRow[]>((tx) =>
-      tx.commentCache.findMany({
-        where,
-        orderBy,
-        take: limit,
-        skip: offset,
-      })
+    const comments = await retryOnceAfterPlanWarmup(() =>
+      withSearchTimeout<CommentRow[]>((tx) =>
+        tx.commentCache.findMany({
+          where,
+          orderBy,
+          take: limit,
+          skip: offset,
+        })
+      )
     );
 
     const threads = comments.map((c) => ({

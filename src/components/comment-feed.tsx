@@ -149,29 +149,41 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     }
   }, [videoId, sortBy, nextToken, loadingMore, activeListId]);
 
+  // 先頭 20 件だけ取得していたため、21 件目以降はサイト内のいいね/低評価が
+  // 常に 0 として描画されていた（YouTube 側の数に加算されない）。
+  // 1 リクエストの URL 長とクエリ数を抑えるため 20 件ずつ分割して全部取る。
   const fetchVoteData = async (threadList: CommentThread[]) => {
-    const commentIds = threadList.slice(0, 20).map((t) => t.comment.commentId);
-    if (commentIds.length === 0) return;
-    try {
-      const [countsRes, userRes] = await Promise.all([
-        fetch(`/api/comments/vote-counts/?${commentIds.map((id) => `commentId=${id}`).join("&")}`),
-        fetch(`/api/comments/vote-state/?${commentIds.map((id) => `commentId=${id}`).join("&")}`),
-      ]);
-      if (countsRes.ok) {
-        const counts = await countsRes.json();
-        setVoteCounts((prev) => ({ ...prev, ...counts }));
-      }
-      if (userRes.ok) {
-        const votes = await userRes.json();
-        const map: Record<string, string> = {};
-        for (const [k, v] of Object.entries(votes)) {
-          map[k] = (v as any).type;
+    const allIds = threadList.map((t) => t.comment.commentId).filter(Boolean);
+    if (allIds.length === 0) return;
+    const CHUNK = 20;
+    const chunks: string[][] = [];
+    for (let i = 0; i < allIds.length; i += CHUNK) chunks.push(allIds.slice(i, i + CHUNK));
+
+    await Promise.all(
+      chunks.map(async (commentIds) => {
+        const query = commentIds.map((id) => `commentId=${encodeURIComponent(id)}`).join("&");
+        try {
+          const [countsRes, userRes] = await Promise.all([
+            fetch(`/api/comments/vote-counts/?${query}`),
+            fetch(`/api/comments/vote-state/?${query}`),
+          ]);
+          if (countsRes.ok) {
+            const counts = await countsRes.json();
+            setVoteCounts((prev) => ({ ...prev, ...counts }));
+          }
+          if (userRes.ok) {
+            const votes = await userRes.json();
+            const map: Record<string, string> = {};
+            for (const [k, v] of Object.entries(votes)) {
+              map[k] = (v as any).type;
+            }
+            setUserVotes((prev) => ({ ...prev, ...map }));
+          }
+        } catch {
+          // ignore
         }
-        setUserVotes((prev) => ({ ...prev, ...map }));
-      }
-    } catch {
-      // ignore
-    }
+      })
+    );
   };
 
   useEffect(() => {
