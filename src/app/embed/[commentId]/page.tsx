@@ -1,5 +1,5 @@
 import { threadPath } from "@/lib/thread-url";
-import { onImgError } from "@/lib/img-fallback";
+import { AvatarImg } from "@/components/avatar-img";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -73,7 +73,7 @@ export default async function EmbedPage({ params }: EmbedPageProps) {
           {/* Header: author */}
           <div className="flex items-center gap-3 p-4">
             {cached.authorThumb ? (
-              <img onError={onImgError}
+              <AvatarImg
                 src={cached.authorThumb}
                 alt={cached.authorName}
                 width={40}
