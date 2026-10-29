@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { intParam } from "@/lib/query-params";
 import { internalError } from "@/lib/api-error";
@@ -21,6 +22,32 @@ function getRelativeTimeString(date: Date): string {
   if (diffHour > 0) return `${diffHour} hour${diffHour > 1 ? "s" : ""} ago`;
   if (diffMin > 0) return `${diffMin} minute${diffMin > 1 ? "s" : ""} ago`;
   return "just now";
+}
+
+// 2文字程度の短い検索語（例: "a*"）だと ILIKE の候補が膨らみ、1リクエストで
+// 数秒ワーカーを占有できてしまう（実測 3.7〜7.6 秒）。トランザクション内で
+// SET LOCAL statement_timeout を掛け、上限を超えたら 503 で打ち切る。
+const SEARCH_TIMEOUT_MS = 3000;
+
+type CommentRow = NonNullable<Awaited<ReturnType<typeof prisma.commentCache.findFirst>>>;
+type AccountRow = { authorChannelId: string | null; authorName: string; authorThumb: string | null };
+
+async function withSearchTimeout<T>(
+  run: (tx: Prisma.TransactionClient) => Promise<T>
+): Promise<T> {
+  // prisma.$transaction の戻り型が unknown に落ちるため、呼び出し側の型で確定させる
+  return prisma.$transaction(
+    async (tx) => {
+      await tx.$executeRawUnsafe(`SET LOCAL statement_timeout = ${SEARCH_TIMEOUT_MS}`);
+      return run(tx);
+    },
+    { timeout: 10_000, maxWait: 5_000 }
+  ) as Promise<T>;
+}
+
+function isStatementTimeout(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return message.includes("statement timeout") || message.includes("57014");
 }
 
 export async function GET(req: NextRequest) {
@@ -63,7 +90,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (type === "accounts") {
-      const comments = await prisma.commentCache.findMany({
+      const comments = await withSearchTimeout<AccountRow[]>((tx) => tx.commentCache.findMany({
         where: {
           authorName: { contains: escapeLike(q), mode: "insensitive" },
           ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
@@ -71,7 +98,7 @@ export async function GET(req: NextRequest) {
         select: { authorChannelId: true, authorName: true, authorThumb: true },
         orderBy: { publishedAt: "desc" },
         take: 500,
-      });
+      }));
 
       const grouped = new Map<string, AccountResult>();
       for (const c of comments) {
@@ -128,11 +155,13 @@ export async function GET(req: NextRequest) {
       orderBy = { likeCount: "desc" };
     }
 
-    const comments = await prisma.commentCache.findMany({
-      where,
-      orderBy,
-      take: limit,
-    });
+    const comments = await withSearchTimeout<CommentRow[]>((tx) =>
+      tx.commentCache.findMany({
+        where,
+        orderBy,
+        take: limit,
+      })
+    );
 
     const threads = comments.map((c) => ({
       comment: {
@@ -160,6 +189,15 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ threads });
   } catch (e) {
+    if (isStatementTimeout(e)) {
+      return NextResponse.json(
+        {
+          error:
+            "検索に時間がかかりすぎました。検索語を長くするか、絞り込み条件を追加してください。",
+        },
+        { status: 503 }
+      );
+    }
     return internalError("api/search/comments", e);
   }
 }
