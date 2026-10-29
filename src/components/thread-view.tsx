@@ -1,5 +1,6 @@
 "use client";
 
+import { threadUrl } from "@/lib/thread-url";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CommentCard } from "./comment-card";
@@ -161,7 +162,7 @@ export function ThreadView({
         </motion.div>
         <h1 className="text-lg font-bold flex-1">スレッド</h1>
         <ShareMenu
-          url={`${origin}/thread/${commentId}/`}
+          url={threadUrl(origin, commentId)}
           text={`${parent.author.name}: ${parent.content}`}
           extraLinks={[
             { label: "YouTubeコメントURLをコピー", url: `https://www.youtube.com/watch?v=${videoId}&lc=${commentId}` },

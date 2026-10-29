@@ -1,3 +1,4 @@
+import { threadPath } from "@/lib/thread-url";
 import { prisma } from "./prisma";
 import { sendPushNotification } from "./push";
 
@@ -120,7 +121,7 @@ export async function createNotification(params: CreateNotificationParams) {
       title: `Lailala - ${TYPE_LABELS[params.type]}`,
       body: pushBody,
       icon: params.actorThumb || "/icon-192x192.png",
-      url: params.commentId ? `/thread/${params.commentId}/` : `/`,
+      url: params.commentId ? threadPath(params.commentId) : `/`,
     }).catch(() => {});
   }
 

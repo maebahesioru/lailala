@@ -1,5 +1,6 @@
 "use client";
 
+import { threadPath } from "@/lib/thread-url";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -169,7 +170,7 @@ export default function NotificationsPage() {
                 </div>
                 {n.content && (
                   <Link
-                    href={n.commentId ? `/thread/${n.commentId}/` : `/`}
+                    href={n.commentId ? threadPath(n.commentId) : `/`}
                     className="block text-[15px] text-muted mt-1 line-clamp-2 hover:underline"
                   >
                     {n.content}

@@ -1,4 +1,5 @@
 "use client";
+import { threadPath, threadUrl } from "@/lib/thread-url";
 import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect } from "react";
@@ -266,7 +267,7 @@ export default function BookmarksPage() {
               className={`px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer ${selectedBookmarkIds.has(b.commentId) ? "bg-primary/5" : ""}`}
               onClick={() => {
                 if (isBulkMode) toggleSelect(b.commentId);
-                else router.push(`/thread/${b.commentId}/`);
+                else router.push(threadPath(b.commentId));
               }}
             >
               <div className="flex gap-3">
@@ -303,12 +304,12 @@ export default function BookmarksPage() {
                     <button onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5">
                       <ThumbsDown size={18} />
                     </button>
-                    <Link href={`/thread/${b.commentId}/`} onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5">
+                    <Link href={threadPath(b.commentId)} onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5">
                       <MessageCircle size={18} />
                       <span>{b.replyCount || 0}</span>
                     </Link>
                     <div onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center">
-                      <ShareMenu url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${b.commentId}`} text={`${b.authorName}: ${b.content}`} buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full" />
+                      <ShareMenu url={threadUrl(typeof window !== "undefined" ? window.location.origin : "", b.commentId)} text={`${b.authorName}: ${b.content}`} buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full" />
                     </div>
                     <button onClick={(e) => { e.stopPropagation(); removeBookmark(b.commentId); }} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-primary transition-colors rounded-full hover:bg-white/5">
                       <Bookmark size={18} fill="currentColor" />

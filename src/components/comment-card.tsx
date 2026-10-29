@@ -1,5 +1,6 @@
 "use client";
 
+import { threadPath, threadUrl } from "@/lib/thread-url";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User } from "lucide-react";
@@ -121,7 +122,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
             exit={{ opacity: 0, x: -100, transition: { duration: 0.25 } }}
             whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
             className="px-4 py-3 select-text relative"
-            onMouseEnter={() => router.prefetch(`/thread/${thread.comment.commentId}/`)}
+            onMouseEnter={() => router.prefetch(threadPath(thread.comment.commentId))}
           >
             <div className="flex gap-3">
               <Link href={`/profile/${encodeURIComponent(thread.comment.author.channelId || "")}`} className="shrink-0" onClick={(e) => e.stopPropagation()}>
@@ -213,12 +214,12 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                       <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed" onClick={() => {
                         const sel = window.getSelection();
                         if (sel && sel.toString().length > 0) return;
-                        router.push(`/thread/${thread.comment.commentId}/`);
+                        router.push(threadPath(thread.comment.commentId));
                       }}>
                         <MentionText content={stripEditedTag(thread.comment.content)} videoId={videoId} />
                       </p>
                     )}
-                    <Link href={`/thread/${thread.comment.commentId}/`} className="block">
+                    <Link href={threadPath(thread.comment.commentId)} className="block">
                       <LinkCard text={thread.comment.content} />
                     </Link>
                     {showDetailTime && (
@@ -311,7 +312,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
 
                   <div onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center">
                     <ShareMenu
-                      url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${thread.comment.commentId}`}
+                      url={threadUrl(typeof window !== "undefined" ? window.location.origin : "", thread.comment.commentId)}
                       text={`${thread.comment.author.name}: ${thread.comment.content}`}
                       buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full"
                       extraLinks={[

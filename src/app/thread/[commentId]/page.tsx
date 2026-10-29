@@ -8,6 +8,7 @@ import { ThreadView } from "@/components/thread-view";
 import { buildReplyTree } from "@/lib/reply-tree";
 import { unwrapReplies } from "@/lib/youtube-comment-shape";
 import { pageMetadata } from "@/lib/page-metadata";
+import { threadPath } from "@/lib/thread-url";
 
 export async function generateMetadata({ params }: { params: Promise<{ commentId: string }> }): Promise<Metadata> {
   const segments = await params;
@@ -19,7 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ commentId
     select: { authorName: true, content: true },
   });
 
-  const path = `/thread/${encodeURIComponent(commentId)}/`;
+  // ドット入り（返信）IDは末尾スラッシュ付きだと 308 になるため helper で分岐
+  const path = threadPath(commentId);
 
   if (cached) {
     return pageMetadata({

@@ -1,3 +1,4 @@
+import { threadPath } from "@/lib/thread-url";
 import { onImgError } from "@/lib/img-fallback";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -115,7 +116,7 @@ export default async function EmbedPage({ params }: EmbedPageProps) {
               </span>
             </div>
             <Link
-              href={`/thread/${encodeURIComponent(commentId)}/`}
+              href={threadPath(encodeURIComponent(commentId))}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[13px] font-bold text-primary hover:underline"

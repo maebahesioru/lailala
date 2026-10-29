@@ -1,5 +1,6 @@
 "use client";
 
+import { threadPath, threadUrl } from "@/lib/thread-url";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User } from "lucide-react";
@@ -119,7 +120,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
     setTimeout(() => onDelete?.(reply.commentId), 300);
   };
 
-  const threadLink = `/thread/${reply.commentId}/`;
+  const threadLink = threadPath(reply.commentId);
 
   return (
     <>
@@ -132,7 +133,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
             exit={{ opacity: 0, x: -100, transition: { duration: 0.25 } }}
             whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
             className="px-4 py-3 select-text relative"
-            onMouseEnter={() => router.prefetch(`/thread/${reply.commentId}/`)}
+            onMouseEnter={() => router.prefetch(threadPath(reply.commentId))}
           >
             <div className="flex gap-3">
               <Link href={`/profile/${encodeURIComponent(reply.author.channelId || "")}`} className="shrink-0">
@@ -276,7 +277,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
 
                   <div onClick={(e) => e.stopPropagation()} className="flex-1 flex items-center justify-center">
                     <ShareMenu
-                      url={`${typeof window !== "undefined" ? window.location.origin : ""}/thread/${reply.commentId}`}
+                      url={threadUrl(typeof window !== "undefined" ? window.location.origin : "", reply.commentId)}
                       text={`${reply.author.name}: ${reply.content}`}
                       buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full"
                       extraLinks={[

@@ -1,4 +1,5 @@
 "use client";
+import { threadPath } from "@/lib/thread-url";
 import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect, use } from "react";
@@ -254,7 +255,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
             <article
               key={c.commentId}
               className="px-4 py-3 hover:bg-white/[0.03] transition-colors select-text cursor-pointer"
-              onClick={() => router.push(`/thread/${c.commentId}/`)}
+              onClick={() => router.push(threadPath(c.commentId))}
             >
               <div className="flex gap-3">
                 <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
