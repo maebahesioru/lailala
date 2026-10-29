@@ -83,7 +83,13 @@ export async function GET(req: NextRequest) {
     for (const t of comments.contents) {
       if (t.comment?.comment_id === commentId) { thread = t; break; }
     }
-    if (!thread) return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+    if (!thread) {
+      // 上流の英語メッセージをそのまま画面に出さない（他ルートと文言を揃える）
+      return NextResponse.json(
+        { error: "このコメントは取得できませんでした（非公開・削除の可能性があります）" },
+        { status: 404 }
+      );
+    }
 
     let replies: any[] = [];
     let replyError: string | null = null;

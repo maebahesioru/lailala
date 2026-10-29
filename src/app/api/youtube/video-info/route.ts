@@ -108,6 +108,19 @@ export async function GET(req: NextRequest) {
       subscriberCount,
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed" }, { status: 500 });
+    const raw = e?.message || "";
+    // 上流の生メッセージ（"This video is unavailable" 等）を 500 で返すと
+    // UI に英語のまま出るので、原因別に振り分けて日本語で返す。
+    if (/unavailable|private|removed|did not have any content|no longer available/i.test(raw)) {
+      return NextResponse.json(
+        { error: "この動画は取得できませんでした（非公開・削除・地域制限の可能性があります）" },
+        { status: 404 }
+      );
+    }
+    console.error("[video-info] failed:", raw);
+    return NextResponse.json(
+      { error: "動画情報の取得に失敗しました。時間をおいて再試行してください。" },
+      { status: 502 }
+    );
   }
 }

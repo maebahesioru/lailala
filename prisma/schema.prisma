@@ -114,6 +114,7 @@ model CommentCache {
   @@index([videoId, likeCount])
   @@index([videoId, publishedAt])
   @@index([publishedAt])
+  @@index([likeCount])
   @@index([authorChannelId])
   @@index([parentCommentId])
   @@map("comment_cache")
