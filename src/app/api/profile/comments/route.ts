@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { intParam } from "@/lib/query-params";
+import { internalError } from "@/lib/api-error";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const channelId = searchParams.get("channelId");
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = Math.min(parseInt(searchParams.get("limit") || "20", 10), 50);
+  const page = intParam(searchParams, "page", 1, 1);
+  const limit = intParam(searchParams, "limit", 20, 1, 50);
   const type = searchParams.get("type") || "all"; // 'comment' | 'reply' | 'likes' | 'dislikes' | 'bookmarks'
 
   if (!channelId) {
@@ -111,7 +113,7 @@ export async function GET(req: NextRequest) {
       page,
       totalPages: Math.ceil(total / limit),
     });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to fetch profile comments" }, { status: 500 });
+  } catch (e) {
+    return internalError("api/profile/comments", e);
   }
 }

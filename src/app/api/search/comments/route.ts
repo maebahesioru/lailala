@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { intParam } from "@/lib/query-params";
+import { internalError } from "@/lib/api-error";
 
 function getRelativeTimeString(date: Date): string {
   const now = new Date();
@@ -24,9 +26,9 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
   const type = searchParams.get("type") || "top";
-  const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 200);
+  const limit = intParam(searchParams, "limit", 50, 1, 200);
   const period = searchParams.get("period") || "all"; // today / week / month / all
-  const minLikes = parseInt(searchParams.get("minLikes") || "0", 10);
+  const minLikes = intParam(searchParams, "minLikes", 0, 0);
   const sort = searchParams.get("sort") || "relevance"; // relevance / newest / likes
   const userFilter = searchParams.get("user") || ""; // channelId or author name
 
@@ -153,8 +155,8 @@ export async function GET(req: NextRequest) {
     }));
 
     return NextResponse.json({ threads });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed" }, { status: 500 });
+  } catch (e) {
+    return internalError("api/search/comments", e);
   }
 }
 

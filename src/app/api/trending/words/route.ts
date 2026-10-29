@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getInnertube } from "@/lib/youtube";
+import { intParam } from "@/lib/query-params";
+import { internalError } from "@/lib/api-error";
 
 const VIDEO_ID = "niKAylKNIEI";
 
@@ -44,7 +46,7 @@ function simpleExtract(contents: string[]): TrendWord[] {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const hours = parseInt(searchParams.get("hours") || "168", 10);
+  const hours = intParam(searchParams, "hours", 168, 1, 24 * 30);
   const since = new Date(Date.now() - hours * 60 * 60 * 1000);
 
   try {
@@ -69,7 +71,7 @@ export async function GET(req: NextRequest) {
 
     const words = simpleExtract(contents);
     return NextResponse.json({ words, total: contents.length });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e) {
+    return internalError("api/trending/words", e);
   }
 }

@@ -3,6 +3,8 @@ import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { markNotificationsAsRead } from "@/lib/notifications";
+import { intParam } from "@/lib/query-params";
+import { internalError } from "@/lib/api-error";
 
 // GET: fetch notifications (app + YouTube)
 export async function GET(req: NextRequest) {
@@ -11,8 +13,8 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const type = searchParams.get("type"); // 'all' | 'mentions'
-  const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 100);
-  const offset = parseInt(searchParams.get("offset") || "0", 10);
+  const limit = intParam(searchParams, "limit", 50, 1, 100);
+  const offset = intParam(searchParams, "offset", 0, 0);
 
   try {
     const where: any = { userId };
@@ -78,8 +80,8 @@ export async function GET(req: NextRequest) {
       total,
       unreadCount: unreadCount + youtubeNotifications.length,
     });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e) {
+    return internalError("api/notifications", e);
   }
 }
 
@@ -105,8 +107,8 @@ export async function PATCH(req: NextRequest) {
 
     const unreadCount = await prisma.notification.count({ where: { userId, isRead: false } });
     return NextResponse.json({ success: true, unreadCount });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e) {
+    return internalError("api/notifications", e);
   }
 }
 
@@ -133,7 +135,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e) {
+    return internalError("api/notifications", e);
   }
 }
