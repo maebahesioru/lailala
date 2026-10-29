@@ -142,7 +142,11 @@ function SearchContent() {
         setResults(mapped);
         setHasMore(!!data.hasMore);
       } else if (tab === "accounts") {
-        const r = await fetch(`/api/search/comments/?q=${encodeURIComponent(q)}&type=accounts`);
+        // 期間・最低いいねはアカウントタブでも有効にする（以前は画面に出ているのに無視されていた）
+        const accParams = new URLSearchParams({ q, type: "accounts" });
+        if (period !== "all") accParams.set("period", period);
+        if (minLikes > 0) accParams.set("minLikes", String(minLikes));
+        const r = await fetch(`/api/search/comments/?${accParams.toString()}`);
         const data = await r.json();
         setAccounts(data.accounts || []);
       } else if (tab === "lists") {
@@ -408,6 +412,7 @@ function SearchContent() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="コメントを検索"
+                maxLength={100}
                 className="w-full bg-card text-foreground rounded-full py-2.5 pl-10 pr-10 outline-none focus:ring-2 focus:ring-primary placeholder-muted border border-border"
                 autoFocus
               />
@@ -431,8 +436,8 @@ function SearchContent() {
             </button>
           </div>
 
-          {/* Advanced Filters Panel */}
-          {showFilters && (
+          {/* Advanced Filters Panel（リストタブは期間などを解釈しないので出さない） */}
+          {showFilters && activeTab !== "lists" && (
             <div className="px-4 pb-4 border-b border-border space-y-4">
               {/* Period */}
               <div>

@@ -50,6 +50,8 @@ function isStatementTimeout(error: unknown): boolean {
   return message.includes("statement timeout") || message.includes("57014");
 }
 
+const MAX_QUERY_LENGTH = 100;
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
@@ -63,6 +65,23 @@ export async function GET(req: NextRequest) {
   const minLikes = intParam(searchParams, "minLikes", 0, 0, 10_000_000);
   const sort = searchParams.get("sort") || "relevance"; // relevance / newest / likes
   const userFilter = searchParams.get("user") || ""; // channelId or author name
+
+  // 検索語が長すぎると ILIKE の全件走査で 3 秒の statement_timeout に達し、
+  // 利用者には「検索に時間がかかりすぎました」(503) という無関係なエラーが返る。
+  // さらに数千文字を超えると URL 自体が大きすぎて proxy が 431 を返す。
+  // 実用上の上限を作り、意味の通る 400 で返す。
+  if (q.length > MAX_QUERY_LENGTH) {
+    return NextResponse.json(
+      { error: `検索語が長すぎます（${MAX_QUERY_LENGTH}文字以内にしてください）。` },
+      { status: 400 }
+    );
+  }
+  if (userFilter.length > MAX_QUERY_LENGTH) {
+    return NextResponse.json(
+      { error: `ユーザー指定が長すぎます（${MAX_QUERY_LENGTH}文字以内にしてください）。` },
+      { status: 400 }
+    );
+  }
 
   if (!q.trim() && !userFilter.trim()) {
     return NextResponse.json({ threads: [] });
@@ -91,9 +110,13 @@ export async function GET(req: NextRequest) {
     }
 
     if (type === "accounts") {
+      // 高度な検索の「期間」「最低いいね」はアカウントタブでも表示されているのに
+      // これまで完全に無視されていた（画面では絞り込み済みに見える）。
       const comments = await withSearchTimeout<AccountRow[]>((tx) => tx.commentCache.findMany({
         where: {
           authorName: { contains: escapeLike(q), mode: "insensitive" },
+          ...(minLikes > 0 ? { likeCount: { gte: minLikes } } : {}),
+          ...(Object.keys(dateFilter).length > 0 ? { publishedAt: dateFilter } : {}),
           ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
         },
         select: { authorChannelId: true, authorName: true, authorThumb: true },
