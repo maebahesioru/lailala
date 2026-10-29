@@ -89,14 +89,32 @@ async function cacheVideoComments(videoId: string, maxItems?: number) {
         }
       }
 
-      // Batch upsert all at once
-      if (operations.length > 0) {
-        for (const op of operations) {
-          await prisma.commentCache.upsert({
-            where: { commentId: op.commentId },
-            update: { content: op.content, likeCount: op.likeCount, replyCount: op.replyCount, authorName: op.authorName, authorChannelId: op.authorChannelId, authorThumb: op.authorThumb, publishedAt: op.publishedAt, parentCommentId: op.parentCommentId },
-            create: op,
-          });
+      // 1件ずつ upsert すると数千回のラウンドトリップになり、接続プールを
+      // 長時間占有して P2024（connection pool timeout）を誘発していた。
+      // 50件ずつのトランザクションにまとめ、プール枯渇時は1回だけ再試行する。
+      const CHUNK = 50;
+      for (let i = 0; i < operations.length; i += CHUNK) {
+        const chunk = operations.slice(i, i + CHUNK);
+        const run = () =>
+          prisma.$transaction(
+            chunk.map((op: any) =>
+              prisma.commentCache.upsert({
+                where: { commentId: op.commentId },
+                update: { content: op.content, likeCount: op.likeCount, replyCount: op.replyCount, authorName: op.authorName, authorChannelId: op.authorChannelId, authorThumb: op.authorThumb, publishedAt: op.publishedAt, parentCommentId: op.parentCommentId },
+                create: op,
+              })
+            ) as any,
+            { timeout: 30_000 }
+          );
+        try {
+          await run();
+        } catch (e: any) {
+          if (e?.code === "P2024") {
+            await new Promise((r) => setTimeout(r, 1_000));
+            await run();
+          } else {
+            throw e;
+          }
         }
       }
     };
