@@ -6,6 +6,16 @@ interface HeatmapData {
   [date: string]: number;
 }
 
+// ローカル（=ブラウザのタイムゾーン）の暦日を "YYYY-MM-DD" にする。
+// toISOString() は UTC に直すため、JST の 0:00 が前日扱いになり
+// ヒートマップが丸一日ずれて表示されていた。
+function localDateKey(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 function getYearGrid(): string[][] {
   const weeks: string[][] = [];
   const today = new Date();
@@ -16,7 +26,7 @@ function getYearGrid(): string[][] {
 
   let currentWeek: string[] = [];
   for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
-    const iso = d.toISOString().split("T")[0];
+    const iso = localDateKey(d);
     currentWeek.push(iso);
     if (d.getDay() === 6) {
       weeks.push(currentWeek);
@@ -46,6 +56,8 @@ export function ContributionHeatmap({ channelId, authorName }: { channelId: stri
     const url = new URL(`/api/profile/heatmap/`, window.location.origin);
     url.searchParams.set("channelId", channelId);
     if (authorName) url.searchParams.set("authorName", authorName);
+    // API 側も同じ暦日でバケツ分けする（既定は JST 540 分）
+    url.searchParams.set("tzOffset", String(-new Date().getTimezoneOffset()));
     fetch(url.toString())
       .then((r) => r.json())
       .then((res) => {

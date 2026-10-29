@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { internalError } from "@/lib/api-error";
+import { intParam } from "@/lib/query-params";
 
 // 1 人が 13 万行のうち何割を占めるかは分からないので、集計対象に上限を置く。
 // （無制限だと、たくさん書き込む配信者 1 人で毎リクエスト数秒かかる）
@@ -10,6 +11,8 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const channelId = searchParams.get("channelId");
   const authorName = searchParams.get("authorName");
+  // 分単位のタイムゾーンオフセット（JST = 540）。既定は JST。
+  const tzOffset = intParam(searchParams, "tzOffset", 540, -720, 840);
   if (!channelId) return NextResponse.json({ error: "channelId required" }, { status: 400 });
 
   const map = new Map<string, number>();
@@ -31,7 +34,10 @@ export async function GET(req: NextRequest) {
     }
 
     for (const c of comments) {
-      const key = c.publishedAt.toISOString().split("T")[0];
+      // 暦日はクライアントと同じタイムゾーンで切る。
+      // toISOString() は UTC なので、JST の 0:00〜8:59 の投稿が前日に数えられていた。
+      const shifted = new Date(c.publishedAt.getTime() + tzOffset * 60_000);
+      const key = shifted.toISOString().slice(0, 10);
       map.set(key, (map.get(key) || 0) + 1);
     }
 
