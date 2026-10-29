@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare, Music, Bell } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
@@ -238,7 +239,7 @@ export function Sidebar() {
                   className="flex items-center gap-3 px-3 py-3 rounded-full hover:bg-white/10 transition-colors w-full"
                 >
                   {user.image ? (
-                    <img src={user.image} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
+                    <img onError={onImgError} src={user.image} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
                       <User size={20} className="text-muted" />
@@ -277,7 +278,7 @@ export function Sidebar() {
                               }`}
                             >
                               {account.image ? (
-                                <img src={account.image} alt="" className="w-6 h-6 rounded-full object-cover" />
+                                <img onError={onImgError} src={account.image} alt="" className="w-6 h-6 rounded-full object-cover" />
                               ) : (
                                 <div className="w-6 h-6 rounded-full bg-border flex items-center justify-center">
                                   <User size={14} className="text-muted" />

@@ -1,3 +1,4 @@
+import { onImgError } from "@/lib/img-fallback";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -71,7 +72,7 @@ export default async function EmbedPage({ params }: EmbedPageProps) {
           {/* Header: author */}
           <div className="flex items-center gap-3 p-4">
             {cached.authorThumb ? (
-              <img
+              <img onError={onImgError}
                 src={cached.authorThumb}
                 alt={cached.authorName}
                 width={40}

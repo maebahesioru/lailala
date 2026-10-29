@@ -12,6 +12,8 @@ export const metadata: Metadata = pageMetadata({
 export default function PopularPage() {
   return (
     <MainLayout>
+      {/* 見出しが1つも無いページだったので、読み上げ用の h1 を置く */}
+      <h1 className="sr-only">人気のコメント</h1>
       <CommentFeed videoId="niKAylKNIEI" defaultSort="TOP_COMMENTS" />
     </MainLayout>
   );

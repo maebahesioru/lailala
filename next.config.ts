@@ -32,6 +32,14 @@ const nextConfig: NextConfig = {
         source: "/embed/:path*",
         headers: common,
       },
+      {
+        // OGP 画像などは max-age=0 で毎回取り直していた。
+        // 内容が変わらない静的アセットなので長期キャッシュさせる。
+        source: "/(og-image.png|apple-touch-icon.png|favicon.svg|manifest.json|sw.js)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+        ],
+      },
     ];
   },
   async redirects() {

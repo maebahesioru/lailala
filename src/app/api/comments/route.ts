@@ -145,6 +145,9 @@ export async function GET(req: NextRequest) {
   const videoId = searchParams.get("videoId");
   const sortBy = (searchParams.get("sortBy") as "TOP_COMMENTS" | "NEWEST_FIRST") || "TOP_COMMENTS";
   const continuationToken = searchParams.get("continuationToken");
+  // 1年フィルタは既定でオフ。以前は既定で掛けていたため、上位100件のうち
+  // 65% が理由も表示されずに消えていた。filter=year を明示した時だけ絞る。
+  const filterYear = searchParams.get("filter") === "year";
 
   if (!videoId) {
     return NextResponse.json({ error: "videoId required" }, { status: 400 });
@@ -202,7 +205,7 @@ export async function GET(req: NextRequest) {
         .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)
         .map(parseCommentThread)
         .filter(Boolean)
-        .filter((t: any) => !isOlderThanOneYear(t.comment.publishedTime));
+        .filter((t: any) => !filterYear || !isOlderThanOneYear(t.comment.publishedTime));
 
       nextToken = page.continuation_token;
       hasContinuation = page.has_continuation && !!nextToken;
@@ -213,7 +216,7 @@ export async function GET(req: NextRequest) {
         .filter((thread: any) => thread.comment != null && !thread.comment.is_pinned)
         .map(parseCommentThread)
         .filter(Boolean)
-        .filter((t: any) => !isOlderThanOneYear(t.comment.publishedTime));
+        .filter((t: any) => !filterYear || !isOlderThanOneYear(t.comment.publishedTime));
 
       nextToken = comments.continuation_token;
       hasContinuation = comments.has_continuation && !!nextToken;

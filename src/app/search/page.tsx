@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -58,6 +59,9 @@ function SearchContent() {
   const [listResults, setListResults] = useState<ListResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  // 50件で頭打ちになっていたので「もっと見る」で継ぎ足せるようにする
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [trendWords, setTrendWords] = useState<TrendWord[]>([]);
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const [listening, setListening] = useState(false);
@@ -136,6 +140,7 @@ function SearchContent() {
           videoId: t.videoId || "niKAylKNIEI",
         }));
         setResults(mapped);
+        setHasMore(!!data.hasMore);
       } else if (tab === "accounts") {
         const r = await fetch(`/api/search/comments/?q=${encodeURIComponent(q)}&type=accounts`);
         const data = await r.json();
@@ -150,6 +155,37 @@ function SearchContent() {
     } finally {
       setLoading(false);
       setSearched(true);
+    }
+  };
+
+  const loadMoreResults = async () => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    try {
+      const params = new URLSearchParams();
+      if (query.trim()) params.set("q", query.trim());
+      params.set("type", activeTab);
+      if (period !== "all") params.set("period", period);
+      if (minLikes > 0) params.set("minLikes", String(minLikes));
+      if (sortBy !== "relevance") params.set("sort", sortBy);
+      if (userFilter.trim()) params.set("user", userFilter.trim());
+      params.set("offset", String(results.length));
+      const r = await fetch(`/api/search/comments/?${params.toString()}`);
+      const data = await r.json();
+      const mapped = (data.threads || []).map((t: any) => ({
+        thread: {
+          comment: t.comment,
+          replies: t.replies,
+          hasRepliesContinuation: t.hasRepliesContinuation,
+        } as CommentThread,
+        videoId: t.videoId || "niKAylKNIEI",
+      }));
+      setResults((prev) => [...prev, ...mapped]);
+      setHasMore(!!data.hasMore);
+    } catch {
+      // ignore
+    } finally {
+      setLoadingMore(false);
     }
   };
 
@@ -269,6 +305,18 @@ function SearchContent() {
           {results.map(({ thread, videoId }) => (
             <CommentCard key={thread.comment.commentId} thread={thread} videoId={videoId} voteCounts={{ likes: 0, dislikes: 0 }} />
           ))}
+          {hasMore && (
+            <div className="p-4 flex justify-center border-t border-border">
+              <button
+                type="button"
+                onClick={loadMoreResults}
+                disabled={loadingMore}
+                className="px-6 py-2.5 rounded-full border border-border text-primary font-bold hover:bg-primary/10 transition-colors disabled:opacity-50"
+              >
+                {loadingMore ? "読み込み中…" : "もっと見る"}
+              </button>
+            </div>
+          )}
         </div>
       );
     }
@@ -291,7 +339,7 @@ function SearchContent() {
               className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors"
             >
               {acc.authorThumb ? (
-                <img src={acc.authorThumb} alt="" className="w-12 h-12 rounded-full object-cover" />
+                <img onError={onImgError} src={acc.authorThumb} alt="" className="w-12 h-12 rounded-full object-cover" />
               ) : (
                 <div className="w-12 h-12 rounded-full bg-border flex items-center justify-center">
                   <User size={24} className="text-muted" />
@@ -347,6 +395,7 @@ function SearchContent() {
 
   return (
     <MainLayout>
+      <h1 className="sr-only">検索</h1>
       <div className="flex-1 flex flex-col">
         <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
           <div className="flex items-center gap-3 px-4 py-3">
@@ -541,7 +590,7 @@ function SearchContent() {
             {/* Video Info - mobile visible (hidden on lg since widgets-panel shows it) */}
             {videoInfo && (
               <div className="bg-card rounded-2xl border border-border overflow-hidden lg:hidden">
-                <img src={videoInfo.thumbnail} alt={videoInfo.title} width={320} height={180} className="w-full aspect-video object-cover" />
+                <img onError={onImgError} src={videoInfo.thumbnail} alt={videoInfo.title} width={320} height={180} className="w-full aspect-video object-cover" />
                 <div className="p-4">
                   <h3 className="font-bold text-[15px] leading-snug mb-1 line-clamp-2">{videoInfo.title}</h3>
                   <p className="text-muted text-[13px] mb-3">{videoInfo.author}</p>

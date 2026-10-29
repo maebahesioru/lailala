@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { Search, ThumbsUp, ThumbsDown, Eye, Clock, MessageSquare, TrendingUp, Mic, MicOff, X, Calendar, Users } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -175,7 +176,7 @@ export function WidgetsPanel() {
 
       {videoInfo && (
         <div className="bg-card rounded-2xl border border-border overflow-hidden">
-          <img src={videoInfo.thumbnail} alt={videoInfo.title} width={320} height={180} className="w-full aspect-video object-cover" />
+          <img onError={onImgError} src={videoInfo.thumbnail} alt={videoInfo.title} width={320} height={180} className="w-full aspect-video object-cover" />
           <div className="p-4">
             <h3 className="font-bold text-[15px] leading-snug mb-1 line-clamp-2">{videoInfo.title}</h3>
             <p className="text-muted text-[13px] mb-3">{videoInfo.author}</p>

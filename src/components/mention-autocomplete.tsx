@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { User } from "lucide-react";
@@ -106,7 +107,7 @@ export function MentionAutocomplete({ textareaRef, text, onSelect }: MentionAuto
           className={`flex items-center gap-3 w-full px-4 py-2.5 text-left hover:bg-white/5 transition-colors ${i === index ? "bg-white/5" : ""}`}
         >
           {u.image ? (
-            <img src={u.image} alt="" className="w-8 h-8 rounded-full object-cover" />
+            <img onError={onImgError} src={u.image} alt="" className="w-8 h-8 rounded-full object-cover" />
           ) : (
             <div className="w-8 h-8 rounded-full bg-border flex items-center justify-center">
               <User size={16} className="text-muted" />

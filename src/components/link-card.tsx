@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect } from "react";
 import { Link2, Loader2 } from "lucide-react";
@@ -48,7 +49,7 @@ export function LinkCard({ text }: { text: string }) {
     >
       {ogp.image && (
         <div className="w-full h-32 bg-background relative">
-          <img src={ogp.image} alt="" className="w-full h-full object-cover" loading="lazy" />
+          <img onError={onImgError} src={ogp.image} alt="" className="w-full h-full object-cover" loading="lazy" />
         </div>
       )}
       <div className="p-3">

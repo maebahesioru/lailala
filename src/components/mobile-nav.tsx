@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { Home, Search, List, User, Music, Bell, Bookmark, Settings, X, PenSquare, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -180,7 +181,7 @@ export function MobileNav() {
                           }`}
                         >
                           {account.image ? (
-                            <img src={account.image} alt="" className="w-6 h-6 rounded-full object-cover" />
+                            <img onError={onImgError} src={account.image} alt="" className="w-6 h-6 rounded-full object-cover" />
                           ) : (
                             <div className="w-6 h-6 rounded-full bg-border flex items-center justify-center">
                               <User size={14} className="text-muted" />
@@ -201,7 +202,7 @@ export function MobileNav() {
                   </button>
                   <div className="flex items-center gap-3">
                     {user.image ? (
-                      <img src={user.image} alt="" className="w-10 h-10 rounded-full object-cover" />
+                      <img onError={onImgError} src={user.image} alt="" className="w-10 h-10 rounded-full object-cover" />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
                         <User size={20} className="text-muted" />

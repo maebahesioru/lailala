@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -52,7 +53,7 @@ export default function MyProfilePage() {
       <div className="px-4 py-6 border-b border-border">
         <div className="flex items-center gap-4">
           {user?.image ? (
-            <img src={user.image} alt={user.name || ""} width={80} height={80} className="w-20 h-20 rounded-full object-cover border border-border" />
+            <img onError={onImgError} src={user.image} alt={user.name || ""} width={80} height={80} className="w-20 h-20 rounded-full object-cover border border-border" />
           ) : (
             <div className="w-20 h-20 rounded-full bg-border flex items-center justify-center">
               <User size={32} className="text-muted" />
@@ -110,7 +111,7 @@ export default function MyProfilePage() {
               <div className="flex gap-3">
                 <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
                   {user?.image ? (
-                    <img src={user.image} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                    <img onError={onImgError} src={user.image} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
                       <User size={20} className="text-muted" />

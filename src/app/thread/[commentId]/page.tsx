@@ -201,6 +201,7 @@ export default async function ThreadPage({ params }: PageProps) {
 
   return (
     <MainLayout>
+      <h1 className="sr-only">{parent.author.name}さんのコメント</h1>
       <ThreadView
         parent={parent}
         highlightedReply={highlightedReply}

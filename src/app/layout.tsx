@@ -65,7 +65,8 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/favicon.svg",
-    apple: "/favicon.svg",
+    // iOS は SVG の apple-touch-icon を読まないため PNG(180x180) を別途用意する
+    apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.json",
   appleWebApp: {

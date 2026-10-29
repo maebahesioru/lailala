@@ -23,16 +23,28 @@ const parseReply = (r: any) => ({
   isHearted: r.is_hearted || false,
 });
 
-function extractContinuationToken(memo: any): string | null {
-  const cont = memo?.getType(YTNodes.ContinuationItem)?.[0];
-  if (!cont) return null;
+function tokenOf(cont: any): string | null {
   // 返信の続きは「もっと見る」ボタンの endpoint に載ることが多く、
   // continuationEndpoint 側は payload が空のことがある。両方見る。
-  const endpoints = [(cont as any).endpoint, (cont as any).button?.endpoint];
+  const endpoints = [cont?.endpoint, cont?.button?.endpoint];
   for (const ep of endpoints) {
     const payload = ep?.payload;
     const token = payload?.continuationCommand?.token || payload?.token;
     if (typeof token === "string" && token.length > 0) return token;
+  }
+  return null;
+}
+
+function extractContinuationToken(memo: any): string | null {
+  const conts: any[] = memo?.getType(YTNodes.ContinuationItem) ?? [];
+  // getType は入れ子も含めて全部拾う。返信ページでは
+  // 「各返信の中にある孫返信の続き（短いトークン）」と
+  // 「ページ全体の続き（長いトークン・末尾に付く）」が混在するので、
+  // 末尾から探して最初に見つかったものをページの続きとして扱う。
+  // 先頭を掴むと 3 ページ目で打ち切られる（実測: 21件で停止）。
+  for (let i = conts.length - 1; i >= 0; i--) {
+    const token = tokenOf(conts[i]);
+    if (token) return token;
   }
   return null;
 }

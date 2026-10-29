@@ -12,6 +12,7 @@ export const metadata: Metadata = pageMetadata({
 export default function LatestPage() {
   return (
     <MainLayout>
+      <h1 className="sr-only">新着コメント</h1>
       <CommentFeed videoId="niKAylKNIEI" defaultSort="NEWEST_FIRST" />
     </MainLayout>
   );

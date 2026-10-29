@@ -55,6 +55,7 @@ export async function GET(req: NextRequest) {
   const q = searchParams.get("q") || "";
   const type = searchParams.get("type") || "top";
   const limit = intParam(searchParams, "limit", 50, 1, 200);
+  const offset = intParam(searchParams, "offset", 0, 0, 100_000);
   const period = searchParams.get("period") || "all"; // today / week / month / all
   // minLikes は上限を明示する。intParam の既定上限は MAX_SAFE_INTEGER なので
   // それだと PostgreSQL の int4 範囲外になり Prisma が落ちて 500 になっていた
@@ -160,6 +161,7 @@ export async function GET(req: NextRequest) {
         where,
         orderBy,
         take: limit,
+        skip: offset,
       })
     );
 
@@ -187,7 +189,9 @@ export async function GET(req: NextRequest) {
       videoId: c.videoId,
     }));
 
-    return NextResponse.json({ threads });
+    // 50件で打ち切られていたので、続きがあるかを返して
+    // UI 側が「もっと見る」を出せるようにする。
+    return NextResponse.json({ threads, hasMore: comments.length === limit, offset });
   } catch (e) {
     if (isStatementTimeout(e)) {
       return NextResponse.json(

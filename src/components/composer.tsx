@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "./auth-provider";
@@ -131,7 +132,7 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
     <div className="px-4 py-3 border-b border-[#2f3336]">
       <div className="flex gap-3">
         {user.image ? (
-          <img src={user.image} alt={user.name || "User"} width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
+          <img onError={onImgError} src={user.image} alt={user.name || "User"} width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
         ) : (
           <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
             <User size={20} className="text-muted" />

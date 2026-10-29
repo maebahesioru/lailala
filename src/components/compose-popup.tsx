@@ -1,4 +1,5 @@
 "use client";
+import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -319,7 +320,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
         <div className="p-4">
           <div className="flex gap-3">
             {user.image ? (
-              <img src={user.image} alt={user.name || "User"} width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
+              <img onError={onImgError} src={user.image} alt={user.name || "User"} width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0" />
             ) : (
               <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0">
                 <User size={20} className="text-muted" />

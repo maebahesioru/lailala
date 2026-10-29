@@ -246,6 +246,11 @@ export function ThreadView({
         )}
       </div>
 
+      {!continuationToken && replies.length > 0 && (
+        <div className="p-4 text-center text-[12px] text-muted border-t border-border">
+          返信はここまでです（YouTube 側で公開されている範囲をすべて表示しました）
+        </div>
+      )}
       {continuationToken && (
         <div className="p-6 text-center border-t border-border">
           <motion.button
