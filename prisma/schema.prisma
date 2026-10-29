@@ -127,6 +127,22 @@ model CommentCache {
   @@map("comment_cache")
 }
 
+/// YouTube コメントの全件同期の進捗（続きトークンを保持して再デプロイ後も再開できる）
+model CommentSyncState {
+  id        String   @id @default(cuid())
+  videoId   String   @map("video_id")
+  sortBy    String   @default("NEWEST_FIRST") @map("sort_by")
+  token     String?  @db.Text
+  pages     Int      @default(0)
+  comments  Int      @default(0)
+  done      Boolean  @default(false)
+  lastError String?  @map("last_error") @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([videoId, sortBy])
+  @@map("comment_sync_state")
+}
+
 model Bookmark {
   id          String   @id @default(cuid())
   userId      String   @map("user_id")

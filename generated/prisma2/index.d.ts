@@ -39,6 +39,11 @@ export type UserAction = $Result.DefaultSelection<Prisma.$UserActionPayload>
  */
 export type CommentCache = $Result.DefaultSelection<Prisma.$CommentCachePayload>
 /**
+ * Model CommentSyncState
+ * YouTube コメントの全件同期の進捗（続きトークンを保持して再デプロイ後も再開できる）
+ */
+export type CommentSyncState = $Result.DefaultSelection<Prisma.$CommentSyncStatePayload>
+/**
  * Model Bookmark
  * 
  */
@@ -271,6 +276,16 @@ export class PrismaClient<
     * ```
     */
   get commentCache(): Prisma.CommentCacheDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.commentSyncState`: Exposes CRUD operations for the **CommentSyncState** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CommentSyncStates
+    * const commentSyncStates = await prisma.commentSyncState.findMany()
+    * ```
+    */
+  get commentSyncState(): Prisma.CommentSyncStateDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.bookmark`: Exposes CRUD operations for the **Bookmark** model.
@@ -847,6 +862,7 @@ export namespace Prisma {
     CommentLike: 'CommentLike',
     UserAction: 'UserAction',
     CommentCache: 'CommentCache',
+    CommentSyncState: 'CommentSyncState',
     Bookmark: 'Bookmark',
     List: 'List',
     ListItem: 'ListItem',
@@ -878,7 +894,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "mutedWord" | "ogpCache" | "scheduledPost" | "notification" | "notificationSetting" | "pushSubscription"
+      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "commentSyncState" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "mutedWord" | "ogpCache" | "scheduledPost" | "notification" | "notificationSetting" | "pushSubscription"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1249,6 +1265,80 @@ export namespace Prisma {
           count: {
             args: Prisma.CommentCacheCountArgs<ExtArgs>
             result: $Utils.Optional<CommentCacheCountAggregateOutputType> | number
+          }
+        }
+      }
+      CommentSyncState: {
+        payload: Prisma.$CommentSyncStatePayload<ExtArgs>
+        fields: Prisma.CommentSyncStateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CommentSyncStateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CommentSyncStateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>
+          }
+          findFirst: {
+            args: Prisma.CommentSyncStateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CommentSyncStateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>
+          }
+          findMany: {
+            args: Prisma.CommentSyncStateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>[]
+          }
+          create: {
+            args: Prisma.CommentSyncStateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>
+          }
+          createMany: {
+            args: Prisma.CommentSyncStateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CommentSyncStateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>[]
+          }
+          delete: {
+            args: Prisma.CommentSyncStateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>
+          }
+          update: {
+            args: Prisma.CommentSyncStateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>
+          }
+          deleteMany: {
+            args: Prisma.CommentSyncStateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CommentSyncStateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CommentSyncStateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>[]
+          }
+          upsert: {
+            args: Prisma.CommentSyncStateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentSyncStatePayload>
+          }
+          aggregate: {
+            args: Prisma.CommentSyncStateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCommentSyncState>
+          }
+          groupBy: {
+            args: Prisma.CommentSyncStateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CommentSyncStateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CommentSyncStateCountArgs<ExtArgs>
+            result: $Utils.Optional<CommentSyncStateCountAggregateOutputType> | number
           }
         }
       }
@@ -2315,6 +2405,7 @@ export namespace Prisma {
     commentLike?: CommentLikeOmit
     userAction?: UserActionOmit
     commentCache?: CommentCacheOmit
+    commentSyncState?: CommentSyncStateOmit
     bookmark?: BookmarkOmit
     list?: ListOmit
     listItem?: ListItemOmit
@@ -8541,6 +8632,1091 @@ export namespace Prisma {
      * Omit specific fields from the CommentCache
      */
     omit?: CommentCacheOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CommentSyncState
+   */
+
+  export type AggregateCommentSyncState = {
+    _count: CommentSyncStateCountAggregateOutputType | null
+    _avg: CommentSyncStateAvgAggregateOutputType | null
+    _sum: CommentSyncStateSumAggregateOutputType | null
+    _min: CommentSyncStateMinAggregateOutputType | null
+    _max: CommentSyncStateMaxAggregateOutputType | null
+  }
+
+  export type CommentSyncStateAvgAggregateOutputType = {
+    pages: number | null
+    comments: number | null
+  }
+
+  export type CommentSyncStateSumAggregateOutputType = {
+    pages: number | null
+    comments: number | null
+  }
+
+  export type CommentSyncStateMinAggregateOutputType = {
+    id: string | null
+    videoId: string | null
+    sortBy: string | null
+    token: string | null
+    pages: number | null
+    comments: number | null
+    done: boolean | null
+    lastError: string | null
+    updatedAt: Date | null
+  }
+
+  export type CommentSyncStateMaxAggregateOutputType = {
+    id: string | null
+    videoId: string | null
+    sortBy: string | null
+    token: string | null
+    pages: number | null
+    comments: number | null
+    done: boolean | null
+    lastError: string | null
+    updatedAt: Date | null
+  }
+
+  export type CommentSyncStateCountAggregateOutputType = {
+    id: number
+    videoId: number
+    sortBy: number
+    token: number
+    pages: number
+    comments: number
+    done: number
+    lastError: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CommentSyncStateAvgAggregateInputType = {
+    pages?: true
+    comments?: true
+  }
+
+  export type CommentSyncStateSumAggregateInputType = {
+    pages?: true
+    comments?: true
+  }
+
+  export type CommentSyncStateMinAggregateInputType = {
+    id?: true
+    videoId?: true
+    sortBy?: true
+    token?: true
+    pages?: true
+    comments?: true
+    done?: true
+    lastError?: true
+    updatedAt?: true
+  }
+
+  export type CommentSyncStateMaxAggregateInputType = {
+    id?: true
+    videoId?: true
+    sortBy?: true
+    token?: true
+    pages?: true
+    comments?: true
+    done?: true
+    lastError?: true
+    updatedAt?: true
+  }
+
+  export type CommentSyncStateCountAggregateInputType = {
+    id?: true
+    videoId?: true
+    sortBy?: true
+    token?: true
+    pages?: true
+    comments?: true
+    done?: true
+    lastError?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CommentSyncStateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CommentSyncState to aggregate.
+     */
+    where?: CommentSyncStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommentSyncStates to fetch.
+     */
+    orderBy?: CommentSyncStateOrderByWithRelationInput | CommentSyncStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CommentSyncStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommentSyncStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommentSyncStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CommentSyncStates
+    **/
+    _count?: true | CommentSyncStateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CommentSyncStateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CommentSyncStateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CommentSyncStateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CommentSyncStateMaxAggregateInputType
+  }
+
+  export type GetCommentSyncStateAggregateType<T extends CommentSyncStateAggregateArgs> = {
+        [P in keyof T & keyof AggregateCommentSyncState]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCommentSyncState[P]>
+      : GetScalarType<T[P], AggregateCommentSyncState[P]>
+  }
+
+
+
+
+  export type CommentSyncStateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommentSyncStateWhereInput
+    orderBy?: CommentSyncStateOrderByWithAggregationInput | CommentSyncStateOrderByWithAggregationInput[]
+    by: CommentSyncStateScalarFieldEnum[] | CommentSyncStateScalarFieldEnum
+    having?: CommentSyncStateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CommentSyncStateCountAggregateInputType | true
+    _avg?: CommentSyncStateAvgAggregateInputType
+    _sum?: CommentSyncStateSumAggregateInputType
+    _min?: CommentSyncStateMinAggregateInputType
+    _max?: CommentSyncStateMaxAggregateInputType
+  }
+
+  export type CommentSyncStateGroupByOutputType = {
+    id: string
+    videoId: string
+    sortBy: string
+    token: string | null
+    pages: number
+    comments: number
+    done: boolean
+    lastError: string | null
+    updatedAt: Date
+    _count: CommentSyncStateCountAggregateOutputType | null
+    _avg: CommentSyncStateAvgAggregateOutputType | null
+    _sum: CommentSyncStateSumAggregateOutputType | null
+    _min: CommentSyncStateMinAggregateOutputType | null
+    _max: CommentSyncStateMaxAggregateOutputType | null
+  }
+
+  type GetCommentSyncStateGroupByPayload<T extends CommentSyncStateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CommentSyncStateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CommentSyncStateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CommentSyncStateGroupByOutputType[P]>
+            : GetScalarType<T[P], CommentSyncStateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CommentSyncStateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    videoId?: boolean
+    sortBy?: boolean
+    token?: boolean
+    pages?: boolean
+    comments?: boolean
+    done?: boolean
+    lastError?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["commentSyncState"]>
+
+  export type CommentSyncStateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    videoId?: boolean
+    sortBy?: boolean
+    token?: boolean
+    pages?: boolean
+    comments?: boolean
+    done?: boolean
+    lastError?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["commentSyncState"]>
+
+  export type CommentSyncStateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    videoId?: boolean
+    sortBy?: boolean
+    token?: boolean
+    pages?: boolean
+    comments?: boolean
+    done?: boolean
+    lastError?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["commentSyncState"]>
+
+  export type CommentSyncStateSelectScalar = {
+    id?: boolean
+    videoId?: boolean
+    sortBy?: boolean
+    token?: boolean
+    pages?: boolean
+    comments?: boolean
+    done?: boolean
+    lastError?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CommentSyncStateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "videoId" | "sortBy" | "token" | "pages" | "comments" | "done" | "lastError" | "updatedAt", ExtArgs["result"]["commentSyncState"]>
+
+  export type $CommentSyncStatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CommentSyncState"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      videoId: string
+      sortBy: string
+      token: string | null
+      pages: number
+      comments: number
+      done: boolean
+      lastError: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["commentSyncState"]>
+    composites: {}
+  }
+
+  type CommentSyncStateGetPayload<S extends boolean | null | undefined | CommentSyncStateDefaultArgs> = $Result.GetResult<Prisma.$CommentSyncStatePayload, S>
+
+  type CommentSyncStateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CommentSyncStateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CommentSyncStateCountAggregateInputType | true
+    }
+
+  export interface CommentSyncStateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CommentSyncState'], meta: { name: 'CommentSyncState' } }
+    /**
+     * Find zero or one CommentSyncState that matches the filter.
+     * @param {CommentSyncStateFindUniqueArgs} args - Arguments to find a CommentSyncState
+     * @example
+     * // Get one CommentSyncState
+     * const commentSyncState = await prisma.commentSyncState.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CommentSyncStateFindUniqueArgs>(args: SelectSubset<T, CommentSyncStateFindUniqueArgs<ExtArgs>>): Prisma__CommentSyncStateClient<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CommentSyncState that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CommentSyncStateFindUniqueOrThrowArgs} args - Arguments to find a CommentSyncState
+     * @example
+     * // Get one CommentSyncState
+     * const commentSyncState = await prisma.commentSyncState.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CommentSyncStateFindUniqueOrThrowArgs>(args: SelectSubset<T, CommentSyncStateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommentSyncStateClient<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CommentSyncState that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentSyncStateFindFirstArgs} args - Arguments to find a CommentSyncState
+     * @example
+     * // Get one CommentSyncState
+     * const commentSyncState = await prisma.commentSyncState.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CommentSyncStateFindFirstArgs>(args?: SelectSubset<T, CommentSyncStateFindFirstArgs<ExtArgs>>): Prisma__CommentSyncStateClient<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CommentSyncState that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentSyncStateFindFirstOrThrowArgs} args - Arguments to find a CommentSyncState
+     * @example
+     * // Get one CommentSyncState
+     * const commentSyncState = await prisma.commentSyncState.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CommentSyncStateFindFirstOrThrowArgs>(args?: SelectSubset<T, CommentSyncStateFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommentSyncStateClient<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CommentSyncStates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentSyncStateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CommentSyncStates
+     * const commentSyncStates = await prisma.commentSyncState.findMany()
+     * 
+     * // Get first 10 CommentSyncStates
+     * const commentSyncStates = await prisma.commentSyncState.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const commentSyncStateWithIdOnly = await prisma.commentSyncState.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CommentSyncStateFindManyArgs>(args?: SelectSubset<T, CommentSyncStateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CommentSyncState.
+     * @param {CommentSyncStateCreateArgs} args - Arguments to create a CommentSyncState.
+     * @example
+     * // Create one CommentSyncState
+     * const CommentSyncState = await prisma.commentSyncState.create({
+     *   data: {
+     *     // ... data to create a CommentSyncState
+     *   }
+     * })
+     * 
+     */
+    create<T extends CommentSyncStateCreateArgs>(args: SelectSubset<T, CommentSyncStateCreateArgs<ExtArgs>>): Prisma__CommentSyncStateClient<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CommentSyncStates.
+     * @param {CommentSyncStateCreateManyArgs} args - Arguments to create many CommentSyncStates.
+     * @example
+     * // Create many CommentSyncStates
+     * const commentSyncState = await prisma.commentSyncState.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CommentSyncStateCreateManyArgs>(args?: SelectSubset<T, CommentSyncStateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CommentSyncStates and returns the data saved in the database.
+     * @param {CommentSyncStateCreateManyAndReturnArgs} args - Arguments to create many CommentSyncStates.
+     * @example
+     * // Create many CommentSyncStates
+     * const commentSyncState = await prisma.commentSyncState.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CommentSyncStates and only return the `id`
+     * const commentSyncStateWithIdOnly = await prisma.commentSyncState.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CommentSyncStateCreateManyAndReturnArgs>(args?: SelectSubset<T, CommentSyncStateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CommentSyncState.
+     * @param {CommentSyncStateDeleteArgs} args - Arguments to delete one CommentSyncState.
+     * @example
+     * // Delete one CommentSyncState
+     * const CommentSyncState = await prisma.commentSyncState.delete({
+     *   where: {
+     *     // ... filter to delete one CommentSyncState
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CommentSyncStateDeleteArgs>(args: SelectSubset<T, CommentSyncStateDeleteArgs<ExtArgs>>): Prisma__CommentSyncStateClient<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CommentSyncState.
+     * @param {CommentSyncStateUpdateArgs} args - Arguments to update one CommentSyncState.
+     * @example
+     * // Update one CommentSyncState
+     * const commentSyncState = await prisma.commentSyncState.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CommentSyncStateUpdateArgs>(args: SelectSubset<T, CommentSyncStateUpdateArgs<ExtArgs>>): Prisma__CommentSyncStateClient<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CommentSyncStates.
+     * @param {CommentSyncStateDeleteManyArgs} args - Arguments to filter CommentSyncStates to delete.
+     * @example
+     * // Delete a few CommentSyncStates
+     * const { count } = await prisma.commentSyncState.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CommentSyncStateDeleteManyArgs>(args?: SelectSubset<T, CommentSyncStateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CommentSyncStates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentSyncStateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CommentSyncStates
+     * const commentSyncState = await prisma.commentSyncState.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CommentSyncStateUpdateManyArgs>(args: SelectSubset<T, CommentSyncStateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CommentSyncStates and returns the data updated in the database.
+     * @param {CommentSyncStateUpdateManyAndReturnArgs} args - Arguments to update many CommentSyncStates.
+     * @example
+     * // Update many CommentSyncStates
+     * const commentSyncState = await prisma.commentSyncState.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CommentSyncStates and only return the `id`
+     * const commentSyncStateWithIdOnly = await prisma.commentSyncState.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CommentSyncStateUpdateManyAndReturnArgs>(args: SelectSubset<T, CommentSyncStateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CommentSyncState.
+     * @param {CommentSyncStateUpsertArgs} args - Arguments to update or create a CommentSyncState.
+     * @example
+     * // Update or create a CommentSyncState
+     * const commentSyncState = await prisma.commentSyncState.upsert({
+     *   create: {
+     *     // ... data to create a CommentSyncState
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CommentSyncState we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CommentSyncStateUpsertArgs>(args: SelectSubset<T, CommentSyncStateUpsertArgs<ExtArgs>>): Prisma__CommentSyncStateClient<$Result.GetResult<Prisma.$CommentSyncStatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CommentSyncStates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentSyncStateCountArgs} args - Arguments to filter CommentSyncStates to count.
+     * @example
+     * // Count the number of CommentSyncStates
+     * const count = await prisma.commentSyncState.count({
+     *   where: {
+     *     // ... the filter for the CommentSyncStates we want to count
+     *   }
+     * })
+    **/
+    count<T extends CommentSyncStateCountArgs>(
+      args?: Subset<T, CommentSyncStateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CommentSyncStateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CommentSyncState.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentSyncStateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CommentSyncStateAggregateArgs>(args: Subset<T, CommentSyncStateAggregateArgs>): Prisma.PrismaPromise<GetCommentSyncStateAggregateType<T>>
+
+    /**
+     * Group by CommentSyncState.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentSyncStateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CommentSyncStateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CommentSyncStateGroupByArgs['orderBy'] }
+        : { orderBy?: CommentSyncStateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CommentSyncStateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCommentSyncStateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CommentSyncState model
+   */
+  readonly fields: CommentSyncStateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CommentSyncState.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CommentSyncStateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CommentSyncState model
+   */
+  interface CommentSyncStateFieldRefs {
+    readonly id: FieldRef<"CommentSyncState", 'String'>
+    readonly videoId: FieldRef<"CommentSyncState", 'String'>
+    readonly sortBy: FieldRef<"CommentSyncState", 'String'>
+    readonly token: FieldRef<"CommentSyncState", 'String'>
+    readonly pages: FieldRef<"CommentSyncState", 'Int'>
+    readonly comments: FieldRef<"CommentSyncState", 'Int'>
+    readonly done: FieldRef<"CommentSyncState", 'Boolean'>
+    readonly lastError: FieldRef<"CommentSyncState", 'String'>
+    readonly updatedAt: FieldRef<"CommentSyncState", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CommentSyncState findUnique
+   */
+  export type CommentSyncStateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentSyncState to fetch.
+     */
+    where: CommentSyncStateWhereUniqueInput
+  }
+
+  /**
+   * CommentSyncState findUniqueOrThrow
+   */
+  export type CommentSyncStateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentSyncState to fetch.
+     */
+    where: CommentSyncStateWhereUniqueInput
+  }
+
+  /**
+   * CommentSyncState findFirst
+   */
+  export type CommentSyncStateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentSyncState to fetch.
+     */
+    where?: CommentSyncStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommentSyncStates to fetch.
+     */
+    orderBy?: CommentSyncStateOrderByWithRelationInput | CommentSyncStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CommentSyncStates.
+     */
+    cursor?: CommentSyncStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommentSyncStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommentSyncStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommentSyncStates.
+     */
+    distinct?: CommentSyncStateScalarFieldEnum | CommentSyncStateScalarFieldEnum[]
+  }
+
+  /**
+   * CommentSyncState findFirstOrThrow
+   */
+  export type CommentSyncStateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentSyncState to fetch.
+     */
+    where?: CommentSyncStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommentSyncStates to fetch.
+     */
+    orderBy?: CommentSyncStateOrderByWithRelationInput | CommentSyncStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CommentSyncStates.
+     */
+    cursor?: CommentSyncStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommentSyncStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommentSyncStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommentSyncStates.
+     */
+    distinct?: CommentSyncStateScalarFieldEnum | CommentSyncStateScalarFieldEnum[]
+  }
+
+  /**
+   * CommentSyncState findMany
+   */
+  export type CommentSyncStateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentSyncStates to fetch.
+     */
+    where?: CommentSyncStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommentSyncStates to fetch.
+     */
+    orderBy?: CommentSyncStateOrderByWithRelationInput | CommentSyncStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CommentSyncStates.
+     */
+    cursor?: CommentSyncStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommentSyncStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommentSyncStates.
+     */
+    skip?: number
+    distinct?: CommentSyncStateScalarFieldEnum | CommentSyncStateScalarFieldEnum[]
+  }
+
+  /**
+   * CommentSyncState create
+   */
+  export type CommentSyncStateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a CommentSyncState.
+     */
+    data: XOR<CommentSyncStateCreateInput, CommentSyncStateUncheckedCreateInput>
+  }
+
+  /**
+   * CommentSyncState createMany
+   */
+  export type CommentSyncStateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CommentSyncStates.
+     */
+    data: CommentSyncStateCreateManyInput | CommentSyncStateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CommentSyncState createManyAndReturn
+   */
+  export type CommentSyncStateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * The data used to create many CommentSyncStates.
+     */
+    data: CommentSyncStateCreateManyInput | CommentSyncStateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CommentSyncState update
+   */
+  export type CommentSyncStateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a CommentSyncState.
+     */
+    data: XOR<CommentSyncStateUpdateInput, CommentSyncStateUncheckedUpdateInput>
+    /**
+     * Choose, which CommentSyncState to update.
+     */
+    where: CommentSyncStateWhereUniqueInput
+  }
+
+  /**
+   * CommentSyncState updateMany
+   */
+  export type CommentSyncStateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CommentSyncStates.
+     */
+    data: XOR<CommentSyncStateUpdateManyMutationInput, CommentSyncStateUncheckedUpdateManyInput>
+    /**
+     * Filter which CommentSyncStates to update
+     */
+    where?: CommentSyncStateWhereInput
+    /**
+     * Limit how many CommentSyncStates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommentSyncState updateManyAndReturn
+   */
+  export type CommentSyncStateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * The data used to update CommentSyncStates.
+     */
+    data: XOR<CommentSyncStateUpdateManyMutationInput, CommentSyncStateUncheckedUpdateManyInput>
+    /**
+     * Filter which CommentSyncStates to update
+     */
+    where?: CommentSyncStateWhereInput
+    /**
+     * Limit how many CommentSyncStates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommentSyncState upsert
+   */
+  export type CommentSyncStateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the CommentSyncState to update in case it exists.
+     */
+    where: CommentSyncStateWhereUniqueInput
+    /**
+     * In case the CommentSyncState found by the `where` argument doesn't exist, create a new CommentSyncState with this data.
+     */
+    create: XOR<CommentSyncStateCreateInput, CommentSyncStateUncheckedCreateInput>
+    /**
+     * In case the CommentSyncState was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CommentSyncStateUpdateInput, CommentSyncStateUncheckedUpdateInput>
+  }
+
+  /**
+   * CommentSyncState delete
+   */
+  export type CommentSyncStateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
+    /**
+     * Filter which CommentSyncState to delete.
+     */
+    where: CommentSyncStateWhereUniqueInput
+  }
+
+  /**
+   * CommentSyncState deleteMany
+   */
+  export type CommentSyncStateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CommentSyncStates to delete
+     */
+    where?: CommentSyncStateWhereInput
+    /**
+     * Limit how many CommentSyncStates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommentSyncState without action
+   */
+  export type CommentSyncStateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentSyncState
+     */
+    select?: CommentSyncStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentSyncState
+     */
+    omit?: CommentSyncStateOmit<ExtArgs> | null
   }
 
 
@@ -22794,6 +23970,21 @@ export namespace Prisma {
   export type CommentCacheScalarFieldEnum = (typeof CommentCacheScalarFieldEnum)[keyof typeof CommentCacheScalarFieldEnum]
 
 
+  export const CommentSyncStateScalarFieldEnum: {
+    id: 'id',
+    videoId: 'videoId',
+    sortBy: 'sortBy',
+    token: 'token',
+    pages: 'pages',
+    comments: 'comments',
+    done: 'done',
+    lastError: 'lastError',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CommentSyncStateScalarFieldEnum = (typeof CommentSyncStateScalarFieldEnum)[keyof typeof CommentSyncStateScalarFieldEnum]
+
+
   export const BookmarkScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -23503,6 +24694,81 @@ export namespace Prisma {
     parentCommentId?: StringNullableWithAggregatesFilter<"CommentCache"> | string | null
     publishedAt?: DateTimeWithAggregatesFilter<"CommentCache"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CommentCache"> | Date | string
+  }
+
+  export type CommentSyncStateWhereInput = {
+    AND?: CommentSyncStateWhereInput | CommentSyncStateWhereInput[]
+    OR?: CommentSyncStateWhereInput[]
+    NOT?: CommentSyncStateWhereInput | CommentSyncStateWhereInput[]
+    id?: StringFilter<"CommentSyncState"> | string
+    videoId?: StringFilter<"CommentSyncState"> | string
+    sortBy?: StringFilter<"CommentSyncState"> | string
+    token?: StringNullableFilter<"CommentSyncState"> | string | null
+    pages?: IntFilter<"CommentSyncState"> | number
+    comments?: IntFilter<"CommentSyncState"> | number
+    done?: BoolFilter<"CommentSyncState"> | boolean
+    lastError?: StringNullableFilter<"CommentSyncState"> | string | null
+    updatedAt?: DateTimeFilter<"CommentSyncState"> | Date | string
+  }
+
+  export type CommentSyncStateOrderByWithRelationInput = {
+    id?: SortOrder
+    videoId?: SortOrder
+    sortBy?: SortOrder
+    token?: SortOrderInput | SortOrder
+    pages?: SortOrder
+    comments?: SortOrder
+    done?: SortOrder
+    lastError?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CommentSyncStateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    videoId_sortBy?: CommentSyncStateVideoIdSortByCompoundUniqueInput
+    AND?: CommentSyncStateWhereInput | CommentSyncStateWhereInput[]
+    OR?: CommentSyncStateWhereInput[]
+    NOT?: CommentSyncStateWhereInput | CommentSyncStateWhereInput[]
+    videoId?: StringFilter<"CommentSyncState"> | string
+    sortBy?: StringFilter<"CommentSyncState"> | string
+    token?: StringNullableFilter<"CommentSyncState"> | string | null
+    pages?: IntFilter<"CommentSyncState"> | number
+    comments?: IntFilter<"CommentSyncState"> | number
+    done?: BoolFilter<"CommentSyncState"> | boolean
+    lastError?: StringNullableFilter<"CommentSyncState"> | string | null
+    updatedAt?: DateTimeFilter<"CommentSyncState"> | Date | string
+  }, "id" | "videoId_sortBy">
+
+  export type CommentSyncStateOrderByWithAggregationInput = {
+    id?: SortOrder
+    videoId?: SortOrder
+    sortBy?: SortOrder
+    token?: SortOrderInput | SortOrder
+    pages?: SortOrder
+    comments?: SortOrder
+    done?: SortOrder
+    lastError?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: CommentSyncStateCountOrderByAggregateInput
+    _avg?: CommentSyncStateAvgOrderByAggregateInput
+    _max?: CommentSyncStateMaxOrderByAggregateInput
+    _min?: CommentSyncStateMinOrderByAggregateInput
+    _sum?: CommentSyncStateSumOrderByAggregateInput
+  }
+
+  export type CommentSyncStateScalarWhereWithAggregatesInput = {
+    AND?: CommentSyncStateScalarWhereWithAggregatesInput | CommentSyncStateScalarWhereWithAggregatesInput[]
+    OR?: CommentSyncStateScalarWhereWithAggregatesInput[]
+    NOT?: CommentSyncStateScalarWhereWithAggregatesInput | CommentSyncStateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CommentSyncState"> | string
+    videoId?: StringWithAggregatesFilter<"CommentSyncState"> | string
+    sortBy?: StringWithAggregatesFilter<"CommentSyncState"> | string
+    token?: StringNullableWithAggregatesFilter<"CommentSyncState"> | string | null
+    pages?: IntWithAggregatesFilter<"CommentSyncState"> | number
+    comments?: IntWithAggregatesFilter<"CommentSyncState"> | number
+    done?: BoolWithAggregatesFilter<"CommentSyncState"> | boolean
+    lastError?: StringNullableWithAggregatesFilter<"CommentSyncState"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CommentSyncState"> | Date | string
   }
 
   export type BookmarkWhereInput = {
@@ -24892,6 +26158,90 @@ export namespace Prisma {
     replyCount?: IntFieldUpdateOperationsInput | number
     parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommentSyncStateCreateInput = {
+    id?: string
+    videoId: string
+    sortBy?: string
+    token?: string | null
+    pages?: number
+    comments?: number
+    done?: boolean
+    lastError?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type CommentSyncStateUncheckedCreateInput = {
+    id?: string
+    videoId: string
+    sortBy?: string
+    token?: string | null
+    pages?: number
+    comments?: number
+    done?: boolean
+    lastError?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type CommentSyncStateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    sortBy?: StringFieldUpdateOperationsInput | string
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: IntFieldUpdateOperationsInput | number
+    comments?: IntFieldUpdateOperationsInput | number
+    done?: BoolFieldUpdateOperationsInput | boolean
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommentSyncStateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    sortBy?: StringFieldUpdateOperationsInput | string
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: IntFieldUpdateOperationsInput | number
+    comments?: IntFieldUpdateOperationsInput | number
+    done?: BoolFieldUpdateOperationsInput | boolean
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommentSyncStateCreateManyInput = {
+    id?: string
+    videoId: string
+    sortBy?: string
+    token?: string | null
+    pages?: number
+    comments?: number
+    done?: boolean
+    lastError?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type CommentSyncStateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    sortBy?: StringFieldUpdateOperationsInput | string
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: IntFieldUpdateOperationsInput | number
+    comments?: IntFieldUpdateOperationsInput | number
+    done?: BoolFieldUpdateOperationsInput | boolean
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommentSyncStateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    videoId?: StringFieldUpdateOperationsInput | string
+    sortBy?: StringFieldUpdateOperationsInput | string
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: IntFieldUpdateOperationsInput | number
+    comments?: IntFieldUpdateOperationsInput | number
+    done?: BoolFieldUpdateOperationsInput | boolean
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26306,6 +27656,57 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type CommentSyncStateVideoIdSortByCompoundUniqueInput = {
+    videoId: string
+    sortBy: string
+  }
+
+  export type CommentSyncStateCountOrderByAggregateInput = {
+    id?: SortOrder
+    videoId?: SortOrder
+    sortBy?: SortOrder
+    token?: SortOrder
+    pages?: SortOrder
+    comments?: SortOrder
+    done?: SortOrder
+    lastError?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CommentSyncStateAvgOrderByAggregateInput = {
+    pages?: SortOrder
+    comments?: SortOrder
+  }
+
+  export type CommentSyncStateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    videoId?: SortOrder
+    sortBy?: SortOrder
+    token?: SortOrder
+    pages?: SortOrder
+    comments?: SortOrder
+    done?: SortOrder
+    lastError?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CommentSyncStateMinOrderByAggregateInput = {
+    id?: SortOrder
+    videoId?: SortOrder
+    sortBy?: SortOrder
+    token?: SortOrder
+    pages?: SortOrder
+    comments?: SortOrder
+    done?: SortOrder
+    lastError?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CommentSyncStateSumOrderByAggregateInput = {
+    pages?: SortOrder
+    comments?: SortOrder
   }
 
   export type BookmarkFolderNullableScalarRelationFilter = {

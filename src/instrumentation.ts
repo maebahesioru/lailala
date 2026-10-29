@@ -7,6 +7,12 @@ export async function register() {
     if (process.env.NODE_ENV !== "development") {
       const { startCommentCacheWorker } = await import("@/lib/comment-cache-worker");
       startCommentCacheWorker();
+
+      // YouTube のコメントを最後まで辿る全件同期（続きトークンを DB に保存して再開可能）
+      if (process.env.COMMENT_SYNC_ENABLED !== "false") {
+        const { startCommentSyncWorker } = await import("@/lib/comment-sync-worker");
+        startCommentSyncWorker();
+      }
     }
   }
 }
