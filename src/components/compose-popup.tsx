@@ -304,7 +304,7 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
         >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-          <button onClick={handleClose} className="p-2 rounded-full hover:bg-white/10 text-muted">
+          <button onClick={handleClose} aria-label="閉じる" className="p-2 rounded-full hover:bg-white/10 text-muted">
             <X size={20} />
           </button>
           <div className="flex items-center gap-2">
