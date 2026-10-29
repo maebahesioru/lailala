@@ -54,6 +54,7 @@ export function DonationPopup() {
               </div>
               <button
                 onClick={() => setShow(false)}
+                aria-label="閉じる"
                 className="p-1.5 rounded-full hover:bg-white/10 text-muted transition-colors"
               >
                 <X size={18} />

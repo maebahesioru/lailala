@@ -293,6 +293,9 @@ model Notification {
   videoId         String   @map("video_id")
   content         String?  @db.Text
   isRead          Boolean  @default(false) @map("is_read")
+  // 「同じ相手・同じ対象」の通知を 24 時間で 1 件に固定するためのキー。
+  // アプリ側の findFirst だけだと同時実行で二重に入るため、DB のユニーク制約で担保する。
+  dedupeKey       String?  @unique @map("dedupe_key")
   createdAt       DateTime @default(now()) @map("created_at")
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

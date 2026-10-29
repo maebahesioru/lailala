@@ -19428,6 +19428,7 @@ export namespace Prisma {
     videoId: string | null
     content: string | null
     isRead: boolean | null
+    dedupeKey: string | null
     createdAt: Date | null
   }
 
@@ -19442,6 +19443,7 @@ export namespace Prisma {
     videoId: string | null
     content: string | null
     isRead: boolean | null
+    dedupeKey: string | null
     createdAt: Date | null
   }
 
@@ -19456,6 +19458,7 @@ export namespace Prisma {
     videoId: number
     content: number
     isRead: number
+    dedupeKey: number
     createdAt: number
     _all: number
   }
@@ -19472,6 +19475,7 @@ export namespace Prisma {
     videoId?: true
     content?: true
     isRead?: true
+    dedupeKey?: true
     createdAt?: true
   }
 
@@ -19486,6 +19490,7 @@ export namespace Prisma {
     videoId?: true
     content?: true
     isRead?: true
+    dedupeKey?: true
     createdAt?: true
   }
 
@@ -19500,6 +19505,7 @@ export namespace Prisma {
     videoId?: true
     content?: true
     isRead?: true
+    dedupeKey?: true
     createdAt?: true
     _all?: true
   }
@@ -19587,6 +19593,7 @@ export namespace Prisma {
     videoId: string
     content: string | null
     isRead: boolean
+    dedupeKey: string | null
     createdAt: Date
     _count: NotificationCountAggregateOutputType | null
     _min: NotificationMinAggregateOutputType | null
@@ -19618,6 +19625,7 @@ export namespace Prisma {
     videoId?: boolean
     content?: boolean
     isRead?: boolean
+    dedupeKey?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
@@ -19633,6 +19641,7 @@ export namespace Prisma {
     videoId?: boolean
     content?: boolean
     isRead?: boolean
+    dedupeKey?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
@@ -19648,6 +19657,7 @@ export namespace Prisma {
     videoId?: boolean
     content?: boolean
     isRead?: boolean
+    dedupeKey?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
@@ -19663,10 +19673,11 @@ export namespace Prisma {
     videoId?: boolean
     content?: boolean
     isRead?: boolean
+    dedupeKey?: boolean
     createdAt?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "actorName" | "actorChannelId" | "actorThumb" | "commentId" | "videoId" | "content" | "isRead" | "createdAt", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "actorName" | "actorChannelId" | "actorThumb" | "commentId" | "videoId" | "content" | "isRead" | "dedupeKey" | "createdAt", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -19693,6 +19704,7 @@ export namespace Prisma {
       videoId: string
       content: string | null
       isRead: boolean
+      dedupeKey: string | null
       createdAt: Date
     }, ExtArgs["result"]["notification"]>
     composites: {}
@@ -20128,6 +20140,7 @@ export namespace Prisma {
     readonly videoId: FieldRef<"Notification", 'String'>
     readonly content: FieldRef<"Notification", 'String'>
     readonly isRead: FieldRef<"Notification", 'Boolean'>
+    readonly dedupeKey: FieldRef<"Notification", 'String'>
     readonly createdAt: FieldRef<"Notification", 'DateTime'>
   }
     
@@ -22922,6 +22935,7 @@ export namespace Prisma {
     videoId: 'videoId',
     content: 'content',
     isRead: 'isRead',
+    dedupeKey: 'dedupeKey',
     createdAt: 'createdAt'
   };
 
@@ -24169,6 +24183,7 @@ export namespace Prisma {
     videoId?: StringFilter<"Notification"> | string
     content?: StringNullableFilter<"Notification"> | string | null
     isRead?: BoolFilter<"Notification"> | boolean
+    dedupeKey?: StringNullableFilter<"Notification"> | string | null
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -24184,12 +24199,14 @@ export namespace Prisma {
     videoId?: SortOrder
     content?: SortOrderInput | SortOrder
     isRead?: SortOrder
+    dedupeKey?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
   export type NotificationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    dedupeKey?: string
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
@@ -24204,7 +24221,7 @@ export namespace Prisma {
     isRead?: BoolFilter<"Notification"> | boolean
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+  }, "id" | "dedupeKey">
 
   export type NotificationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -24217,6 +24234,7 @@ export namespace Prisma {
     videoId?: SortOrder
     content?: SortOrderInput | SortOrder
     isRead?: SortOrder
+    dedupeKey?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: NotificationCountOrderByAggregateInput
     _max?: NotificationMaxOrderByAggregateInput
@@ -24237,6 +24255,7 @@ export namespace Prisma {
     videoId?: StringWithAggregatesFilter<"Notification"> | string
     content?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     isRead?: BoolWithAggregatesFilter<"Notification"> | boolean
+    dedupeKey?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
@@ -25589,6 +25608,7 @@ export namespace Prisma {
     videoId: string
     content?: string | null
     isRead?: boolean
+    dedupeKey?: string | null
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutNotificationsInput
   }
@@ -25604,6 +25624,7 @@ export namespace Prisma {
     videoId: string
     content?: string | null
     isRead?: boolean
+    dedupeKey?: string | null
     createdAt?: Date | string
   }
 
@@ -25617,6 +25638,7 @@ export namespace Prisma {
     videoId?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
   }
@@ -25632,6 +25654,7 @@ export namespace Prisma {
     videoId?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -25646,6 +25669,7 @@ export namespace Prisma {
     videoId: string
     content?: string | null
     isRead?: boolean
+    dedupeKey?: string | null
     createdAt?: Date | string
   }
 
@@ -25659,6 +25683,7 @@ export namespace Prisma {
     videoId?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -25673,6 +25698,7 @@ export namespace Prisma {
     videoId?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26686,6 +26712,7 @@ export namespace Prisma {
     videoId?: SortOrder
     content?: SortOrder
     isRead?: SortOrder
+    dedupeKey?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -26700,6 +26727,7 @@ export namespace Prisma {
     videoId?: SortOrder
     content?: SortOrder
     isRead?: SortOrder
+    dedupeKey?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -26714,6 +26742,7 @@ export namespace Prisma {
     videoId?: SortOrder
     content?: SortOrder
     isRead?: SortOrder
+    dedupeKey?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -28069,6 +28098,7 @@ export namespace Prisma {
     videoId: string
     content?: string | null
     isRead?: boolean
+    dedupeKey?: string | null
     createdAt?: Date | string
   }
 
@@ -28082,6 +28112,7 @@ export namespace Prisma {
     videoId: string
     content?: string | null
     isRead?: boolean
+    dedupeKey?: string | null
     createdAt?: Date | string
   }
 
@@ -28426,6 +28457,7 @@ export namespace Prisma {
     videoId?: StringFilter<"Notification"> | string
     content?: StringNullableFilter<"Notification"> | string | null
     isRead?: BoolFilter<"Notification"> | boolean
+    dedupeKey?: StringNullableFilter<"Notification"> | string | null
     createdAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
@@ -30683,6 +30715,7 @@ export namespace Prisma {
     videoId: string
     content?: string | null
     isRead?: boolean
+    dedupeKey?: string | null
     createdAt?: Date | string
   }
 
@@ -30925,6 +30958,7 @@ export namespace Prisma {
     videoId?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -30938,6 +30972,7 @@ export namespace Prisma {
     videoId?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -30951,6 +30986,7 @@ export namespace Prisma {
     videoId?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

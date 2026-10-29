@@ -299,6 +299,7 @@ exports.Prisma.NotificationScalarFieldEnum = {
   videoId: 'videoId',
   content: 'content',
   isRead: 'isRead',
+  dedupeKey: 'dedupeKey',
   createdAt: 'createdAt'
 };
 

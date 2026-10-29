@@ -84,9 +84,19 @@ function toJsonRow(c: {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId");
-  const requested = parseInt(searchParams.get("limit") || String(MAX_ROWS), 10);
+  // 以前は parseInt("abc")=NaN を「未指定」と同じ扱いにして MAX_ROWS へ
+  // フォールバックしていたため、limit=abc で全件（17MB・約5秒）が出ていた。
+  // 明示された値が壊れている場合は 400 にする。
+  const rawLimit = searchParams.get("limit");
+  const requested = rawLimit === null ? MAX_ROWS : Number(rawLimit);
+  if (rawLimit !== null && (!Number.isFinite(requested) || requested < 1)) {
+    return NextResponse.json(
+      { error: "limit には 1 以上の数値を指定してください。" },
+      { status: 400 }
+    );
+  }
   const limit = Math.min(
-    Number.isFinite(requested) && requested > 0 ? requested : MAX_ROWS,
+    Math.floor(requested),
     MAX_ROWS
   );
 

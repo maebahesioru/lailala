@@ -1,11 +1,13 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma2"
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma2"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pg_trgm]
 }
 
 model User {
@@ -114,8 +116,14 @@ model CommentCache {
   @@index([videoId, likeCount])
   @@index([videoId, publishedAt])
   @@index([publishedAt])
+  @@index([likeCount])
   @@index([authorChannelId])
   @@index([parentCommentId])
+  // 検索（ILIKE '%q%'）用の trigram インデックス。SQL ファイルで作っていたが
+  // `db push` が毎回落として起動のたびに再構築（135k行で約2分の停止）していたため、
+  // Prisma 管理下に移した。
+  @@index([content(ops: raw("gin_trgm_ops"))], type: Gin, map: "comment_cache_content_trgm_idx")
+  @@index([authorName(ops: raw("gin_trgm_ops"))], type: Gin, map: "comment_cache_author_name_trgm_idx")
   @@map("comment_cache")
 }
 
@@ -285,6 +293,9 @@ model Notification {
   videoId        String   @map("video_id")
   content        String?  @db.Text
   isRead         Boolean  @default(false) @map("is_read")
+  // 「同じ相手・同じ対象」の通知を 24 時間で 1 件に固定するためのキー。
+  // アプリ側の findFirst だけだと同時実行で二重に入るため、DB のユニーク制約で担保する。
+  dedupeKey      String?  @unique @map("dedupe_key")
   createdAt      DateTime @default(now()) @map("created_at")
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

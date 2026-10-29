@@ -3,6 +3,7 @@ import { getSessionUserId } from "@/lib/session";
 import { getInnertube, getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
+import { intParam } from "@/lib/query-params";
 import { z } from "zod";
 import { YT, YTNodes } from "youtubei.js";
 import { unwrapReplies } from "@/lib/youtube-comment-shape";
@@ -142,6 +143,34 @@ function filterBlockedThreads(threads: any[], blockedIds: Set<string>) {
 }
 
 // GET: コメント取得 (サーバーサイドプロキシ)
+// limit/offset を YouTube の1ページ（約20件）より細かく扱うための短期キャッシュ。
+// 同じページを offset 違いで何度も取り直すとその分だけ上流を叩いてしまうため、
+// 20 秒だけ本文を保持して切り出す。
+const PAGE_TTL_MS = 20_000;
+const PAGE_CACHE_MAX = 20;
+const pageCache = new Map<
+  string,
+  { threads: any[]; nextToken: string | null; hasContinuation: boolean; commentCount: string | null; expiresAt: number }
+>();
+
+function readPageCache(key: string) {
+  const entry = pageCache.get(key);
+  if (!entry) return null;
+  if (entry.expiresAt < Date.now()) {
+    pageCache.delete(key);
+    return null;
+  }
+  return entry;
+}
+
+function writePageCache(key: string, value: Omit<ReturnType<typeof readPageCache> & {}, "expiresAt">) {
+  if (pageCache.size >= PAGE_CACHE_MAX) {
+    const oldest = [...pageCache.entries()].sort((a, b) => a[1].expiresAt - b[1].expiresAt)[0];
+    if (oldest) pageCache.delete(oldest[0]);
+  }
+  pageCache.set(key, { ...(value as any), expiresAt: Date.now() + PAGE_TTL_MS });
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId");
@@ -159,6 +188,10 @@ export async function GET(req: NextRequest) {
   // 1年フィルタは既定でオフ。以前は既定で掛けていたため、上位100件のうち
   // 65% が理由も表示されずに消えていた。filter=year を明示した時だけ絞る。
   const filterYear = searchParams.get("filter") === "year";
+  // YouTube の1ページは約20件固定なので、以前は limit を無視して常に全件返していた
+  // （limit=1 でも19件）。limit と offset を実際に効かせる。
+  const limit = intParam(searchParams, "limit", 20, 1, 50);
+  const offset = intParam(searchParams, "offset", 0, 0, 500);
 
   if (!videoId) {
     return NextResponse.json({ error: "videoId required" }, { status: 400 });
@@ -274,10 +307,29 @@ export async function GET(req: NextRequest) {
 
     threads = filterBlockedThreads(threads, blockedIds);
 
+    // limit / offset を効かせる。1ページ分（約20件）を超えない範囲で切り出す。
+    const pageKey = `${videoId}:${sortBy}:${filterYear ? "y" : "a"}`;
+    if (!continuationToken) {
+      writePageCache(pageKey, { threads, nextToken: nextToken ?? null, hasContinuation, commentCount });
+    } else if (offset > 0) {
+      const cached = readPageCache(pageKey);
+      if (cached) {
+        threads = cached.threads;
+        nextToken = cached.nextToken;
+        hasContinuation = cached.hasContinuation;
+        commentCount = cached.commentCount;
+      }
+    }
+
+    const allThreads = threads;
+    const start = Math.min(offset, allThreads.length);
+    const visibleThreads = allThreads.slice(start, start + limit);
+    const hasMoreInPage = start + visibleThreads.length < allThreads.length;
+
     // Fire-and-forget: cache fetched comments to DB
     // （ポーリングのキャッシュヒット時は同じ行を書き直すだけなので省く）
     if (!servedFromPollCache) Promise.resolve().then(async () => {
-      for (const t of threads) {
+      for (const t of allThreads) {
         const c = t.comment;
         if (!c?.commentId) continue;
         try {
@@ -310,9 +362,10 @@ export async function GET(req: NextRequest) {
     }).catch((e) => { console.error(e); });
 
     return NextResponse.json({
-      threads,
-      hasContinuation,
+      threads: visibleThreads,
+      hasContinuation: hasContinuation || hasMoreInPage,
       continuationToken: nextToken,
+      nextOffset: hasMoreInPage ? start + visibleThreads.length : null,
       videoInfo: {
         commentCount: commentCount || "0",
       },

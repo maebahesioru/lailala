@@ -90,18 +90,38 @@ export async function createNotification(params: CreateNotificationParams) {
   if (preference === "none") return null;
   if (preference === "mentions" && params.type !== "reply" && params.type !== "mention") return null;
 
-  const notification = await prisma.notification.create({
-    data: {
-      userId: user.id,
-      type: params.type,
-      actorName: params.actorName,
-      actorChannelId: params.actorChannelId,
-      actorThumb: params.actorThumb,
-      commentId: params.commentId,
-      videoId: params.videoId,
-      content: params.content?.slice(0, 500),
-    },
-  });
+  // 24 時間窓の重複排除は、上の findFirst だけだと同時実行で 2 件入りうる。
+  // 日単位のバケットをキーにして DB のユニーク制約でも止める（後勝ちは捨てる）。
+  const dedupeKey =
+    params.dedupeWindowMs && params.dedupeWindowMs >= 86_400_000
+      ? [
+          user.id,
+          params.type,
+          params.actorChannelId ?? "",
+          params.commentId ?? "",
+          Math.floor(Date.now() / 86_400_000),
+        ].join(":")
+      : null;
+
+  let notification;
+  try {
+    notification = await prisma.notification.create({
+      data: {
+        userId: user.id,
+        type: params.type,
+        actorName: params.actorName,
+        actorChannelId: params.actorChannelId,
+        actorThumb: params.actorThumb,
+        commentId: params.commentId,
+        videoId: params.videoId,
+        content: params.content?.slice(0, 500),
+        dedupeKey,
+      },
+    });
+  } catch (e: any) {
+    if (e?.code === "P2002") return null; // 同じ窓の通知が既にある
+    throw e;
+  }
 
   // Check per-type push notification settings
   const shouldPush =

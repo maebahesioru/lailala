@@ -102,6 +102,18 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
+  // 3 文字未満かつ記号を含む検索語は、trigram 索引が効かず全件走査になる
+  // （実測: "a*" 6.0 秒 / "a@" 4.5 秒でいずれも 503）。原理的に速くできないため
+  // 「時間がかかりすぎました(503)」ではなく、意味の通る 400 で返す。
+  {
+    const trimmedQuery = q.trim();
+    if (trimmedQuery.length > 0 && trimmedQuery.length < 3 && /[^\p{L}\p{N}\s]/u.test(trimmedQuery)) {
+      return NextResponse.json(
+        { error: "記号を含む 2 文字以下の検索語は検索できません。3 文字以上で指定してください。" },
+        { status: 400 }
+      );
+    }
+  }
   if (userFilter.length > MAX_QUERY_LENGTH) {
     return NextResponse.json(
       { error: `ユーザー指定が長すぎます（${MAX_QUERY_LENGTH}文字以内にしてください）。` },
@@ -156,7 +168,10 @@ export async function GET(req: NextRequest) {
           ...(blockedIds.size > 0 ? { NOT: { authorChannelId: { in: Array.from(blockedIds) } } } : {}),
         },
         select: { authorChannelId: true, authorName: true, authorThumb: true },
-        orderBy: { publishedAt: "desc" },
+        // 並べ替えを外している。以前は publishedAt desc で 500 件に絞っていたが、
+        // これは「13万行を全部並べてから 500 件」に等しく、2文字検索だと
+        // statement_timeout(3秒) に当たって 503 になっていた。
+        // 並べ替えを外すと GIN(trgm) 索引で 500 件そろった時点で打ち切れる。
         take: 500,
       })));
 

@@ -15,7 +15,7 @@ import { ShareMenu } from "./share-menu";
 import { TweetMoreMenu } from "./tweet-more-menu";
 import { ConfirmDialog } from "./confirm-dialog";
 import { useDataSaver } from "./data-saver-provider";
-import { LinkCard } from "./link-card";
+import { LinkCard, hasLink } from "./link-card";
 
 interface CommentCardProps {
   thread: CommentThread;
@@ -219,9 +219,15 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         <MentionText content={stripEditedTag(thread.comment.content)} videoId={videoId} />
                       </p>
                     )}
-                    <Link href={threadPath(thread.comment.commentId)} className="block">
-                      <LinkCard text={thread.comment.content} />
-                    </Link>
+                    {hasLink(thread.comment.content) && (
+                      <Link
+                        href={threadPath(thread.comment.commentId)}
+                        className="block"
+                        aria-label={`${thread.comment.author.name} のコメントを開く`}
+                      >
+                        <LinkCard text={thread.comment.content} />
+                      </Link>
+                    )}
                     {showDetailTime && (
                       <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                     )}

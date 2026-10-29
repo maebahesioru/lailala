@@ -17,6 +17,10 @@ function extractUrls(text: string): string[] {
   return matches ? [...new Set(matches)] : [];
 }
 
+export function hasLink(text: string): boolean {
+  return extractUrls(text).length > 0;
+}
+
 export function LinkCard({ text }: { text: string }) {
   const [ogp, setOgp] = useState<OgpData | null>(null);
   const [loading, setLoading] = useState(false);
