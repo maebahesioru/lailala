@@ -71,12 +71,19 @@ async function retryOnceAfterPlanWarmup<T>(run: () => Promise<T>): Promise<T> {
 
 const MAX_QUERY_LENGTH = 100;
 
+// OFFSET は読み飛ばした行だけコストが増えるため、深いページほど遅い。
+// 実測（本番）: offset=0 は 0.03 秒、offset=99,000 は 1.7 秒。未認証で
+// 叩けるので、深いページを連打されると DB を占有できてしまう。
+// 実用上 5,000 件（50 件×100 ページ）より先を人が読むことはないため、
+// それ以降は「検索結果の終わり」として空で返す（エラーにはしない）。
+const MAX_OFFSET = 5000;
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
   const type = searchParams.get("type") || "top";
   const limit = intParam(searchParams, "limit", 50, 1, 200);
-  const offset = intParam(searchParams, "offset", 0, 0, 100_000);
+  const requestedOffset = intParam(searchParams, "offset", 0, 0, 1_000_000);
   const period = searchParams.get("period") || "all"; // today / week / month / all
   // minLikes は上限を明示する。intParam の既定上限は MAX_SAFE_INTEGER なので
   // それだと PostgreSQL の int4 範囲外になり Prisma が落ちて 500 になっていた
@@ -105,6 +112,16 @@ export async function GET(req: NextRequest) {
   if (!q.trim() && !userFilter.trim()) {
     return NextResponse.json({ threads: [] });
   }
+
+  if (requestedOffset > MAX_OFFSET) {
+    return NextResponse.json({
+      threads: [],
+      hasMore: false,
+      offset: requestedOffset,
+      note: `検索結果は先頭から ${MAX_OFFSET.toLocaleString("ja-JP")} 件までさかのぼれます。`,
+    });
+  }
+  const offset = requestedOffset;
 
   try {
     const userId = await getSessionUserId();
