@@ -103,8 +103,10 @@ export async function GET(req: NextRequest) {
       const withReplies = await thread.getReplies();
       replies = unwrapReplies(withReplies.replies).map(parseReply);
       nextToken = withReplies.continuation_token;
-    } catch (e: any) {
-      replyError = e.message || "Failed to load replies";
+    } catch (e) {
+      // 上流 YouTube の英語メッセージを画面に出さない（他ルートと方針を揃える）
+      console.error("[api/comments/thread] getReplies failed:", e);
+      replyError = "時間をおいて再試行してください。";
     }
 
     const c = thread.comment;

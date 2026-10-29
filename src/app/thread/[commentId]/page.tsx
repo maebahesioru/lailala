@@ -165,8 +165,9 @@ export default async function ThreadPage({ params }: PageProps) {
         loadedReplies = unwrapReplies(withReplies.replies);
         nextToken = withReplies.continuation_token;
       }
-    } catch (e: any) {
-      replyError = e.message || "返信の読み込みに失敗しました";
+    } catch (e) {
+      console.error("[thread page] getReplies failed:", e);
+      replyError = "時間をおいて再試行してください。";
     }
   }
 
