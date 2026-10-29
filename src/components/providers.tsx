@@ -6,6 +6,7 @@ import { ThemeProvider } from "./theme-provider";
 import { BgmProvider } from "./bgm-provider";
 import { PushProvider } from "./push-provider";
 import { DataSaverProvider } from "./data-saver-provider";
+import { FetchDedupe } from "./fetch-dedupe";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -13,7 +14,10 @@ export function Providers({ children }: { children: ReactNode }) {
       <ThemeProvider>
         <BgmProvider>
           <PushProvider>
-            <DataSaverProvider>{children}</DataSaverProvider>
+            <DataSaverProvider>
+              <FetchDedupe />
+              {children}
+            </DataSaverProvider>
           </PushProvider>
         </BgmProvider>
       </ThemeProvider>

@@ -26,7 +26,6 @@ const ThemeContext = createContext<ThemeContextType>({
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("black");
   const [useSystem, setUseSystemState] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   const applyTheme = useCallback((t: Theme) => {
     document.documentElement.setAttribute("data-theme", t);
@@ -48,7 +47,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } else {
       applyTheme("black");
     }
-    setMounted(true);
   }, [applyTheme]);
 
   useEffect(() => {
@@ -81,10 +79,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  if (!mounted) {
-    return <>{children}</>;
-  }
-
+  // NOTE: 以前はマウント前後で `<>…</>` と `ThemeContext.Provider` を切り替えて
+  // いたため、マウント直後に要素の型が Fragment → Provider に変わり、
+  // React が children 以下（＝サイト全体）を作り直していた。その結果
+  // すべての useEffect が 2 回走り、API への GET も 2 倍になっていた
+  // （実測: /api/comments/ などが 55ms 差で 2 回）。
+  // マウント状態に関係なく同じ要素を返すようにして再マウントを止める。
   return (
     <ThemeContext.Provider value={{ theme, setTheme, useSystem, setUseSystem }}>
       {children}

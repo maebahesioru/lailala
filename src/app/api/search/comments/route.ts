@@ -28,7 +28,10 @@ export async function GET(req: NextRequest) {
   const type = searchParams.get("type") || "top";
   const limit = intParam(searchParams, "limit", 50, 1, 200);
   const period = searchParams.get("period") || "all"; // today / week / month / all
-  const minLikes = intParam(searchParams, "minLikes", 0, 0);
+  // minLikes は上限を明示する。intParam の既定上限は MAX_SAFE_INTEGER なので
+  // それだと PostgreSQL の int4 範囲外になり Prisma が落ちて 500 になっていた
+  // （例: ?minLikes=99999999999）。
+  const minLikes = intParam(searchParams, "minLikes", 0, 0, 10_000_000);
   const sort = searchParams.get("sort") || "relevance"; // relevance / newest / likes
   const userFilter = searchParams.get("user") || ""; // channelId or author name
 

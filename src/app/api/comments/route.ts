@@ -171,10 +171,21 @@ export async function GET(req: NextRequest) {
         },
       });
 
-      const response = await cmd.call(innertube.actions, { parse: true });
+      // 失効した・壊れたトークンを渡されると上流は空のレスポンスを返す
+      // （以前は 500 + "Unexpected response" をそのまま画面に出していた）。
+      // クライアント側で再読み込みすれば直る種類の失敗なので 400 にする。
+      let response: any = null;
+      try {
+        response = await cmd.call(innertube.actions, { parse: true });
+      } catch (e) {
+        console.error("[comments] continuation failed:", e);
+      }
 
       if (!response?.on_response_received_endpoints?.length) {
-        return NextResponse.json({ error: "Unexpected response" }, { status: 500 });
+        return NextResponse.json(
+          { error: "続きのコメントを読み込めませんでした。ページを再読み込みしてください。" },
+          { status: 400 }
+        );
       }
 
       // 18.x の Comments は「ヘッダ + 本文」の2要素を前提に組み立てられている。
