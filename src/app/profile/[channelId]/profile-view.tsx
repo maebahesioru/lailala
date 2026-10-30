@@ -157,13 +157,13 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
     <MainLayout>
     <div className="min-h-screen">
       {/* Header */}
-      <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 h-[53px] flex items-center gap-2">
         <Link href="/" aria-label="戻る" className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1 min-w-0">
-          <h1 className="text-[20px] font-bold leading-6 truncate">{displayName}</h1>
-          <p className="text-[13px] text-muted">{comments.length}件のコメント</p>
+          <h1 className="text-[20px] font-bold leading-5 truncate">{displayName}</h1>
+          <p className="text-[13px] text-muted leading-4">{comments.length}件のコメント</p>
         </div>
         <ProfileMoreMenu channelId={channelId} channelName={displayName} />
       </div>
