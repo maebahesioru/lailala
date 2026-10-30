@@ -93,7 +93,15 @@ async function runSlice(
     }
   }
 
-  const saved = rows.length > 0 ? await saveCommentRows(rows) : 0;
+  // 「新規に増えた行数」を数えてから保存する（added=20 のような誤解を招くログをやめる）
+  let newRows = 0;
+  if (rows.length > 0) {
+    const ids = rows.map((r) => r.commentId);
+    const existing = await prisma.commentCache.count({ where: { commentId: { in: ids } } });
+    newRows = ids.length - existing;
+    await saveCommentRows(rows);
+  }
+  const saved = rows.length;
   const done = !nextToken || contents.length === 0;
 
   await prisma.commentSyncState.update({
@@ -107,7 +115,7 @@ async function runSlice(
     },
   });
 
-  return { added: saved, done, signature: pageSignature(contents) };
+  return { added: newRows, done, signature: pageSignature(contents) };
 }
 
 export async function startCommentSyncWorker() {
@@ -152,7 +160,7 @@ export async function startCommentSyncWorker() {
           if (shouldLog) {
             const dbTotal = pages % 100 === 0 || done ? await prisma.commentCache.count() : null;
             console.log(
-              `[CommentSync] ${videoId} pages=${pages} fetched=${state?.comments ?? 0} added=${added} page=${signature}` +
+              `[CommentSync] ${videoId} pages=${pages} walked=${state?.comments ?? 0} new=${added} page=${signature}` +
                 (dbTotal === null ? "" : ` db_total=${dbTotal}`) +
                 (done ? " DONE" : "")
             );
