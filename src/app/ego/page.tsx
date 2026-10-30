@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AtSign, Plus, X } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
+import { MainLayout } from "@/components/main-layout";
 import { threadPath } from "@/lib/thread-url";
 import { avatarColor, avatarLetter } from "@/lib/avatar-utils";
 import { onImgError } from "@/lib/img-fallback";
@@ -117,6 +118,7 @@ export default function EgoPage() {
   }, [loading, keywords, unread]);
 
   return (
+    <MainLayout>
     <div className="min-h-screen">
       <PageHeader title="エゴサ" subtitle="自分の名前や気になる語を登録すると、コメント欄から拾って並べます" />
 
@@ -231,5 +233,6 @@ export default function EgoPage() {
         ))}
       </ul>
     </div>
+    </MainLayout>
   );
 }
