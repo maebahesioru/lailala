@@ -200,6 +200,18 @@ exports.Prisma.CommentSyncStateScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CommentReplySyncScalarFieldEnum = {
+  id: 'id',
+  videoId: 'videoId',
+  parentCommentId: 'parentCommentId',
+  token: 'token',
+  pages: 'pages',
+  comments: 'comments',
+  done: 'done',
+  lastError: 'lastError',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.BookmarkScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -357,6 +369,7 @@ exports.Prisma.ModelName = {
   UserAction: 'UserAction',
   CommentCache: 'CommentCache',
   CommentSyncState: 'CommentSyncState',
+  CommentReplySync: 'CommentReplySync',
   Bookmark: 'Bookmark',
   List: 'List',
   ListItem: 'ListItem',

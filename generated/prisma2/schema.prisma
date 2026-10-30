@@ -143,6 +143,24 @@ model CommentSyncState {
   @@map("comment_sync_state")
 }
 
+// 返信チェーンの同期状態。返信は親コメントごとに独立した「続きトークン」を持つため、
+// 親単位で状態を保存して並列に歩けるようにする。
+model CommentReplySync {
+  id              String   @id @default(cuid())
+  videoId         String   @map("video_id")
+  parentCommentId String   @map("parent_comment_id")
+  token           String?  @db.Text
+  pages           Int      @default(0)
+  comments        Int      @default(0)
+  done            Boolean  @default(false)
+  lastError       String?  @map("last_error") @db.Text
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([videoId, parentCommentId])
+  @@index([videoId, done])
+  @@map("comment_reply_sync")
+}
+
 model Bookmark {
   id            String          @id @default(cuid())
   userId        String          @map("user_id")

@@ -11,58 +11,58 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  name          String?
-  email         String?  @unique
-  image         String?
-  channelId     String?  @map("channel_id")
-  selectedAccountId String? @map("selected_account_id")
-  ytCredentials YtCredential[]
-  commentLikes  CommentLike[]
-  actions       UserAction[]
-  lists         List[]
-  listFollows   ListFollow[]
-  bookmarkFolders BookmarkFolder[]
-  blockedUsers  BlockedUser[]
-  mutedUsers    MutedUser[]
-  mutedWords    MutedWord[]
-  notifications Notification[]
+  id                   String                @id @default(cuid())
+  name                 String?
+  email                String?               @unique
+  image                String?
+  channelId            String?               @map("channel_id")
+  selectedAccountId    String?               @map("selected_account_id")
+  ytCredentials        YtCredential[]
+  commentLikes         CommentLike[]
+  actions              UserAction[]
+  lists                List[]
+  listFollows          ListFollow[]
+  bookmarkFolders      BookmarkFolder[]
+  blockedUsers         BlockedUser[]
+  mutedUsers           MutedUser[]
+  mutedWords           MutedWord[]
+  notifications        Notification[]
   notificationSettings NotificationSetting[]
-  pushSubscriptions PushSubscription[]
+  pushSubscriptions    PushSubscription[]
   // Privacy settings
-  showLikesTab     Boolean @default(true) @map("show_likes_tab")
-  showDislikesTab  Boolean @default(true) @map("show_dislikes_tab")
-  showBookmarksTab Boolean @default(true) @map("show_bookmarks_tab")
-  notifyLikes      Boolean @default(true) @map("notify_likes")
-  notifyDislikes   Boolean @default(true) @map("notify_dislikes")
-  notifyBookmarks  Boolean @default(true) @map("notify_bookmarks")
-  notifyReplies    Boolean @default(true) @map("notify_replies")
+  showLikesTab         Boolean               @default(true) @map("show_likes_tab")
+  showDislikesTab      Boolean               @default(true) @map("show_dislikes_tab")
+  showBookmarksTab     Boolean               @default(true) @map("show_bookmarks_tab")
+  notifyLikes          Boolean               @default(true) @map("notify_likes")
+  notifyDislikes       Boolean               @default(true) @map("notify_dislikes")
+  notifyBookmarks      Boolean               @default(true) @map("notify_bookmarks")
+  notifyReplies        Boolean               @default(true) @map("notify_replies")
   // Push notification per-type
-  pushNotifyLikes     Boolean @default(true) @map("push_notify_likes")
-  pushNotifyDislikes  Boolean @default(true) @map("push_notify_dislikes")
-  pushNotifyBookmarks Boolean @default(true) @map("push_notify_bookmarks")
-  pushNotifyReplies   Boolean @default(true) @map("push_notify_replies")
-  pushNotifyMentions  Boolean @default(true) @map("push_notify_mentions")
+  pushNotifyLikes      Boolean               @default(true) @map("push_notify_likes")
+  pushNotifyDislikes   Boolean               @default(true) @map("push_notify_dislikes")
+  pushNotifyBookmarks  Boolean               @default(true) @map("push_notify_bookmarks")
+  pushNotifyReplies    Boolean               @default(true) @map("push_notify_replies")
+  pushNotifyMentions   Boolean               @default(true) @map("push_notify_mentions")
   // Data saver
-  dataSaver Boolean @default(false) @map("data_saver")
+  dataSaver            Boolean               @default(false) @map("data_saver")
 
   @@map("users")
 }
 
 // YouTube認証情報 (OAuth credentials)
 model YtCredential {
-  id           String   @id @default(cuid())
-  userId       String   @map("user_id")
+  id               String   @id @default(cuid())
+  userId           String   @map("user_id")
   // 暗号化されたCookieまたはOAuth credentials JSON
-  credential   String   @db.Text
+  credential       String   @db.Text
   // 'cookie' | 'oauth'
-  type         String
+  type             String
   // YouTubeチャンネル名（アカウント切り替え表示用）
-  accountName  String?  @map("account_name")
-  accountThumb String?  @map("account_thumb")
-  accountChannelId String? @map("account_channel_id")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountName      String?  @map("account_name")
+  accountThumb     String?  @map("account_thumb")
+  accountChannelId String?  @map("account_channel_id")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, accountChannelId])
   @@map("yt_credentials")
@@ -70,14 +70,14 @@ model YtCredential {
 
 // コメントの高評価/低評価状態を自前で記録（X風表示用）
 model CommentLike {
-  id          String   @id @default(cuid())
-  commentId   String   @map("comment_id")
-  videoId     String   @map("video_id")
-  userId      String   @map("user_id")
+  id        String   @id @default(cuid())
+  commentId String   @map("comment_id")
+  videoId   String   @map("video_id")
+  userId    String   @map("user_id")
   // 'like' | 'dislike'
-  type        String
-  createdAt   DateTime @default(now()) @map("created_at")
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([commentId, userId])
   @@map("comment_likes")
@@ -85,25 +85,25 @@ model CommentLike {
 
 // ユーザーの行動ログ（プロフィール用）
 model UserAction {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  videoId     String   @map("video_id")
-  commentId   String   @map("comment_id")
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  videoId    String   @map("video_id")
+  commentId  String   @map("comment_id")
   // 'comment' | 'reply' | 'like' | 'dislike' | 'delete'
-  actionType  String   @map("action_type")
-  content     String?  @db.Text
-  createdAt   DateTime @default(now()) @map("created_at")
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  actionType String   @map("action_type")
+  content    String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_actions")
 }
 
 // コメントキャッシュ（トレンド・検索用）
 model CommentCache {
-  id             String   @id @default(cuid())
-  commentId      String   @unique @map("comment_id")
-  videoId        String   @map("video_id")
-  authorName     String   @map("author_name")
+  id              String   @id @default(cuid())
+  commentId       String   @unique @map("comment_id")
+  videoId         String   @map("video_id")
+  authorName      String   @map("author_name")
   authorChannelId String?  @map("author_channel_id")
   authorThumb     String?  @map("author_thumb")
   content         String   @db.Text
@@ -143,20 +143,38 @@ model CommentSyncState {
   @@map("comment_sync_state")
 }
 
+// 返信チェーンの同期状態。返信は親コメントごとに独立した「続きトークン」を持つため、
+// 親単位で状態を保存して並列に歩けるようにする。
+model CommentReplySync {
+  id              String   @id @default(cuid())
+  videoId         String   @map("video_id")
+  parentCommentId String   @map("parent_comment_id")
+  token           String?  @db.Text
+  pages           Int      @default(0)
+  comments        Int      @default(0)
+  done            Boolean  @default(false)
+  lastError       String?  @map("last_error") @db.Text
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([videoId, parentCommentId])
+  @@index([videoId, done])
+  @@map("comment_reply_sync")
+}
+
 model Bookmark {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  folderId    String?  @map("folder_id")
-  commentId   String   @map("comment_id")
-  videoId     String   @map("video_id")
-  authorName  String   @map("author_name")
-  authorThumb String?  @map("author_thumb")
-  content     String   @db.Text
-  likeCount   String   @map("like_count")
-  replyCount  String   @map("reply_count")
-  publishedTime String @map("published_time")
-  createdAt   DateTime @default(now()) @map("created_at")
-  folder      BookmarkFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  id            String          @id @default(cuid())
+  userId        String          @map("user_id")
+  folderId      String?         @map("folder_id")
+  commentId     String          @map("comment_id")
+  videoId       String          @map("video_id")
+  authorName    String          @map("author_name")
+  authorThumb   String?         @map("author_thumb")
+  content       String          @db.Text
+  likeCount     String          @map("like_count")
+  replyCount    String          @map("reply_count")
+  publishedTime String          @map("published_time")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  folder        BookmarkFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
 
   @@unique([userId, commentId])
   @@index([userId, createdAt])
@@ -165,14 +183,14 @@ model Bookmark {
 }
 
 model List {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
+  id          String       @id @default(cuid())
+  userId      String       @map("user_id")
   name        String
   description String?
-  isPublic    Boolean  @default(false) @map("is_public")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isPublic    Boolean      @default(false) @map("is_public")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       ListItem[]
   followers   ListFollow[]
 
@@ -215,11 +233,11 @@ model ListFollow {
 }
 
 model BookmarkFolder {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
+  id        String     @id @default(cuid())
+  userId    String     @map("user_id")
   name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now()) @map("created_at")
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookmarks Bookmark[]
 
   @@index([userId])
@@ -227,12 +245,12 @@ model BookmarkFolder {
 }
 
 model BlockedUser {
-  id            String   @id @default(cuid())
-  userId        String   @map("user_id")
-  channelId     String   @map("channel_id")
-  channelName   String?  @map("channel_name")
-  createdAt     DateTime @default(now()) @map("created_at")
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  channelId   String   @map("channel_id")
+  channelName String?  @map("channel_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, channelId])
   @@index([userId])
@@ -240,12 +258,12 @@ model BlockedUser {
 }
 
 model MutedUser {
-  id            String   @id @default(cuid())
-  userId        String   @map("user_id")
-  channelId     String   @map("channel_id")
-  channelName   String?  @map("channel_name")
-  createdAt     DateTime @default(now()) @map("created_at")
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  channelId   String   @map("channel_id")
+  channelName String?  @map("channel_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, channelId])
   @@index([userId])
@@ -280,18 +298,18 @@ model OgpCache {
 }
 
 model ScheduledPost {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  videoId     String   @map("video_id")
+  id              String    @id @default(cuid())
+  userId          String    @map("user_id")
+  videoId         String    @map("video_id")
   // 返信の予約投稿のときだけ入る親コメントID。null なら通常のコメント投稿。
-  parentCommentId String? @map("parent_comment_id")
-  text        String   @db.Text
-  scheduledAt DateTime @map("scheduled_at")
-  posted        Boolean  @default(false)
+  parentCommentId String?   @map("parent_comment_id")
+  text            String    @db.Text
+  scheduledAt     DateTime  @map("scheduled_at")
+  posted          Boolean   @default(false)
   // 失敗時の指数バックオフ用（未設定だと30秒ごとに無限リトライしてログを埋める）
-  attempts      Int      @default(0)
-  lastAttemptAt DateTime? @map("last_attempt_at")
-  createdAt   DateTime @default(now()) @map("created_at")
+  attempts        Int       @default(0)
+  lastAttemptAt   DateTime? @map("last_attempt_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
 
   @@index([posted, scheduledAt])
   @@index([userId])
@@ -300,22 +318,22 @@ model ScheduledPost {
 
 // 通知
 model Notification {
-  id              String   @id @default(cuid())
-  userId          String   @map("user_id")
+  id             String   @id @default(cuid())
+  userId         String   @map("user_id")
   // 'like' | 'dislike' | 'reply' | 'bookmark' | 'mention' | 'youtube'
-  type            String
-  actorName       String   @map("actor_name")
-  actorChannelId  String?  @map("actor_channel_id")
-  actorThumb      String?  @map("actor_thumb")
-  commentId       String?  @map("comment_id")
-  videoId         String   @map("video_id")
-  content         String?  @db.Text
-  isRead          Boolean  @default(false) @map("is_read")
+  type           String
+  actorName      String   @map("actor_name")
+  actorChannelId String?  @map("actor_channel_id")
+  actorThumb     String?  @map("actor_thumb")
+  commentId      String?  @map("comment_id")
+  videoId        String   @map("video_id")
+  content        String?  @db.Text
+  isRead         Boolean  @default(false) @map("is_read")
   // 「同じ相手・同じ対象」の通知を 24 時間で 1 件に固定するためのキー。
   // アプリ側の findFirst だけだと同時実行で二重に入るため、DB のユニーク制約で担保する。
-  dedupeKey       String?  @unique @map("dedupe_key")
-  createdAt       DateTime @default(now()) @map("created_at")
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dedupeKey      String?  @unique @map("dedupe_key")
+  createdAt      DateTime @default(now()) @map("created_at")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, isRead])
   @@index([userId, createdAt])
@@ -325,14 +343,14 @@ model Notification {
 
 // 通知設定（各チャンネルごと）
 model NotificationSetting {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  channelId   String   @map("channel_id")
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  channelId  String   @map("channel_id")
   // 'all' | 'mentions' | 'none'
-  preference  String   @default("all")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  preference String   @default("all")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, channelId])
   @@index([userId])

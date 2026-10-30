@@ -13,6 +13,12 @@ export async function register() {
         const { startCommentSyncWorker } = await import("@/lib/comment-sync-worker");
         startCommentSyncWorker();
       }
+
+      // 返信チェーンは親コメントごとに独立なので、こちらは並列に掘る
+      if (process.env.COMMENT_REPLY_SYNC_ENABLED !== "false") {
+        const { startCommentReplySyncWorker } = await import("@/lib/comment-reply-sync-worker");
+        startCommentReplySyncWorker();
+      }
     }
   }
 }
