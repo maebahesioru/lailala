@@ -105,6 +105,9 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   const [nextToken, setNextToken] = useState<string | null>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
   const isRestoring = useRef(false);
+  // 並び順を切り替えた直後に前のリクエストが後から返ってくると、
+  // 「タブは新着なのに中身は人気」になる。最新の要求だけを反映する。
+  const loadSeq = useRef(0);
 
   const [followedLists, setFollowedLists] = useState<FollowedList[]>([]);
   const [activeListId, setActiveListId] = useState<string | null>(null);
@@ -116,12 +119,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   // Restore saved tab state on mount (from sessionStorage)
   useEffect(() => {
     setMounted(true);
-    const savedSort = sessionStorage.getItem("lailala-sort");
     const savedList = sessionStorage.getItem("lailala-list");
-    if (savedSort) {
-      setSortBy(savedSort as any);
-      sessionStorage.removeItem("lailala-sort");
-    }
     if (savedList) {
       setActiveListId(savedList);
       sessionStorage.removeItem("lailala-list");
@@ -137,6 +135,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
   }, []);
 
   const loadInitial = useCallback(async () => {
+    const seq = ++loadSeq.current;
     setLoading(true);
     setError(null);
     setHasMore(false);
@@ -166,19 +165,21 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
           replies: [],
           hasRepliesContinuation: false,
         }));
+        if (seq !== loadSeq.current) return;
         setThreads(mapped);
         fetchVoteData(mapped);
       } else {
         const data = await fetchComments(videoId, sortBy);
+        if (seq !== loadSeq.current) return;
         setThreads(data.threads);
         setHasMore(data.hasContinuation);
         setNextToken(data.continuationToken);
         fetchVoteData(data.threads);
       }
     } catch (e: any) {
-      setError(e.message || "コメントの取得に失敗しました");
+      if (seq === loadSeq.current) setError(e.message || "コメントの取得に失敗しました");
     } finally {
-      setLoading(false);
+      if (seq === loadSeq.current) setLoading(false);
     }
   }, [videoId, sortBy, activeListId]);
 
@@ -197,9 +198,11 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
 
   const loadMore = useCallback(async () => {
     if (activeListId || !nextToken || loadingMore) return;
+    const seq = loadSeq.current;
     setLoadingMore(true);
     try {
       const data = await fetchComments(videoId, sortBy, nextToken);
+      if (seq !== loadSeq.current) return;
       setThreads((prev) => {
         const existingIds = new Set(prev.map((t) => t.comment.commentId));
         const newThreads = data.threads.filter((t) => !existingIds.has(t.comment.commentId));
@@ -209,9 +212,9 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
       setNextToken(data.continuationToken);
       fetchVoteData(data.threads);
     } catch (e: any) {
-      setError(e.message || "追加の取得に失敗しました");
+      if (seq === loadSeq.current) setError(e.message || "追加の取得に失敗しました");
     } finally {
-      setLoadingMore(false);
+      if (seq === loadSeq.current) setLoadingMore(false);
     }
   }, [videoId, sortBy, nextToken, loadingMore, activeListId]);
 
