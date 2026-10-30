@@ -13,6 +13,13 @@ services:
       - VAPID_SUBJECT=${VAPID_SUBJECT:-mailto:admin@example.com}
     depends_on:
       - db
+    # ログは溜め込まない（既定の json-file は無制限に増える）。
+    # アクセスログはアプリ側で一切出力していないので、残るのは起動・ワーカーの記録だけ。
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "2"
 
   db:
     image: postgres:16-alpine
@@ -22,5 +29,10 @@ services:
       - POSTGRES_DB=lailala
     volumes:
       - 'postgres_data:/var/lib/postgresql/data'
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
 volumes:
   postgres_data:

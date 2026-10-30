@@ -52,9 +52,14 @@ export default function SecurityPage() {
               YouTubeの公式画面で入力されるため、このサービスがパスワードを知ることはありません。
             </p>
             <p className="text-[15px] text-muted leading-relaxed mt-3">
-              YouTubeから発行された認証トークンはデータベースに保存されますが、
-              <b>AES-256-GCM</b> で暗号化されています。
-              ただし、本サービスは個人運営のため、サーバー管理者が技術的に復号できる可能性があることをご了承ください。
+              YouTubeから発行された認証トークンは、データベースに保存する前に <b>AES-256-GCM</b> で暗号化します。
+              鍵はデータベースではなくサーバーの環境変数に置いているため、<b>データベースのバックアップが流出しても、それだけでは復号できません</b>。
+            </p>
+            <p className="text-[15px] text-muted leading-relaxed mt-3">
+              ただし、投稿・予約投稿・通知のためにサーバー自身がトークンを使う必要があるため、
+              <b>鍵とデータベースの両方を管理する運営者は、原理的に復号できます</b>。
+              ここだけは仕組み上どうしても避けられません。
+              なお、<b>ログアウトすると暗号化された認証情報もサーバーから削除</b>します（再ログインが必要になります）。
             </p>
           </section>
 
@@ -67,7 +72,7 @@ export default function SecurityPage() {
               <li>Cookieは <code className="bg-background px-1.5 py-0.5 rounded text-[13px]">httpOnly</code>（JavaScriptからアクセス不可）</li>
               <li>HTTPS通信時のみ送信（<code className="bg-background px-1.5 py-0.5 rounded text-[13px]">secure</code>）</li>
               <li>30日で自動削除</li>
-              <li>ログアウトで即座にサーバー・クライアント双方から削除</li>
+              <li>ログアウトでCookieを削除し、保存していた認証情報もサーバーから消します</li>
             </ul>
           </section>
 
