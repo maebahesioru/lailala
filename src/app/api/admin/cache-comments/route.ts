@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-auth";
 import { unwrapReplies } from "@/lib/youtube-comment-shape";
 import { parseCount } from "@/lib/parse-count";
+import { rateLimit } from "@/lib/rate-limit";
 
 function parsePublishedTime(text: string): Date | null {
   if (!text) return null;
@@ -25,15 +26,15 @@ function parsePublishedTime(text: string): Date | null {
   return d;
 }
 
-export async function GET(req: NextRequest) {
-  // 未ログインの第三者に YouTube 取得＋DB 書き込みを起動されないよう認可する
-  const denied = await requireAdmin();
-  if (denied) return denied;
+export async function GET() {
+  // 副作用のある処理を GET で起動できないようにする（POST のみ）。
+  return NextResponse.json(
+    { error: "このエンドポイントは POST のみです。" },
+    { status: 405, headers: { Allow: "POST" } }
+  );
+}
 
-  const { searchParams } = new URL(req.url);
-  const videoId = searchParams.get("videoId") || "niKAylKNIEI";
-  const max = parseInt(searchParams.get("max") || "500", 10);
-
+async function runCache(videoId: string, max: number) {
   try {
     const innertube = await getInnertube();
     let comments = await innertube.getComments(videoId, "NEWEST_FIRST");
@@ -83,7 +84,30 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { videoId, max = 500 } = await req.json();
-  if (!videoId) return NextResponse.json({ error: "videoId required" }, { status: 400 });
-  return GET(new NextRequest(`http://localhost/api/admin/cache-comments?videoId=${videoId}&max=${max}`));
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const limit = await rateLimit(`admin-cache-comments:${ip}`, 6, 60);
+  if (!limit.success) {
+    return NextResponse.json(
+      { error: "キャッシュ更新の実行が多すぎます。少し待ってから再試行してください。" },
+      { status: 429, headers: { "Retry-After": String(Math.max(1, limit.reset)) } }
+    );
+  }
+
+  let payload: { videoId?: string; max?: number | string } = {};
+  try {
+    payload = await req.json();
+  } catch {
+    return NextResponse.json({ error: "JSON ボディが必要です。" }, { status: 400 });
+  }
+
+  const videoId = payload.videoId || "niKAylKNIEI";
+  const max = Number.parseInt(String(payload.max ?? "500"), 10);
+  if (!Number.isFinite(max) || max < 1) {
+    return NextResponse.json({ error: "max には 1 以上の数値を指定してください。" }, { status: 400 });
+  }
+
+  return runCache(videoId, Math.min(max, 2000));
 }

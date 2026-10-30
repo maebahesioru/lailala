@@ -11,7 +11,7 @@ import { getSessionUserId } from "@/lib/session";
  *
  * - 未ログイン: 401
  * - ADMIN_CHANNEL_IDS が設定済み: その中の channelId のみ許可（それ以外 403）
- * - ADMIN_CHANNEL_IDS 未設定: ログインユーザーなら許可（従来の運用手順を壊さない）
+ * - ADMIN_CHANNEL_IDS 未設定: 403（fail closed。設定漏れで全ログインユーザーに開放しない）
  *
  * ガードを通った場合は null を返す。
  */
@@ -26,7 +26,12 @@ export async function requireAdmin(): Promise<NextResponse | null> {
     .map((id) => id.trim())
     .filter(Boolean);
 
-  if (allowList.length === 0) return null;
+  if (allowList.length === 0) {
+    return NextResponse.json(
+      { error: "管理用の設定がされていません（ADMIN_CHANNEL_IDS が未設定です）。" },
+      { status: 403 }
+    );
+  }
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
