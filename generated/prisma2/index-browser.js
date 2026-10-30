@@ -289,6 +289,14 @@ exports.Prisma.MutedWordScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.EgoKeywordScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  word: 'word',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.OgpCacheScalarFieldEnum = {
   id: 'id',
   url: 'url',
@@ -378,6 +386,7 @@ exports.Prisma.ModelName = {
   BlockedUser: 'BlockedUser',
   MutedUser: 'MutedUser',
   MutedWord: 'MutedWord',
+  EgoKeyword: 'EgoKeyword',
   OgpCache: 'OgpCache',
   ScheduledPost: 'ScheduledPost',
   Notification: 'Notification',

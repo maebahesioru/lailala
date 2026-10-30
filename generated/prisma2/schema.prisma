@@ -26,6 +26,7 @@ model User {
   blockedUsers         BlockedUser[]
   mutedUsers           MutedUser[]
   mutedWords           MutedWord[]
+  egoKeywords          EgoKeyword[]
   notifications        Notification[]
   notificationSettings NotificationSetting[]
   pushSubscriptions    PushSubscription[]
@@ -282,6 +283,19 @@ model MutedWord {
   @@unique([userId, word])
   @@index([userId])
   @@map("muted_words")
+}
+
+model EgoKeyword {
+  id         String    @id @default(cuid())
+  userId     String    @map("user_id")
+  word       String    @map("word")
+  lastSeenAt DateTime? @map("last_seen_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, word])
+  @@index([userId])
+  @@map("ego_keywords")
 }
 
 model OgpCache {

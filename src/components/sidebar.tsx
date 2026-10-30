@@ -1,7 +1,7 @@
 "use client";
 import { onImgError } from "@/lib/img-fallback";
 
-import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare, Music, Bell } from "lucide-react";
+import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare, Music, Bell, AtSign } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -169,6 +169,17 @@ export function Sidebar() {
             >
               <Bookmark size={26} aria-hidden="true" />
               <span className="font-medium">ブックマーク</span>
+            </Link>
+          </motion.div>
+          <motion.div whileHover={{ x: 4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
+            <Link
+              href="/ego"
+              onClick={(e) => handleProtectedClick(e)}
+              className="flex items-center gap-4 px-3 py-3 text-xl rounded-full hover:bg-white/10 transition-colors text-foreground"
+              aria-label="エゴサ"
+            >
+              <AtSign size={26} aria-hidden="true" />
+              <span className="font-medium">エゴサ</span>
             </Link>
           </motion.div>
           <motion.div whileHover={{ x: 4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>

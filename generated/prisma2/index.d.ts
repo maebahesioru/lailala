@@ -89,6 +89,11 @@ export type MutedUser = $Result.DefaultSelection<Prisma.$MutedUserPayload>
  */
 export type MutedWord = $Result.DefaultSelection<Prisma.$MutedWordPayload>
 /**
+ * Model EgoKeyword
+ * 
+ */
+export type EgoKeyword = $Result.DefaultSelection<Prisma.$EgoKeywordPayload>
+/**
  * Model OgpCache
  * 
  */
@@ -381,6 +386,16 @@ export class PrismaClient<
     * ```
     */
   get mutedWord(): Prisma.MutedWordDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.egoKeyword`: Exposes CRUD operations for the **EgoKeyword** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EgoKeywords
+    * const egoKeywords = await prisma.egoKeyword.findMany()
+    * ```
+    */
+  get egoKeyword(): Prisma.EgoKeywordDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.ogpCache`: Exposes CRUD operations for the **OgpCache** model.
@@ -887,6 +902,7 @@ export namespace Prisma {
     BlockedUser: 'BlockedUser',
     MutedUser: 'MutedUser',
     MutedWord: 'MutedWord',
+    EgoKeyword: 'EgoKeyword',
     OgpCache: 'OgpCache',
     ScheduledPost: 'ScheduledPost',
     Notification: 'Notification',
@@ -910,7 +926,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "commentSyncState" | "commentReplySync" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "mutedWord" | "ogpCache" | "scheduledPost" | "notification" | "notificationSetting" | "pushSubscription"
+      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "commentSyncState" | "commentReplySync" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "mutedWord" | "egoKeyword" | "ogpCache" | "scheduledPost" | "notification" | "notificationSetting" | "pushSubscription"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2024,6 +2040,80 @@ export namespace Prisma {
           }
         }
       }
+      EgoKeyword: {
+        payload: Prisma.$EgoKeywordPayload<ExtArgs>
+        fields: Prisma.EgoKeywordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EgoKeywordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EgoKeywordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>
+          }
+          findFirst: {
+            args: Prisma.EgoKeywordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EgoKeywordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>
+          }
+          findMany: {
+            args: Prisma.EgoKeywordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>[]
+          }
+          create: {
+            args: Prisma.EgoKeywordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>
+          }
+          createMany: {
+            args: Prisma.EgoKeywordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EgoKeywordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>[]
+          }
+          delete: {
+            args: Prisma.EgoKeywordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>
+          }
+          update: {
+            args: Prisma.EgoKeywordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>
+          }
+          deleteMany: {
+            args: Prisma.EgoKeywordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EgoKeywordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EgoKeywordUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>[]
+          }
+          upsert: {
+            args: Prisma.EgoKeywordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EgoKeywordPayload>
+          }
+          aggregate: {
+            args: Prisma.EgoKeywordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEgoKeyword>
+          }
+          groupBy: {
+            args: Prisma.EgoKeywordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EgoKeywordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EgoKeywordCountArgs<ExtArgs>
+            result: $Utils.Optional<EgoKeywordCountAggregateOutputType> | number
+          }
+        }
+      }
       OgpCache: {
         payload: Prisma.$OgpCachePayload<ExtArgs>
         fields: Prisma.OgpCacheFieldRefs
@@ -2505,6 +2595,7 @@ export namespace Prisma {
     blockedUser?: BlockedUserOmit
     mutedUser?: MutedUserOmit
     mutedWord?: MutedWordOmit
+    egoKeyword?: EgoKeywordOmit
     ogpCache?: OgpCacheOmit
     scheduledPost?: ScheduledPostOmit
     notification?: NotificationOmit
@@ -2599,6 +2690,7 @@ export namespace Prisma {
     blockedUsers: number
     mutedUsers: number
     mutedWords: number
+    egoKeywords: number
     notifications: number
     notificationSettings: number
     pushSubscriptions: number
@@ -2614,6 +2706,7 @@ export namespace Prisma {
     blockedUsers?: boolean | UserCountOutputTypeCountBlockedUsersArgs
     mutedUsers?: boolean | UserCountOutputTypeCountMutedUsersArgs
     mutedWords?: boolean | UserCountOutputTypeCountMutedWordsArgs
+    egoKeywords?: boolean | UserCountOutputTypeCountEgoKeywordsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     notificationSettings?: boolean | UserCountOutputTypeCountNotificationSettingsArgs
     pushSubscriptions?: boolean | UserCountOutputTypeCountPushSubscriptionsArgs
@@ -2691,6 +2784,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMutedWordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MutedWordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEgoKeywordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EgoKeywordWhereInput
   }
 
   /**
@@ -3075,6 +3175,7 @@ export namespace Prisma {
     blockedUsers?: boolean | User$blockedUsersArgs<ExtArgs>
     mutedUsers?: boolean | User$mutedUsersArgs<ExtArgs>
     mutedWords?: boolean | User$mutedWordsArgs<ExtArgs>
+    egoKeywords?: boolean | User$egoKeywordsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     notificationSettings?: boolean | User$notificationSettingsArgs<ExtArgs>
     pushSubscriptions?: boolean | User$pushSubscriptionsArgs<ExtArgs>
@@ -3158,6 +3259,7 @@ export namespace Prisma {
     blockedUsers?: boolean | User$blockedUsersArgs<ExtArgs>
     mutedUsers?: boolean | User$mutedUsersArgs<ExtArgs>
     mutedWords?: boolean | User$mutedWordsArgs<ExtArgs>
+    egoKeywords?: boolean | User$egoKeywordsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     notificationSettings?: boolean | User$notificationSettingsArgs<ExtArgs>
     pushSubscriptions?: boolean | User$pushSubscriptionsArgs<ExtArgs>
@@ -3178,6 +3280,7 @@ export namespace Prisma {
       blockedUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
       mutedUsers: Prisma.$MutedUserPayload<ExtArgs>[]
       mutedWords: Prisma.$MutedWordPayload<ExtArgs>[]
+      egoKeywords: Prisma.$EgoKeywordPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       notificationSettings: Prisma.$NotificationSettingPayload<ExtArgs>[]
       pushSubscriptions: Prisma.$PushSubscriptionPayload<ExtArgs>[]
@@ -3605,6 +3708,7 @@ export namespace Prisma {
     blockedUsers<T extends User$blockedUsersArgs<ExtArgs> = {}>(args?: Subset<T, User$blockedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mutedUsers<T extends User$mutedUsersArgs<ExtArgs> = {}>(args?: Subset<T, User$mutedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mutedWords<T extends User$mutedWordsArgs<ExtArgs> = {}>(args?: Subset<T, User$mutedWordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MutedWordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    egoKeywords<T extends User$egoKeywordsArgs<ExtArgs> = {}>(args?: Subset<T, User$egoKeywordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notificationSettings<T extends User$notificationSettingsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationSettingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pushSubscriptions<T extends User$pushSubscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, User$pushSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4257,6 +4361,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MutedWordScalarFieldEnum | MutedWordScalarFieldEnum[]
+  }
+
+  /**
+   * User.egoKeywords
+   */
+  export type User$egoKeywordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    where?: EgoKeywordWhereInput
+    orderBy?: EgoKeywordOrderByWithRelationInput | EgoKeywordOrderByWithRelationInput[]
+    cursor?: EgoKeywordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EgoKeywordScalarFieldEnum | EgoKeywordScalarFieldEnum[]
   }
 
   /**
@@ -19645,6 +19773,1064 @@ export namespace Prisma {
 
 
   /**
+   * Model EgoKeyword
+   */
+
+  export type AggregateEgoKeyword = {
+    _count: EgoKeywordCountAggregateOutputType | null
+    _min: EgoKeywordMinAggregateOutputType | null
+    _max: EgoKeywordMaxAggregateOutputType | null
+  }
+
+  export type EgoKeywordMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    word: string | null
+    lastSeenAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type EgoKeywordMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    word: string | null
+    lastSeenAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type EgoKeywordCountAggregateOutputType = {
+    id: number
+    userId: number
+    word: number
+    lastSeenAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type EgoKeywordMinAggregateInputType = {
+    id?: true
+    userId?: true
+    word?: true
+    lastSeenAt?: true
+    createdAt?: true
+  }
+
+  export type EgoKeywordMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    word?: true
+    lastSeenAt?: true
+    createdAt?: true
+  }
+
+  export type EgoKeywordCountAggregateInputType = {
+    id?: true
+    userId?: true
+    word?: true
+    lastSeenAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type EgoKeywordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EgoKeyword to aggregate.
+     */
+    where?: EgoKeywordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EgoKeywords to fetch.
+     */
+    orderBy?: EgoKeywordOrderByWithRelationInput | EgoKeywordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EgoKeywordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EgoKeywords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EgoKeywords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EgoKeywords
+    **/
+    _count?: true | EgoKeywordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EgoKeywordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EgoKeywordMaxAggregateInputType
+  }
+
+  export type GetEgoKeywordAggregateType<T extends EgoKeywordAggregateArgs> = {
+        [P in keyof T & keyof AggregateEgoKeyword]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEgoKeyword[P]>
+      : GetScalarType<T[P], AggregateEgoKeyword[P]>
+  }
+
+
+
+
+  export type EgoKeywordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EgoKeywordWhereInput
+    orderBy?: EgoKeywordOrderByWithAggregationInput | EgoKeywordOrderByWithAggregationInput[]
+    by: EgoKeywordScalarFieldEnum[] | EgoKeywordScalarFieldEnum
+    having?: EgoKeywordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EgoKeywordCountAggregateInputType | true
+    _min?: EgoKeywordMinAggregateInputType
+    _max?: EgoKeywordMaxAggregateInputType
+  }
+
+  export type EgoKeywordGroupByOutputType = {
+    id: string
+    userId: string
+    word: string
+    lastSeenAt: Date | null
+    createdAt: Date
+    _count: EgoKeywordCountAggregateOutputType | null
+    _min: EgoKeywordMinAggregateOutputType | null
+    _max: EgoKeywordMaxAggregateOutputType | null
+  }
+
+  type GetEgoKeywordGroupByPayload<T extends EgoKeywordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EgoKeywordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EgoKeywordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EgoKeywordGroupByOutputType[P]>
+            : GetScalarType<T[P], EgoKeywordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EgoKeywordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    word?: boolean
+    lastSeenAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["egoKeyword"]>
+
+  export type EgoKeywordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    word?: boolean
+    lastSeenAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["egoKeyword"]>
+
+  export type EgoKeywordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    word?: boolean
+    lastSeenAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["egoKeyword"]>
+
+  export type EgoKeywordSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    word?: boolean
+    lastSeenAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type EgoKeywordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "word" | "lastSeenAt" | "createdAt", ExtArgs["result"]["egoKeyword"]>
+  export type EgoKeywordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type EgoKeywordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type EgoKeywordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $EgoKeywordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EgoKeyword"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      word: string
+      lastSeenAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["egoKeyword"]>
+    composites: {}
+  }
+
+  type EgoKeywordGetPayload<S extends boolean | null | undefined | EgoKeywordDefaultArgs> = $Result.GetResult<Prisma.$EgoKeywordPayload, S>
+
+  type EgoKeywordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EgoKeywordFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EgoKeywordCountAggregateInputType | true
+    }
+
+  export interface EgoKeywordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EgoKeyword'], meta: { name: 'EgoKeyword' } }
+    /**
+     * Find zero or one EgoKeyword that matches the filter.
+     * @param {EgoKeywordFindUniqueArgs} args - Arguments to find a EgoKeyword
+     * @example
+     * // Get one EgoKeyword
+     * const egoKeyword = await prisma.egoKeyword.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EgoKeywordFindUniqueArgs>(args: SelectSubset<T, EgoKeywordFindUniqueArgs<ExtArgs>>): Prisma__EgoKeywordClient<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EgoKeyword that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EgoKeywordFindUniqueOrThrowArgs} args - Arguments to find a EgoKeyword
+     * @example
+     * // Get one EgoKeyword
+     * const egoKeyword = await prisma.egoKeyword.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EgoKeywordFindUniqueOrThrowArgs>(args: SelectSubset<T, EgoKeywordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EgoKeywordClient<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EgoKeyword that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EgoKeywordFindFirstArgs} args - Arguments to find a EgoKeyword
+     * @example
+     * // Get one EgoKeyword
+     * const egoKeyword = await prisma.egoKeyword.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EgoKeywordFindFirstArgs>(args?: SelectSubset<T, EgoKeywordFindFirstArgs<ExtArgs>>): Prisma__EgoKeywordClient<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EgoKeyword that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EgoKeywordFindFirstOrThrowArgs} args - Arguments to find a EgoKeyword
+     * @example
+     * // Get one EgoKeyword
+     * const egoKeyword = await prisma.egoKeyword.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EgoKeywordFindFirstOrThrowArgs>(args?: SelectSubset<T, EgoKeywordFindFirstOrThrowArgs<ExtArgs>>): Prisma__EgoKeywordClient<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EgoKeywords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EgoKeywordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EgoKeywords
+     * const egoKeywords = await prisma.egoKeyword.findMany()
+     * 
+     * // Get first 10 EgoKeywords
+     * const egoKeywords = await prisma.egoKeyword.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const egoKeywordWithIdOnly = await prisma.egoKeyword.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EgoKeywordFindManyArgs>(args?: SelectSubset<T, EgoKeywordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EgoKeyword.
+     * @param {EgoKeywordCreateArgs} args - Arguments to create a EgoKeyword.
+     * @example
+     * // Create one EgoKeyword
+     * const EgoKeyword = await prisma.egoKeyword.create({
+     *   data: {
+     *     // ... data to create a EgoKeyword
+     *   }
+     * })
+     * 
+     */
+    create<T extends EgoKeywordCreateArgs>(args: SelectSubset<T, EgoKeywordCreateArgs<ExtArgs>>): Prisma__EgoKeywordClient<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EgoKeywords.
+     * @param {EgoKeywordCreateManyArgs} args - Arguments to create many EgoKeywords.
+     * @example
+     * // Create many EgoKeywords
+     * const egoKeyword = await prisma.egoKeyword.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EgoKeywordCreateManyArgs>(args?: SelectSubset<T, EgoKeywordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EgoKeywords and returns the data saved in the database.
+     * @param {EgoKeywordCreateManyAndReturnArgs} args - Arguments to create many EgoKeywords.
+     * @example
+     * // Create many EgoKeywords
+     * const egoKeyword = await prisma.egoKeyword.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EgoKeywords and only return the `id`
+     * const egoKeywordWithIdOnly = await prisma.egoKeyword.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EgoKeywordCreateManyAndReturnArgs>(args?: SelectSubset<T, EgoKeywordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EgoKeyword.
+     * @param {EgoKeywordDeleteArgs} args - Arguments to delete one EgoKeyword.
+     * @example
+     * // Delete one EgoKeyword
+     * const EgoKeyword = await prisma.egoKeyword.delete({
+     *   where: {
+     *     // ... filter to delete one EgoKeyword
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EgoKeywordDeleteArgs>(args: SelectSubset<T, EgoKeywordDeleteArgs<ExtArgs>>): Prisma__EgoKeywordClient<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EgoKeyword.
+     * @param {EgoKeywordUpdateArgs} args - Arguments to update one EgoKeyword.
+     * @example
+     * // Update one EgoKeyword
+     * const egoKeyword = await prisma.egoKeyword.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EgoKeywordUpdateArgs>(args: SelectSubset<T, EgoKeywordUpdateArgs<ExtArgs>>): Prisma__EgoKeywordClient<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EgoKeywords.
+     * @param {EgoKeywordDeleteManyArgs} args - Arguments to filter EgoKeywords to delete.
+     * @example
+     * // Delete a few EgoKeywords
+     * const { count } = await prisma.egoKeyword.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EgoKeywordDeleteManyArgs>(args?: SelectSubset<T, EgoKeywordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EgoKeywords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EgoKeywordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EgoKeywords
+     * const egoKeyword = await prisma.egoKeyword.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EgoKeywordUpdateManyArgs>(args: SelectSubset<T, EgoKeywordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EgoKeywords and returns the data updated in the database.
+     * @param {EgoKeywordUpdateManyAndReturnArgs} args - Arguments to update many EgoKeywords.
+     * @example
+     * // Update many EgoKeywords
+     * const egoKeyword = await prisma.egoKeyword.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EgoKeywords and only return the `id`
+     * const egoKeywordWithIdOnly = await prisma.egoKeyword.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EgoKeywordUpdateManyAndReturnArgs>(args: SelectSubset<T, EgoKeywordUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EgoKeyword.
+     * @param {EgoKeywordUpsertArgs} args - Arguments to update or create a EgoKeyword.
+     * @example
+     * // Update or create a EgoKeyword
+     * const egoKeyword = await prisma.egoKeyword.upsert({
+     *   create: {
+     *     // ... data to create a EgoKeyword
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EgoKeyword we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EgoKeywordUpsertArgs>(args: SelectSubset<T, EgoKeywordUpsertArgs<ExtArgs>>): Prisma__EgoKeywordClient<$Result.GetResult<Prisma.$EgoKeywordPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EgoKeywords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EgoKeywordCountArgs} args - Arguments to filter EgoKeywords to count.
+     * @example
+     * // Count the number of EgoKeywords
+     * const count = await prisma.egoKeyword.count({
+     *   where: {
+     *     // ... the filter for the EgoKeywords we want to count
+     *   }
+     * })
+    **/
+    count<T extends EgoKeywordCountArgs>(
+      args?: Subset<T, EgoKeywordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EgoKeywordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EgoKeyword.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EgoKeywordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EgoKeywordAggregateArgs>(args: Subset<T, EgoKeywordAggregateArgs>): Prisma.PrismaPromise<GetEgoKeywordAggregateType<T>>
+
+    /**
+     * Group by EgoKeyword.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EgoKeywordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EgoKeywordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EgoKeywordGroupByArgs['orderBy'] }
+        : { orderBy?: EgoKeywordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EgoKeywordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEgoKeywordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EgoKeyword model
+   */
+  readonly fields: EgoKeywordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EgoKeyword.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EgoKeywordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EgoKeyword model
+   */
+  interface EgoKeywordFieldRefs {
+    readonly id: FieldRef<"EgoKeyword", 'String'>
+    readonly userId: FieldRef<"EgoKeyword", 'String'>
+    readonly word: FieldRef<"EgoKeyword", 'String'>
+    readonly lastSeenAt: FieldRef<"EgoKeyword", 'DateTime'>
+    readonly createdAt: FieldRef<"EgoKeyword", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EgoKeyword findUnique
+   */
+  export type EgoKeywordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * Filter, which EgoKeyword to fetch.
+     */
+    where: EgoKeywordWhereUniqueInput
+  }
+
+  /**
+   * EgoKeyword findUniqueOrThrow
+   */
+  export type EgoKeywordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * Filter, which EgoKeyword to fetch.
+     */
+    where: EgoKeywordWhereUniqueInput
+  }
+
+  /**
+   * EgoKeyword findFirst
+   */
+  export type EgoKeywordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * Filter, which EgoKeyword to fetch.
+     */
+    where?: EgoKeywordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EgoKeywords to fetch.
+     */
+    orderBy?: EgoKeywordOrderByWithRelationInput | EgoKeywordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EgoKeywords.
+     */
+    cursor?: EgoKeywordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EgoKeywords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EgoKeywords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EgoKeywords.
+     */
+    distinct?: EgoKeywordScalarFieldEnum | EgoKeywordScalarFieldEnum[]
+  }
+
+  /**
+   * EgoKeyword findFirstOrThrow
+   */
+  export type EgoKeywordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * Filter, which EgoKeyword to fetch.
+     */
+    where?: EgoKeywordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EgoKeywords to fetch.
+     */
+    orderBy?: EgoKeywordOrderByWithRelationInput | EgoKeywordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EgoKeywords.
+     */
+    cursor?: EgoKeywordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EgoKeywords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EgoKeywords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EgoKeywords.
+     */
+    distinct?: EgoKeywordScalarFieldEnum | EgoKeywordScalarFieldEnum[]
+  }
+
+  /**
+   * EgoKeyword findMany
+   */
+  export type EgoKeywordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * Filter, which EgoKeywords to fetch.
+     */
+    where?: EgoKeywordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EgoKeywords to fetch.
+     */
+    orderBy?: EgoKeywordOrderByWithRelationInput | EgoKeywordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EgoKeywords.
+     */
+    cursor?: EgoKeywordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EgoKeywords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EgoKeywords.
+     */
+    skip?: number
+    distinct?: EgoKeywordScalarFieldEnum | EgoKeywordScalarFieldEnum[]
+  }
+
+  /**
+   * EgoKeyword create
+   */
+  export type EgoKeywordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EgoKeyword.
+     */
+    data: XOR<EgoKeywordCreateInput, EgoKeywordUncheckedCreateInput>
+  }
+
+  /**
+   * EgoKeyword createMany
+   */
+  export type EgoKeywordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EgoKeywords.
+     */
+    data: EgoKeywordCreateManyInput | EgoKeywordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EgoKeyword createManyAndReturn
+   */
+  export type EgoKeywordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * The data used to create many EgoKeywords.
+     */
+    data: EgoKeywordCreateManyInput | EgoKeywordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EgoKeyword update
+   */
+  export type EgoKeywordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EgoKeyword.
+     */
+    data: XOR<EgoKeywordUpdateInput, EgoKeywordUncheckedUpdateInput>
+    /**
+     * Choose, which EgoKeyword to update.
+     */
+    where: EgoKeywordWhereUniqueInput
+  }
+
+  /**
+   * EgoKeyword updateMany
+   */
+  export type EgoKeywordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EgoKeywords.
+     */
+    data: XOR<EgoKeywordUpdateManyMutationInput, EgoKeywordUncheckedUpdateManyInput>
+    /**
+     * Filter which EgoKeywords to update
+     */
+    where?: EgoKeywordWhereInput
+    /**
+     * Limit how many EgoKeywords to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EgoKeyword updateManyAndReturn
+   */
+  export type EgoKeywordUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * The data used to update EgoKeywords.
+     */
+    data: XOR<EgoKeywordUpdateManyMutationInput, EgoKeywordUncheckedUpdateManyInput>
+    /**
+     * Filter which EgoKeywords to update
+     */
+    where?: EgoKeywordWhereInput
+    /**
+     * Limit how many EgoKeywords to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EgoKeyword upsert
+   */
+  export type EgoKeywordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EgoKeyword to update in case it exists.
+     */
+    where: EgoKeywordWhereUniqueInput
+    /**
+     * In case the EgoKeyword found by the `where` argument doesn't exist, create a new EgoKeyword with this data.
+     */
+    create: XOR<EgoKeywordCreateInput, EgoKeywordUncheckedCreateInput>
+    /**
+     * In case the EgoKeyword was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EgoKeywordUpdateInput, EgoKeywordUncheckedUpdateInput>
+  }
+
+  /**
+   * EgoKeyword delete
+   */
+  export type EgoKeywordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+    /**
+     * Filter which EgoKeyword to delete.
+     */
+    where: EgoKeywordWhereUniqueInput
+  }
+
+  /**
+   * EgoKeyword deleteMany
+   */
+  export type EgoKeywordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EgoKeywords to delete
+     */
+    where?: EgoKeywordWhereInput
+    /**
+     * Limit how many EgoKeywords to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EgoKeyword without action
+   */
+  export type EgoKeywordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EgoKeyword
+     */
+    select?: EgoKeywordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EgoKeyword
+     */
+    omit?: EgoKeywordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EgoKeywordInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model OgpCache
    */
 
@@ -25290,6 +26476,17 @@ export namespace Prisma {
   export type MutedWordScalarFieldEnum = (typeof MutedWordScalarFieldEnum)[keyof typeof MutedWordScalarFieldEnum]
 
 
+  export const EgoKeywordScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    word: 'word',
+    lastSeenAt: 'lastSeenAt',
+    createdAt: 'createdAt'
+  };
+
+  export type EgoKeywordScalarFieldEnum = (typeof EgoKeywordScalarFieldEnum)[keyof typeof EgoKeywordScalarFieldEnum]
+
+
   export const OgpCacheScalarFieldEnum: {
     id: 'id',
     url: 'url',
@@ -25489,6 +26686,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserListRelationFilter
     mutedUsers?: MutedUserListRelationFilter
     mutedWords?: MutedWordListRelationFilter
+    egoKeywords?: EgoKeywordListRelationFilter
     notifications?: NotificationListRelationFilter
     notificationSettings?: NotificationSettingListRelationFilter
     pushSubscriptions?: PushSubscriptionListRelationFilter
@@ -25523,6 +26721,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserOrderByRelationAggregateInput
     mutedUsers?: MutedUserOrderByRelationAggregateInput
     mutedWords?: MutedWordOrderByRelationAggregateInput
+    egoKeywords?: EgoKeywordOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     notificationSettings?: NotificationSettingOrderByRelationAggregateInput
     pushSubscriptions?: PushSubscriptionOrderByRelationAggregateInput
@@ -25560,6 +26759,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserListRelationFilter
     mutedUsers?: MutedUserListRelationFilter
     mutedWords?: MutedWordListRelationFilter
+    egoKeywords?: EgoKeywordListRelationFilter
     notifications?: NotificationListRelationFilter
     notificationSettings?: NotificationSettingListRelationFilter
     pushSubscriptions?: PushSubscriptionListRelationFilter
@@ -26574,6 +27774,62 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"MutedWord"> | Date | string
   }
 
+  export type EgoKeywordWhereInput = {
+    AND?: EgoKeywordWhereInput | EgoKeywordWhereInput[]
+    OR?: EgoKeywordWhereInput[]
+    NOT?: EgoKeywordWhereInput | EgoKeywordWhereInput[]
+    id?: StringFilter<"EgoKeyword"> | string
+    userId?: StringFilter<"EgoKeyword"> | string
+    word?: StringFilter<"EgoKeyword"> | string
+    lastSeenAt?: DateTimeNullableFilter<"EgoKeyword"> | Date | string | null
+    createdAt?: DateTimeFilter<"EgoKeyword"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type EgoKeywordOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    lastSeenAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type EgoKeywordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_word?: EgoKeywordUserIdWordCompoundUniqueInput
+    AND?: EgoKeywordWhereInput | EgoKeywordWhereInput[]
+    OR?: EgoKeywordWhereInput[]
+    NOT?: EgoKeywordWhereInput | EgoKeywordWhereInput[]
+    userId?: StringFilter<"EgoKeyword"> | string
+    word?: StringFilter<"EgoKeyword"> | string
+    lastSeenAt?: DateTimeNullableFilter<"EgoKeyword"> | Date | string | null
+    createdAt?: DateTimeFilter<"EgoKeyword"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_word">
+
+  export type EgoKeywordOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    lastSeenAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: EgoKeywordCountOrderByAggregateInput
+    _max?: EgoKeywordMaxOrderByAggregateInput
+    _min?: EgoKeywordMinOrderByAggregateInput
+  }
+
+  export type EgoKeywordScalarWhereWithAggregatesInput = {
+    AND?: EgoKeywordScalarWhereWithAggregatesInput | EgoKeywordScalarWhereWithAggregatesInput[]
+    OR?: EgoKeywordScalarWhereWithAggregatesInput[]
+    NOT?: EgoKeywordScalarWhereWithAggregatesInput | EgoKeywordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"EgoKeyword"> | string
+    userId?: StringWithAggregatesFilter<"EgoKeyword"> | string
+    word?: StringWithAggregatesFilter<"EgoKeyword"> | string
+    lastSeenAt?: DateTimeNullableWithAggregatesFilter<"EgoKeyword"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EgoKeyword"> | Date | string
+  }
+
   export type OgpCacheWhereInput = {
     AND?: OgpCacheWhereInput | OgpCacheWhereInput[]
     OR?: OgpCacheWhereInput[]
@@ -26961,6 +28217,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -26995,6 +28252,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -27029,6 +28287,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -27063,6 +28322,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -28156,6 +29416,61 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EgoKeywordCreateInput = {
+    id?: string
+    word: string
+    lastSeenAt?: Date | string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutEgoKeywordsInput
+  }
+
+  export type EgoKeywordUncheckedCreateInput = {
+    id?: string
+    userId: string
+    word: string
+    lastSeenAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type EgoKeywordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    lastSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEgoKeywordsNestedInput
+  }
+
+  export type EgoKeywordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    lastSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EgoKeywordCreateManyInput = {
+    id?: string
+    userId: string
+    word: string
+    lastSeenAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type EgoKeywordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    lastSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EgoKeywordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    lastSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OgpCacheCreateInput = {
     id?: string
     url: string
@@ -28641,6 +29956,12 @@ export namespace Prisma {
     none?: MutedWordWhereInput
   }
 
+  export type EgoKeywordListRelationFilter = {
+    every?: EgoKeywordWhereInput
+    some?: EgoKeywordWhereInput
+    none?: EgoKeywordWhereInput
+  }
+
   export type NotificationListRelationFilter = {
     every?: NotificationWhereInput
     some?: NotificationWhereInput
@@ -28697,6 +30018,10 @@ export namespace Prisma {
   }
 
   export type MutedWordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EgoKeywordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -29427,6 +30752,60 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type EgoKeywordUserIdWordCompoundUniqueInput = {
+    userId: string
+    word: string
+  }
+
+  export type EgoKeywordCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    lastSeenAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EgoKeywordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    lastSeenAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EgoKeywordMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    word?: SortOrder
+    lastSeenAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type OgpCacheCountOrderByAggregateInput = {
     id?: SortOrder
     url?: SortOrder
@@ -29458,17 +30837,6 @@ export namespace Prisma {
     siteName?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type ScheduledPostCountOrderByAggregateInput = {
@@ -29516,20 +30884,6 @@ export namespace Prisma {
 
   export type ScheduledPostSumOrderByAggregateInput = {
     attempts?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NotificationCountOrderByAggregateInput = {
@@ -29704,6 +31058,13 @@ export namespace Prisma {
     connect?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
   }
 
+  export type EgoKeywordCreateNestedManyWithoutUserInput = {
+    create?: XOR<EgoKeywordCreateWithoutUserInput, EgoKeywordUncheckedCreateWithoutUserInput> | EgoKeywordCreateWithoutUserInput[] | EgoKeywordUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EgoKeywordCreateOrConnectWithoutUserInput | EgoKeywordCreateOrConnectWithoutUserInput[]
+    createMany?: EgoKeywordCreateManyUserInputEnvelope
+    connect?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+  }
+
   export type NotificationCreateNestedManyWithoutUserInput = {
     create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
@@ -29786,6 +31147,13 @@ export namespace Prisma {
     connectOrCreate?: MutedWordCreateOrConnectWithoutUserInput | MutedWordCreateOrConnectWithoutUserInput[]
     createMany?: MutedWordCreateManyUserInputEnvelope
     connect?: MutedWordWhereUniqueInput | MutedWordWhereUniqueInput[]
+  }
+
+  export type EgoKeywordUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<EgoKeywordCreateWithoutUserInput, EgoKeywordUncheckedCreateWithoutUserInput> | EgoKeywordCreateWithoutUserInput[] | EgoKeywordUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EgoKeywordCreateOrConnectWithoutUserInput | EgoKeywordCreateOrConnectWithoutUserInput[]
+    createMany?: EgoKeywordCreateManyUserInputEnvelope
+    connect?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
   }
 
   export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
@@ -29945,6 +31313,20 @@ export namespace Prisma {
     update?: MutedWordUpdateWithWhereUniqueWithoutUserInput | MutedWordUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: MutedWordUpdateManyWithWhereWithoutUserInput | MutedWordUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: MutedWordScalarWhereInput | MutedWordScalarWhereInput[]
+  }
+
+  export type EgoKeywordUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EgoKeywordCreateWithoutUserInput, EgoKeywordUncheckedCreateWithoutUserInput> | EgoKeywordCreateWithoutUserInput[] | EgoKeywordUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EgoKeywordCreateOrConnectWithoutUserInput | EgoKeywordCreateOrConnectWithoutUserInput[]
+    upsert?: EgoKeywordUpsertWithWhereUniqueWithoutUserInput | EgoKeywordUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EgoKeywordCreateManyUserInputEnvelope
+    set?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+    disconnect?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+    delete?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+    connect?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+    update?: EgoKeywordUpdateWithWhereUniqueWithoutUserInput | EgoKeywordUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EgoKeywordUpdateManyWithWhereWithoutUserInput | EgoKeywordUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EgoKeywordScalarWhereInput | EgoKeywordScalarWhereInput[]
   }
 
   export type NotificationUpdateManyWithoutUserNestedInput = {
@@ -30113,6 +31495,20 @@ export namespace Prisma {
     update?: MutedWordUpdateWithWhereUniqueWithoutUserInput | MutedWordUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: MutedWordUpdateManyWithWhereWithoutUserInput | MutedWordUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: MutedWordScalarWhereInput | MutedWordScalarWhereInput[]
+  }
+
+  export type EgoKeywordUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EgoKeywordCreateWithoutUserInput, EgoKeywordUncheckedCreateWithoutUserInput> | EgoKeywordCreateWithoutUserInput[] | EgoKeywordUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EgoKeywordCreateOrConnectWithoutUserInput | EgoKeywordCreateOrConnectWithoutUserInput[]
+    upsert?: EgoKeywordUpsertWithWhereUniqueWithoutUserInput | EgoKeywordUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EgoKeywordCreateManyUserInputEnvelope
+    set?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+    disconnect?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+    delete?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+    connect?: EgoKeywordWhereUniqueInput | EgoKeywordWhereUniqueInput[]
+    update?: EgoKeywordUpdateWithWhereUniqueWithoutUserInput | EgoKeywordUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EgoKeywordUpdateManyWithWhereWithoutUserInput | EgoKeywordUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EgoKeywordScalarWhereInput | EgoKeywordScalarWhereInput[]
   }
 
   export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
@@ -30465,8 +31861,22 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMutedWordsInput, UserUpdateWithoutMutedWordsInput>, UserUncheckedUpdateWithoutMutedWordsInput>
   }
 
+  export type UserCreateNestedOneWithoutEgoKeywordsInput = {
+    create?: XOR<UserCreateWithoutEgoKeywordsInput, UserUncheckedCreateWithoutEgoKeywordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEgoKeywordsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type UserUpdateOneRequiredWithoutEgoKeywordsNestedInput = {
+    create?: XOR<UserCreateWithoutEgoKeywordsInput, UserUncheckedCreateWithoutEgoKeywordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEgoKeywordsInput
+    upsert?: UserUpsertWithoutEgoKeywordsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEgoKeywordsInput, UserUpdateWithoutEgoKeywordsInput>, UserUncheckedUpdateWithoutEgoKeywordsInput>
   }
 
   export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -30919,6 +32329,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EgoKeywordCreateWithoutUserInput = {
+    id?: string
+    word: string
+    lastSeenAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type EgoKeywordUncheckedCreateWithoutUserInput = {
+    id?: string
+    word: string
+    lastSeenAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type EgoKeywordCreateOrConnectWithoutUserInput = {
+    where: EgoKeywordWhereUniqueInput
+    create: XOR<EgoKeywordCreateWithoutUserInput, EgoKeywordUncheckedCreateWithoutUserInput>
+  }
+
+  export type EgoKeywordCreateManyUserInputEnvelope = {
+    data: EgoKeywordCreateManyUserInput | EgoKeywordCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type NotificationCreateWithoutUserInput = {
     id?: string
     type: string
@@ -31258,6 +32692,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"MutedWord"> | Date | string
   }
 
+  export type EgoKeywordUpsertWithWhereUniqueWithoutUserInput = {
+    where: EgoKeywordWhereUniqueInput
+    update: XOR<EgoKeywordUpdateWithoutUserInput, EgoKeywordUncheckedUpdateWithoutUserInput>
+    create: XOR<EgoKeywordCreateWithoutUserInput, EgoKeywordUncheckedCreateWithoutUserInput>
+  }
+
+  export type EgoKeywordUpdateWithWhereUniqueWithoutUserInput = {
+    where: EgoKeywordWhereUniqueInput
+    data: XOR<EgoKeywordUpdateWithoutUserInput, EgoKeywordUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EgoKeywordUpdateManyWithWhereWithoutUserInput = {
+    where: EgoKeywordScalarWhereInput
+    data: XOR<EgoKeywordUpdateManyMutationInput, EgoKeywordUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type EgoKeywordScalarWhereInput = {
+    AND?: EgoKeywordScalarWhereInput | EgoKeywordScalarWhereInput[]
+    OR?: EgoKeywordScalarWhereInput[]
+    NOT?: EgoKeywordScalarWhereInput | EgoKeywordScalarWhereInput[]
+    id?: StringFilter<"EgoKeyword"> | string
+    userId?: StringFilter<"EgoKeyword"> | string
+    word?: StringFilter<"EgoKeyword"> | string
+    lastSeenAt?: DateTimeNullableFilter<"EgoKeyword"> | Date | string | null
+    createdAt?: DateTimeFilter<"EgoKeyword"> | Date | string
+  }
+
   export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
     where: NotificationWhereUniqueInput
     update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
@@ -31376,6 +32837,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -31409,6 +32871,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -31458,6 +32921,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -31491,6 +32955,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -31524,6 +32989,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -31557,6 +33023,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -31606,6 +33073,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -31639,6 +33107,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -31672,6 +33141,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -31705,6 +33175,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -31754,6 +33225,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -31787,6 +33259,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -31864,6 +33337,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -31897,6 +33371,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -32004,6 +33479,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -32037,6 +33513,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -32179,6 +33656,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -32212,6 +33690,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -32288,6 +33767,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -32321,6 +33801,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -32387,6 +33868,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -32420,6 +33902,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -32507,6 +33990,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -32540,6 +34024,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -32607,6 +34092,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -32640,6 +34126,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -32689,6 +34176,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -32722,6 +34210,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -32755,6 +34244,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -32788,6 +34278,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -32837,6 +34328,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -32870,6 +34362,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -32903,6 +34396,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
@@ -32936,6 +34430,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
@@ -32985,6 +34480,7 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
@@ -33018,6 +34514,159 @@ export namespace Prisma {
     bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutEgoKeywordsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    selectedAccountId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
+    ytCredentials?: YtCredentialCreateNestedManyWithoutUserInput
+    commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    actions?: UserActionCreateNestedManyWithoutUserInput
+    lists?: ListCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutEgoKeywordsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    channelId?: string | null
+    selectedAccountId?: string | null
+    showLikesTab?: boolean
+    showDislikesTab?: boolean
+    showBookmarksTab?: boolean
+    notifyLikes?: boolean
+    notifyDislikes?: boolean
+    notifyBookmarks?: boolean
+    notifyReplies?: boolean
+    pushNotifyLikes?: boolean
+    pushNotifyDislikes?: boolean
+    pushNotifyBookmarks?: boolean
+    pushNotifyReplies?: boolean
+    pushNotifyMentions?: boolean
+    dataSaver?: boolean
+    ytCredentials?: YtCredentialUncheckedCreateNestedManyWithoutUserInput
+    commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    actions?: UserActionUncheckedCreateNestedManyWithoutUserInput
+    lists?: ListUncheckedCreateNestedManyWithoutUserInput
+    listFollows?: ListFollowUncheckedCreateNestedManyWithoutUserInput
+    bookmarkFolders?: BookmarkFolderUncheckedCreateNestedManyWithoutUserInput
+    blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
+    mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutEgoKeywordsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEgoKeywordsInput, UserUncheckedCreateWithoutEgoKeywordsInput>
+  }
+
+  export type UserUpsertWithoutEgoKeywordsInput = {
+    update: XOR<UserUpdateWithoutEgoKeywordsInput, UserUncheckedUpdateWithoutEgoKeywordsInput>
+    create: XOR<UserCreateWithoutEgoKeywordsInput, UserUncheckedCreateWithoutEgoKeywordsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEgoKeywordsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEgoKeywordsInput, UserUncheckedUpdateWithoutEgoKeywordsInput>
+  }
+
+  export type UserUpdateWithoutEgoKeywordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
+    ytCredentials?: YtCredentialUpdateManyWithoutUserNestedInput
+    commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    actions?: UserActionUpdateManyWithoutUserNestedInput
+    lists?: ListUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEgoKeywordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    showLikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
+    showBookmarksTab?: BoolFieldUpdateOperationsInput | boolean
+    notifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    notifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    notifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyLikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyDislikes?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyBookmarks?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyReplies?: BoolFieldUpdateOperationsInput | boolean
+    pushNotifyMentions?: BoolFieldUpdateOperationsInput | boolean
+    dataSaver?: BoolFieldUpdateOperationsInput | boolean
+    ytCredentials?: YtCredentialUncheckedUpdateManyWithoutUserNestedInput
+    commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    actions?: UserActionUncheckedUpdateManyWithoutUserNestedInput
+    lists?: ListUncheckedUpdateManyWithoutUserNestedInput
+    listFollows?: ListFollowUncheckedUpdateManyWithoutUserNestedInput
+    bookmarkFolders?: BookmarkFolderUncheckedUpdateManyWithoutUserNestedInput
+    blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
+    mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
@@ -33052,6 +34701,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
@@ -33085,6 +34735,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -33134,6 +34785,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
@@ -33167,6 +34819,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -33200,6 +34853,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
@@ -33233,6 +34887,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -33282,6 +34937,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
@@ -33315,6 +34971,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -33348,6 +35005,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingCreateNestedManyWithoutUserInput
   }
@@ -33381,6 +35039,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedCreateNestedManyWithoutUserInput
     mutedUsers?: MutedUserUncheckedCreateNestedManyWithoutUserInput
     mutedWords?: MutedWordUncheckedCreateNestedManyWithoutUserInput
+    egoKeywords?: EgoKeywordUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     notificationSettings?: NotificationSettingUncheckedCreateNestedManyWithoutUserInput
   }
@@ -33430,6 +35089,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUpdateManyWithoutUserNestedInput
   }
@@ -33463,6 +35123,7 @@ export namespace Prisma {
     blockedUsers?: BlockedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedUsers?: MutedUserUncheckedUpdateManyWithoutUserNestedInput
     mutedWords?: MutedWordUncheckedUpdateManyWithoutUserNestedInput
+    egoKeywords?: EgoKeywordUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     notificationSettings?: NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -33533,6 +35194,13 @@ export namespace Prisma {
     id?: string
     word: string
     mode?: string
+    createdAt?: Date | string
+  }
+
+  export type EgoKeywordCreateManyUserInput = {
+    id?: string
+    word: string
+    lastSeenAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -33776,6 +35444,27 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     word?: StringFieldUpdateOperationsInput | string
     mode?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EgoKeywordUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    lastSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EgoKeywordUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    lastSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EgoKeywordUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    word?: StringFieldUpdateOperationsInput | string
+    lastSeenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
