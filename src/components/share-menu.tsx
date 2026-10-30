@@ -64,7 +64,7 @@ export function ShareMenu({ url, text, buttonClass, extraLinks }: ShareMenuProps
             exit={{ scale: 0.5, opacity: 0 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
           >
-            {copied ? <Check size={18} className="text-green-500" /> : <Share size={18} />}
+            {copied ? <Check size={18} className="text-green-500" /> : <Share size={18.75} />}
           </motion.span>
         </AnimatePresence>
       </motion.button>

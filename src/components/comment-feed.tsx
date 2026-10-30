@@ -333,8 +333,8 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
                   router.push(tab.href as string);
                 }
               }}
-              className={`flex-1 py-4 text-center text-sm font-medium hover:bg-white/5 transition-colors relative whitespace-nowrap inline-flex items-center justify-center ${
-                activeTabId === tab.id ? "text-foreground font-bold" : "text-muted"
+              className={`flex-1 py-4 text-center text-sm hover:bg-white/5 transition-colors relative whitespace-nowrap inline-flex items-center justify-center ${
+                activeTabId === tab.id ? "text-foreground font-bold" : "text-muted font-medium"
               }`}
             >
               {tab.id !== "top" && tab.id !== "new" && <List size={14} className="mr-1 shrink-0" />}
