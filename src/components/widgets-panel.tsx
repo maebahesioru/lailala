@@ -155,6 +155,7 @@ export function WidgetsPanel() {
           />
           <button
             type="button"
+            aria-label={listening ? "音声入力を停止" : "音声入力"}
             onClick={startVoiceInput}
             className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full transition-colors ${
               listening ? "text-primary animate-pulse" : "text-muted hover:text-foreground"

@@ -158,7 +158,7 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
     <div className="min-h-screen">
       {/* Header */}
       <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 py-3 flex items-center gap-3">
-        <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
+        <Link href="/" aria-label="戻る" className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1 min-w-0">

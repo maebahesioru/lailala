@@ -96,7 +96,7 @@ export function ProfileMoreMenu({ channelId, channelName }: ProfileMoreMenuProps
   return (
     <>
       <div className="relative" ref={ref}>
-        <motion.button
+        <motion.button aria-label="その他の操作"
           onClick={handleOpen}
           whileTap={{ scale: 0.85 }}
           className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
