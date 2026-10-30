@@ -74,6 +74,26 @@ export function startScheduledPostWorker() {
             if (!target) throw new Error("parent comment not found");
             target.setActions(innertube.actions);
             await target.reply(post.text);
+
+            // 即時返信と同じく、親コメントの投稿者へ通知する
+            const authorChannelId = target.author?.id;
+            const me = await prisma.user.findUnique({
+              where: { id: post.userId },
+              select: { name: true, channelId: true, image: true },
+            });
+            if (authorChannelId && me?.channelId && authorChannelId !== me.channelId) {
+              const { createNotification } = await import("./notifications");
+              await createNotification({
+                recipientChannelId: authorChannelId,
+                type: "reply",
+                actorName: me.name || "Unknown",
+                actorChannelId: me.channelId,
+                actorThumb: me.image || undefined,
+                commentId: post.parentCommentId,
+                videoId: post.videoId,
+                content: post.text,
+              }).catch(() => {});
+            }
           } else {
             await innertube.interact.comment(post.videoId, post.text);
           }
