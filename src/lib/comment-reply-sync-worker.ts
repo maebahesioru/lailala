@@ -132,6 +132,8 @@ async function runLane(videoId: string, laneIndex: number): Promise<void> {
   let handled = 0;
   let errors = 0;
   let totalAdded = 0;
+  let current: Claimed | null = null;
+  let sameFails = 0;
 
   for (;;) {
     try {
@@ -140,7 +142,10 @@ async function runLane(videoId: string, laneIndex: number): Promise<void> {
         console.log(`[CommentReplySync] lane${laneIndex} no pending parents. handled=${handled} added=${totalAdded}`);
         return;
       }
+      current = claim;
       const { added, done } = await runParent(innertube, videoId, claim);
+      current = null;
+      sameFails = 0;
       handled += 1;
       totalAdded += added;
       errors = 0;
@@ -153,8 +158,29 @@ async function runLane(videoId: string, laneIndex: number): Promise<void> {
       await new Promise((r) => setTimeout(r, PAGE_DELAY_MS));
     } catch (e: any) {
       errors += 1;
+      sameFails += 1;
       const message = e?.message || String(e);
       console.error(`[CommentReplySync] lane${laneIndex} error(${errors}): ${message}`);
+
+      // 「返信が無い」等の終端エラーや、同一親で3回続けて失敗した場合は
+      // その親を done にして先へ進む（同じ親で無限にループしてレーンが詰まるのを防ぐ）。
+      const terminal = /no replies|not found|does not exist|unavailable|404/i.test(message);
+      if (current && (terminal || sameFails >= 3)) {
+        const parentId = current.parentId;
+        current = null;
+        sameFails = 0;
+        errors = 0;
+        await prisma.commentReplySync
+          .update({
+            where: { videoId_parentCommentId: { videoId, parentCommentId: parentId } },
+            data: { done: true, lastError: message || "failed" },
+          })
+          .catch(() => {});
+        console.log(`[CommentReplySync] lane${laneIndex} skip ${parentId}: ${message || "failed"}`);
+        await new Promise((r) => setTimeout(r, PAGE_DELAY_MS));
+        continue;
+      }
+
       const wait = errors >= 3 ? RETRY_DELAY_MS * 4 : RETRY_DELAY_MS;
       if (errors >= 3) errors = 0;
       await new Promise((r) => setTimeout(r, wait));
