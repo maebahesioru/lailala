@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CommentCard } from "./comment-card";
 import { ReplyCard } from "./reply-card";
 import { Composer } from "./composer";
-import { ArrowLeft, Loader2, MessageCircle, CornerDownRight } from "lucide-react";
-import Link from "next/link";
+import { Loader2, MessageCircle, CornerDownRight } from "lucide-react";
 import { YtComment } from "@/types/youtube";
 import { ReplyNode } from "@/lib/reply-tree";
 import { ShareMenu } from "./share-menu";
+import { PageHeader } from "./page-header";
 
 interface ThreadViewProps {
   parent: YtComment;
@@ -154,22 +154,18 @@ export function ThreadView({
 
   return (
     <>
-      <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border px-4 py-3 flex items-center gap-3">
-        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-          <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors inline-block">
-            <ArrowLeft size={20} />
-          </Link>
-        </motion.div>
-        <h1 className="text-lg font-bold flex-1">スレッド</h1>
-        <ShareMenu
+      <PageHeader
+        title="ポスト"
+        back
+        action={<ShareMenu
           url={threadUrl(origin, commentId)}
           text={`${parent.author.name}: ${parent.content}`}
           extraLinks={[
             { label: "YouTubeコメントURLをコピー", url: `https://www.youtube.com/watch?v=${videoId}&lc=${commentId}` },
           ]}
           buttonClass="p-2 rounded-full hover:bg-white/10 text-muted hover:text-primary transition-colors"
-        />
-      </div>
+        />}
+      />
 
       <div className="border-b border-border">
         <CommentCard

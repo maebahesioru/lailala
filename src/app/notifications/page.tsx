@@ -100,7 +100,7 @@ export default function NotificationsPage() {
     <MainLayout>
       <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
         <div className="px-4 py-3 flex items-center justify-between">
-          <h1 className="text-xl font-bold">通知</h1>
+          <h1 className="text-[20px] font-bold leading-6">通知</h1>
           {notifications.length > 0 && (
             <motion.button
               whileHover={{ scale: 1.05 }}

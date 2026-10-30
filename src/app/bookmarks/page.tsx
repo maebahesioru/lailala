@@ -159,7 +159,7 @@ export default function BookmarksPage() {
         <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft size={20} />
         </Link>
-        <h1 className="text-lg font-bold">ブックマーク</h1>
+        <h1 className="text-[20px] font-bold leading-6">ブックマーク</h1>
         {bookmarks.length > 0 && (
           <button
             onClick={selectAll}

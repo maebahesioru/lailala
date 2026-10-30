@@ -162,8 +162,8 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1 min-w-0">
-          <h1 className="text-lg font-bold truncate">{displayName}</h1>
-          <p className="text-[13px] text-muted">{comments.length} 件</p>
+          <h1 className="text-[20px] font-bold leading-6 truncate">{displayName}</h1>
+          <p className="text-[13px] text-muted">{comments.length}件のコメント</p>
         </div>
         <ProfileMoreMenu channelId={channelId} channelName={displayName} />
       </div>

@@ -267,7 +267,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                     onClick={(e) => { e.stopPropagation(); handleLike(); }}
                     whileTap={{ scale: 0.8 }}
                     transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                    className={`relative flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880]"}`}
+                    className={`relative flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] transition-colors rounded-full hover:bg-white/5 ${liked ? "text-[#f91880]" : "text-muted hover:text-[#f91880] hover:bg-[#f91880]/10"}`}
                     title="高評価"
                   >
                     <AnimatePresence mode="wait">
@@ -323,7 +323,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                       e.stopPropagation();
                       window.dispatchEvent(new CustomEvent("lailala:openReply", { detail: { videoId, parentCommentId: thread.comment.commentId, authorName: thread.comment.author.name } }));
                     }}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-[#1d9bf0] transition-colors rounded-full hover:bg-[#1d9bf0]/10"
                     aria-label="返信する"
                     title="返信する"
                   >
@@ -335,7 +335,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                     <ShareMenu
                       url={threadUrl(typeof window !== "undefined" ? window.location.origin : "", thread.comment.commentId)}
                       text={`${thread.comment.author.name}: ${thread.comment.content}`}
-                      buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5 w-full"
+                      buttonClass="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-[#00ba7c] transition-colors rounded-full hover:bg-[#00ba7c]/10 w-full"
                       extraLinks={[
                         { label: "YouTubeコメントURLをコピー", url: `https://www.youtube.com/watch?v=${videoId}&lc=${thread.comment.commentId}` },
                       ]}

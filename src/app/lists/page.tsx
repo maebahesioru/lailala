@@ -254,7 +254,7 @@ function ListsPageInner() {
             ) : (
               <>
                 <div className="flex-1 min-w-0">
-                  <h1 className="text-lg font-bold truncate">{selectedList.name}</h1>
+                  <h1 className="text-[20px] font-bold leading-6 truncate">{selectedList.name}</h1>
                   <p className="text-[13px] text-muted">{selectedList._count?.items || selectedList.items?.length || 0} 件 · {selectedList.isPublic ? <Globe size={12} className="inline" /> : <Lock size={12} className="inline" />}</p>
                 </div>
                 {selectedList.isOwner && (
@@ -289,7 +289,7 @@ function ListsPageInner() {
             <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition-colors">
               <ArrowLeft size={20} />
             </Link>
-            <h1 className="text-lg font-bold">リスト</h1>
+            <h1 className="text-[20px] font-bold leading-6">リスト</h1>
           </>
         )}
       </div>
