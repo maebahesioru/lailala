@@ -168,34 +168,43 @@ export default function ProfilePage({ params }: { params: Promise<{ channelId: s
         <ProfileMoreMenu channelId={channelId} channelName={displayName} />
       </div>
 
-      {/* Author info */}
-      <div className="px-4 py-6 border-b border-border">
-        <div className="flex items-center gap-4">
-          {authorThumb ? (
-            <img onError={onImgError} src={authorThumb} alt={displayName} width={80} height={80} className="w-20 h-20 rounded-full object-cover border border-border" />
-          ) : (
-            <div className="w-20 h-20 rounded-full bg-border flex items-center justify-center">
-              <User size={32} className="text-muted" />
-            </div>
-          )}
-          <div className="flex-1">
-            <h2 className="text-xl font-bold">{displayName}</h2>
+      {/* Banner + アバター（X のプロフィールヒーロー相当） */}
+      <div className="h-[150px] w-full bg-gradient-to-r from-[#1d9bf0]/35 via-[#16181c] to-[#f91880]/25" />
+      <div className="px-4 pb-4 border-b border-border">
+        <div className="flex items-end justify-between -mt-[67px]">
+          <div className="rounded-full border-4 border-background bg-background">
+            {authorThumb ? (
+              <img onError={onImgError} src={authorThumb} alt={displayName} width={133} height={133} className="w-[133px] h-[133px] rounded-full object-cover" />
+            ) : (
+              <div className="w-[133px] h-[133px] rounded-full bg-border flex items-center justify-center">
+                <span className="text-4xl font-bold text-muted">{displayName.slice(0, 1)}</span>
+              </div>
+            )}
           </div>
-          {!isOwner && currentUser && (
-            <button
-              onClick={toggleNotification}
-              disabled={notifLoading}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-colors border ${
-                notifPref === "none"
-                  ? "border-border hover:bg-white/5 text-foreground"
-                  : "bg-primary text-white border-primary hover:bg-primary-hover"
-              }`}
-              title={notifPref === "none" ? "通知をオンにする" : "通知をオフにする"}
-            >
-              {notifPref === "none" ? <BellOff size={16} /> : <Bell size={16} />}
-              <span>{notifPref === "none" ? "通知OFF" : "通知ON"}</span>
-            </button>
-          )}
+          <div className="mb-3 flex items-center gap-2">
+            {!isOwner && currentUser && (
+              <button
+                onClick={toggleNotification}
+                disabled={notifLoading}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-colors border ${
+                  notifPref === "none"
+                    ? "border-border hover:bg-white/5 text-foreground"
+                    : "bg-primary text-white border-primary hover:bg-primary-hover"
+                }`}
+                title={notifPref === "none" ? "通知をオンにする" : "通知をオフにする"}
+              >
+                {notifPref === "none" ? <BellOff size={16} /> : <Bell size={16} />}
+                <span>{notifPref === "none" ? "通知OFF" : "通知ON"}</span>
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="mt-3">
+          <h2 className="text-[20px] font-bold leading-6">{displayName}</h2>
+          <p className="text-[15px] text-muted leading-5 truncate">@{channelId}</p>
+          <p className="text-[15px] text-muted leading-5 mt-3">
+            <span className="font-bold text-foreground">{comments.length}</span>件のコメント
+          </p>
         </div>
       </div>
 
