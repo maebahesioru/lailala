@@ -126,68 +126,87 @@ export async function startCommentSyncWorker() {
     .split(",")
     .map((v) => v.trim())
     .filter(Boolean);
-  const sortBy = (process.env.COMMENT_SYNC_SORT || "NEWEST_FIRST").trim();
+
+  // 並び順ごとに鎖が独立している（実測: TOP_COMMENTS と NEWEST_FIRST の1ページ目は重複0）ので、
+  // sort をレーンとして並列に歩く。1本が尽きても他方が残る＝到達率が上がる。
+  const sorts = (process.env.COMMENT_SYNC_SORTS || process.env.COMMENT_SYNC_SORT || "NEWEST_FIRST,TOP_COMMENTS")
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean)
+    .filter((v, i, arr) => arr.indexOf(v) === i);
 
   (async () => {
     // 起動直後は他の初期化とぶつかるので少し待つ
     await new Promise((r) => setTimeout(r, 20_000));
-    let errors = 0;
 
+    const jobs: Promise<void>[] = [];
     for (const videoId of videoIds) {
-      console.log(`[CommentSync] started for ${videoId} (sort=${sortBy})`);
-      let lastSignature = "";
-      let repeats = 0;
-      for (;;) {
-        try {
-          const { added, done, signature } = await runSlice(videoId, sortBy);
-
-          // 同じページが返り続けている＝トークンが進んでいない（無限ループ）検知
-          if (signature && signature === lastSignature) {
-            repeats += 1;
-            if (repeats >= 3) {
-              throw new Error(`continuation token is not advancing (page=${signature})`);
-            }
-          } else {
-            repeats = 0;
-            lastSignature = signature;
-          }
-          const state = await prisma.commentSyncState.findUnique({
-            where: { videoId_sortBy: { videoId, sortBy } },
-          });
-          // 毎ページの count() は 170万行では重いので 100 ページに 1 回だけ測る
-          const pages = state?.pages ?? 0;
-          const shouldLog = done || pages % LOG_EVERY_PAGES === 0;
-          if (shouldLog) {
-            const dbTotal = pages % 100 === 0 || done ? await prisma.commentCache.count() : null;
-            console.log(
-              `[CommentSync] ${videoId} pages=${pages} walked=${state?.comments ?? 0} new=${added} page=${signature}` +
-                (dbTotal === null ? "" : ` db_total=${dbTotal}`) +
-                (done ? " DONE" : "")
-            );
-          }
-          errors = 0;
-          if (done) {
-            console.log(`[CommentSync] ${videoId} reached the end of YouTube's comments.`);
-            break;
-          }
-          await new Promise((r) => setTimeout(r, PAGE_DELAY_MS));
-        } catch (e: any) {
-          errors += 1;
-          const message = e?.message || String(e);
-          console.error(`[CommentSync] ${videoId} error(${errors}): ${message}`);
-          try {
-            await prisma.commentSyncState.update({
-              where: { videoId_sortBy: { videoId, sortBy } },
-              data: { lastError: message.slice(0, 500) },
-            });
-          } catch {
-            /* 状態更新に失敗しても止めない */
-          }
-          const wait = errors >= MAX_ERRORS_BEFORE_BACKOFF ? RETRY_DELAY_MS * 4 : RETRY_DELAY_MS;
-          if (errors >= MAX_ERRORS_BEFORE_BACKOFF) errors = 0;
-          await new Promise((r) => setTimeout(r, wait));
-        }
+      for (const sortBy of sorts) {
+        jobs.push(runLane(videoId, sortBy));
       }
     }
+    console.log(`[CommentSync] starting ${jobs.length} lane(s): ${videoIds.join(",")} x ${sorts.join(",")}`);
+    await Promise.all(jobs);
+    console.log(`[CommentSync] all lanes finished.`);
   })();
+}
+
+/** 1本の鎖（video × sort）を最後まで歩く。並列レーンとして独立に動く。 */
+async function runLane(videoId: string, sortBy: string): Promise<void> {
+  let errors = 0;
+  console.log(`[CommentSync] lane started ${videoId} (sort=${sortBy})`);
+
+  let lastSignature = "";
+  let repeats = 0;
+  for (;;) {
+    try {
+      const { added, done, signature } = await runSlice(videoId, sortBy);
+
+      // 同じページが返り続けている＝トークンが進んでいない（無限ループ）検知
+      if (signature && signature === lastSignature) {
+        repeats += 1;
+        if (repeats >= 3) {
+          throw new Error(`continuation token is not advancing (page=${signature})`);
+        }
+      } else {
+        repeats = 0;
+        lastSignature = signature;
+      }
+
+      const state = await prisma.commentSyncState.findUnique({
+        where: { videoId_sortBy: { videoId, sortBy } },
+      });
+      // 毎ページの count() は 170万行では重いので 100 ページに 1 回だけ測る
+      const pages = state?.pages ?? 0;
+      if (done || pages % LOG_EVERY_PAGES === 0) {
+        const dbTotal = pages % 100 === 0 || done ? await prisma.commentCache.count() : null;
+        console.log(
+          `[CommentSync] ${sortBy} pages=${pages} walked=${state?.comments ?? 0} new=${added} page=${signature}` +
+            (dbTotal === null ? "" : ` db_total=${dbTotal}`) +
+            (done ? " DONE" : "")
+        );
+      }
+      errors = 0;
+      if (done) {
+        console.log(`[CommentSync] ${sortBy} reached the end of YouTube's comments.`);
+        return;
+      }
+      await new Promise((r) => setTimeout(r, PAGE_DELAY_MS));
+    } catch (e: any) {
+      errors += 1;
+      const message = e?.message || String(e);
+      console.error(`[CommentSync] ${sortBy} error(${errors}): ${message}`);
+      try {
+        await prisma.commentSyncState.update({
+          where: { videoId_sortBy: { videoId, sortBy } },
+          data: { lastError: message.slice(0, 500) },
+        });
+      } catch {
+        /* 状態更新に失敗しても止めない */
+      }
+      const wait = errors >= MAX_ERRORS_BEFORE_BACKOFF ? RETRY_DELAY_MS * 4 : RETRY_DELAY_MS;
+      if (errors >= MAX_ERRORS_BEFORE_BACKOFF) errors = 0;
+      await new Promise((r) => setTimeout(r, wait));
+    }
+  }
 }
