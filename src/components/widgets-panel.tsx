@@ -151,7 +151,7 @@ export function WidgetsPanel() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setShowSuggestions(true)}
-            className="w-full bg-card text-foreground rounded-full py-3 pl-12 pr-10 outline-none focus:ring-2 focus:ring-primary placeholder-muted border border-border"
+            className="w-full bg-[#202327] text-foreground rounded-full h-11 text-[15px] pl-12 pr-10 outline-none focus:ring-2 focus:ring-primary placeholder-muted border border-transparent"
           />
           <button
             type="button"

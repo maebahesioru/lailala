@@ -224,7 +224,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         </div>
                       </div>
                     ) : (
-                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed" onClick={() => {
+                      <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-5" onClick={() => {
                         const sel = window.getSelection();
                         if (sel && sel.toString().length > 0) return;
                         router.push(threadPath(thread.comment.commentId));

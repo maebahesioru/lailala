@@ -156,7 +156,7 @@ export function TweetMoreMenu({
           className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted"
           title="もっと見る"
         >
-          <MoreHorizontal size={18} />
+          <MoreHorizontal size={18.75} />
         </motion.button>
 
         <AnimatePresence>
