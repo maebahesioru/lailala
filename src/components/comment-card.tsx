@@ -3,6 +3,7 @@
 import { threadPath, threadUrl } from "@/lib/thread-url";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { avatarColor, avatarLetter } from "@/lib/avatar-utils";
 import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User } from "lucide-react";
 import { CommentThread } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
@@ -138,8 +139,20 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                     onClick={(e) => e.stopPropagation()}
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center shrink-0" onClick={(e) => e.stopPropagation()}>
-                    <User size={20} className="text-muted" />
+                  <div
+
+                    className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-white font-bold select-none"
+
+                    style={{ backgroundColor: avatarColor(thread.comment.author.name) }}
+
+                    aria-hidden="true"
+
+                    onClick={(e) => e.stopPropagation()}
+
+                  >
+
+                    <span className="text-[15px] leading-none">{avatarLetter(thread.comment.author.name)}</span>
+
                   </div>
                 )}
               </Link>

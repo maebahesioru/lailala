@@ -89,7 +89,7 @@ export async function GET(req: NextRequest) {
   // それだと PostgreSQL の int4 範囲外になり Prisma が落ちて 500 になっていた
   // （例: ?minLikes=99999999999）。
   const minLikes = intParam(searchParams, "minLikes", 0, 0, 10_000_000);
-  const sort = searchParams.get("sort") || "relevance"; // relevance / newest / likes
+  const sort = searchParams.get("sort") || "relevance"; // relevance / newest / oldest / likes
   const userFilter = searchParams.get("user") || ""; // channelId or author name
 
   // 検索語が長すぎると ILIKE の全件走査で 3 秒の statement_timeout に達し、
@@ -233,6 +233,8 @@ export async function GET(req: NextRequest) {
       orderBy = { publishedAt: "desc" };
     } else if (type === "accounts") {
       orderBy = { likeCount: "desc" };
+    } else if (sort === "oldest") {
+      orderBy = { publishedAt: "asc" };
     } else if (sort === "newest") {
       orderBy = { publishedAt: "desc" };
     } else if (sort === "likes") {

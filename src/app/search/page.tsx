@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { MainLayout } from "@/components/main-layout";
 import { CommentCard } from "@/components/comment-card";
 import { CommentThread } from "@/types/youtube";
-import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp, User, List, SlidersHorizontal, X, Heart, Clock, Eye, ThumbsUp, ThumbsDown, MessageSquare, Calendar, Users } from "lucide-react";
+import { Search, ArrowLeft, Loader2, SearchX, Mic, MicOff, TrendingUp, User, List, SlidersHorizontal, X, Heart, Clock, Eye, ThumbsUp, ThumbsDown, MessageSquare, Calendar, Users, ArrowUp } from "lucide-react";
 import Link from "next/link";
 
 interface TrendWord {
@@ -46,7 +46,7 @@ interface ListResult {
 
 type SearchTab = "top" | "latest" | "accounts" | "lists";
 type Period = "all" | "today" | "week" | "month";
-type SortBy = "relevance" | "newest" | "likes";
+type SortBy = "relevance" | "newest" | "oldest" | "likes";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -246,6 +246,7 @@ function SearchContent() {
   const sorts: { id: SortBy; label: string; icon: typeof Heart }[] = [
     { id: "relevance", label: "関連度", icon: Search },
     { id: "newest", label: "新着", icon: Clock },
+    { id: "oldest", label: "古い順", icon: ArrowUp },
     { id: "likes", label: "いいね数", icon: Heart },
   ];
 

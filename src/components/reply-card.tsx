@@ -3,6 +3,7 @@
 import { threadPath, threadUrl } from "@/lib/thread-url";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { avatarColor, avatarLetter } from "@/lib/avatar-utils";
 import { ThumbsUp, ThumbsDown, MessageCircle, Heart, Bookmark, User } from "lucide-react";
 import { YtComment } from "@/types/youtube";
 import { useAuth } from "./auth-provider";
@@ -147,8 +148,18 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                     onError={() => setAvatarError(true)}
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center">
-                    <User size={20} className="text-muted" />
+                  <div
+
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold select-none"
+
+                    style={{ backgroundColor: avatarColor(reply.author.name) }}
+
+                    aria-hidden="true"
+
+                  >
+
+                    <span className="text-[15px] leading-none">{avatarLetter(reply.author.name)}</span>
+
                   </div>
                 )}
               </Link>

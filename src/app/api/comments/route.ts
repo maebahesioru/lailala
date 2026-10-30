@@ -342,7 +342,8 @@ export async function GET(req: NextRequest) {
               replyCount: parseCount(c.replyCount),
               authorName: c.author?.name || "Unknown",
               authorChannelId: c.author?.channelId || null,
-              authorThumb: c.author?.thumbnail || null,
+              // 既存行のアイコンを null で上書きしない（サムネが取れなかった時だけ温存）
+              ...(c.author?.thumbnail ? { authorThumb: c.author.thumbnail } : {}),
               publishedAt,
             },
             create: {
