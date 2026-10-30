@@ -86,9 +86,14 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
 
   const router = useRouter();
   const pathname = usePathname();
+  // 並び順はルートで決まる（/latest/ は新着、それ以外は人気）。
+  // sessionStorage を優先すると「タブ表示は新着なのに中身は人気」という
+  // 食い違いが起きるため、初期値も pathname から決める。
   const [sortBy, setSortBy] = useState<"TOP_COMMENTS" | "NEWEST_FIRST">(() => {
     if (typeof window === "undefined") return defaultSort;
-    return (sessionStorage.getItem("lailala-sort") as any) || defaultSort;
+    if (window.location.pathname === "/latest/") return "NEWEST_FIRST";
+    if (window.location.pathname === "/popular/") return "TOP_COMMENTS";
+    return defaultSort;
   });
   const [threads, setThreads] = useState<CommentThread[]>([]);
   const [loading, setLoading] = useState(false);
@@ -254,6 +259,13 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
     loadInitialAndRestoreScroll();
   }, [videoId, sortBy, activeListId, loadInitialAndRestoreScroll]);
 
+  // ルートが変わったら並び順も追従させる（/popular/ ↔ /latest/）
+  useEffect(() => {
+    if (activeListId) return;
+    const want = pathname === "/latest/" ? "NEWEST_FIRST" : "TOP_COMMENTS";
+    setSortBy((prev) => (prev === want ? prev : want));
+  }, [pathname, activeListId]);
+
   // Listen for scroll-to-top event from sidebar home button
   useEffect(() => {
     const handleScrollToTop = () => {
@@ -279,7 +291,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
 
   // Save tab state before navigating away
   useEffect(() => {
-    sessionStorage.setItem("lailala-sort", sortBy);
+    sessionStorage.removeItem("lailala-sort");
     if (activeListId) {
       sessionStorage.setItem("lailala-list", activeListId);
     } else {
