@@ -196,7 +196,7 @@ export async function startCommentReplySyncWorker() {
     .split(",")
     .map((v) => v.trim())
     .filter(Boolean);
-  const lanes = envInt("COMMENT_REPLY_SYNC_LANES", 3);
+  const lanes = envInt("COMMENT_REPLY_SYNC_LANES", 4);
 
   (async () => {
     await new Promise((r) => setTimeout(r, 40_000));
