@@ -6,16 +6,16 @@ import { unwrapComment } from "@/lib/youtube-comment-shape";
 
 export async function PATCH(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const limit = await rateLimit(`edit:${userId}`, 10, 60);
-  if (!limit.success) return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  if (!limit.success) return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
 
   try {
     const body = await req.json();
     const { videoId, commentId, text } = body;
     if (!videoId || !commentId || !text?.trim()) {
-      return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+      return NextResponse.json({ error: "リクエストの内容が不正です。" }, { status: 400 });
     }
 
     const innertube = await getInnertubeWithAuth(userId);
@@ -34,7 +34,7 @@ export async function PATCH(req: NextRequest) {
       if (targetComment) break;
     }
 
-    if (!targetComment) return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+    if (!targetComment) return NextResponse.json({ error: "コメントが見つかりませんでした。" }, { status: 404 });
 
     targetComment.setActions(innertube.actions);
     await targetComment.edit(text.trim());

@@ -168,7 +168,7 @@ async function fetchOgp(url: string) {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const url = searchParams.get("url");
-  if (!url) return NextResponse.json({ error: "URL required" }, { status: 400 });
+  if (!url) return NextResponse.json({ error: "URL が必要です。" }, { status: 400 });
 
   try {
     await assertPublicUrl(url);

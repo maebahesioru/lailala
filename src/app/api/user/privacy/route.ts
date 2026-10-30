@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   try {
     const user = await prisma.user.findUnique({
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   try {
     const body = await req.json();

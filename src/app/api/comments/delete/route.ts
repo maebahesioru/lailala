@@ -6,10 +6,10 @@ import { rateLimit } from "@/lib/rate-limit";
 
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const limit = await rateLimit(`delete:${userId}`, 10, 60);
-  if (!limit.success) return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  if (!limit.success) return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
 
   const { searchParams } = new URL(req.url);
   const videoId = searchParams.get("videoId");

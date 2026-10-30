@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const channelId = searchParams.get("channelId");
-  if (!channelId) return NextResponse.json({ error: "channelId required" }, { status: 400 });
+  if (!channelId) return NextResponse.json({ error: "channelId が必要です。" }, { status: 400 });
 
   try {
     const user = await prisma.user.findFirst({

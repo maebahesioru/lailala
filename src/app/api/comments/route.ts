@@ -88,18 +88,18 @@ function parseCommentThread(thread: any) {
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   const limit = await rateLimit(`comment:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   const body = await req.json();
   const parsed = postSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+    return NextResponse.json({ error: "リクエストの内容が不正です。" }, { status: 400 });
   }
 
   const { videoId, text } = parsed.data;
@@ -194,7 +194,7 @@ export async function GET(req: NextRequest) {
   const offset = intParam(searchParams, "offset", 0, 0, 500);
 
   if (!videoId) {
-    return NextResponse.json({ error: "videoId required" }, { status: 400 });
+    return NextResponse.json({ error: "videoId が必要です。" }, { status: 400 });
   }
 
   try {

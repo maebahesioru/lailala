@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const videoId = searchParams.get("videoId");
 
   if (!videoId) {
-    return NextResponse.json({ error: "videoId required" }, { status: 400 });
+    return NextResponse.json({ error: "videoId が必要です。" }, { status: 400 });
   }
 
   try {

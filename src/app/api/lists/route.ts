@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
         },
       });
       if (!list) {
-        return NextResponse.json({ error: "Not found" }, { status: 404 });
+        return NextResponse.json({ error: "見つかりませんでした。" }, { status: 404 });
       }
       // Only owner or public lists are viewable
       const isOwner = list.userId === userId;
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
     }
 
     const lists = await prisma.list.findMany({
@@ -67,12 +67,12 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   const limit = await rateLimit(`list:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   try {
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
       const list = await prisma.list.findFirst({
         where: { id: body.listId, userId },
       });
-      if (!list) return NextResponse.json({ error: "Not found" }, { status: 404 });
+      if (!list) return NextResponse.json({ error: "見つかりませんでした。" }, { status: 404 });
 
       // Find comments by this user and add them
       const comments = await prisma.commentCache.findMany({
@@ -161,16 +161,16 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   const limit = await rateLimit(`list-update:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   const { listId, name, description, isPublic } = await req.json();
-  if (!listId) return NextResponse.json({ error: "listId required" }, { status: 400 });
+  if (!listId) return NextResponse.json({ error: "listId が必要です。" }, { status: 400 });
 
   try {
     const list = await prisma.list.updateMany({
@@ -190,12 +190,12 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   const limit = await rateLimit(`list-delete:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   const { searchParams } = new URL(req.url);
@@ -217,7 +217,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ success: true });
     }
 
-    return NextResponse.json({ error: "listId required" }, { status: 400 });
+    return NextResponse.json({ error: "listId が必要です。" }, { status: 400 });
   } catch (e: any) {
     return internalError("api/lists", e);
   }

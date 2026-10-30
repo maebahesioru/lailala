@@ -18,7 +18,7 @@ import { getSessionUserId } from "@/lib/session";
 export async function requireAdmin(): Promise<NextResponse | null> {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   const allowList = (process.env.ADMIN_CHANNEL_IDS || "")

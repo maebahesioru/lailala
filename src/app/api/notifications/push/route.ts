@@ -7,13 +7,13 @@ import { sendPushNotification } from "@/lib/push";
 // POST: subscribe to push notifications
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   try {
     const body = await req.json();
     const { endpoint, keys } = body;
     if (!endpoint || !keys?.p256dh || !keys?.auth) {
-      return NextResponse.json({ error: "Invalid subscription" }, { status: 400 });
+      return NextResponse.json({ error: "購読情報が不正です。" }, { status: 400 });
     }
 
     await prisma.pushSubscription.upsert({
@@ -36,13 +36,13 @@ export async function POST(req: NextRequest) {
 // DELETE: unsubscribe
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   try {
     const body = await req.json();
     const { endpoint } = body;
     if (!endpoint) {
-      return NextResponse.json({ error: "endpoint required" }, { status: 400 });
+      return NextResponse.json({ error: "endpoint が必要です。" }, { status: 400 });
     }
 
     await prisma.pushSubscription.deleteMany({

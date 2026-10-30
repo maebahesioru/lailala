@@ -5,13 +5,13 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   try {
     const { channelId } = await req.json();
     if (!channelId) {
-      return NextResponse.json({ error: "channelId required" }, { status: 400 });
+      return NextResponse.json({ error: "channelId が必要です。" }, { status: 400 });
     }
 
     // Verify the account belongs to this user

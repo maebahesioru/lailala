@@ -5,12 +5,23 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const { listId } = await req.json();
-  if (!listId) return NextResponse.json({ error: "listId required" }, { status: 400 });
+  if (!listId) return NextResponse.json({ error: "listId が必要です。" }, { status: 400 });
 
   try {
+    const list = await prisma.list.findUnique({
+      where: { id: listId },
+      select: { id: true, userId: true, isPublic: true },
+    });
+    if (!list) {
+      return NextResponse.json({ error: "リストが見つかりませんでした。" }, { status: 404 });
+    }
+    if (!list.isPublic && list.userId !== userId) {
+      return NextResponse.json({ error: "このリストは非公開です。" }, { status: 403 });
+    }
+
     await prisma.listFollow.upsert({
       where: { userId_listId: { userId, listId } },
       update: {},
@@ -24,11 +35,11 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
   const listId = searchParams.get("listId");
-  if (!listId) return NextResponse.json({ error: "listId required" }, { status: 400 });
+  if (!listId) return NextResponse.json({ error: "listId が必要です。" }, { status: 400 });
 
   try {
     await prisma.listFollow.deleteMany({
@@ -42,7 +53,7 @@ export async function DELETE(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   try {
     const follows = await prisma.listFollow.findMany({

@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const type = searchParams.get("type") || "all"; // 'comment' | 'reply' | 'likes' | 'dislikes' | 'bookmarks'
 
   if (!channelId) {
-    return NextResponse.json({ error: "channelId required" }, { status: 400 });
+    return NextResponse.json({ error: "channelId が必要です。" }, { status: 400 });
   }
 
   try {

@@ -6,7 +6,7 @@ import { rateLimit } from "@/lib/rate-limit";
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   try {
     const blocked = await prisma.blockedUser.findMany({
@@ -21,15 +21,15 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const limit = await rateLimit(`block:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   const { channelId, channelName } = await req.json();
-  if (!channelId) return NextResponse.json({ error: "channelId required" }, { status: 400 });
+  if (!channelId) return NextResponse.json({ error: "channelId が必要です。" }, { status: 400 });
 
   try {
     // Also try to block on YouTube
@@ -59,16 +59,16 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const limit = await rateLimit(`block-delete:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   const { searchParams } = new URL(req.url);
   const channelId = searchParams.get("channelId");
-  if (!channelId) return NextResponse.json({ error: "channelId required" }, { status: 400 });
+  if (!channelId) return NextResponse.json({ error: "channelId が必要です。" }, { status: 400 });
 
   try {
     await prisma.blockedUser.deleteMany({

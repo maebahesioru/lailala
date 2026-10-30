@@ -8,7 +8,7 @@ import { createNotification } from "@/lib/notifications";
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   const { searchParams } = new URL(req.url);
@@ -28,12 +28,12 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   const limit = await rateLimit(`bookmark:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   try {
@@ -108,18 +108,18 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
   }
 
   const limit = await rateLimit(`bookmark-delete:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   const { searchParams } = new URL(req.url);
   const commentId = searchParams.get("commentId");
   if (!commentId) {
-    return NextResponse.json({ error: "commentId required" }, { status: 400 });
+    return NextResponse.json({ error: "commentId が必要です。" }, { status: 400 });
   }
 
   try {

@@ -9,7 +9,7 @@ const VIDEO_ID = "niKAylKNIEI";
 // GET: fetch YouTube notifications and sync to our DB
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   try {
     const innertube = await getInnertubeWithAuth(userId);

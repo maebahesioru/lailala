@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const authorName = searchParams.get("authorName");
   // 分単位のタイムゾーンオフセット（JST = 540）。既定は JST。
   const tzOffset = intParam(searchParams, "tzOffset", 540, -720, 840);
-  if (!channelId) return NextResponse.json({ error: "channelId required" }, { status: 400 });
+  if (!channelId) return NextResponse.json({ error: "channelId が必要です。" }, { status: 400 });
 
   const map = new Map<string, number>();
 

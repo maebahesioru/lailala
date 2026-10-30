@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const words = await prisma.mutedWord.findMany({
     where: { userId },
@@ -16,11 +16,11 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const { word, mode = "partial" } = await req.json();
   if (!word || typeof word !== "string" || word.trim().length === 0) {
-    return NextResponse.json({ error: "Word is required" }, { status: 400 });
+    return NextResponse.json({ error: "単語が必要です。" }, { status: 400 });
   }
 
   try {
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");

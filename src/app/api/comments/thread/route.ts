@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
   const continuationToken = searchParams.get("continuationToken");
 
   if (!videoId || !commentId) {
-    return NextResponse.json({ error: "videoId and commentId required" }, { status: 400 });
+    return NextResponse.json({ error: "videoId と commentId が必要です。" }, { status: 400 });
   }
 
   try {

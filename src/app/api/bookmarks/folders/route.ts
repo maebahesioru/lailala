@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   try {
     const folders = await prisma.bookmarkFolder.findMany({
@@ -23,10 +23,10 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const { name } = await req.json();
-  if (!name?.trim()) return NextResponse.json({ error: "name required" }, { status: 400 });
+  if (!name?.trim()) return NextResponse.json({ error: "name が必要です。" }, { status: 400 });
 
   try {
     const folder = await prisma.bookmarkFolder.create({
@@ -40,11 +40,11 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
   const folderId = searchParams.get("folderId");
-  if (!folderId) return NextResponse.json({ error: "folderId required" }, { status: 400 });
+  if (!folderId) return NextResponse.json({ error: "folderId が必要です。" }, { status: 400 });
 
   try {
     await prisma.bookmarkFolder.deleteMany({

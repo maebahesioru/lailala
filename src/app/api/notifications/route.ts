@@ -9,7 +9,7 @@ import { internalError } from "@/lib/api-error";
 // GET: fetch notifications (app + YouTube)
 export async function GET(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
   const type = searchParams.get("type"); // 'all' | 'mentions'
@@ -88,11 +88,11 @@ export async function GET(req: NextRequest) {
 // PATCH: mark as read
 export async function PATCH(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const limit = await rateLimit(`notification-patch:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   try {
@@ -115,11 +115,11 @@ export async function PATCH(req: NextRequest) {
 // DELETE: remove notifications
 export async function DELETE(req: NextRequest) {
   const userId = await getSessionUserId();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return NextResponse.json({ error: "ログインが必要です。" }, { status: 401 });
 
   const limit = await rateLimit(`notification-delete:${userId}`, 10, 60);
   if (!limit.success) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
   }
 
   try {
