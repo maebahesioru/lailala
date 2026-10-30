@@ -28,11 +28,13 @@ function NestedReply({
   depth,
   videoId,
   commentId,
+  parentAuthorName = null,
 }: {
   node: ReplyNode;
   depth: number;
   videoId: string;
   commentId: string;
+  parentAuthorName?: string | null;
 }) {
   const [expanded, setExpanded] = useState(true);
   const hasChildren = node.children.length > 0;
@@ -45,7 +47,11 @@ function NestedReply({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
     >
-      <ReplyCard reply={node} parentCommentId={commentId} />
+      <ReplyCard
+        reply={node}
+        parentCommentId={commentId}
+        replyToName={depth > 0 ? parentAuthorName : null}
+      />
       {hasChildren && (
         <div className="relative">
           {depth < 3 && (
@@ -79,6 +85,7 @@ function NestedReply({
                     depth={depth + 1}
                     videoId={videoId}
                     commentId={commentId}
+                    parentAuthorName={node.author?.name ?? null}
                   />
                 ))}
               </motion.div>

@@ -7,9 +7,70 @@ import { CommentCard } from "./comment-card";
 import { Composer } from "./composer";
 import { fetchComments } from "@/lib/youtube-client";
 import { CommentThread } from "@/types/youtube";
-import { RefreshCw, Loader2, List, ArrowUp } from "lucide-react";
+import { RefreshCw, Loader2, List, ArrowUp, CornerDownRight } from "lucide-react";
 import { SkeletonCard } from "./skeleton-card";
 import { useMutedWords } from "./use-muted-words";
+/**
+ * 同じ人が続けて投稿した「連投」をまとめて表示する。
+ * コメント欄では連投で他の発言が埋もれるという声が多いため、
+ * 2件目以降は既定で畳み、「N件を表示」で開けるようにする。
+ */
+function ConsecutiveGroup({
+  items,
+  videoId,
+  voteCounts,
+  userVotes,
+  onDelete,
+}: {
+  items: CommentThread[];
+  videoId: string;
+  voteCounts: Record<string, { likes: number; dislikes: number }>;
+  userVotes: Record<string, string>;
+  onDelete: (id: string) => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const [first, ...rest] = items;
+  const authorName = first.comment.author?.name ?? "";
+
+  return (
+    <>
+      <CommentCard
+        thread={first}
+        videoId={videoId}
+        voteCounts={voteCounts[first.comment.commentId] || { likes: 0, dislikes: 0 }}
+        userVote={userVotes[first.comment.commentId]}
+        onDelete={onDelete}
+      />
+      {rest.length > 0 && (
+        <div className="flex items-center gap-2 px-4 py-2 text-[13px] text-muted bg-background/40">
+          <CornerDownRight size={14} className="shrink-0" />
+          <span className="truncate">
+            {authorName} の連投 {rest.length}件
+          </span>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="ml-auto shrink-0 font-bold text-primary hover:underline"
+            aria-expanded={expanded}
+          >
+            {expanded ? "たたむ" : "表示"}
+          </button>
+        </div>
+      )}
+      {expanded &&
+        rest.map((thread) => (
+          <CommentCard
+            key={thread.comment.commentId}
+            thread={thread}
+            videoId={videoId}
+            voteCounts={voteCounts[thread.comment.commentId] || { likes: 0, dislikes: 0 }}
+            userVote={userVotes[thread.comment.commentId]}
+            onDelete={onDelete}
+          />
+        ))}
+    </>
+  );
+}
+
 
 interface VoteCounts {
   likes: number;
@@ -380,18 +441,30 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
       <div className="divide-y divide-border">
         {threads.length === 0 && loading
           ? Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)
-          : threads
-              .filter((thread) => !isMuted(thread.comment.content))
-              .map((thread) => (
-                <CommentCard
-                  key={thread.comment.commentId}
-                  thread={thread}
+          : (() => {
+              const visible = threads.filter((thread) => !isMuted(thread.comment.content));
+              // 同じ投稿者の連続投稿をひとまとまりにする
+              const groups: CommentThread[][] = [];
+              for (const thread of visible) {
+                const key = thread.comment.author?.channelId || thread.comment.author?.name || "";
+                const last = groups[groups.length - 1];
+                const lastKey = last && (last[0].comment.author?.channelId || last[0].comment.author?.name || "");
+                if (last && key && lastKey === key) last.push(thread);
+                else groups.push([thread]);
+              }
+              const removeThread = (id: string) =>
+                setThreads((prev) => prev.filter((t) => t.comment.commentId !== id));
+              return groups.map((group) => (
+                <ConsecutiveGroup
+                  key={group[0].comment.commentId}
+                  items={group}
                   videoId={videoId}
-                  voteCounts={voteCounts[thread.comment.commentId] || { likes: 0, dislikes: 0 }}
-                  userVote={userVotes[thread.comment.commentId]}
-                  onDelete={(id) => setThreads((prev) => prev.filter((t) => t.comment.commentId !== id))}
+                  voteCounts={voteCounts}
+                  userVotes={userVotes}
+                  onDelete={removeThread}
                 />
-              ))}
+              ));
+            })()}
       </div>
 
       {/* Infinite scroll sentinel */}

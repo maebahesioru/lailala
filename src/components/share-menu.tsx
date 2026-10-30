@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Share, Link2, MoreHorizontal, Check } from "lucide-react";
+import { Share, Link2, MoreHorizontal, Check, Quote } from "lucide-react";
 
 interface ShareMenuProps {
   url: string;
@@ -36,6 +36,17 @@ export function ShareMenu({ url, text, buttonClass, extraLinks }: ShareMenuProps
       setTimeout(() => { setCopied(false); setCopiedLabel(""); }, 2000);
       setOpen(false);
     } catch (e) { console.error(e); }
+  };
+
+  const handleQuote = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const body = `${text}\n${url}`;
+    window.open(
+      `https://x.com/intent/post?text=${encodeURIComponent(body)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+    setOpen(false);
   };
 
   const handleNativeShare = async (e: React.MouseEvent) => {
@@ -96,6 +107,14 @@ export function ShareMenu({ url, text, buttonClass, extraLinks }: ShareMenuProps
                 <span>{copied && copiedLabel === link.label ? "コピーしました" : link.label}</span>
               </motion.button>
             ))}
+            <motion.button
+              whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+              onClick={handleQuote}
+              className="flex items-center gap-3 w-full px-4 py-3 text-left text-[15px]"
+            >
+              <Quote size={18} className="text-muted" />
+              <span>引用してXに投稿</span>
+            </motion.button>
             <motion.button
               whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
               onClick={handleNativeShare}

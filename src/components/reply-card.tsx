@@ -24,6 +24,8 @@ interface ReplyCardProps {
   parentCommentId?: string;
   onDelete?: (commentId: string) => void;
   showDetailTime?: boolean;
+  /** @メンションが本文に無いときも「返信先」を出すための親の表示名 */
+  replyToName?: string | null;
 }
 
 function parseReplyTo(content: string): { replyTo: string | null; displayContent: string } {
@@ -37,7 +39,7 @@ function parseReplyTo(content: string): { replyTo: string | null; displayContent
   return { replyTo: null, displayContent: content };
 }
 
-export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onDelete, showDetailTime = false }: ReplyCardProps) {
+export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onDelete, showDetailTime = false, replyToName = null }: ReplyCardProps) {
   const { user } = useAuth();
   const router = useRouter();
   const [liked, setLiked] = useState(reply.isLiked || false);
@@ -190,9 +192,9 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                       <span className="text-muted text-[15px]">·</span>
                       <span className="text-muted text-[15px] shrink-0 cursor-help" title={detailTime}>{localizeTime(reply.publishedTime)}</span>
                     </div>
-                    {replyTo && (
+                    {(replyTo || replyToName) && (
                       <div className="text-[13px] text-muted mt-0.5">
-                        返信先: <span className="text-primary">＠{replyTo}</span>
+                        返信先: <span className="text-primary">＠{replyTo || replyToName}</span>
                       </div>
                     )}
                     <p className="text-[15px] whitespace-pre-wrap mt-0.5 leading-relaxed">
