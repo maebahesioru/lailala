@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { internalError } from "@/lib/api-error";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
@@ -75,6 +76,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ actions: allActions });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/profile/actions", e);
   }
 }

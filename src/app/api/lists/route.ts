@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { internalError } from "@/lib/api-error";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
@@ -59,7 +60,7 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json({ lists: lists.map((l) => ({ ...l, isFollowing: true })) });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/lists", e);
   }
 }
 
@@ -153,7 +154,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/lists", e);
   }
 }
 
@@ -182,7 +183,7 @@ export async function PUT(req: NextRequest) {
     });
     return NextResponse.json({ success: true, list });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/lists", e);
   }
 }
 
@@ -218,6 +219,6 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({ error: "listId required" }, { status: 400 });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/lists", e);
   }
 }

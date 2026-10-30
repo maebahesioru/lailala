@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { internalError } from "@/lib/api-error";
 import { getInnertube } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -79,7 +80,7 @@ async function runCache(videoId: string, max: number) {
 
     return NextResponse.json({ success: true, cached: count, total, nextToken });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/admin/cache-comments", e);
   }
 }
 

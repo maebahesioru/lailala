@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { internalError } from "@/lib/api-error";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json({ bookmarks });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/bookmarks", e);
   }
 }
 
@@ -45,6 +46,15 @@ export async function POST(req: NextRequest) {
         data: { folderId: body.folderId || null },
       });
       return NextResponse.json({ action: "moved" });
+    }
+
+    const required = ["commentId", "videoId", "authorName", "content", "likeCount", "replyCount", "publishedTime"] as const;
+    const missing = required.filter((k) => body[k] === undefined || body[k] === null || body[k] === "");
+    if (missing.length > 0) {
+      return NextResponse.json(
+        { error: `ブックマークに必要な項目が足りません（${missing.join(", ")}）。` },
+        { status: 400 }
+      );
     }
 
     const bookmark = await prisma.bookmark.upsert({
@@ -91,7 +101,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ bookmark, action: "added" });
   } catch (e: any) {
     console.error("[Bookmarks POST]", e);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/bookmarks", e);
   }
 }
 
@@ -118,6 +128,6 @@ export async function DELETE(req: NextRequest) {
     });
     return NextResponse.json({ success: true });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/bookmarks", e);
   }
 }

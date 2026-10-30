@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { internalError } from "@/lib/api-error";
 import { getSessionUserId } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json({ folders });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/bookmarks/folders", e);
   }
 }
 
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ folder });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/bookmarks/folders", e);
   }
 }
 
@@ -51,6 +52,6 @@ export async function DELETE(req: NextRequest) {
     });
     return NextResponse.json({ success: true });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/bookmarks/folders", e);
   }
 }

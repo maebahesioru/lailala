@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { internalError } from "@/lib/api-error";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-auth";
 
@@ -49,6 +50,6 @@ export async function POST(_req: NextRequest) {
 
     return NextResponse.json({ fixed, total: users.length });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return internalError("api/admin/fix-channel-ids", e);
   }
 }

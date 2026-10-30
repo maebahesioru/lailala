@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, data: response });
   } catch (e: any) {
-    const msg = e.code === "YOUTUBE_AUTH_REQUIRED" ? "YouTube認証が必要です" : e.message || "Failed to post comment";
+    const msg = e.code === "YOUTUBE_AUTH_REQUIRED" ? "YouTube認証が必要です" : "処理に失敗しました。時間をおいて再試行してください。";
     return NextResponse.json({ error: msg }, { status: e.code === "YOUTUBE_AUTH_REQUIRED" ? 401 : 500 });
   }
 }
