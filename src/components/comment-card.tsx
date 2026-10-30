@@ -278,7 +278,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         exit={{ scale: 0.5, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
-                        <ThumbsUp size={18} fill={liked ? "currentColor" : "none"} />
+                        <ThumbsUp size={18.75} fill={liked ? "currentColor" : "none"} />
                       </motion.span>
                     </AnimatePresence>
                     <span>{formatCount(localLikes)}</span>
@@ -312,7 +312,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         exit={{ scale: 0.5, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
-                        <ThumbsDown size={18} fill={disliked ? "currentColor" : "none"} />
+                        <ThumbsDown size={18.75} fill={disliked ? "currentColor" : "none"} />
                       </motion.span>
                     </AnimatePresence>
                   </motion.button>
@@ -327,7 +327,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                     aria-label="返信する"
                     title="返信する"
                   >
-                    <MessageCircle size={18} />
+                    <MessageCircle size={18.75} />
                     <span>{thread.comment.replyCount || 0}</span>
                   </motion.button>
 
@@ -357,7 +357,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         exit={{ scale: 0.5, opacity: 0, rotate: 30 }}
                         transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
-                        <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
+                        <Bookmark size={18.75} fill={bookmarked ? "currentColor" : "none"} />
                       </motion.span>
                     </AnimatePresence>
                   </motion.button>

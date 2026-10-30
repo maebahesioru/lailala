@@ -237,7 +237,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                         exit={{ scale: 0.5, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
-                        <ThumbsUp size={18} fill={liked ? "currentColor" : "none"} />
+                        <ThumbsUp size={18.75} fill={liked ? "currentColor" : "none"} />
                       </motion.span>
                     </AnimatePresence>
                     {localLikes > 0 && <span>{formatCount(localLikes)}</span>}
@@ -271,7 +271,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                         exit={{ scale: 0.5, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
-                        <ThumbsDown size={18} fill={disliked ? "currentColor" : "none"} />
+                        <ThumbsDown size={18.75} fill={disliked ? "currentColor" : "none"} />
                       </motion.span>
                     </AnimatePresence>
                   </motion.button>
@@ -286,7 +286,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                       }
                       className="flex items-center justify-center gap-1.5 py-1.5 text-[13px] text-muted hover:text-primary transition-colors rounded-full hover:bg-white/5"
                     >
-                      <MessageCircle size={18} />
+                      <MessageCircle size={18.75} />
                       {reply.replyCount && reply.replyCount !== "0" && reply.replyCount !== "-" && <span>{reply.replyCount}</span>}
                     </Link>
                   </motion.div>
@@ -317,7 +317,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                         exit={{ scale: 0.5, opacity: 0, rotate: 30 }}
                         transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
-                        <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
+                        <Bookmark size={18.75} fill={bookmarked ? "currentColor" : "none"} />
                       </motion.span>
                     </AnimatePresence>
                   </motion.button>

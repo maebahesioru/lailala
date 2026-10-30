@@ -1,11 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { GlobalShortcuts } from "@/components/global-shortcuts";
 import { SITE_URL } from "@/lib/site-url";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -101,7 +98,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} min-h-screen antialiased`}>
+      <body className="min-h-screen antialiased">
         <script
           type="application/ld+json"
           // WebSite + SearchAction。`/` は `/popular/` へリダイレクトするため、
