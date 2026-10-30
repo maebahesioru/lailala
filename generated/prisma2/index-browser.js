@@ -292,6 +292,7 @@ exports.Prisma.ScheduledPostScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   videoId: 'videoId',
+  parentCommentId: 'parentCommentId',
   text: 'text',
   scheduledAt: 'scheduledAt',
   posted: 'posted',

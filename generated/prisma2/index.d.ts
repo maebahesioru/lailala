@@ -19526,6 +19526,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     videoId: string | null
+    parentCommentId: string | null
     text: string | null
     scheduledAt: Date | null
     posted: boolean | null
@@ -19538,6 +19539,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     videoId: string | null
+    parentCommentId: string | null
     text: string | null
     scheduledAt: Date | null
     posted: boolean | null
@@ -19550,6 +19552,7 @@ export namespace Prisma {
     id: number
     userId: number
     videoId: number
+    parentCommentId: number
     text: number
     scheduledAt: number
     posted: number
@@ -19572,6 +19575,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     videoId?: true
+    parentCommentId?: true
     text?: true
     scheduledAt?: true
     posted?: true
@@ -19584,6 +19588,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     videoId?: true
+    parentCommentId?: true
     text?: true
     scheduledAt?: true
     posted?: true
@@ -19596,6 +19601,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     videoId?: true
+    parentCommentId?: true
     text?: true
     scheduledAt?: true
     posted?: true
@@ -19695,6 +19701,7 @@ export namespace Prisma {
     id: string
     userId: string
     videoId: string
+    parentCommentId: string | null
     text: string
     scheduledAt: Date
     posted: boolean
@@ -19726,6 +19733,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     videoId?: boolean
+    parentCommentId?: boolean
     text?: boolean
     scheduledAt?: boolean
     posted?: boolean
@@ -19738,6 +19746,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     videoId?: boolean
+    parentCommentId?: boolean
     text?: boolean
     scheduledAt?: boolean
     posted?: boolean
@@ -19750,6 +19759,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     videoId?: boolean
+    parentCommentId?: boolean
     text?: boolean
     scheduledAt?: boolean
     posted?: boolean
@@ -19762,6 +19772,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     videoId?: boolean
+    parentCommentId?: boolean
     text?: boolean
     scheduledAt?: boolean
     posted?: boolean
@@ -19770,7 +19781,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type ScheduledPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "videoId" | "text" | "scheduledAt" | "posted" | "attempts" | "lastAttemptAt" | "createdAt", ExtArgs["result"]["scheduledPost"]>
+  export type ScheduledPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "videoId" | "parentCommentId" | "text" | "scheduledAt" | "posted" | "attempts" | "lastAttemptAt" | "createdAt", ExtArgs["result"]["scheduledPost"]>
 
   export type $ScheduledPostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ScheduledPost"
@@ -19779,6 +19790,7 @@ export namespace Prisma {
       id: string
       userId: string
       videoId: string
+      parentCommentId: string | null
       text: string
       scheduledAt: Date
       posted: boolean
@@ -20211,6 +20223,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ScheduledPost", 'String'>
     readonly userId: FieldRef<"ScheduledPost", 'String'>
     readonly videoId: FieldRef<"ScheduledPost", 'String'>
+    readonly parentCommentId: FieldRef<"ScheduledPost", 'String'>
     readonly text: FieldRef<"ScheduledPost", 'String'>
     readonly scheduledAt: FieldRef<"ScheduledPost", 'DateTime'>
     readonly posted: FieldRef<"ScheduledPost", 'Boolean'>
@@ -24104,6 +24117,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     videoId: 'videoId',
+    parentCommentId: 'parentCommentId',
     text: 'text',
     scheduledAt: 'scheduledAt',
     posted: 'posted',
@@ -25368,6 +25382,7 @@ export namespace Prisma {
     id?: StringFilter<"ScheduledPost"> | string
     userId?: StringFilter<"ScheduledPost"> | string
     videoId?: StringFilter<"ScheduledPost"> | string
+    parentCommentId?: StringNullableFilter<"ScheduledPost"> | string | null
     text?: StringFilter<"ScheduledPost"> | string
     scheduledAt?: DateTimeFilter<"ScheduledPost"> | Date | string
     posted?: BoolFilter<"ScheduledPost"> | boolean
@@ -25380,6 +25395,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     videoId?: SortOrder
+    parentCommentId?: SortOrderInput | SortOrder
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
@@ -25395,6 +25411,7 @@ export namespace Prisma {
     NOT?: ScheduledPostWhereInput | ScheduledPostWhereInput[]
     userId?: StringFilter<"ScheduledPost"> | string
     videoId?: StringFilter<"ScheduledPost"> | string
+    parentCommentId?: StringNullableFilter<"ScheduledPost"> | string | null
     text?: StringFilter<"ScheduledPost"> | string
     scheduledAt?: DateTimeFilter<"ScheduledPost"> | Date | string
     posted?: BoolFilter<"ScheduledPost"> | boolean
@@ -25407,6 +25424,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     videoId?: SortOrder
+    parentCommentId?: SortOrderInput | SortOrder
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
@@ -25427,6 +25445,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"ScheduledPost"> | string
     userId?: StringWithAggregatesFilter<"ScheduledPost"> | string
     videoId?: StringWithAggregatesFilter<"ScheduledPost"> | string
+    parentCommentId?: StringNullableWithAggregatesFilter<"ScheduledPost"> | string | null
     text?: StringWithAggregatesFilter<"ScheduledPost"> | string
     scheduledAt?: DateTimeWithAggregatesFilter<"ScheduledPost"> | Date | string
     posted?: BoolWithAggregatesFilter<"ScheduledPost"> | boolean
@@ -26868,6 +26887,7 @@ export namespace Prisma {
     id?: string
     userId: string
     videoId: string
+    parentCommentId?: string | null
     text: string
     scheduledAt: Date | string
     posted?: boolean
@@ -26880,6 +26900,7 @@ export namespace Prisma {
     id?: string
     userId: string
     videoId: string
+    parentCommentId?: string | null
     text: string
     scheduledAt: Date | string
     posted?: boolean
@@ -26892,6 +26913,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     videoId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     text?: StringFieldUpdateOperationsInput | string
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posted?: BoolFieldUpdateOperationsInput | boolean
@@ -26904,6 +26926,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     videoId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     text?: StringFieldUpdateOperationsInput | string
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posted?: BoolFieldUpdateOperationsInput | boolean
@@ -26916,6 +26939,7 @@ export namespace Prisma {
     id?: string
     userId: string
     videoId: string
+    parentCommentId?: string | null
     text: string
     scheduledAt: Date | string
     posted?: boolean
@@ -26928,6 +26952,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     videoId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     text?: StringFieldUpdateOperationsInput | string
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posted?: BoolFieldUpdateOperationsInput | boolean
@@ -26940,6 +26965,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     videoId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     text?: StringFieldUpdateOperationsInput | string
     scheduledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posted?: BoolFieldUpdateOperationsInput | boolean
@@ -28048,6 +28074,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     videoId?: SortOrder
+    parentCommentId?: SortOrder
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
@@ -28064,6 +28091,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     videoId?: SortOrder
+    parentCommentId?: SortOrder
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder
@@ -28076,6 +28104,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     videoId?: SortOrder
+    parentCommentId?: SortOrder
     text?: SortOrder
     scheduledAt?: SortOrder
     posted?: SortOrder

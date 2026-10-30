@@ -283,6 +283,8 @@ model ScheduledPost {
   id          String   @id @default(cuid())
   userId      String   @map("user_id")
   videoId     String   @map("video_id")
+  // 返信の予約投稿のときだけ入る親コメントID。null なら通常のコメント投稿。
+  parentCommentId String? @map("parent_comment_id")
   text        String   @db.Text
   scheduledAt DateTime @map("scheduled_at")
   posted        Boolean  @default(false)

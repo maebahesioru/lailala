@@ -46,11 +46,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "未来の日時を指定してください" }, { status: 400 });
     }
 
+    const videoId = typeof body.videoId === "string" ? body.videoId.trim() : "";
+    const text = typeof body.text === "string" ? body.text.trim() : "";
+    // 返信の予約投稿では親コメントIDを受け取る（未指定なら通常のコメント投稿）。
+    const parentCommentId =
+      typeof body.parentCommentId === "string" && body.parentCommentId.trim().length > 0
+        ? body.parentCommentId.trim()
+        : null;
+
+    if (!videoId) {
+      return NextResponse.json({ error: "動画IDが必要です。" }, { status: 400 });
+    }
+    if (!text) {
+      return NextResponse.json({ error: "本文を入力してください。" }, { status: 400 });
+    }
+    if (text.length > 5000) {
+      return NextResponse.json({ error: "本文は5000文字以内にしてください。" }, { status: 400 });
+    }
+
     const post = await prisma.scheduledPost.create({
       data: {
         userId,
-        videoId: body.videoId,
-        text: body.text,
+        videoId,
+        text,
+        parentCommentId,
         scheduledAt,
       },
     });

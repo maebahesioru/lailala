@@ -14,6 +14,7 @@ interface ScheduledPost {
   videoId: string;
   text: string;
   scheduledAt: string;
+  parentCommentId?: string | null;
 }
 
 export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { videoId: string; parentCommentId?: string; placeholder?: string; onPosted?: () => void }) {

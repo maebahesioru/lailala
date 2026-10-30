@@ -51,12 +51,37 @@ export function startScheduledPostWorker() {
           // Lazy import to avoid bundling youtubei.js at startup
           const { getInnertubeWithAuth } = await import("./youtube");
           const innertube = await getInnertubeWithAuth(post.userId);
-          await innertube.interact.comment(post.videoId, post.text);
+          if (post.parentCommentId) {
+            // 返信の予約投稿: 親コメントを引き当ててから reply する
+            const { unwrapComment } = await import("./youtube-comment-shape");
+            const comments = await innertube.getComments(
+              post.videoId,
+              "TOP_COMMENTS",
+              post.parentCommentId,
+            );
+            let target: any = null;
+            for (const thread of comments.contents as any[]) {
+              if (thread.comment?.comment_id === post.parentCommentId) {
+                target = thread.comment;
+                break;
+              }
+              for (const reply of thread.replies ?? []) {
+                const c = unwrapComment(reply);
+                if (c?.comment_id === post.parentCommentId) { target = c; break; }
+              }
+              if (target) break;
+            }
+            if (!target) throw new Error("parent comment not found");
+            target.setActions(innertube.actions);
+            await target.reply(post.text);
+          } else {
+            await innertube.interact.comment(post.videoId, post.text);
+          }
           await prisma.scheduledPost.update({
             where: { id: post.id },
             data: { posted: true, lastAttemptAt: new Date() },
           });
-          console.log(`[ScheduledPost] Posted ${post.id} for video ${post.videoId}`);
+          console.log(`[ScheduledPost] Posted ${post.id} for video ${post.videoId}${post.parentCommentId ? ` (reply to ${post.parentCommentId})` : ""}`);
         } catch (e: any) {
           const attempts = post.attempts + 1;
           await prisma.scheduledPost

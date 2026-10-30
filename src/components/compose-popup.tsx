@@ -18,6 +18,7 @@ interface ScheduledPost {
   videoId: string;
   text: string;
   scheduledAt: string;
+  parentCommentId?: string | null;
 }
 
 interface Draft {
@@ -195,7 +196,12 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
       const res = await fetch("/api/scheduled-posts/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId, text: text.trim(), scheduledAt }),
+        body: JSON.stringify({
+          videoId,
+          text: text.trim(),
+          scheduledAt,
+          ...(replyParentId ? { parentCommentId: replyParentId } : {}),
+        }),
       });
       if (res.ok) {
         setText("");
@@ -203,6 +209,8 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
         setShowSchedule(false);
         setScheduleDate("");
         setScheduleTime("");
+        setReplyParentId(null);
+        setReplyAuthorName(null);
         loadScheduled();
       } else {
         const data = await res.json();
@@ -401,6 +409,11 @@ export function ComposePopup({ open, onClose, videoId, initialThreadParentId, in
                     <div key={s.id} className="flex items-center justify-between bg-background border border-border rounded-lg px-3 py-2 text-[13px]">
                       <div className="flex items-center gap-2 text-muted min-w-0">
                         <Clock size={14} />
+                        {s.parentCommentId && (
+                          <span className="shrink-0 rounded-full bg-[#1d9bf0]/15 px-2 py-0.5 text-[11px] font-bold text-[#1d9bf0]">
+                            返信
+                          </span>
+                        )}
                         <span className="truncate">{new Date(s.scheduledAt).toLocaleString("ja-JP")}</span>
                         <span className="truncate text-foreground">{s.text}</span>
                       </div>
