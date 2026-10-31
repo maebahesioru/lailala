@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, usePathname } from "next/navigation";
 import { CommentCard } from "./comment-card";
+import { FeatureAnnouncement } from "./feature-announcement";
 import { Composer } from "./composer";
 import { fetchComments } from "@/lib/youtube-client";
 import { CommentThread } from "@/types/youtube";
@@ -398,6 +399,7 @@ export function CommentFeed({ videoId, defaultSort = "TOP_COMMENTS" }: { videoId
 
   return (
     <div>
+      <FeatureAnnouncement />
       <div className="sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border">
         <div className="flex">
           {tabs.map((tab) => (

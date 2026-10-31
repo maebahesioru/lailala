@@ -355,6 +355,16 @@ exports.Prisma.PushSubscriptionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.CommentImageScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  userId: 'userId',
+  filename: 'filename',
+  mimeType: 'mimeType',
+  size: 'size',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -392,7 +402,8 @@ exports.Prisma.ModelName = {
   ScheduledPost: 'ScheduledPost',
   Notification: 'Notification',
   NotificationSetting: 'NotificationSetting',
-  PushSubscription: 'PushSubscription'
+  PushSubscription: 'PushSubscription',
+  CommentImage: 'CommentImage'
 };
 
 /**

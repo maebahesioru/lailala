@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { getSessionUserId } from "@/lib/session";
 import { getInnertube } from "@/lib/youtube";
 import { YTNodes } from "youtubei.js";
@@ -141,6 +142,26 @@ export async function GET(req: NextRequest) {
       isHearted: c.is_hearted || false,
     };
 
+    try {
+      const ids = [parent?.commentId, ...replies.map((r: any) => r.commentId)].filter(Boolean) as string[];
+      if (ids.length > 0) {
+        const imageRows = await prisma.commentImage.findMany({
+          where: { commentId: { in: ids } },
+          orderBy: { createdAt: "asc" },
+          select: { id: true, commentId: true },
+        });
+        const byComment = new Map<string, { id: string; url: string }[]>();
+        for (const row of imageRows) {
+          const list = byComment.get(row.commentId) ?? [];
+          list.push({ id: row.id, url: `/api/images/${row.id}/` });
+          byComment.set(row.commentId, list);
+        }
+        if (parent) (parent as any).images = byComment.get(parent.commentId) ?? [];
+        for (const r of replies as any[]) r.images = byComment.get(r.commentId) ?? [];
+      }
+    } catch (e) {
+      console.error("[api/comments/thread] images attach failed", e);
+    }
     return NextResponse.json({ parent, replies, replyError, continuationToken: nextToken });
   } catch (e: any) {
     const raw = e?.message || "";

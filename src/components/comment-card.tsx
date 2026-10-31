@@ -17,6 +17,7 @@ import { TweetMoreMenu } from "./tweet-more-menu";
 import { ConfirmDialog } from "./confirm-dialog";
 import { useDataSaver } from "./data-saver-provider";
 import { LinkCard, hasLink } from "./link-card";
+import { CommentImages } from "./comment-images";
 
 interface CommentCardProps {
   thread: CommentThread;
@@ -241,6 +242,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         <LinkCard text={thread.comment.content} />
                       </Link>
                     )}
+                    <CommentImages commentId={thread.comment.commentId} initial={(thread as any).images} />
                     {showDetailTime && (
                       <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                     )}
@@ -281,7 +283,7 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         <ThumbsUp size={18.75} fill={liked ? "currentColor" : "none"} />
                       </motion.span>
                     </AnimatePresence>
-                    <span>{formatCount(localLikes)}</span>
+                    <span title={localLikes.toLocaleString("ja-JP")}>{formatCount(localLikes)}</span>
                     <AnimatePresence>
                       {liked && (
                         <motion.div

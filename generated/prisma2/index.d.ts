@@ -118,6 +118,11 @@ export type NotificationSetting = $Result.DefaultSelection<Prisma.$NotificationS
  * 
  */
 export type PushSubscription = $Result.DefaultSelection<Prisma.$PushSubscriptionPayload>
+/**
+ * Model CommentImage
+ * コメントに紐付ける画像（YouTube のコメント欄は画像を投稿できないため、サイト側で独自に添付する）。
+ */
+export type CommentImage = $Result.DefaultSelection<Prisma.$CommentImagePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -446,6 +451,16 @@ export class PrismaClient<
     * ```
     */
   get pushSubscription(): Prisma.PushSubscriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.commentImage`: Exposes CRUD operations for the **CommentImage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CommentImages
+    * const commentImages = await prisma.commentImage.findMany()
+    * ```
+    */
+  get commentImage(): Prisma.CommentImageDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -907,7 +922,8 @@ export namespace Prisma {
     ScheduledPost: 'ScheduledPost',
     Notification: 'Notification',
     NotificationSetting: 'NotificationSetting',
-    PushSubscription: 'PushSubscription'
+    PushSubscription: 'PushSubscription',
+    CommentImage: 'CommentImage'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -926,7 +942,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "commentSyncState" | "commentReplySync" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "mutedWord" | "egoKeyword" | "ogpCache" | "scheduledPost" | "notification" | "notificationSetting" | "pushSubscription"
+      modelProps: "user" | "ytCredential" | "commentLike" | "userAction" | "commentCache" | "commentSyncState" | "commentReplySync" | "bookmark" | "list" | "listItem" | "listFollow" | "bookmarkFolder" | "blockedUser" | "mutedUser" | "mutedWord" | "egoKeyword" | "ogpCache" | "scheduledPost" | "notification" | "notificationSetting" | "pushSubscription" | "commentImage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2484,6 +2500,80 @@ export namespace Prisma {
           }
         }
       }
+      CommentImage: {
+        payload: Prisma.$CommentImagePayload<ExtArgs>
+        fields: Prisma.CommentImageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CommentImageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CommentImageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>
+          }
+          findFirst: {
+            args: Prisma.CommentImageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CommentImageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>
+          }
+          findMany: {
+            args: Prisma.CommentImageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>[]
+          }
+          create: {
+            args: Prisma.CommentImageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>
+          }
+          createMany: {
+            args: Prisma.CommentImageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CommentImageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>[]
+          }
+          delete: {
+            args: Prisma.CommentImageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>
+          }
+          update: {
+            args: Prisma.CommentImageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>
+          }
+          deleteMany: {
+            args: Prisma.CommentImageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CommentImageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CommentImageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>[]
+          }
+          upsert: {
+            args: Prisma.CommentImageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommentImagePayload>
+          }
+          aggregate: {
+            args: Prisma.CommentImageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCommentImage>
+          }
+          groupBy: {
+            args: Prisma.CommentImageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CommentImageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CommentImageCountArgs<ExtArgs>
+            result: $Utils.Optional<CommentImageCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2601,6 +2691,7 @@ export namespace Prisma {
     notification?: NotificationOmit
     notificationSetting?: NotificationSettingOmit
     pushSubscription?: PushSubscriptionOmit
+    commentImage?: CommentImageOmit
   }
 
   /* Types for Logging */
@@ -26266,6 +26357,1061 @@ export namespace Prisma {
 
 
   /**
+   * Model CommentImage
+   */
+
+  export type AggregateCommentImage = {
+    _count: CommentImageCountAggregateOutputType | null
+    _avg: CommentImageAvgAggregateOutputType | null
+    _sum: CommentImageSumAggregateOutputType | null
+    _min: CommentImageMinAggregateOutputType | null
+    _max: CommentImageMaxAggregateOutputType | null
+  }
+
+  export type CommentImageAvgAggregateOutputType = {
+    size: number | null
+  }
+
+  export type CommentImageSumAggregateOutputType = {
+    size: number | null
+  }
+
+  export type CommentImageMinAggregateOutputType = {
+    id: string | null
+    commentId: string | null
+    userId: string | null
+    filename: string | null
+    mimeType: string | null
+    size: number | null
+    createdAt: Date | null
+  }
+
+  export type CommentImageMaxAggregateOutputType = {
+    id: string | null
+    commentId: string | null
+    userId: string | null
+    filename: string | null
+    mimeType: string | null
+    size: number | null
+    createdAt: Date | null
+  }
+
+  export type CommentImageCountAggregateOutputType = {
+    id: number
+    commentId: number
+    userId: number
+    filename: number
+    mimeType: number
+    size: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CommentImageAvgAggregateInputType = {
+    size?: true
+  }
+
+  export type CommentImageSumAggregateInputType = {
+    size?: true
+  }
+
+  export type CommentImageMinAggregateInputType = {
+    id?: true
+    commentId?: true
+    userId?: true
+    filename?: true
+    mimeType?: true
+    size?: true
+    createdAt?: true
+  }
+
+  export type CommentImageMaxAggregateInputType = {
+    id?: true
+    commentId?: true
+    userId?: true
+    filename?: true
+    mimeType?: true
+    size?: true
+    createdAt?: true
+  }
+
+  export type CommentImageCountAggregateInputType = {
+    id?: true
+    commentId?: true
+    userId?: true
+    filename?: true
+    mimeType?: true
+    size?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CommentImageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CommentImage to aggregate.
+     */
+    where?: CommentImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommentImages to fetch.
+     */
+    orderBy?: CommentImageOrderByWithRelationInput | CommentImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CommentImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommentImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommentImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CommentImages
+    **/
+    _count?: true | CommentImageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CommentImageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CommentImageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CommentImageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CommentImageMaxAggregateInputType
+  }
+
+  export type GetCommentImageAggregateType<T extends CommentImageAggregateArgs> = {
+        [P in keyof T & keyof AggregateCommentImage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCommentImage[P]>
+      : GetScalarType<T[P], AggregateCommentImage[P]>
+  }
+
+
+
+
+  export type CommentImageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommentImageWhereInput
+    orderBy?: CommentImageOrderByWithAggregationInput | CommentImageOrderByWithAggregationInput[]
+    by: CommentImageScalarFieldEnum[] | CommentImageScalarFieldEnum
+    having?: CommentImageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CommentImageCountAggregateInputType | true
+    _avg?: CommentImageAvgAggregateInputType
+    _sum?: CommentImageSumAggregateInputType
+    _min?: CommentImageMinAggregateInputType
+    _max?: CommentImageMaxAggregateInputType
+  }
+
+  export type CommentImageGroupByOutputType = {
+    id: string
+    commentId: string
+    userId: string | null
+    filename: string
+    mimeType: string
+    size: number
+    createdAt: Date
+    _count: CommentImageCountAggregateOutputType | null
+    _avg: CommentImageAvgAggregateOutputType | null
+    _sum: CommentImageSumAggregateOutputType | null
+    _min: CommentImageMinAggregateOutputType | null
+    _max: CommentImageMaxAggregateOutputType | null
+  }
+
+  type GetCommentImageGroupByPayload<T extends CommentImageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CommentImageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CommentImageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CommentImageGroupByOutputType[P]>
+            : GetScalarType<T[P], CommentImageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CommentImageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    commentId?: boolean
+    userId?: boolean
+    filename?: boolean
+    mimeType?: boolean
+    size?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["commentImage"]>
+
+  export type CommentImageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    commentId?: boolean
+    userId?: boolean
+    filename?: boolean
+    mimeType?: boolean
+    size?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["commentImage"]>
+
+  export type CommentImageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    commentId?: boolean
+    userId?: boolean
+    filename?: boolean
+    mimeType?: boolean
+    size?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["commentImage"]>
+
+  export type CommentImageSelectScalar = {
+    id?: boolean
+    commentId?: boolean
+    userId?: boolean
+    filename?: boolean
+    mimeType?: boolean
+    size?: boolean
+    createdAt?: boolean
+  }
+
+  export type CommentImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "commentId" | "userId" | "filename" | "mimeType" | "size" | "createdAt", ExtArgs["result"]["commentImage"]>
+
+  export type $CommentImagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CommentImage"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      commentId: string
+      userId: string | null
+      filename: string
+      mimeType: string
+      size: number
+      createdAt: Date
+    }, ExtArgs["result"]["commentImage"]>
+    composites: {}
+  }
+
+  type CommentImageGetPayload<S extends boolean | null | undefined | CommentImageDefaultArgs> = $Result.GetResult<Prisma.$CommentImagePayload, S>
+
+  type CommentImageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CommentImageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CommentImageCountAggregateInputType | true
+    }
+
+  export interface CommentImageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CommentImage'], meta: { name: 'CommentImage' } }
+    /**
+     * Find zero or one CommentImage that matches the filter.
+     * @param {CommentImageFindUniqueArgs} args - Arguments to find a CommentImage
+     * @example
+     * // Get one CommentImage
+     * const commentImage = await prisma.commentImage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CommentImageFindUniqueArgs>(args: SelectSubset<T, CommentImageFindUniqueArgs<ExtArgs>>): Prisma__CommentImageClient<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CommentImage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CommentImageFindUniqueOrThrowArgs} args - Arguments to find a CommentImage
+     * @example
+     * // Get one CommentImage
+     * const commentImage = await prisma.commentImage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CommentImageFindUniqueOrThrowArgs>(args: SelectSubset<T, CommentImageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommentImageClient<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CommentImage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentImageFindFirstArgs} args - Arguments to find a CommentImage
+     * @example
+     * // Get one CommentImage
+     * const commentImage = await prisma.commentImage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CommentImageFindFirstArgs>(args?: SelectSubset<T, CommentImageFindFirstArgs<ExtArgs>>): Prisma__CommentImageClient<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CommentImage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentImageFindFirstOrThrowArgs} args - Arguments to find a CommentImage
+     * @example
+     * // Get one CommentImage
+     * const commentImage = await prisma.commentImage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CommentImageFindFirstOrThrowArgs>(args?: SelectSubset<T, CommentImageFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommentImageClient<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CommentImages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentImageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CommentImages
+     * const commentImages = await prisma.commentImage.findMany()
+     * 
+     * // Get first 10 CommentImages
+     * const commentImages = await prisma.commentImage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const commentImageWithIdOnly = await prisma.commentImage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CommentImageFindManyArgs>(args?: SelectSubset<T, CommentImageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CommentImage.
+     * @param {CommentImageCreateArgs} args - Arguments to create a CommentImage.
+     * @example
+     * // Create one CommentImage
+     * const CommentImage = await prisma.commentImage.create({
+     *   data: {
+     *     // ... data to create a CommentImage
+     *   }
+     * })
+     * 
+     */
+    create<T extends CommentImageCreateArgs>(args: SelectSubset<T, CommentImageCreateArgs<ExtArgs>>): Prisma__CommentImageClient<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CommentImages.
+     * @param {CommentImageCreateManyArgs} args - Arguments to create many CommentImages.
+     * @example
+     * // Create many CommentImages
+     * const commentImage = await prisma.commentImage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CommentImageCreateManyArgs>(args?: SelectSubset<T, CommentImageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CommentImages and returns the data saved in the database.
+     * @param {CommentImageCreateManyAndReturnArgs} args - Arguments to create many CommentImages.
+     * @example
+     * // Create many CommentImages
+     * const commentImage = await prisma.commentImage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CommentImages and only return the `id`
+     * const commentImageWithIdOnly = await prisma.commentImage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CommentImageCreateManyAndReturnArgs>(args?: SelectSubset<T, CommentImageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CommentImage.
+     * @param {CommentImageDeleteArgs} args - Arguments to delete one CommentImage.
+     * @example
+     * // Delete one CommentImage
+     * const CommentImage = await prisma.commentImage.delete({
+     *   where: {
+     *     // ... filter to delete one CommentImage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CommentImageDeleteArgs>(args: SelectSubset<T, CommentImageDeleteArgs<ExtArgs>>): Prisma__CommentImageClient<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CommentImage.
+     * @param {CommentImageUpdateArgs} args - Arguments to update one CommentImage.
+     * @example
+     * // Update one CommentImage
+     * const commentImage = await prisma.commentImage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CommentImageUpdateArgs>(args: SelectSubset<T, CommentImageUpdateArgs<ExtArgs>>): Prisma__CommentImageClient<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CommentImages.
+     * @param {CommentImageDeleteManyArgs} args - Arguments to filter CommentImages to delete.
+     * @example
+     * // Delete a few CommentImages
+     * const { count } = await prisma.commentImage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CommentImageDeleteManyArgs>(args?: SelectSubset<T, CommentImageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CommentImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentImageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CommentImages
+     * const commentImage = await prisma.commentImage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CommentImageUpdateManyArgs>(args: SelectSubset<T, CommentImageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CommentImages and returns the data updated in the database.
+     * @param {CommentImageUpdateManyAndReturnArgs} args - Arguments to update many CommentImages.
+     * @example
+     * // Update many CommentImages
+     * const commentImage = await prisma.commentImage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CommentImages and only return the `id`
+     * const commentImageWithIdOnly = await prisma.commentImage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CommentImageUpdateManyAndReturnArgs>(args: SelectSubset<T, CommentImageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CommentImage.
+     * @param {CommentImageUpsertArgs} args - Arguments to update or create a CommentImage.
+     * @example
+     * // Update or create a CommentImage
+     * const commentImage = await prisma.commentImage.upsert({
+     *   create: {
+     *     // ... data to create a CommentImage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CommentImage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CommentImageUpsertArgs>(args: SelectSubset<T, CommentImageUpsertArgs<ExtArgs>>): Prisma__CommentImageClient<$Result.GetResult<Prisma.$CommentImagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CommentImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentImageCountArgs} args - Arguments to filter CommentImages to count.
+     * @example
+     * // Count the number of CommentImages
+     * const count = await prisma.commentImage.count({
+     *   where: {
+     *     // ... the filter for the CommentImages we want to count
+     *   }
+     * })
+    **/
+    count<T extends CommentImageCountArgs>(
+      args?: Subset<T, CommentImageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CommentImageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CommentImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentImageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CommentImageAggregateArgs>(args: Subset<T, CommentImageAggregateArgs>): Prisma.PrismaPromise<GetCommentImageAggregateType<T>>
+
+    /**
+     * Group by CommentImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommentImageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CommentImageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CommentImageGroupByArgs['orderBy'] }
+        : { orderBy?: CommentImageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CommentImageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCommentImageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CommentImage model
+   */
+  readonly fields: CommentImageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CommentImage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CommentImageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CommentImage model
+   */
+  interface CommentImageFieldRefs {
+    readonly id: FieldRef<"CommentImage", 'String'>
+    readonly commentId: FieldRef<"CommentImage", 'String'>
+    readonly userId: FieldRef<"CommentImage", 'String'>
+    readonly filename: FieldRef<"CommentImage", 'String'>
+    readonly mimeType: FieldRef<"CommentImage", 'String'>
+    readonly size: FieldRef<"CommentImage", 'Int'>
+    readonly createdAt: FieldRef<"CommentImage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CommentImage findUnique
+   */
+  export type CommentImageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentImage to fetch.
+     */
+    where: CommentImageWhereUniqueInput
+  }
+
+  /**
+   * CommentImage findUniqueOrThrow
+   */
+  export type CommentImageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentImage to fetch.
+     */
+    where: CommentImageWhereUniqueInput
+  }
+
+  /**
+   * CommentImage findFirst
+   */
+  export type CommentImageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentImage to fetch.
+     */
+    where?: CommentImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommentImages to fetch.
+     */
+    orderBy?: CommentImageOrderByWithRelationInput | CommentImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CommentImages.
+     */
+    cursor?: CommentImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommentImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommentImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommentImages.
+     */
+    distinct?: CommentImageScalarFieldEnum | CommentImageScalarFieldEnum[]
+  }
+
+  /**
+   * CommentImage findFirstOrThrow
+   */
+  export type CommentImageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentImage to fetch.
+     */
+    where?: CommentImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommentImages to fetch.
+     */
+    orderBy?: CommentImageOrderByWithRelationInput | CommentImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CommentImages.
+     */
+    cursor?: CommentImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommentImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommentImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommentImages.
+     */
+    distinct?: CommentImageScalarFieldEnum | CommentImageScalarFieldEnum[]
+  }
+
+  /**
+   * CommentImage findMany
+   */
+  export type CommentImageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * Filter, which CommentImages to fetch.
+     */
+    where?: CommentImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommentImages to fetch.
+     */
+    orderBy?: CommentImageOrderByWithRelationInput | CommentImageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CommentImages.
+     */
+    cursor?: CommentImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommentImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommentImages.
+     */
+    skip?: number
+    distinct?: CommentImageScalarFieldEnum | CommentImageScalarFieldEnum[]
+  }
+
+  /**
+   * CommentImage create
+   */
+  export type CommentImageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * The data needed to create a CommentImage.
+     */
+    data: XOR<CommentImageCreateInput, CommentImageUncheckedCreateInput>
+  }
+
+  /**
+   * CommentImage createMany
+   */
+  export type CommentImageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CommentImages.
+     */
+    data: CommentImageCreateManyInput | CommentImageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CommentImage createManyAndReturn
+   */
+  export type CommentImageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * The data used to create many CommentImages.
+     */
+    data: CommentImageCreateManyInput | CommentImageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CommentImage update
+   */
+  export type CommentImageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * The data needed to update a CommentImage.
+     */
+    data: XOR<CommentImageUpdateInput, CommentImageUncheckedUpdateInput>
+    /**
+     * Choose, which CommentImage to update.
+     */
+    where: CommentImageWhereUniqueInput
+  }
+
+  /**
+   * CommentImage updateMany
+   */
+  export type CommentImageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CommentImages.
+     */
+    data: XOR<CommentImageUpdateManyMutationInput, CommentImageUncheckedUpdateManyInput>
+    /**
+     * Filter which CommentImages to update
+     */
+    where?: CommentImageWhereInput
+    /**
+     * Limit how many CommentImages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommentImage updateManyAndReturn
+   */
+  export type CommentImageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * The data used to update CommentImages.
+     */
+    data: XOR<CommentImageUpdateManyMutationInput, CommentImageUncheckedUpdateManyInput>
+    /**
+     * Filter which CommentImages to update
+     */
+    where?: CommentImageWhereInput
+    /**
+     * Limit how many CommentImages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommentImage upsert
+   */
+  export type CommentImageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * The filter to search for the CommentImage to update in case it exists.
+     */
+    where: CommentImageWhereUniqueInput
+    /**
+     * In case the CommentImage found by the `where` argument doesn't exist, create a new CommentImage with this data.
+     */
+    create: XOR<CommentImageCreateInput, CommentImageUncheckedCreateInput>
+    /**
+     * In case the CommentImage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CommentImageUpdateInput, CommentImageUncheckedUpdateInput>
+  }
+
+  /**
+   * CommentImage delete
+   */
+  export type CommentImageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+    /**
+     * Filter which CommentImage to delete.
+     */
+    where: CommentImageWhereUniqueInput
+  }
+
+  /**
+   * CommentImage deleteMany
+   */
+  export type CommentImageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CommentImages to delete
+     */
+    where?: CommentImageWhereInput
+    /**
+     * Limit how many CommentImages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommentImage without action
+   */
+  export type CommentImageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentImage
+     */
+    select?: CommentImageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommentImage
+     */
+    omit?: CommentImageOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -26574,6 +27720,19 @@ export namespace Prisma {
   };
 
   export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
+
+
+  export const CommentImageScalarFieldEnum: {
+    id: 'id',
+    commentId: 'commentId',
+    userId: 'userId',
+    filename: 'filename',
+    mimeType: 'mimeType',
+    size: 'size',
+    createdAt: 'createdAt'
+  };
+
+  export type CommentImageScalarFieldEnum = (typeof CommentImageScalarFieldEnum)[keyof typeof CommentImageScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -28208,6 +29367,70 @@ export namespace Prisma {
     p256dh?: StringWithAggregatesFilter<"PushSubscription"> | string
     auth?: StringWithAggregatesFilter<"PushSubscription"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PushSubscription"> | Date | string
+  }
+
+  export type CommentImageWhereInput = {
+    AND?: CommentImageWhereInput | CommentImageWhereInput[]
+    OR?: CommentImageWhereInput[]
+    NOT?: CommentImageWhereInput | CommentImageWhereInput[]
+    id?: StringFilter<"CommentImage"> | string
+    commentId?: StringFilter<"CommentImage"> | string
+    userId?: StringNullableFilter<"CommentImage"> | string | null
+    filename?: StringFilter<"CommentImage"> | string
+    mimeType?: StringFilter<"CommentImage"> | string
+    size?: IntFilter<"CommentImage"> | number
+    createdAt?: DateTimeFilter<"CommentImage"> | Date | string
+  }
+
+  export type CommentImageOrderByWithRelationInput = {
+    id?: SortOrder
+    commentId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    filename?: SortOrder
+    mimeType?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CommentImageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CommentImageWhereInput | CommentImageWhereInput[]
+    OR?: CommentImageWhereInput[]
+    NOT?: CommentImageWhereInput | CommentImageWhereInput[]
+    commentId?: StringFilter<"CommentImage"> | string
+    userId?: StringNullableFilter<"CommentImage"> | string | null
+    filename?: StringFilter<"CommentImage"> | string
+    mimeType?: StringFilter<"CommentImage"> | string
+    size?: IntFilter<"CommentImage"> | number
+    createdAt?: DateTimeFilter<"CommentImage"> | Date | string
+  }, "id">
+
+  export type CommentImageOrderByWithAggregationInput = {
+    id?: SortOrder
+    commentId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    filename?: SortOrder
+    mimeType?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+    _count?: CommentImageCountOrderByAggregateInput
+    _avg?: CommentImageAvgOrderByAggregateInput
+    _max?: CommentImageMaxOrderByAggregateInput
+    _min?: CommentImageMinOrderByAggregateInput
+    _sum?: CommentImageSumOrderByAggregateInput
+  }
+
+  export type CommentImageScalarWhereWithAggregatesInput = {
+    AND?: CommentImageScalarWhereWithAggregatesInput | CommentImageScalarWhereWithAggregatesInput[]
+    OR?: CommentImageScalarWhereWithAggregatesInput[]
+    NOT?: CommentImageScalarWhereWithAggregatesInput | CommentImageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CommentImage"> | string
+    commentId?: StringWithAggregatesFilter<"CommentImage"> | string
+    userId?: StringNullableWithAggregatesFilter<"CommentImage"> | string | null
+    filename?: StringWithAggregatesFilter<"CommentImage"> | string
+    mimeType?: StringWithAggregatesFilter<"CommentImage"> | string
+    size?: IntWithAggregatesFilter<"CommentImage"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"CommentImage"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -29896,6 +31119,76 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CommentImageCreateInput = {
+    id?: string
+    commentId: string
+    userId?: string | null
+    filename: string
+    mimeType: string
+    size: number
+    createdAt?: Date | string
+  }
+
+  export type CommentImageUncheckedCreateInput = {
+    id?: string
+    commentId: string
+    userId?: string | null
+    filename: string
+    mimeType: string
+    size: number
+    createdAt?: Date | string
+  }
+
+  export type CommentImageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commentId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommentImageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commentId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommentImageCreateManyInput = {
+    id?: string
+    commentId: string
+    userId?: string | null
+    filename: string
+    mimeType: string
+    size: number
+    createdAt?: Date | string
+  }
+
+  export type CommentImageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commentId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommentImageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commentId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -31025,6 +32318,44 @@ export namespace Prisma {
     p256dh?: SortOrder
     auth?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type CommentImageCountOrderByAggregateInput = {
+    id?: SortOrder
+    commentId?: SortOrder
+    userId?: SortOrder
+    filename?: SortOrder
+    mimeType?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CommentImageAvgOrderByAggregateInput = {
+    size?: SortOrder
+  }
+
+  export type CommentImageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    commentId?: SortOrder
+    userId?: SortOrder
+    filename?: SortOrder
+    mimeType?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CommentImageMinOrderByAggregateInput = {
+    id?: SortOrder
+    commentId?: SortOrder
+    userId?: SortOrder
+    filename?: SortOrder
+    mimeType?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CommentImageSumOrderByAggregateInput = {
+    size?: SortOrder
   }
 
   export type YtCredentialCreateNestedManyWithoutUserInput = {

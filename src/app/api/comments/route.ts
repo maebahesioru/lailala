@@ -324,6 +324,28 @@ export async function GET(req: NextRequest) {
     const allThreads = threads;
     const start = Math.min(offset, allThreads.length);
     const visibleThreads = allThreads.slice(start, start + limit);
+    // コメントに添付された画像をまとめて1クエリで引く（カードごとに叩かない）。
+    try {
+      const ids = visibleThreads.map((t: any) => t.comment?.commentId).filter(Boolean);
+      if (ids.length > 0) {
+        const imageRows = await prisma.commentImage.findMany({
+          where: { commentId: { in: ids } },
+          orderBy: { createdAt: "asc" },
+          select: { id: true, commentId: true },
+        });
+        const byComment = new Map<string, { id: string; url: string }[]>();
+        for (const row of imageRows) {
+          const list = byComment.get(row.commentId) ?? [];
+          list.push({ id: row.id, url: `/api/images/${row.id}/` });
+          byComment.set(row.commentId, list);
+        }
+        for (const t of visibleThreads as any[]) {
+          t.images = byComment.get(t.comment?.commentId) ?? [];
+        }
+      }
+    } catch (e) {
+      console.error("[api/comments] images attach failed", e);
+    }
     const hasMoreInPage = start + visibleThreads.length < allThreads.length;
 
     // Fire-and-forget: cache fetched comments to DB

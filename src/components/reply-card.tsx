@@ -17,6 +17,7 @@ import { TweetMoreMenu } from "./tweet-more-menu";
 import { formatCount, parseLikeCount } from "./comment-card";
 import { useDataSaver } from "./data-saver-provider";
 import { LinkCard } from "./link-card";
+import { CommentImages } from "./comment-images";
 
 interface ReplyCardProps {
   reply: YtComment;
@@ -201,6 +202,7 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                       <MentionText content={stripEditedTag(displayContent)} videoId={videoId} />
                     </p>
                     <LinkCard text={reply.content} />
+                    <CommentImages commentId={reply.commentId} initial={(reply as any).images} />
                     {showDetailTime && (
                       <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                     )}

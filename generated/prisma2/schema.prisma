@@ -387,3 +387,18 @@ model PushSubscription {
   @@index([userId])
   @@map("push_subscriptions")
 }
+
+/// コメントに紐付ける画像（YouTube のコメント欄は画像を投稿できないため、サイト側で独自に添付する）。
+model CommentImage {
+  id        String   @id @default(cuid())
+  commentId String   @map("comment_id")
+  userId    String?  @map("user_id")
+  filename  String
+  mimeType  String   @map("mime_type")
+  size      Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([commentId])
+  @@index([userId])
+  @@map("comment_images")
+}
