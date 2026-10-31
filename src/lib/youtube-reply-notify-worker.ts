@@ -27,17 +27,38 @@ type CandidateRow = {
   parent_content: string | null;
 };
 
-/** 通知の宛先ユーザーごとに、自分のチャンネルIDを集める。 */
+/**
+ * 通知の宛先ユーザーごとに、自分の YouTube チャンネルID（UC…）を集める。
+ *
+ * 注意: YtCredential.accountChannelId は UC… でないことがある（ログイン時に
+ * YouTube のチャンネルIDを取れず sessionId の UUID を保存してしまう経路がある）。
+ * そのため「サイトから投稿したコメントの author_channel_id」も突き合わせて補完する。
+ */
 async function channelIdsOfUser(userId: string): Promise<string[]> {
+  const ids = new Set<string>();
+
   const creds = await prisma.ytCredential.findMany({
     where: { userId },
     select: { accountChannelId: true },
   });
-  const ids = new Set<string>();
   for (const c of creds) {
     const id = (c.accountChannelId || "").trim();
     if (id.startsWith("UC")) ids.add(id);
   }
+
+  if (ids.size === 0) {
+    const rows = await prisma.$queryRaw<Array<{ channel_id: string | null }>>`
+      SELECT DISTINCT c.author_channel_id AS channel_id
+      FROM user_action a
+      JOIN comment_cache c ON c.comment_id = a.comment_id
+      WHERE a.user_id = ${userId}
+        AND a.action_type = 'comment'
+        AND c.author_channel_id LIKE 'UC%'
+      LIMIT 5
+    `;
+    for (const r of rows) if (r.channel_id) ids.add(r.channel_id);
+  }
+
   return [...ids];
 }
 

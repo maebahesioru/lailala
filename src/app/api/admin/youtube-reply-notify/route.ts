@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
       channels: results.length,
       candidates,
       created,
-      results: results.filter((r) => r.candidates > 0),
+      results: results.slice(0, 50),
     });
   } catch (e) {
     return internalError("api/admin/youtube-reply-notify", e);
