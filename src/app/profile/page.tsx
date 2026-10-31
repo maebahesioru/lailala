@@ -1,5 +1,6 @@
 "use client";
 import { threadPath } from "@/lib/thread-url";
+import { displayHandle } from "@/lib/display-handle";
 import { onImgError } from "@/lib/img-fallback";
 
 import { useState, useEffect } from "react";
@@ -19,7 +20,7 @@ interface UserAction {
 
 export default function MyProfilePage() {
   const router = useRouter();
-  const [user, setUser] = useState<{ name?: string | null; email?: string | null; image?: string | null } | null>(null);
+  const [user, setUser] = useState<{ name?: string | null; email?: string | null; image?: string | null; channelId?: string | null; youtubeLinked?: boolean } | null>(null);
   const [actions, setActions] = useState<UserAction[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"comments" | "replies">("comments");
@@ -61,8 +62,10 @@ export default function MyProfilePage() {
             </div>
           )}
           <div>
-            <h2 className="text-xl font-bold">{user?.name || user?.email?.split("@")[0] || "名無し"}</h2>
-            <p className="text-[13px] text-muted">{user?.email}</p>
+            <h2 className="text-xl font-bold">{user?.name || displayHandle(user)?.replace(/^@/, "") || "名無し"}</h2>
+            <p className="text-[13px] text-muted">
+              {displayHandle(user) ?? (user?.youtubeLinked === false ? "YouTube未連携" : "")}
+            </p>
           </div>
         </div>
       </div>
@@ -121,7 +124,7 @@ export default function MyProfilePage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-[15px] truncate">{user?.name || user?.email?.split("@")[0] || "名無し"}</span>
+                    <span className="font-bold text-[15px] truncate">{user?.name || displayHandle(user)?.replace(/^@/, "") || "名無し"}</span>
                     <span className="text-muted text-[15px]">·</span>
                     <span className="text-muted text-[15px] shrink-0">
                       {new Date(action.createdAt).toLocaleDateString("ja-JP", { month: "short", day: "numeric" })}

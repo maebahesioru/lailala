@@ -1,5 +1,6 @@
 "use client";
 import { onImgError } from "@/lib/img-fallback";
+import { displayHandle } from "@/lib/display-handle";
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -283,7 +284,9 @@ export default function SettingsPage() {
               )}
               <div>
                 <p className="font-medium">{user.name}</p>
-                <p className="text-sm text-muted">{user.email}</p>
+                <p className="text-sm text-muted">
+                  {displayHandle(user) ?? (user.youtubeLinked === false ? "YouTube未連携" : "")}
+                </p>
               </div>
             </div>
           ) : (
