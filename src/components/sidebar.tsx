@@ -107,6 +107,12 @@ export function Sidebar() {
     { icon: Search, label: "検索", href: "/search" },
   ];
 
+  useEffect(() => {
+    const open = () => setShowLogin(true);
+    window.addEventListener("lailala:open-login", open);
+    return () => window.removeEventListener("lailala:open-login", open);
+  }, []);
+
   return (
     <>
       <aside className="w-[275px] hidden md:flex flex-col sticky top-0 h-screen px-4 py-4" aria-label="メインナビゲーション">
