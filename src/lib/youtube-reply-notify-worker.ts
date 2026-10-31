@@ -49,7 +49,7 @@ async function channelIdsOfUser(userId: string): Promise<string[]> {
   if (ids.size === 0) {
     const rows = await prisma.$queryRaw<Array<{ channel_id: string | null }>>`
       SELECT DISTINCT c.author_channel_id AS channel_id
-      FROM user_action a
+      FROM user_actions a
       JOIN comment_cache c ON c.comment_id = a.comment_id
       WHERE a.user_id = ${userId}
         AND a.action_type = 'comment'
