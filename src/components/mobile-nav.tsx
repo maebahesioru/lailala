@@ -158,7 +158,7 @@ export function MobileNav() {
               <button
                 onClick={() => {
                   setOpen(false);
-                  user ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true);
+                  user && user.youtubeLinked !== false ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true);
                 }}
                 className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-full font-bold shadow-lg mt-2"
               >
@@ -169,7 +169,7 @@ export function MobileNav() {
 
             {/* Account */}
             <div className="p-4 border-t border-border space-y-3">
-              {user ? (
+              {user && user.youtubeLinked !== false ? (
                 <>
                   {user.accounts && user.accounts.length > 1 && (
                     <div className="space-y-1">
@@ -218,8 +218,7 @@ export function MobileNav() {
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-sm truncate">{user.name}</p>
                       <p className="text-muted text-xs truncate">
-                        {displayHandle(user) ??
-                          (user.youtubeLinked === false ? "YouTube未連携" : "")}
+                        {displayHandle(user) ?? ""}
                       </p>
                     </div>
                     <button

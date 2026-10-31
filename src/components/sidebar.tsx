@@ -237,7 +237,7 @@ export function Sidebar() {
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              onClick={() => user ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true)}
+              onClick={() => user && user.youtubeLinked !== false ? window.dispatchEvent(new CustomEvent("lailala:openCompose")) : setShowLogin(true)}
               className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-full font-bold text-lg shadow-lg hover:bg-primary-hover transition-colors"
             >
               <PenSquare size={22} />
@@ -248,7 +248,7 @@ export function Sidebar() {
 
         {mounted && (
           <div className="mt-4 relative" ref={menuRef}>
-            {user ? (
+            {user && user.youtubeLinked !== false ? (
               <>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -266,8 +266,7 @@ export function Sidebar() {
                   <div className="flex-1 text-left min-w-0">
                     <p className="font-bold text-sm truncate">{user.name}</p>
                     <p className="text-muted text-xs truncate">
-                        {displayHandle(user) ??
-                          (user.youtubeLinked === false ? "YouTube未連携" : "")}
+                        {displayHandle(user) ?? ""}
                       </p>
                   </div>
                   <MoreHorizontal size={18} className="text-muted" />
