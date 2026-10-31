@@ -20,6 +20,15 @@ export async function POST(req: NextRequest) {
     const userId = typeof body?.userId === "string" ? body.userId : null;
 
     const { prisma } = await import("@/lib/prisma");
+
+    // 検証・設定用: userId と channelId を渡すと監視チャンネルを保存する
+    const setChannelId = typeof body?.channelId === "string" ? body.channelId.trim() : null;
+    if (userId && setChannelId) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { replyWatchChannelId: setChannelId.startsWith("UC") ? setChannelId : null },
+      });
+    }
     let ids: string[] = [];
     if (userId) {
       ids = [userId];

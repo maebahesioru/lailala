@@ -127,6 +127,7 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   image: 'image',
   channelId: 'channelId',
+  replyWatchChannelId: 'replyWatchChannelId',
   selectedAccountId: 'selectedAccountId',
   showLikesTab: 'showLikesTab',
   showDislikesTab: 'showDislikesTab',

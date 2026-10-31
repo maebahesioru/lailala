@@ -16,6 +16,8 @@ model User {
   email                String?               @unique
   image                String?
   channelId            String?               @map("channel_id")
+  /// YouTube側の返信を監視する自分のチャンネルID（UC…）。未設定なら推定を試みる
+  replyWatchChannelId  String?               @map("reply_watch_channel_id")
   selectedAccountId    String?               @map("selected_account_id")
   ytCredentials        YtCredential[]
   commentLikes         CommentLike[]

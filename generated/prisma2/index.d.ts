@@ -2906,6 +2906,7 @@ export namespace Prisma {
     email: string | null
     image: string | null
     channelId: string | null
+    replyWatchChannelId: string | null
     selectedAccountId: string | null
     showLikesTab: boolean | null
     showDislikesTab: boolean | null
@@ -2928,6 +2929,7 @@ export namespace Prisma {
     email: string | null
     image: string | null
     channelId: string | null
+    replyWatchChannelId: string | null
     selectedAccountId: string | null
     showLikesTab: boolean | null
     showDislikesTab: boolean | null
@@ -2950,6 +2952,7 @@ export namespace Prisma {
     email: number
     image: number
     channelId: number
+    replyWatchChannelId: number
     selectedAccountId: number
     showLikesTab: number
     showDislikesTab: number
@@ -2974,6 +2977,7 @@ export namespace Prisma {
     email?: true
     image?: true
     channelId?: true
+    replyWatchChannelId?: true
     selectedAccountId?: true
     showLikesTab?: true
     showDislikesTab?: true
@@ -2996,6 +3000,7 @@ export namespace Prisma {
     email?: true
     image?: true
     channelId?: true
+    replyWatchChannelId?: true
     selectedAccountId?: true
     showLikesTab?: true
     showDislikesTab?: true
@@ -3018,6 +3023,7 @@ export namespace Prisma {
     email?: true
     image?: true
     channelId?: true
+    replyWatchChannelId?: true
     selectedAccountId?: true
     showLikesTab?: true
     showDislikesTab?: true
@@ -3113,6 +3119,7 @@ export namespace Prisma {
     email: string | null
     image: string | null
     channelId: string | null
+    replyWatchChannelId: string | null
     selectedAccountId: string | null
     showLikesTab: boolean
     showDislikesTab: boolean
@@ -3152,6 +3159,7 @@ export namespace Prisma {
     email?: boolean
     image?: boolean
     channelId?: boolean
+    replyWatchChannelId?: boolean
     selectedAccountId?: boolean
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -3188,6 +3196,7 @@ export namespace Prisma {
     email?: boolean
     image?: boolean
     channelId?: boolean
+    replyWatchChannelId?: boolean
     selectedAccountId?: boolean
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -3210,6 +3219,7 @@ export namespace Prisma {
     email?: boolean
     image?: boolean
     channelId?: boolean
+    replyWatchChannelId?: boolean
     selectedAccountId?: boolean
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -3232,6 +3242,7 @@ export namespace Prisma {
     email?: boolean
     image?: boolean
     channelId?: boolean
+    replyWatchChannelId?: boolean
     selectedAccountId?: boolean
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -3248,7 +3259,7 @@ export namespace Prisma {
     dataSaver?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "channelId" | "selectedAccountId" | "showLikesTab" | "showDislikesTab" | "showBookmarksTab" | "notifyLikes" | "notifyDislikes" | "notifyBookmarks" | "notifyReplies" | "pushNotifyLikes" | "pushNotifyDislikes" | "pushNotifyBookmarks" | "pushNotifyReplies" | "pushNotifyMentions" | "dataSaver", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "channelId" | "replyWatchChannelId" | "selectedAccountId" | "showLikesTab" | "showDislikesTab" | "showBookmarksTab" | "notifyLikes" | "notifyDislikes" | "notifyBookmarks" | "notifyReplies" | "pushNotifyLikes" | "pushNotifyDislikes" | "pushNotifyBookmarks" | "pushNotifyReplies" | "pushNotifyMentions" | "dataSaver", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ytCredentials?: boolean | User$ytCredentialsArgs<ExtArgs>
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
@@ -3291,6 +3302,10 @@ export namespace Prisma {
       email: string | null
       image: string | null
       channelId: string | null
+      /**
+       * YouTube側の返信を監視する自分のチャンネルID（UC…）。未設定なら推定を試みる
+       */
+      replyWatchChannelId: string | null
       selectedAccountId: string | null
       showLikesTab: boolean
       showDislikesTab: boolean
@@ -3746,6 +3761,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly image: FieldRef<"User", 'String'>
     readonly channelId: FieldRef<"User", 'String'>
+    readonly replyWatchChannelId: FieldRef<"User", 'String'>
     readonly selectedAccountId: FieldRef<"User", 'String'>
     readonly showLikesTab: FieldRef<"User", 'Boolean'>
     readonly showDislikesTab: FieldRef<"User", 'Boolean'>
@@ -26269,6 +26285,7 @@ export namespace Prisma {
     email: 'email',
     image: 'image',
     channelId: 'channelId',
+    replyWatchChannelId: 'replyWatchChannelId',
     selectedAccountId: 'selectedAccountId',
     showLikesTab: 'showLikesTab',
     showDislikesTab: 'showDislikesTab',
@@ -26663,6 +26680,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     channelId?: StringNullableFilter<"User"> | string | null
+    replyWatchChannelId?: StringNullableFilter<"User"> | string | null
     selectedAccountId?: StringNullableFilter<"User"> | string | null
     showLikesTab?: BoolFilter<"User"> | boolean
     showDislikesTab?: BoolFilter<"User"> | boolean
@@ -26698,6 +26716,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     channelId?: SortOrderInput | SortOrder
+    replyWatchChannelId?: SortOrderInput | SortOrder
     selectedAccountId?: SortOrderInput | SortOrder
     showLikesTab?: SortOrder
     showDislikesTab?: SortOrder
@@ -26736,6 +26755,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     channelId?: StringNullableFilter<"User"> | string | null
+    replyWatchChannelId?: StringNullableFilter<"User"> | string | null
     selectedAccountId?: StringNullableFilter<"User"> | string | null
     showLikesTab?: BoolFilter<"User"> | boolean
     showDislikesTab?: BoolFilter<"User"> | boolean
@@ -26771,6 +26791,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     channelId?: SortOrderInput | SortOrder
+    replyWatchChannelId?: SortOrderInput | SortOrder
     selectedAccountId?: SortOrderInput | SortOrder
     showLikesTab?: SortOrder
     showDislikesTab?: SortOrder
@@ -26799,6 +26820,7 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     channelId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    replyWatchChannelId?: StringNullableWithAggregatesFilter<"User"> | string | null
     selectedAccountId?: StringNullableWithAggregatesFilter<"User"> | string | null
     showLikesTab?: BoolWithAggregatesFilter<"User"> | boolean
     showDislikesTab?: BoolWithAggregatesFilter<"User"> | boolean
@@ -28194,6 +28216,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -28229,6 +28252,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -28264,6 +28288,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -28299,6 +28324,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -28334,6 +28360,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -28356,6 +28383,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -28378,6 +28406,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -30043,6 +30072,7 @@ export namespace Prisma {
     email?: SortOrder
     image?: SortOrder
     channelId?: SortOrder
+    replyWatchChannelId?: SortOrder
     selectedAccountId?: SortOrder
     showLikesTab?: SortOrder
     showDislikesTab?: SortOrder
@@ -30065,6 +30095,7 @@ export namespace Prisma {
     email?: SortOrder
     image?: SortOrder
     channelId?: SortOrder
+    replyWatchChannelId?: SortOrder
     selectedAccountId?: SortOrder
     showLikesTab?: SortOrder
     showDislikesTab?: SortOrder
@@ -30087,6 +30118,7 @@ export namespace Prisma {
     email?: SortOrder
     image?: SortOrder
     channelId?: SortOrder
+    replyWatchChannelId?: SortOrder
     selectedAccountId?: SortOrder
     showLikesTab?: SortOrder
     showDislikesTab?: SortOrder
@@ -32815,6 +32847,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -32849,6 +32882,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -32899,6 +32933,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -32933,6 +32968,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -32967,6 +33003,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33001,6 +33038,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33051,6 +33089,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -33085,6 +33124,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -33119,6 +33159,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33153,6 +33194,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33203,6 +33245,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -33237,6 +33280,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -33315,6 +33359,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33349,6 +33394,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33457,6 +33503,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -33491,6 +33538,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -33634,6 +33682,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33668,6 +33717,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33745,6 +33795,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -33779,6 +33830,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -33846,6 +33898,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33880,6 +33933,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -33968,6 +34022,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34002,6 +34057,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34070,6 +34126,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34104,6 +34161,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34154,6 +34212,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34188,6 +34247,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34222,6 +34282,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34256,6 +34317,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34306,6 +34368,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34340,6 +34403,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34374,6 +34438,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34408,6 +34473,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34458,6 +34524,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34492,6 +34559,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34526,6 +34594,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34560,6 +34629,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34610,6 +34680,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34644,6 +34715,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34678,6 +34750,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34712,6 +34785,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34762,6 +34836,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34796,6 +34871,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34830,6 +34906,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34864,6 +34941,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -34914,6 +34992,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34948,6 +35027,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -34982,6 +35062,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -35016,6 +35097,7 @@ export namespace Prisma {
     email?: string | null
     image?: string | null
     channelId?: string | null
+    replyWatchChannelId?: string | null
     selectedAccountId?: string | null
     showLikesTab?: boolean
     showDislikesTab?: boolean
@@ -35066,6 +35148,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean
@@ -35100,6 +35183,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     channelId?: NullableStringFieldUpdateOperationsInput | string | null
+    replyWatchChannelId?: NullableStringFieldUpdateOperationsInput | string | null
     selectedAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     showLikesTab?: BoolFieldUpdateOperationsInput | boolean
     showDislikesTab?: BoolFieldUpdateOperationsInput | boolean

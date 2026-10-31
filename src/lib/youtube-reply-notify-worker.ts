@@ -37,6 +37,13 @@ type CandidateRow = {
 async function channelIdsOfUser(userId: string): Promise<string[]> {
   const ids = new Set<string>();
 
+  const me = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { replyWatchChannelId: true, name: true },
+  });
+  const watch = (me?.replyWatchChannelId || "").trim();
+  if (watch.startsWith("UC")) ids.add(watch);
+
   const creds = await prisma.ytCredential.findMany({
     where: { userId },
     select: { accountChannelId: true },
@@ -63,8 +70,7 @@ async function channelIdsOfUser(userId: string): Promise<string[]> {
   // （旧ユーザーは YtCredential.accountChannelId に UUID が入っており、
   //   投稿記録の comment_id も "pending" のため、UC… を引く手がここしかない）
   if (ids.size === 0) {
-    const user = await prisma.user.findUnique({ where: { id: userId }, select: { name: true } });
-    const name = (user?.name || "").trim();
+    const name = (me?.name || "").trim();
     if (name.length >= 2) {
       const rows = await prisma.$queryRaw<Array<{ channel_id: string | null }>>`
         SELECT author_channel_id AS channel_id
