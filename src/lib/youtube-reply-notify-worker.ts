@@ -59,6 +59,26 @@ async function channelIdsOfUser(userId: string): Promise<string[]> {
     for (const r of rows) if (r.channel_id) ids.add(r.channel_id);
   }
 
+  // 最後の手段: 表示名が一致するチャンネルを comment_cache から推定する。
+  // （旧ユーザーは YtCredential.accountChannelId に UUID が入っており、
+  //   投稿記録の comment_id も "pending" のため、UC… を引く手がここしかない）
+  if (ids.size === 0) {
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { name: true } });
+    const name = (user?.name || "").trim();
+    if (name.length >= 2) {
+      const rows = await prisma.$queryRaw<Array<{ channel_id: string | null }>>`
+        SELECT author_channel_id AS channel_id
+        FROM comment_cache
+        WHERE author_name = ${name}
+          AND author_channel_id LIKE 'UC%'
+        GROUP BY author_channel_id
+        ORDER BY COUNT(*) DESC
+        LIMIT 1
+      `;
+      for (const r of rows) if (r.channel_id) ids.add(r.channel_id);
+    }
+  }
+
   return [...ids];
 }
 
