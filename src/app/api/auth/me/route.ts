@@ -49,6 +49,9 @@ export async function GET() {
       image: user.image,
       channelId: user.channelId,
       selectedAccountId: user.selectedAccountId,
+      // YouTube の認証情報が残っているか。UI はこれを見て「ログイン中」と
+      // 「実際に投稿できる」を区別する（cookie だけ残って YtCredential が消える事故がある）。
+      youtubeLinked: accounts.length > 0,
       accounts: accounts.map((a) => ({
         id: a.id,
         name: a.accountName || "YouTube User",

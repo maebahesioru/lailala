@@ -17,6 +17,8 @@ interface User {
   channelId?: string | null;
   selectedAccountId?: string | null;
   accounts?: Account[];
+  /** YouTube の認証情報が残っているか（false なら表示はログイン中でも投稿はできない） */
+  youtubeLinked?: boolean;
 }
 
 interface AuthContextType {

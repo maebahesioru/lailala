@@ -172,6 +172,19 @@ export function Composer({ videoId, parentCommentId, placeholder, onPosted }: { 
             </div>
           )}
 
+          {!authError && user?.youtubeLinked === false && (
+            <div className="mt-2 flex flex-wrap items-center gap-2 rounded-lg border border-[#f4212e]/40 bg-[#f4212e]/10 px-3 py-2 text-[13px] text-foreground">
+              <span>YouTubeとの連携が切れているため投稿できません</span>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("lailala:open-login"))}
+                className="rounded-full bg-[#1d9bf0] px-3 py-1 text-[13px] font-bold text-white hover:bg-[#1a8cd8]"
+              >
+                再連携する
+              </button>
+            </div>
+          )}
+
           {authError && (
             <div className="mt-2 flex flex-wrap items-center gap-2 rounded-lg border border-[#f4212e]/40 bg-[#f4212e]/10 px-3 py-2 text-[13px] text-foreground">
               <span>{authError}（投稿にはYouTubeとの再連携が必要です）</span>
