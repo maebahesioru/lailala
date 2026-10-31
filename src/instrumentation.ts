@@ -19,6 +19,12 @@ export async function register() {
         const { startCommentReplySyncWorker } = await import("@/lib/comment-reply-sync-worker");
         startCommentReplySyncWorker();
       }
+
+      // YouTube 側で付いた「自分宛の返信」を comment_cache から拾って通知にする
+      if (process.env.YOUTUBE_REPLY_NOTIFY_ENABLED !== "false") {
+        const { startYoutubeReplyNotifyWorker } = await import("@/lib/youtube-reply-notify-worker");
+        startYoutubeReplyNotifyWorker();
+      }
     }
   }
 }
