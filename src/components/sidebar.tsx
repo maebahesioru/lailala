@@ -1,5 +1,6 @@
 "use client";
 import { onImgError } from "@/lib/img-fallback";
+import { displayHandle } from "@/lib/display-handle";
 
 import { Home, Search, User, Settings, LogOut, Bookmark, List, MoreHorizontal, PenSquare, Music, Bell, AtSign } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
@@ -264,7 +265,10 @@ export function Sidebar() {
                   )}
                   <div className="flex-1 text-left min-w-0">
                     <p className="font-bold text-sm truncate">{user.name}</p>
-                    <p className="text-muted text-xs truncate">{user.email}</p>
+                    <p className="text-muted text-xs truncate">
+                        {displayHandle(user) ??
+                          (user.youtubeLinked === false ? "YouTube未連携" : "")}
+                      </p>
                   </div>
                   <MoreHorizontal size={18} className="text-muted" />
                 </motion.button>

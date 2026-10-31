@@ -1,5 +1,6 @@
 "use client";
 import { onImgError } from "@/lib/img-fallback";
+import { displayHandle } from "@/lib/display-handle";
 
 import { Home, Search, List, User, Music, Bell, Bookmark, Settings, X, PenSquare, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -216,7 +217,10 @@ export function MobileNav() {
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-sm truncate">{user.name}</p>
-                      <p className="text-muted text-xs truncate">{user.email}</p>
+                      <p className="text-muted text-xs truncate">
+                        {displayHandle(user) ??
+                          (user.youtubeLinked === false ? "YouTube未連携" : "")}
+                      </p>
                     </div>
                     <button
                       onClick={() => { setOpen(false); window.location.href = "/api/auth/signout/"; }}
