@@ -394,7 +394,7 @@ model CommentImage {
   id        String   @id @default(cuid())
   commentId String   @map("comment_id")
   userId    String?  @map("user_id")
-  filename  String
+  data      Bytes
   mimeType  String   @map("mime_type")
   size      Int
   createdAt DateTime @default(now()) @map("created_at")

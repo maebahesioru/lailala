@@ -5,7 +5,7 @@ import { ImagePlus, Loader2, X } from "lucide-react";
 import { useAuth } from "./auth-provider";
 import { onImgError } from "@/lib/img-fallback";
 
-export type CommentImage = { id: string; url: string };
+export type CommentImage = { id: string; url: string; mine?: boolean };
 
 /**
  * コメントに紐付いた画像（サイト独自機能）。
@@ -74,6 +74,7 @@ export function CommentImages({
       {images.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {images.map((img) => (
+            <div key={img.id} className="relative">
             <button
               key={img.id}
               type="button"
@@ -94,6 +95,25 @@ export function CommentImages({
                 onError={onImgError}
               />
             </button>
+            {img.mine && (
+              <button
+                type="button"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  const res = await fetch("/api/images/", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: img.id }),
+                  });
+                  if (res.ok) setImages((prev) => prev.filter((x) => x.id !== img.id));
+                }}
+                aria-label="この画像を削除"
+                className="absolute right-1 top-1 rounded-full bg-black/70 p-1 text-white"
+              >
+                <X size={12} />
+              </button>
+            )}
+            </div>
           ))}
         </div>
       )}

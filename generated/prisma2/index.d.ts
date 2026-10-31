@@ -26380,7 +26380,7 @@ export namespace Prisma {
     id: string | null
     commentId: string | null
     userId: string | null
-    filename: string | null
+    data: Bytes | null
     mimeType: string | null
     size: number | null
     createdAt: Date | null
@@ -26390,7 +26390,7 @@ export namespace Prisma {
     id: string | null
     commentId: string | null
     userId: string | null
-    filename: string | null
+    data: Bytes | null
     mimeType: string | null
     size: number | null
     createdAt: Date | null
@@ -26400,7 +26400,7 @@ export namespace Prisma {
     id: number
     commentId: number
     userId: number
-    filename: number
+    data: number
     mimeType: number
     size: number
     createdAt: number
@@ -26420,7 +26420,7 @@ export namespace Prisma {
     id?: true
     commentId?: true
     userId?: true
-    filename?: true
+    data?: true
     mimeType?: true
     size?: true
     createdAt?: true
@@ -26430,7 +26430,7 @@ export namespace Prisma {
     id?: true
     commentId?: true
     userId?: true
-    filename?: true
+    data?: true
     mimeType?: true
     size?: true
     createdAt?: true
@@ -26440,7 +26440,7 @@ export namespace Prisma {
     id?: true
     commentId?: true
     userId?: true
-    filename?: true
+    data?: true
     mimeType?: true
     size?: true
     createdAt?: true
@@ -26537,7 +26537,7 @@ export namespace Prisma {
     id: string
     commentId: string
     userId: string | null
-    filename: string
+    data: Bytes
     mimeType: string
     size: number
     createdAt: Date
@@ -26566,7 +26566,7 @@ export namespace Prisma {
     id?: boolean
     commentId?: boolean
     userId?: boolean
-    filename?: boolean
+    data?: boolean
     mimeType?: boolean
     size?: boolean
     createdAt?: boolean
@@ -26576,7 +26576,7 @@ export namespace Prisma {
     id?: boolean
     commentId?: boolean
     userId?: boolean
-    filename?: boolean
+    data?: boolean
     mimeType?: boolean
     size?: boolean
     createdAt?: boolean
@@ -26586,7 +26586,7 @@ export namespace Prisma {
     id?: boolean
     commentId?: boolean
     userId?: boolean
-    filename?: boolean
+    data?: boolean
     mimeType?: boolean
     size?: boolean
     createdAt?: boolean
@@ -26596,13 +26596,13 @@ export namespace Prisma {
     id?: boolean
     commentId?: boolean
     userId?: boolean
-    filename?: boolean
+    data?: boolean
     mimeType?: boolean
     size?: boolean
     createdAt?: boolean
   }
 
-  export type CommentImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "commentId" | "userId" | "filename" | "mimeType" | "size" | "createdAt", ExtArgs["result"]["commentImage"]>
+  export type CommentImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "commentId" | "userId" | "data" | "mimeType" | "size" | "createdAt", ExtArgs["result"]["commentImage"]>
 
   export type $CommentImagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CommentImage"
@@ -26611,7 +26611,7 @@ export namespace Prisma {
       id: string
       commentId: string
       userId: string | null
-      filename: string
+      data: Prisma.Bytes
       mimeType: string
       size: number
       createdAt: Date
@@ -27041,7 +27041,7 @@ export namespace Prisma {
     readonly id: FieldRef<"CommentImage", 'String'>
     readonly commentId: FieldRef<"CommentImage", 'String'>
     readonly userId: FieldRef<"CommentImage", 'String'>
-    readonly filename: FieldRef<"CommentImage", 'String'>
+    readonly data: FieldRef<"CommentImage", 'Bytes'>
     readonly mimeType: FieldRef<"CommentImage", 'String'>
     readonly size: FieldRef<"CommentImage", 'Int'>
     readonly createdAt: FieldRef<"CommentImage", 'DateTime'>
@@ -27726,7 +27726,7 @@ export namespace Prisma {
     id: 'id',
     commentId: 'commentId',
     userId: 'userId',
-    filename: 'filename',
+    data: 'data',
     mimeType: 'mimeType',
     size: 'size',
     createdAt: 'createdAt'
@@ -27810,6 +27810,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes'
+   */
+  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes[]'
+   */
+  export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
     
 
 
@@ -29376,7 +29390,7 @@ export namespace Prisma {
     id?: StringFilter<"CommentImage"> | string
     commentId?: StringFilter<"CommentImage"> | string
     userId?: StringNullableFilter<"CommentImage"> | string | null
-    filename?: StringFilter<"CommentImage"> | string
+    data?: BytesFilter<"CommentImage"> | Bytes
     mimeType?: StringFilter<"CommentImage"> | string
     size?: IntFilter<"CommentImage"> | number
     createdAt?: DateTimeFilter<"CommentImage"> | Date | string
@@ -29386,7 +29400,7 @@ export namespace Prisma {
     id?: SortOrder
     commentId?: SortOrder
     userId?: SortOrderInput | SortOrder
-    filename?: SortOrder
+    data?: SortOrder
     mimeType?: SortOrder
     size?: SortOrder
     createdAt?: SortOrder
@@ -29399,7 +29413,7 @@ export namespace Prisma {
     NOT?: CommentImageWhereInput | CommentImageWhereInput[]
     commentId?: StringFilter<"CommentImage"> | string
     userId?: StringNullableFilter<"CommentImage"> | string | null
-    filename?: StringFilter<"CommentImage"> | string
+    data?: BytesFilter<"CommentImage"> | Bytes
     mimeType?: StringFilter<"CommentImage"> | string
     size?: IntFilter<"CommentImage"> | number
     createdAt?: DateTimeFilter<"CommentImage"> | Date | string
@@ -29409,7 +29423,7 @@ export namespace Prisma {
     id?: SortOrder
     commentId?: SortOrder
     userId?: SortOrderInput | SortOrder
-    filename?: SortOrder
+    data?: SortOrder
     mimeType?: SortOrder
     size?: SortOrder
     createdAt?: SortOrder
@@ -29427,7 +29441,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"CommentImage"> | string
     commentId?: StringWithAggregatesFilter<"CommentImage"> | string
     userId?: StringNullableWithAggregatesFilter<"CommentImage"> | string | null
-    filename?: StringWithAggregatesFilter<"CommentImage"> | string
+    data?: BytesWithAggregatesFilter<"CommentImage"> | Bytes
     mimeType?: StringWithAggregatesFilter<"CommentImage"> | string
     size?: IntWithAggregatesFilter<"CommentImage"> | number
     createdAt?: DateTimeWithAggregatesFilter<"CommentImage"> | Date | string
@@ -31123,7 +31137,7 @@ export namespace Prisma {
     id?: string
     commentId: string
     userId?: string | null
-    filename: string
+    data: Bytes
     mimeType: string
     size: number
     createdAt?: Date | string
@@ -31133,7 +31147,7 @@ export namespace Prisma {
     id?: string
     commentId: string
     userId?: string | null
-    filename: string
+    data: Bytes
     mimeType: string
     size: number
     createdAt?: Date | string
@@ -31143,7 +31157,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     commentId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    filename?: StringFieldUpdateOperationsInput | string
+    data?: BytesFieldUpdateOperationsInput | Bytes
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31153,7 +31167,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     commentId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    filename?: StringFieldUpdateOperationsInput | string
+    data?: BytesFieldUpdateOperationsInput | Bytes
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31163,7 +31177,7 @@ export namespace Prisma {
     id?: string
     commentId: string
     userId?: string | null
-    filename: string
+    data: Bytes
     mimeType: string
     size: number
     createdAt?: Date | string
@@ -31173,7 +31187,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     commentId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    filename?: StringFieldUpdateOperationsInput | string
+    data?: BytesFieldUpdateOperationsInput | Bytes
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31183,7 +31197,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     commentId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    filename?: StringFieldUpdateOperationsInput | string
+    data?: BytesFieldUpdateOperationsInput | Bytes
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32320,11 +32334,18 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type BytesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesFilter<$PrismaModel> | Bytes
+  }
+
   export type CommentImageCountOrderByAggregateInput = {
     id?: SortOrder
     commentId?: SortOrder
     userId?: SortOrder
-    filename?: SortOrder
+    data?: SortOrder
     mimeType?: SortOrder
     size?: SortOrder
     createdAt?: SortOrder
@@ -32338,7 +32359,7 @@ export namespace Prisma {
     id?: SortOrder
     commentId?: SortOrder
     userId?: SortOrder
-    filename?: SortOrder
+    data?: SortOrder
     mimeType?: SortOrder
     size?: SortOrder
     createdAt?: SortOrder
@@ -32348,7 +32369,7 @@ export namespace Prisma {
     id?: SortOrder
     commentId?: SortOrder
     userId?: SortOrder
-    filename?: SortOrder
+    data?: SortOrder
     mimeType?: SortOrder
     size?: SortOrder
     createdAt?: SortOrder
@@ -32356,6 +32377,16 @@ export namespace Prisma {
 
   export type CommentImageSumOrderByAggregateInput = {
     size?: SortOrder
+  }
+
+  export type BytesWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesWithAggregatesFilter<$PrismaModel> | Bytes
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBytesFilter<$PrismaModel>
+    _max?: NestedBytesFilter<$PrismaModel>
   }
 
   export type YtCredentialCreateNestedManyWithoutUserInput = {
@@ -33284,6 +33315,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPushSubscriptionsInput, UserUpdateWithoutPushSubscriptionsInput>, UserUncheckedUpdateWithoutPushSubscriptionsInput>
   }
 
+  export type BytesFieldUpdateOperationsInput = {
+    set?: Bytes
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -33456,6 +33491,23 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBytesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesFilter<$PrismaModel> | Bytes
+  }
+
+  export type NestedBytesWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesWithAggregatesFilter<$PrismaModel> | Bytes
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBytesFilter<$PrismaModel>
+    _max?: NestedBytesFilter<$PrismaModel>
   }
 
   export type YtCredentialCreateWithoutUserInput = {

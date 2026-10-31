@@ -359,7 +359,7 @@ exports.Prisma.CommentImageScalarFieldEnum = {
   id: 'id',
   commentId: 'commentId',
   userId: 'userId',
-  filename: 'filename',
+  data: 'data',
   mimeType: 'mimeType',
   size: 'size',
   createdAt: 'createdAt'
