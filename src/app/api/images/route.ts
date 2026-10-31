@@ -4,6 +4,7 @@ import { getSessionUserId } from "@/lib/session";
 import { rateLimit } from "@/lib/rate-limit";
 import { internalError } from "@/lib/api-error";
 import { MAX_IMAGES_PER_COMMENT, MAX_UPLOAD_BYTES, sniffImage } from "@/lib/uploads";
+import { channelIdsOfUser, ownsComment } from "@/lib/user-channels";
 
 export const runtime = "nodejs";
 
@@ -76,10 +77,20 @@ export async function POST(req: NextRequest) {
 
     const comment = await prisma.commentCache.findUnique({
       where: { commentId },
-      select: { commentId: true },
+      select: { commentId: true, authorChannelId: true },
     });
     if (!comment) {
       return NextResponse.json({ error: "対象のコメントが見つかりません。" }, { status: 404 });
+    }
+
+    // 画像を付けられるのは自分のコメントだけ。
+    // （以前は誰でも他人のコメントに画像を貼れてしまっていた）
+    const myChannels = await channelIdsOfUser(userId);
+    if (!ownsComment(myChannels, comment.authorChannelId)) {
+      return NextResponse.json(
+        { error: "画像を添付できるのは自分のコメントだけです。" },
+        { status: 403 }
+      );
     }
 
     const existing = await prisma.commentImage.count({ where: { commentId } });

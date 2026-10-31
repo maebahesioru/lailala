@@ -242,7 +242,11 @@ export function CommentCard({ thread, videoId, voteCounts, userVote, onDelete, o
                         <LinkCard text={thread.comment.content} />
                       </Link>
                     )}
-                    <CommentImages commentId={thread.comment.commentId} initial={(thread as any).images} />
+                    <CommentImages
+                      commentId={thread.comment.commentId}
+                      initial={(thread as any).images}
+                      canAttach={(thread as any).canAttach}
+                    />
                     {showDetailTime && (
                       <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                     )}

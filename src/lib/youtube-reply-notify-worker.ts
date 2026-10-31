@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { channelIdsOfUser } from "@/lib/user-channels";
 
 /**
  * 「YouTube 側で付いた返信」を通知にするワーカー。
@@ -34,59 +35,6 @@ type CandidateRow = {
  * YouTube のチャンネルIDを取れず sessionId の UUID を保存してしまう経路がある）。
  * そのため「サイトから投稿したコメントの author_channel_id」も突き合わせて補完する。
  */
-async function channelIdsOfUser(userId: string): Promise<string[]> {
-  const ids = new Set<string>();
-
-  const me = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { replyWatchChannelId: true, name: true },
-  });
-  const watch = (me?.replyWatchChannelId || "").trim();
-  if (watch.startsWith("UC")) ids.add(watch);
-
-  const creds = await prisma.ytCredential.findMany({
-    where: { userId },
-    select: { accountChannelId: true },
-  });
-  for (const c of creds) {
-    const id = (c.accountChannelId || "").trim();
-    if (id.startsWith("UC")) ids.add(id);
-  }
-
-  if (ids.size === 0) {
-    const rows = await prisma.$queryRaw<Array<{ channel_id: string | null }>>`
-      SELECT DISTINCT c.author_channel_id AS channel_id
-      FROM user_actions a
-      JOIN comment_cache c ON c.comment_id = a.comment_id
-      WHERE a.user_id = ${userId}
-        AND a.action_type = 'comment'
-        AND c.author_channel_id LIKE 'UC%'
-      LIMIT 5
-    `;
-    for (const r of rows) if (r.channel_id) ids.add(r.channel_id);
-  }
-
-  // 最後の手段: 表示名が一致するチャンネルを comment_cache から推定する。
-  // （旧ユーザーは YtCredential.accountChannelId に UUID が入っており、
-  //   投稿記録の comment_id も "pending" のため、UC… を引く手がここしかない）
-  if (ids.size === 0) {
-    const name = (me?.name || "").trim();
-    if (name.length >= 2) {
-      const rows = await prisma.$queryRaw<Array<{ channel_id: string | null }>>`
-        SELECT author_channel_id AS channel_id
-        FROM comment_cache
-        WHERE author_name = ${name}
-          AND author_channel_id LIKE 'UC%'
-        GROUP BY author_channel_id
-        ORDER BY COUNT(*) DESC
-        LIMIT 1
-      `;
-      for (const r of rows) if (r.channel_id) ids.add(r.channel_id);
-    }
-  }
-
-  return [...ids];
-}
 
 /** 指定チャンネル宛の「他人からの返信」を新しい順に取る。 */
 export async function findRepliesToChannel(channelId: string, limit = MAX_PER_RUN): Promise<CandidateRow[]> {

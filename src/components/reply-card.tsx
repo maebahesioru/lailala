@@ -202,7 +202,11 @@ export function ReplyCard({ reply, videoId = "niKAylKNIEI", parentCommentId, onD
                       <MentionText content={stripEditedTag(displayContent)} videoId={videoId} />
                     </p>
                     <LinkCard text={reply.content} />
-                    <CommentImages commentId={reply.commentId} initial={(reply as any).images} />
+                    <CommentImages
+                      commentId={reply.commentId}
+                      initial={(reply as any).images}
+                      canAttach={(reply as any).canAttach}
+                    />
                     {showDetailTime && (
                       <p className="text-[13px] text-muted mt-2">{detailTime}</p>
                     )}

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { channelIdsOfUser, ownsComment } from "@/lib/user-channels";
 import { getSessionUserId } from "@/lib/session";
 import { getInnertube } from "@/lib/youtube";
 import { YTNodes } from "youtubei.js";
@@ -159,6 +160,10 @@ export async function GET(req: NextRequest) {
         if (parent) (parent as any).images = byComment.get(parent.commentId) ?? [];
         for (const r of replies as any[]) r.images = byComment.get(r.commentId) ?? [];
       }
+      const viewerId = await getSessionUserId();
+      const myChannels = viewerId ? await channelIdsOfUser(viewerId) : [];
+      if (parent) (parent as any).canAttach = ownsComment(myChannels, (parent as any).author?.channelId);
+      for (const r of replies as any[]) r.canAttach = ownsComment(myChannels, r.author?.channelId);
     } catch (e) {
       console.error("[api/comments/thread] images attach failed", e);
     }

@@ -14,9 +14,12 @@ export type CommentImage = { id: string; url: string; mine?: boolean };
 export function CommentImages({
   commentId,
   initial,
+  canAttach = false,
 }: {
   commentId: string;
   initial?: CommentImage[];
+  /** 自分のコメントにだけ添付ボタンを出す（サーバー側でも所有者を検証している）。 */
+  canAttach?: boolean;
 }) {
   const { user } = useAuth();
   const [images, setImages] = useState<CommentImage[]>(initial ?? []);
@@ -118,7 +121,7 @@ export function CommentImages({
         </div>
       )}
 
-      {user && (
+      {user && canAttach && (
         <div className="mt-2 flex items-center gap-2">
           <input
             ref={inputRef}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session";
 import { getInnertube, getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
+import { channelIdsOfUser, ownsComment } from "@/lib/user-channels";
 import { rateLimit } from "@/lib/rate-limit";
 import { intParam } from "@/lib/query-params";
 import { z } from "zod";
@@ -342,6 +343,12 @@ export async function GET(req: NextRequest) {
         for (const t of visibleThreads as any[]) {
           t.images = byComment.get(t.comment?.commentId) ?? [];
         }
+      }
+      // 自分が書いたコメントにだけ「画像を添付」を出す。
+      const viewerId = await getSessionUserId();
+      const myChannels = viewerId ? await channelIdsOfUser(viewerId) : [];
+      for (const t of visibleThreads as any[]) {
+        t.canAttach = ownsComment(myChannels, t.comment?.author?.channelId);
       }
     } catch (e) {
       console.error("[api/comments] images attach failed", e);
