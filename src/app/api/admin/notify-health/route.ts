@@ -13,8 +13,10 @@ export async function GET() {
   if (denied) return denied;
 
   try {
-    const [notificationByType, actionByType, usersTotal, usersNoChannel, usersLegacyEmail, replyOff, settingsByPref] =
-      await Promise.all([
+    const [
+      notificationByType, actionByType, usersTotal, usersNoChannel, usersLegacyEmail, replyOff, settingsByPref,
+      commentLikes, bookmarks, notificationsTotal, recentActions,
+    ] = await Promise.all([
         prisma.notification.groupBy({ by: ["type"], _count: { _all: true } }),
         prisma.userAction.groupBy({ by: ["actionType"], _count: { _all: true } }),
         prisma.user.count(),
@@ -22,6 +24,10 @@ export async function GET() {
         prisma.user.count({ where: { email: { contains: "yt:" } } }),
         prisma.user.count({ where: { notifyReplies: false } }),
         prisma.notificationSetting.groupBy({ by: ["preference"], _count: { _all: true } }),
+        prisma.commentLike.count(),
+        prisma.bookmark.count(),
+        prisma.notification.count(),
+        prisma.userAction.findMany({ orderBy: { createdAt: "desc" }, take: 5, select: { actionType: true, createdAt: true } }),
       ]);
 
     return NextResponse.json({
@@ -34,6 +40,8 @@ export async function GET() {
         replyNotificationsOff: replyOff,
       },
       notificationSettings: Object.fromEntries(settingsByPref.map((r) => [r.preference, r._count._all])),
+      totals: { notificationsTotal, commentLikes, bookmarks },
+      recentActions,
     });
   } catch (e) {
     return internalError("api/admin/notify-health", e);

@@ -3,7 +3,7 @@ import { getSessionUserId } from "@/lib/session";
 import { getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
-import { createNotification } from "@/lib/notifications";
+import { safeNotify, actorChannelIdOf } from "@/lib/notify";
 import { z } from "zod";
 import { unwrapComment } from "@/lib/youtube-comment-shape";
 
@@ -53,18 +53,24 @@ export async function POST(req: NextRequest) {
 
     // Send notification to comment author
     const authorChannelId = targetComment.author?.id;
-    const me = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, channelId: true, image: true } });
-    if (authorChannelId && me?.channelId && authorChannelId !== me.channelId) {
-      await createNotification({
+    const me = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true, channelId: true, image: true, email: true },
+    });
+    const actorChannelId = actorChannelIdOf(me);
+    if (authorChannelId && actorChannelId && authorChannelId !== actorChannelId) {
+      await safeNotify({
         recipientChannelId: authorChannelId,
         type: "reply",
-        actorName: me.name || "Unknown",
-        actorChannelId: me.channelId,
-        actorThumb: me.image || undefined,
+        actorName: me?.name || "Unknown",
+        actorChannelId,
+        actorThumb: me?.image || undefined,
         commentId,
         videoId,
         content: text,
       });
+    } else if (!authorChannelId) {
+      console.warn("[notify] reply: 親コメントの投稿者IDが取れず通知できません comment=" + commentId);
     }
 
     return NextResponse.json({ success: true, data: response });

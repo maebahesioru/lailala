@@ -3,7 +3,7 @@ import { getSessionUserId } from "@/lib/session";
 import { getInnertubeWithAuth } from "@/lib/youtube";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
-import { createNotification } from "@/lib/notifications";
+import { safeNotify, actorChannelIdOf } from "@/lib/notify";
 import { z } from "zod";
 import { unwrapComment } from "@/lib/youtube-comment-shape";
 
@@ -63,14 +63,18 @@ export async function POST(req: NextRequest) {
       // ②同じ人が同じコメントへ 24 時間以内に既に通知を作っていたら作らない
       const authorChannelId = targetComment.author?.id;
       const notifyType = action === "like" || action === "dislike" ? action : null;
-      const me = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, channelId: true, image: true } });
-      if (notifyType && authorChannelId && me?.channelId && authorChannelId !== me.channelId) {
-        await createNotification({
+      const me = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { name: true, channelId: true, image: true, email: true },
+      });
+      const actorChannelId = actorChannelIdOf(me);
+      if (notifyType && authorChannelId && actorChannelId && authorChannelId !== actorChannelId) {
+        await safeNotify({
           recipientChannelId: authorChannelId,
           type: notifyType,
-          actorName: me.name || "Unknown",
-          actorChannelId: me.channelId,
-          actorThumb: me.image || undefined,
+          actorName: me?.name || "Unknown",
+          actorChannelId,
+          actorThumb: me?.image || undefined,
           commentId,
           videoId,
           content: targetComment.content?.text || "",
